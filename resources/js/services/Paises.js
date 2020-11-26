@@ -2,16 +2,6 @@ const baseUrl = "http://127.0.0.1:8000/api/paises";
 import axios from "axios";
 const pais = {};
 
-/*
-empresa.list = async () => {
-    const urlList = baseUrl + "/paises"
-    const res = await axios.get(urlList)
-        .then(response => { return response.data })
-        .catch(error => { return error; })
-    return res;
-}
-*/
-
 pais.save = async (data) => {
     const urlSave = baseUrl + "/create"
     const res = await axios.post(urlSave, data)
@@ -30,7 +20,7 @@ pais.listPaises = async () => {
 }
 
 pais.update = async (data) => {
-    const urlUpdate = baseUrl+"/update/"+data.id
+    const urlUpdate = baseUrl+"/update/"+data.id_pai
     const res = await axios.put(urlUpdate, data)
     .then(response=>{ return response.data; })
     .catch(error=>{ return error; })
@@ -38,8 +28,8 @@ pais.update = async (data) => {
     return res;
 }
 
-pais.delete = async (id) => {
-    const urlDelete = baseUrl+"/delete/"+id
+pais.delete = async (id_pai) => {
+    const urlDelete = baseUrl+"/delete/"+id_pai
     const res = await axios.delete(urlDelete)
     .then(response=> { return response.data })
     .catch(error =>{ return error })

@@ -11,9 +11,10 @@ class Paises extends Model
 
     protected $table = "paises";
 
-    protected $primaryKey = "id";
+    protected $primaryKey = "id_pai";
 
     protected $fillable = [
+        'codigo_pai',
         'nombre_pai'
     ];
 

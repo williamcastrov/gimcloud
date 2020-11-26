@@ -34,7 +34,8 @@ function Paises() {
   const [modalEliminar, setModalEliminar]= useState(false);
   const [formError, setFormError] = useState(false);
   const [paisSeleccionado, setPaisSeleccionado] = useState({
-    id: "",
+    id_pai: "",
+    codigo_pai: "",
     nombre_pai: ""
   })
 
@@ -78,8 +79,8 @@ function Paises() {
     let errors = {};
     let formOk = true;
 
-    if (!paisSeleccionado.id) {
-      errors.id_ = true;
+    if (!paisSeleccionado.codigo_pai) {
+      errors.codigo_pai = true;
       formOk = false;
     }
 
@@ -97,7 +98,7 @@ function Paises() {
         alert("Pais Creado de forma Correcta")
         console.log(res.message)
         abrirCerrarModalInsertar();
-        delete paisSeleccionado.id;
+        delete paisSeleccionado.codigo_pai;
         delete paisSeleccionado.nombre_pai;
       } else
       {
@@ -119,8 +120,8 @@ function Paises() {
     let errors = {};
     let formOk = true;
 
-    if (!paisSeleccionado.id) {
-      errors.id_ = true;
+    if (!paisSeleccionado.codigo_pai) {
+      errors.codigo_pai = true;
       formOk = false;
     }
 
@@ -140,11 +141,11 @@ function Paises() {
         alert("Pais Actualizado de forma Correcta")
         console.log(res.message)
         abrirCerrarModalEditar();
-        delete paisSeleccionado.id;
+        delete paisSeleccionado.codigo_pai;
         delete paisSeleccionado.nombre_pai;
     } else
     {
-        alert("Error Creando el Pais");
+        alert("Error Actualizando el Pais");
         console.log(res.message);
         abrirCerrarModalEditar();
     }
@@ -158,7 +159,7 @@ function Paises() {
 
   const borrarPais = async()=>{
    
-    const res = await paisServices.delete(paisSeleccionado.id);
+    const res = await paisServices.delete(paisSeleccionado.id_pai);
 
     if (res.success) {
         alert("Pais Borrada de forma Correcta")
@@ -175,8 +176,13 @@ function Paises() {
 
   const columnas = [
     {
+      title: 'Id',
+      field: 'id_pai',
+      type: 'number'
+    },
+    {
       title: 'Codigo',
-      field: 'id'
+      field: 'codigo_pai'
     },
     {
       title: 'País',
@@ -187,7 +193,7 @@ function Paises() {
   const paisInsertar=(
     <div className={styles.modal}>
       <h3>Agregar Nuevo País</h3>
-      <TextField className={styles.inputMaterial} label="Código" name="id" onChange={handleChange} />
+      <TextField className={styles.inputMaterial} label="Código" name="codigo_pai" onChange={handleChange} />
       <br />
       <TextField className={styles.inputMaterial} label="País" name="nombre_pai" onChange={handleChange} />          
       <br /><br />
@@ -200,8 +206,8 @@ function Paises() {
 
   const paisEditar=(
     <div className={styles.modal}>
-      <h3>Editar País</h3>
-      <TextField className={styles.inputMaterial} label="Código" name="id" onChange={handleChange} value={paisSeleccionado&&paisSeleccionado.id}/>
+      <br />
+      <TextField className={styles.inputMaterial} label="Código" name="codigo_pai" onChange={handleChange} value={paisSeleccionado&&paisSeleccionado.codigo_pai}/>
       <br />
       <TextField className={styles.inputMaterial} label="País" name="nombre_pai" onChange={handleChange} value={paisSeleccionado&&paisSeleccionado.nombre_pai}/>          
       <br /><br />
@@ -214,7 +220,7 @@ function Paises() {
 
   const paisEliminar = (
     <div className={styles.modal}>
-      <p>Estás seguro que deseas eliminar el País <b>{paisSeleccionado && paisSeleccionado.id}</b>? </p>
+      <p>Estás seguro que deseas eliminar el País <b>{paisSeleccionado && paisSeleccionado.nombre_pai}</b>? </p>
       <div align="right">
         <Button color="secondary" onClick = {() => borrarPais() }> Confirmar </Button>
         <Button onClick={()=>abrirCerrarModalEliminar()}> Cancelar </Button>

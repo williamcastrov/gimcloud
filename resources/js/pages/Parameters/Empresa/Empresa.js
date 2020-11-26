@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MaterialTable from "material-table";
-import {Modal, TextField, Button } from "@material-ui/core";
+import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 
 import empresaServices from "../../../services/Empresa";
+import paisServices from "../../../services/Paises";
+import ciudadServices from "../../../services/Ciudades";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -23,6 +25,10 @@ const useStyles = makeStyles((theme) => ({
   }, 
   inputMaterial:{
     width: '100%'
+  },
+  formControl: {
+    margin: theme.spacing(0),
+    minWidth: 315,
   }
 }));
 
@@ -33,8 +39,11 @@ function Empresa() {
   const [modalEditar, setModalEditar]= useState(false);
   const [modalEliminar, setModalEliminar]= useState(false);
   const [formError, setFormError] = useState(false);
+  const [listarPaises, setListarPaises] = useState([]);
+  const [listarCiudades, setListarCiudades] = useState([]);
+
   const [empresaSeleccionado, setEmpresaSeleccionado] = useState({
-    'id': "",
+    'id_emp': "",
     'nombre_emp': "",
     'nit_emp': "",
     'digitochequeo_emp': "",
@@ -44,6 +53,33 @@ function Empresa() {
     'ciudad_emp': "",
     'pais_emp': ""
   })
+
+  useEffect(() => {
+    async function fetchDataEmpresa() {
+      const res = await empresaServices.listEmpresas();
+      setListEmpresas(res.data);
+    }
+    fetchDataEmpresa();
+  }, [])
+
+  useEffect (() => {
+      async function fetchDataPais() {
+      const res = await paisServices.listPaises();
+      console.log(res.data);
+      setListarPaises(res.data) 
+      console.log(listarPaises);
+	  }
+    fetchDataPais();
+  }, [])
+
+  useEffect (() => {
+    async function fetchDataCiudad() {
+    const res = await ciudadServices.listCiudades();
+    setListarCiudades(res.data) 
+    //console.log(res.data);
+  }
+  fetchDataCiudad();
+  }, [])
 
   const handleChange = e => {
     const {name, value} = e.target;
@@ -70,15 +106,6 @@ function Empresa() {
   const abrirCerrarModalEliminar = () => {
     setModalEliminar(!modalEliminar);
   }
-
-  useEffect(() => {
-    async function fetchDataEmpresa() {
-      const res = await empresaServices.listarEmpresas();
-      setListEmpresas(res.data);
-      console.log(res.data);
-    }
-    fetchDataEmpresa();
-  }, [])
 
   const grabarEmpresa = async () => {
 
@@ -214,7 +241,7 @@ function Empresa() {
         alert("Empresa Actualizada de forma Correcta")
         console.log(res.message)
         abrirCerrarModalEditar();
-        delete empresaSeleccionado.id;
+        delete empresaSeleccionado.id_emp;
         delete empresaSeleccionado.nombre_emp;
         delete empresaSeleccionado.nit_emp;
         delete empresaSeleccionado.digitochequeo_emp;
@@ -225,7 +252,7 @@ function Empresa() {
         delete empresaSeleccionado.pais_emp;
     } else
     {
-        alert("Error Creando la Empresa");
+        alert("Error Actualizando la Empresa");
         console.log(res.message);
         abrirCerrarModalEditar();
     }
@@ -238,8 +265,8 @@ function Empresa() {
   }
 
   const borrarEmpresa = async()=>{
-
-    const res = await empresaServices.delete(empresaSeleccionado.id);
+    
+    const res = await empresaServices.delete(empresaSeleccionado.id_emp);
 
     if (res.success) {
         alert("Empresa Borrada de forma Correcta")
@@ -257,7 +284,7 @@ function Empresa() {
   const columnas = [
     {
       title: 'Codigo',
-      field: 'id'
+      field: 'id_emp'
     },
     {
       title: 'Nombre',
@@ -309,10 +336,46 @@ function Empresa() {
       <TextField className={styles.inputMaterial} label="Fecha Creación" name="fecha_creacion_emp" onChange={handleChange} />         
       <br />
       <TextField className={styles.inputMaterial} label="Fecha Modificación" name="fecha_modificacion_emp" onChange={handleChange} />         
+      
       <br />
-      <TextField className={styles.inputMaterial} label="Ciudad" name="ciudad_emp" onChange={handleChange} />         
+      <FormControl className={styles.formControl}>
+        <InputLabel id="idselectCiudad">Ciudad</InputLabel>
+        <Select
+          labelId="selectCiudad"
+          name="ciudad_emp"
+          id="idselectCiudad"
+          onChange={handleChange}
+        >
+          <MenuItem value="">  <em>None</em> </MenuItem>
+          {
+            listarCiudades.map((itemselect) => {
+              return (
+                <MenuItem value={itemselect.id_ciu }>{itemselect.nombre_ciu}</MenuItem>
+              )
+            })
+          }
+        </Select>
+      </FormControl>
       <br />
-      <TextField className={styles.inputMaterial} label="Pais" name="pais_emp" onChange={handleChange} />       
+      
+      <FormControl className={styles.formControl}>
+        <InputLabel id="idselectPais">Pais</InputLabel>
+        <Select
+          labelId="selectPaises"
+          name="pais_emp"
+          id="idselectPais"
+          onChange={handleChange}
+        >
+          <MenuItem value="">  <em>None</em> </MenuItem>
+          {
+            listarPaises.map((itemselect) => {
+              return (
+                <MenuItem value={itemselect.id_pai }>{itemselect.nombre_pai}</MenuItem>
+              )
+            })
+          }
+        </Select>
+      </FormControl>
       <br />
       <br />  
   
@@ -342,8 +405,7 @@ function Empresa() {
       <TextField className={styles.inputMaterial} label="Ciudad" name="ciudad_emp" onChange={handleChange} value={empresaSeleccionado&&empresaSeleccionado.ciudad_emp} />         
       <br />
       <TextField className={styles.inputMaterial} label="Pais" name="pais_emp" onChange={handleChange} value={empresaSeleccionado&&empresaSeleccionado.pais_emp} />       
-
-     
+ 
       <div align="right">
         <Button color="primary" onClick={()=>actualizarEmpresa()} >Editar</Button>
         <Button onClick={()=>abrirCerrarModalEditar()}>Cancelar</Button>

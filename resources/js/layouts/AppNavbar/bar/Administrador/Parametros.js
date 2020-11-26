@@ -60,6 +60,49 @@ function Parametros() {
                         <ListItemText primary="Paises"  />
                     </ListItem>
 
+                    <ListItem component={Link} button to="/parametros/regiones" className={classes.nested}>
+                        <ListItemIcon>
+                            <PublicIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Regiones" />
+                    </ListItem>
+
+                    <ListItem component={Link} button to="/parametros/departamentos" className={classes.nested}>
+                        <ListItemIcon>
+                            <ApartmentIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Departamentos" />
+                    </ListItem>
+
+                    <ListItem  component={Link} button to="/parametros/ciudades" className={classes.nested}>
+                        <ListItemIcon>
+                            <NaturePeopleIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Ciudades" />
+                    </ListItem>
+                    
+                    <ListItem component={Link} button to="/parametros/tipointerlocutores" className={classes.nested}>
+                        <ListItemIcon>
+                            <DialerSipIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Tipo de Interlocutores" />
+                    </ListItem>
+     
+                    <ListItem component={Link} button to="/parametros/especialidades" className={classes.nested}>
+                        <ListItemIcon>
+                            <AssignmentIndIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Especialidades" />
+                    </ListItem>
+
+                    <ListItem component={Link} button to="/parametros/estados" className={classes.nested}>
+                        <ListItemIcon>
+                            <AssignmentIndIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Estados" />
+                    </ListItem>
+                    
+
                     <ListItem component={Link} button to="/parametros/empresa" className={classes.nested}>
                         <ListItemIcon>
                             <BusinessIcon />
@@ -79,48 +122,13 @@ function Parametros() {
                             <PeopleIcon />
                         </ListItemIcon>
                         <ListItemText primary="Clientes" />
-                    </ListItem>
-
-                    <ListItem button className={classes.nested}>
-                        <ListItemIcon>
-                            <PublicIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Regiones" />
-                    </ListItem>
-
-                    <ListItem button className={classes.nested}>
-                        <ListItemIcon>
-                            <ApartmentIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Departamentos" />
-                    </ListItem>
-
-                    <ListItem button className={classes.nested}>
-                        <ListItemIcon>
-                            <NaturePeopleIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Ciudades" />
-                    </ListItem>
-
-                    <ListItem button className={classes.nested}>
-                        <ListItemIcon>
-                            <AssignmentIndIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Especialidades" />
-                    </ListItem>
-
+                    </ListItem>                 
+                 
                     <ListItem button className={classes.nested}>
                         <ListItemIcon>
                             <ContactsIcon />
                         </ListItemIcon>
                         <ListItemText primary="Contactos" />
-                    </ListItem>
-
-                    <ListItem button className={classes.nested}>
-                        <ListItemIcon>
-                            <DialerSipIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Tipo de Interlocutores" />
                     </ListItem>
 
                     <ListItem button className={classes.nested}>

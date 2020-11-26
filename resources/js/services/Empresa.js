@@ -1,4 +1,5 @@
 const baseUrl = "http://127.0.0.1:8000/api/empresa";
+
 import axios from "axios";
 const empresa = {};
 
@@ -10,7 +11,7 @@ empresa.save = async (data) => {
     return res;
 }
 
-empresa.listarEmpresas = async () => {
+empresa.listEmpresas = async () => {
     const urlList = baseUrl+"/listar_empresa"
     const res = await axios.get(urlList)
     .then(response=>{ return response.data; })
@@ -20,7 +21,7 @@ empresa.listarEmpresas = async () => {
 }
 
 empresa.update = async (data) => {
-    const urlUpdate = baseUrl+"/update/"+data.id
+    const urlUpdate = baseUrl+"/update/"+data.id_emp
     const res = await axios.put(urlUpdate, data)
     .then(response=>{ return response.data; })
     .catch(error=>{ return error; })
@@ -28,8 +29,8 @@ empresa.update = async (data) => {
     return res;
 }
 
-empresa.delete = async (id) => {
-    const urlDelete = baseUrl+"/delete/"+id
+empresa.delete = async (id_emp) => {
+    const urlDelete = baseUrl+"/delete/"+id_emp
     const res = await axios.delete(urlDelete)
     .then(response=> { return response.data })
     .catch(error =>{ return error })

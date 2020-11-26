@@ -11,6 +11,8 @@ class Empresa extends Model
 
     protected $table = "empresa";
 
+    protected $primaryKey = "id_emp";
+
     protected $fillable = [
         'nombre_emp',
         'nit_emp',
@@ -22,7 +24,7 @@ class Empresa extends Model
         'pais_emp'
     ];
   
-      public function pais(){
+    public function pais(){
         return $this->belongsTo("App\Models\Paises","pais_emp");
     }
 

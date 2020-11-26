@@ -5,10 +5,19 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Empresa;
+use App\Models\Paises;
 
 class EmpresaController extends Controller
 {
     //
+    public function list_paises(){ 
+      $data = Paises::get();
+
+      $response['data'] = $data;
+      $response['succes'] = true;
+      return $response;
+    }
+
     public function create(Request $request){
 
       try {
@@ -38,7 +47,7 @@ class EmpresaController extends Controller
 
         try {
 
-          $data = Empresa::get();
+          $data = Empresa::with("pais")->get();
 
           $response['data'] = $data;
           $response['message'] = "load successful";
@@ -51,11 +60,11 @@ class EmpresaController extends Controller
         return $response;
     }
 
-    public function get($id){
+    public function get($id_emp){
 
         try {
   
-          $data = Empresa::find($id);
+          $data = Empresa::find($id_emp);
   
           if ($data) {
             $response['data'] = $data;
@@ -75,7 +84,7 @@ class EmpresaController extends Controller
         return $response;
       }
 
-      public function update(Request $request, $id){
+      public function update(Request $request, $id_emp){
 
         try {
   
@@ -90,7 +99,7 @@ class EmpresaController extends Controller
 
           //Console::info('mymessage');
 
-          $res = Empresa::where("id",$id)->update($data);
+          $res = Empresa::where("id_emp",$id_emp)->update($data);
 
           $response['res'] = $res;
           $response['message'] = "Updated successful";
@@ -104,10 +113,10 @@ class EmpresaController extends Controller
   
       }
 
-      public function delete($id){
+      public function delete($id_emp){
 
         try {
-          $res = Empresa::where("id",$id)->delete($id);
+          $res = Empresa::where("id_emp",$id_emp)->delete($id_emp);
           $response['res'] = $res;
 
           $response['message'] = "Deleted successful";

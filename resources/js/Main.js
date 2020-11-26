@@ -18,7 +18,13 @@ import Management from './components/Management/Management';
 
 // Componentes adicionales
 import Paises from './pages/Parameters/Paises';
-import Empresa from './pages/Parameters/Empresa/Empresa';
+import Regiones from './pages/Parameters/Regiones';
+import Empresa from './pages/Parameters/Empresa';
+import Departamentos from './pages/Parameters/Departamentos';
+import Ciudades from './pages/Parameters/Ciudades';
+import TipoInterlocutores from './pages/Parameters/TipoInterlocutores';
+import Especialidades from './pages/Parameters/Especialidades';
+import Estados from './pages/Parameters/Estados';
 
 import {
   BrowserRouter as Router,
@@ -60,7 +66,16 @@ function Main() {
               <Route path="/login" component={Login} />
 
               <Route path="/parametros/paises" component={Paises} />
+              <Route path="/parametros/regiones" component={Regiones} />
               <Route path="/parametros/empresa" component={Empresa} />
+              <Route path="/parametros/departamentos" component={Departamentos} />
+              <Route path="/parametros/ciudades" component={Ciudades} />
+              <Route path="/parametros/tipointerlocutores" component={TipoInterlocutores} />
+              <Route path="/parametros/especialidades" component={Especialidades} />
+              <Route path="/parametros/estados" component={Estados} />
+
+              
+              
       
             </Switch>
           </ThemeProvider>

@@ -13,7 +13,7 @@ class PaisesController extends Controller
 
       try {
     
-          $insert['id'] = $request['id'];
+          $insert['codigo_pai'] = $request['codigo_pai'];
           $insert['nombre_pai'] = $request['nombre_pai'];
 
           Paises::insert($insert);
@@ -46,11 +46,11 @@ class PaisesController extends Controller
         return $response;
     }
 
-      public function get($id){
+      public function get($id_pai){
 
         try {
   
-          $data = Paises::find($id);
+          $data = Paises::find($id_pai);
   
           if ($data) {
             $response['data'] = $data;
@@ -59,7 +59,7 @@ class PaisesController extends Controller
           }
           else {
             $response['data'] = null;
-            $response['message'] = "Not found data id => $id";
+            $response['message'] = "Not found data id_pai => $id_pai";
             $response['success'] = false;
           }
   
@@ -70,15 +70,16 @@ class PaisesController extends Controller
         return $response;
       }
 
-      public function update(Request $request, $id){
+      public function update(Request $request, $id_pai){
 
         try {
         
+          $data['codigo_pai'] = $request['codigo_pai'];
           $data['nombre_pai'] = $request['nombre_pai'];
 
           //Console::info('mymessage');
 
-          $res = Paises::where("id",$id)->update($data);
+          $res = Paises::where("id_pai",$id_pai)->update($data);
 
           $response['res'] = $res;
           $response['message'] = "Updated successful";
@@ -92,10 +93,10 @@ class PaisesController extends Controller
   
       }
 
-      public function delete($id){
+      public function delete($id_pai){
 
         try {
-          $res = Paises::where("id",$id)->delete($id);
+          $res = Paises::where("id_pai",$id_pai)->delete($id_pai);
           $response['res'] = $res;
 
           $response['message'] = "Deleted successful";
