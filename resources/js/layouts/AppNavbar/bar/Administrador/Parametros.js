@@ -16,6 +16,7 @@ import PublicIcon from '@material-ui/icons/Public';
 import SettingsBackupRestoreIcon from '@material-ui/icons/SettingsBackupRestore';
 import StoreIcon from '@material-ui/icons/Store';
 import SyncIcon from '@material-ui/icons/Sync';
+import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import VerticalAlignCenterIcon from '@material-ui/icons/VerticalAlignCenter';
 
 
@@ -97,7 +98,7 @@ function Parametros() {
 
                     <ListItem component={Link} button to="/parametros/estados" className={classes.nested}>
                         <ListItemIcon>
-                            <AssignmentIndIcon />
+                            < PlaylistAddCheckIcon />
                         </ListItemIcon>
                         <ListItemText primary="Estados" />
                     </ListItem>
