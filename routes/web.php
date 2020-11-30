@@ -31,7 +31,11 @@ Route::get('/parametros/empresa', 'App\Http\Controllers\GimController@index');
 Route::get('/parametros/regiones', 'App\Http\Controllers\GimController@index');
 Route::get('/parametros/departamentos', 'App\Http\Controllers\GimController@index');
 Route::get('/parametros/ciudades', 'App\Http\Controllers\GimController@index');
-Route::get('/parametros/tipointerlocutores', 'App\Http\Controllers\GimController@index');
-Route::get('/parametros/especialidades', 'App\Http\Controllers\GimController@index');
 Route::get('/parametros/estados', 'App\Http\Controllers\GimController@index');
+Route::get('/parametros/frecuencias', 'App\Http\Controllers\GimController@index');
+Route::get('/parametros/tiposmtto', 'App\Http\Controllers\GimController@index');
 
+// Rutas del Modulo de Interlocutores
+Route::get('/interlocutores/tipointerlocutores', 'App\Http\Controllers\GimController@index');
+Route::get('/interlocutores/especialidades', 'App\Http\Controllers\GimController@index');
+Route::get('/interlocutores/proveedores', 'App\Http\Controllers\GimController@index');

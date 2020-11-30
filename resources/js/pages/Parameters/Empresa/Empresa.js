@@ -5,8 +5,8 @@ import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } fr
 import {makeStyles} from "@material-ui/core/styles";
 
 import empresaServices from "../../../services/Empresa";
-import paisServices from "../../../services/Paises";
-import ciudadServices from "../../../services/Ciudades";
+import paisServices from "../../../services/Parameters/Paises";
+import ciudadServices from "../../../services/Parameters/Ciudades";
 
 const useStyles = makeStyles((theme) => ({
   modal: {

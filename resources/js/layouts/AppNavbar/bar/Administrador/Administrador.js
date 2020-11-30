@@ -3,6 +3,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { ListSubheader, List } from "@material-ui/core";
 import Parametros from "./Parametros";
 import GestionUsuarios from "./GestionUsuarios";
+import Interlocutores from "./Interlocutores";
+import Activos from "./Activos";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -36,6 +38,9 @@ function Administrador() {
         >
             <Parametros />
             <GestionUsuarios />
+            <Interlocutores />
+            <Activos />
+      
         </List>
     );
 }

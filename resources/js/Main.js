@@ -22,9 +22,14 @@ import Regiones from './pages/Parameters/Regiones';
 import Empresa from './pages/Parameters/Empresa';
 import Departamentos from './pages/Parameters/Departamentos';
 import Ciudades from './pages/Parameters/Ciudades';
-import TipoInterlocutores from './pages/Parameters/TipoInterlocutores';
-import Especialidades from './pages/Parameters/Especialidades';
+
 import Estados from './pages/Parameters/Estados';
+import Frecuencias from './pages/Parameters/Frecuencias';
+import Tiposmtto from './pages/Parameters/Tiposmtto';
+
+//Componentes Modulo Interlocutores
+import TipoInterlocutores from './pages/Interlocutores/Parameters/TipoInterlocutores';
+import Especialidades from './pages/Interlocutores/Parameters/Especialidades';
 
 import {
   BrowserRouter as Router,
@@ -65,18 +70,18 @@ function Main() {
               <Route path="/auth/registrarusuario" component={RegistrarUsuario} />
               <Route path="/login" component={Login} />
 
-              <Route path="/parametros/paises" component={Paises} />
-              <Route path="/parametros/regiones" component={Regiones} />
+              <Route path="/parametros/paises" component={Paises}/>
+              <Route path="/parametros/regiones" component={Regiones}/>
               <Route path="/parametros/empresa" component={Empresa} />
               <Route path="/parametros/departamentos" component={Departamentos} />
               <Route path="/parametros/ciudades" component={Ciudades} />
-              <Route path="/parametros/tipointerlocutores" component={TipoInterlocutores} />
-              <Route path="/parametros/especialidades" component={Especialidades} />
               <Route path="/parametros/estados" component={Estados} />
+              <Route path="/parametros/frecuencias" component={Frecuencias} />
+              <Route path="/parametros/tiposmtto" component={Tiposmtto} />
 
+              <Route path="/interlocutores/tipointerlocutores" component={TipoInterlocutores} />
+              <Route path="/interlocutores/especialidades" component={Especialidades} />
               
-              
-      
             </Switch>
           </ThemeProvider>
         </Router>

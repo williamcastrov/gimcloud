@@ -2,9 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {ListSubheader, List, ListItem, ListItemIcon, ListItemText, Collapse } from "@material-ui/core";
 import {ExpandLess, ExpandMore, StarBorder } from "@material-ui/icons";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import DraftsIcon from "@material-ui/icons/Drafts";
-import SendIcon from "@material-ui/icons/Send";
+import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,7 +27,7 @@ function GestionUsuarios() {
       <div>
       <ListItem button onClick={handleClick}>
         <ListItemIcon>
-          <InboxIcon />
+          <VerifiedUserIcon />
         </ListItemIcon>
         <ListItemText primary="Gestion de Usuarios" />
         {open ? <ExpandLess /> : <ExpandMore />}

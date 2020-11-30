@@ -20,6 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/employee/listar_empleados', 'App\Http\Controllers\API\EmployeeController@list');
 
+// Rutas definidas para los Parametros del Sistema
 Route::get('/paises/listar_paises', 'App\Http\Controllers\API\Parameters\PaisesController@listar_paises');
 Route::post('/paises/create', 'App\Http\Controllers\API\Parameters\PaisesController@create');
 Route::get('/paises/get/{id}', 'App\Http\Controllers\API\Parameters\PaisesController@get');
@@ -44,23 +45,23 @@ Route::get('/ciudades/get/{id}', 'App\Http\Controllers\API\Parameters\CiudadesCo
 Route::delete('/ciudades/delete/{id}', 'App\Http\Controllers\API\Parameters\CiudadesController@delete');
 Route::put('/ciudades/update/{id}', 'App\Http\Controllers\API\Parameters\CiudadesController@update');
 
-Route::get('/tipointerlocutor/listar_tipointerlocutor', 'App\Http\Controllers\API\Parameters\TipoInterlocutorController@listar_tipointerlocutor');
-Route::post('/tipointerlocutor/create', 'App\Http\Controllers\API\Parameters\TipoInterlocutorController@create');
-Route::get('/tipointerlocutor/get/{id}', 'App\Http\Controllers\API\Parameters\TipoInterlocutorController@get');
-Route::delete('/tipointerlocutor/delete/{id}', 'App\Http\Controllers\API\Parameters\TipoInterlocutorController@delete');
-Route::put('/tipointerlocutor/update/{id}', 'App\Http\Controllers\API\Parameters\TipoInterlocutorController@update');
-
-Route::get('/especialidad/listar_especialidades', 'App\Http\Controllers\API\Parameters\EspecialidadesController@listar_especialidades');
-Route::post('/especialidad/create', 'App\Http\Controllers\API\Parameters\EspecialidadesController@create');
-Route::get('/especialidad/get/{id}', 'App\Http\Controllers\API\Parameters\EspecialidadesController@get');
-Route::delete('/especialidad/delete/{id}', 'App\Http\Controllers\API\Parameters\EspecialidadesController@delete');
-Route::put('/especialidad/update/{id}', 'App\Http\Controllers\API\Parameters\EspecialidadesController@update');
-
 Route::get('/estados/listar_estados', 'App\Http\Controllers\API\Parameters\EstadosController@listar_estados');
 Route::post('/estados/create', 'App\Http\Controllers\API\Parameters\EstadosController@create');
 Route::get('/estados/get/{id}', 'App\Http\Controllers\API\Parameters\EstadosController@get');
 Route::delete('/estados/delete/{id}', 'App\Http\Controllers\API\Parameters\EstadosController@delete');
 Route::put('/estados/update/{id}', 'App\Http\Controllers\API\Parameters\EstadosController@update');
+
+Route::get('/frecuencias/listar_frecuencias', 'App\Http\Controllers\API\Parameters\FrecuenciasController@listar_frecuencias');
+Route::post('/frecuencias/create', 'App\Http\Controllers\API\Parameters\FrecuenciasController@create');
+Route::get('/frecuencias/get/{id}', 'App\Http\Controllers\API\Parameters\FrecuenciasController@get');
+Route::delete('/frecuencias/delete/{id}', 'App\Http\Controllers\API\Parameters\FrecuenciasController@delete');
+Route::put('/frecuencias/update/{id}', 'App\Http\Controllers\API\Parameters\FrecuenciasController@update');
+
+Route::get('/tiposmtto/listar_tiposmtto', 'App\Http\Controllers\API\Parameters\TiposmttoController@listar_tiposmtto');
+Route::post('/tiposmtto/create', 'App\Http\Controllers\API\Parameters\TiposmttoController@create');
+Route::get('/tiposmtto/get/{id}', 'App\Http\Controllers\API\Parameters\TiposmttoController@get');
+Route::delete('/tiposmtto/delete/{id}', 'App\Http\Controllers\API\Parameters\TiposmttoController@delete');
+Route::put('/tiposmtto/update/{id}', 'App\Http\Controllers\API\Parameters\TiposmttoController@update');
 
 Route::get('/empresa/listar_empresa', 'App\Http\Controllers\API\Parameters\EmpresaController@listar_empresa');
 Route::post('/empresa/create', 'App\Http\Controllers\API\Parameters\EmpresaController@create');
@@ -68,6 +69,26 @@ Route::get('/empresa/get/{id}', 'App\Http\Controllers\API\Parameters\EmpresaCont
 Route::delete('/empresa/delete/{id}', 'App\Http\Controllers\API\Parameters\EmpresaController@delete');
 Route::put('/empresa/update/{id}', 'App\Http\Controllers\API\Parameters\EmpresaController@update');
 
+// Rutas Gestión Interlocutores
+Route::get('/tipointerlocutor/listar_tipointerlocutor', 'App\Http\Controllers\API\Interlocutores\TipoInterlocutoresController@listar_tipointerlocutor');
+Route::post('/tipointerlocutor/create', 'App\Http\Controllers\API\Interlocutores\TipoInterlocutoresController@create');
+Route::get('/tipointerlocutor/get/{id}', 'App\Http\Controllers\API\v\TipoInterlocutoresController@get');
+Route::delete('/tipointerlocutor/delete/{id}', 'App\Http\Controllers\API\Interlocutores\TipoInterlocutoresController@delete');
+Route::put('/tipointerlocutor/update/{id}', 'App\Http\Controllers\API\Interlocutores\TipoInterlocutoresController@update');
+
+Route::get('/especialidad/listar_especialidades', 'App\Http\Controllers\API\Interlocutores\EspecialidadesController@listar_especialidades');
+Route::post('/especialidad/create', 'App\Http\Controllers\API\Interlocutores\EspecialidadesController@create');
+Route::get('/especialidad/get/{id}', 'App\Http\Controllers\API\Interlocutores\EspecialidadesController@get');
+Route::delete('/especialidad/delete/{id}', 'App\Http\Controllers\API\Interlocutores\EspecialidadesController@delete');
+Route::put('/especialidad/update/{id}', 'App\Http\Controllers\API\Interlocutores\EspecialidadesController@update');
+
+Route::get('/interlocutores/listar_interlocutores', 'App\Http\Controllers\API\Interlocutores\InterlocutoresController@listar_interlocutores');
+Route::post('/interlocutores/create', 'App\Http\Controllers\API\Interlocutores\InterlocutoresController@create');
+Route::get('/interlocutores/get/{id}', 'App\Http\Controllers\API\Interlocutores\InterlocutoresController@get');
+Route::delete('/interlocutores/delete/{id}', 'App\Http\Controllers\API\Interlocutores\InterlocutoresController@delete');
+Route::put('/interlocutores/update/{id}', 'App\Http\Controllers\API\Interlocutores\InterlocutoresController@update');
+
+// Rutas Gestión Usuarios
 Route::get('/usuarios/listar_usuarios', 'App\Http\Controllers\API\Parameters\UsuariosController@listar_usuarios');
 Route::post('/usuarios/create', 'App\Http\Controllers\API\Parameters\UsuariosController@create');
 Route::get('/usuarios/get/{id}', 'App\Http\Controllers\API\Parameters\UsuariosController@get');

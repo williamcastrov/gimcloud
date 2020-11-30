@@ -4,7 +4,7 @@ import MaterialTable from "material-table";
 import {Modal, TextField, Button } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 
-import paisServices from "../../../services/Paises";
+import paisServices from "../../../services/Parameters/Paises";
 
 const useStyles = makeStyles((theme) => ({
   modal: {

@@ -5,8 +5,8 @@ import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } fr
 import {makeStyles} from "@material-ui/core/styles";
 
 // Componentes de Conexion con el Backend
-import ciudadesServices from "../../../services/Ciudades";
-import departamentosServices from "../../../services/Departamentos";
+import ciudadesServices from "../../../services/Parameters/Ciudades";
+import departamentosServices from "../../../services/Parameters/Departamentos";
 
 
 const useStyles = makeStyles((theme) => ({
