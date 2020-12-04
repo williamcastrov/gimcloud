@@ -23,6 +23,7 @@ class InterlocutoresController extends Controller
           $insert['primer_nombre_int']      = $request['primer_nombre_int'];
           $insert['segundo_nombre_int']     = $request['segundo_nombre_int'];
           $insert['primer_apellido_int']    = $request['primer_apellido_int'];
+          $insert['segundo_apellido_int']    = $request['segundo_apellido_int'];
           $insert['razonsocial_int']        = $request['razonsocial_int'];
           $insert['ciudad_int']             = $request['ciudad_int'];
           $insert['direccion_int']          = $request['direccion_int'];
@@ -47,11 +48,11 @@ class InterlocutoresController extends Controller
     
       public function listar_interlocutores(){  
         try {
-          //$data = Frecuencias::with("empresa")->get();
+          //Muestra Unicamente los tipos de Interlocutores PROVEEDORES = 1
           $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est, t3.nombre_ciu, t4.nombre_esp,  t5.nombre_tint
           FROM interlocutores as t0 INNER JOIN empresa as t1 INNER JOIN estados as t2 INNER JOIN ciudades as t3
           INNER JOIN especialidades_int as t4  INNER JOIN tipo_interlocutor as t5
-          WHERE t0.empresa_int = t1.id_emp and t0.estado_int = t2.id_est 
+          WHERE t0.codigo_tipo_int = 1 and t0.empresa_int = t1.id_emp and t0.estado_int = t2.id_est 
           and t0.ciudad_int = t3.id_ciu and t0.especialidad_int = t4.id_esp and t0.codigo_tipo_int = t5.id_tint");
   
     
@@ -101,6 +102,7 @@ class InterlocutoresController extends Controller
           $data['primer_nombre_int']      = $request['primer_nombre_int'];
           $data['segundo_nombre_int']     = $request['segundo_nombre_int'];
           $data['primer_apellido_int']    = $request['primer_apellido_int'];
+          $data['segundo_apellido_int']   = $request['segundo_apellido_int'];
           $data['razonsocial_int']        = $request['razonsocial_int'];
           $data['ciudad_int']             = $request['ciudad_int'];
           $data['direccion_int']          = $request['direccion_int'];

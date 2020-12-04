@@ -39,3 +39,4 @@ Route::get('/parametros/tiposmtto', 'App\Http\Controllers\GimController@index');
 Route::get('/interlocutores/tipointerlocutores', 'App\Http\Controllers\GimController@index');
 Route::get('/interlocutores/especialidades', 'App\Http\Controllers\GimController@index');
 Route::get('/interlocutores/proveedores', 'App\Http\Controllers\GimController@index');
+Route::get('/interlocutores/clientes', 'App\Http\Controllers\GimController@index');

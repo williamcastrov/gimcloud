@@ -70,13 +70,13 @@ const BarSession = () => {
                 ))}
 
                 </IconButton>
-                <Typography variant="h3" >
+                <Typography variant="h3" color="inherit" >
                     GIM Cloud
                 </Typography>
                 
                 <div className={classes.grow} ></div>
                 <div className={classes.sectionDesktop} >
-                    <Button size="large" color="default" onClick={IraInicio} variant="outlined" > Ir a Inicio </Button>
+                    <Button size="large" onClick={IraInicio} variant="outlined" color="inherit" > Ir a Inicio </Button>
                 </div>
                 
                 <div className={classes.grow} ></div>

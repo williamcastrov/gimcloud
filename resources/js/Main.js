@@ -30,6 +30,8 @@ import Tiposmtto from './pages/Parameters/Tiposmtto';
 //Componentes Modulo Interlocutores
 import TipoInterlocutores from './pages/Interlocutores/Parameters/TipoInterlocutores';
 import Especialidades from './pages/Interlocutores/Parameters/Especialidades';
+import Proveedores from './pages/Interlocutores/Proveedores';
+import Clientes from './pages/Interlocutores/Clientes';
 
 import {
   BrowserRouter as Router,
@@ -81,6 +83,8 @@ function Main() {
 
               <Route path="/interlocutores/tipointerlocutores" component={TipoInterlocutores} />
               <Route path="/interlocutores/especialidades" component={Especialidades} />
+              <Route path="/interlocutores/proveedores" component={Proveedores} />
+              <Route path="/interlocutores/clientes" component={Clientes} />
               
             </Switch>
           </ThemeProvider>

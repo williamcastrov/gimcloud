@@ -70,13 +70,13 @@ function Interlocutores() {
               </ListItem>
             </List>
           </Collapse>
-          <ListItem button className={classes.nested}>
+          <ListItem component={Link} button to="/interlocutores/proveedores" className={classes.nested}>
             <ListItemIcon>
               <SettingsBackupRestoreIcon />
             </ListItemIcon>
             <ListItemText primary="Proveedores" />
           </ListItem>
-          <ListItem button className={classes.nested}>
+          <ListItem component={Link} button to="/interlocutores/clientes" className={classes.nested} >
             <ListItemIcon>
               <PeopleIcon />
             </ListItemIcon>

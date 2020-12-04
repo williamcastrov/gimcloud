@@ -82,6 +82,18 @@ Route::get('/especialidad/get/{id}', 'App\Http\Controllers\API\Interlocutores\Es
 Route::delete('/especialidad/delete/{id}', 'App\Http\Controllers\API\Interlocutores\EspecialidadesController@delete');
 Route::put('/especialidad/update/{id}', 'App\Http\Controllers\API\Interlocutores\EspecialidadesController@update');
 
+Route::get('/proveedores/listar_proveedores', 'App\Http\Controllers\API\Interlocutores\ProveedoresController@listar_proveedores');
+Route::post('/proveedores/create', 'App\Http\Controllers\API\Interlocutores\ProveedoresController@create');
+Route::get('/proveedores/get/{id}', 'App\Http\Controllers\API\Interlocutores\ProveedoresController@get');
+Route::delete('/proveedores/delete/{id}', 'App\Http\Controllers\API\Interlocutores\ProveedoresController@delete');
+Route::put('/proveedores/update/{id}', 'App\Http\Controllers\API\Interlocutores\ProveedoresController@update');
+
+Route::get('/clientes/listar_clientes', 'App\Http\Controllers\API\Interlocutores\ClientesController@listar_clientes');
+Route::post('/clientes/create', 'App\Http\Controllers\API\Interlocutores\ClientesController@create');
+Route::get('/clientes/get/{id}', 'App\Http\Controllers\API\Interlocutores\ClientesController@get');
+Route::delete('/clientes/delete/{id}', 'App\Http\Controllers\API\Interlocutores\ClientesController@delete');
+Route::put('/clientes/update/{id}', 'App\Http\Controllers\API\Interlocutores\ClientesController@update');
+
 Route::get('/interlocutores/listar_interlocutores', 'App\Http\Controllers\API\Interlocutores\InterlocutoresController@listar_interlocutores');
 Route::post('/interlocutores/create', 'App\Http\Controllers\API\Interlocutores\InterlocutoresController@create');
 Route::get('/interlocutores/get/{id}', 'App\Http\Controllers\API\Interlocutores\InterlocutoresController@get');
