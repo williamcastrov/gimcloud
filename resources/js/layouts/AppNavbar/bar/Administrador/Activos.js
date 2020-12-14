@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from 'react-router-dom';
 import { makeStyles } from "@material-ui/core/styles";
 import {ListSubheader, List, ListItem, ListItemIcon, ListItemText, Collapse } from "@material-ui/core";
 import {ExpandLess, ExpandMore} from "@material-ui/icons";
@@ -7,6 +8,7 @@ import StoreIcon from '@material-ui/icons/Store';
 import VerticalAlignCenterIcon from '@material-ui/icons/VerticalAlignCenter';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
+import Divider from '@material-ui/core/Divider';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,7 +40,7 @@ function Activos() {
         <ListItemIcon>
           <MonetizationOnIcon />
         </ListItemIcon>
-        <ListItemText primary="Administrar Activos" />
+        <ListItemText primary="Activos" />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
    
@@ -60,13 +62,13 @@ function Activos() {
                 </ListItemIcon>
                 <ListItemText primary="Bodegas" />
               </ListItem>
-              <ListItem button className={classes.nested}>
+              <ListItem component={Link} button to="/activos/areas" className={classes.nested} >
                 <ListItemIcon>
                   <VerticalAlignCenterIcon />
                 </ListItemIcon>
                 <ListItemText primary="Areas" />
               </ListItem>
-              <ListItem button className={classes.nested}>
+              <ListItem component={Link} button to="/activos/cencostos" className={classes.nested}>
                 <ListItemIcon>
                   <CenterFocusWeakIcon />
                 </ListItemIcon>
@@ -74,7 +76,7 @@ function Activos() {
               </ListItem>
             </List>
           </Collapse>
-
+          <Divider />
           <ListItem button className={classes.nested}>
             <ListItemIcon>
               <MonetizationOnIcon />

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MaterialTable from "material-table";
-import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
+import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
+import SaveIcon from '@material-ui/icons/Save';
 
 // Componentes de Conexion con el Backend
 import frecuenciasServices from "../../../services/Parameters/Frecuencias";
@@ -76,7 +77,7 @@ function Frecuencias() {
     console.log(res.data);
   }
   fetchDataEstados();
-}, [])
+  }, [])
 
   const handleChange = e => {
     const {name, value} = e.target;
@@ -263,47 +264,59 @@ function Frecuencias() {
 
   const frecuenciaInsertar=(
     <div className={styles.modal}>
+      <br />
       <h3>Agregar Nueva Frecuencia para Mantenimiento</h3>
-      <TextField className={styles.inputMaterial} label="Código" name="codigo_fre" onChange={handleChange} />   
-      <br />
-      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_fre" onChange={handleChange} />          
-      <br />
-      <FormControl className={styles.formControl}>
-        <InputLabel id="idselectEmpresa">Empresa</InputLabel>
-        <Select
-          labelId="selectEmpresa"
-          name="empresa_fre"
-          id="idselectEmpresa"
-          onChange={handleChange}
-        >
-          <MenuItem value=""> <em>None</em> </MenuItem>
-          {
-            listarEmpresas.map((itemselect) => {
-              return (
-                <MenuItem value={itemselect.id_emp }>{itemselect.nombre_emp}</MenuItem>
-              )
-            })
-          }
-        </Select>
-      </FormControl>
-      <FormControl className={styles.formControl}>
-        <InputLabel id="idselectEstado">Estado</InputLabel>
-        <Select
-          labelId="selectEstado"
-          name="estado_fre"
-          id="idselectEstado"
-          onChange={handleChange}
-        >
-          <MenuItem value=""> <em>None</em> </MenuItem>
-          {
-            listarEstados.map((itemselect) => {
-              return (
-                <MenuItem value={itemselect.id_est }>{itemselect.nombre_est}</MenuItem>
-              )
-            })
-          }
-        </Select>
-      </FormControl>
+ 
+      <Grid container spacing={2} > 
+        <Grid item xs={12} md={6}>
+          <TextField className={styles.inputMaterial} label="Código" name="codigo_fre" fullWidth onChange={handleChange} />
+        </Grid>
+        <Grid item xs={12} md={6}> 
+          <TextField className={styles.inputMaterial} label="Descripción" name="nombre_fre" fullWidth onChange={handleChange} />  
+        </Grid>
+      </Grid>
+      <Grid container spacing={2} > 
+        <Grid item xs={12} md={6}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectEmpresa">Empresa</InputLabel>
+            <Select
+              labelId="selectEmpresa"
+              name="empresa_fre"
+              id="idselectEmpresa"
+              onChange={handleChange}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarEmpresas.map((itemselect) => {
+                  return (
+                  <MenuItem value={itemselect.id_emp }>{itemselect.nombre_emp}</MenuItem>
+                )
+              })
+            }
+            </Select>
+          </FormControl>
+        </Grid>
+          <Grid item xs={12} md={6}>
+            <FormControl className={styles.formControl}>
+              <InputLabel id="idselectEstado">Estado</InputLabel>
+              <Select
+                labelId="selectEstado"
+                name="estado_fre"
+                id="idselectEstado"
+                onChange={handleChange}
+              >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarEstados.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_est }>{itemselect.nombre_est}</MenuItem>
+                  )
+                })
+              }
+              </Select>
+            </FormControl>
+          </Grid>
+      </Grid>
       <br /><br />
       <div align="right">    
         <Button color="primary" onClick = { () => grabarFrecuencia() } >Insertar</Button>
@@ -377,7 +390,8 @@ function Frecuencias() {
 
   return (
     <div className="App">
-    <Button onClick={()=> abrirCerrarModalInsertar() } >Insertar Frecuencia para Mantenimiento</Button>
+    <br />
+    <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Insertar</Button>
      <MaterialTable
        columns={columnas}
        data={listFrecuencias}

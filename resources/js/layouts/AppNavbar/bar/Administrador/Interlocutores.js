@@ -10,6 +10,7 @@ import RecentActorsIcon from '@material-ui/icons/RecentActors';
 import DialerSipIcon from '@material-ui/icons/DialerSip';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
+import Divider from '@material-ui/core/Divider';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,7 +42,7 @@ function Interlocutores() {
         <ListItemIcon>
           <RecentActorsIcon />
         </ListItemIcon>
-        <ListItemText primary="Gestion de Interlocutores" />
+        <ListItemText primary="Interlocutores" />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
    
@@ -70,19 +71,22 @@ function Interlocutores() {
               </ListItem>
             </List>
           </Collapse>
+          <Divider />
           <ListItem component={Link} button to="/interlocutores/proveedores" className={classes.nested}>
             <ListItemIcon>
               <SettingsBackupRestoreIcon />
             </ListItemIcon>
             <ListItemText primary="Proveedores" />
           </ListItem>
+          <Divider />
           <ListItem component={Link} button to="/interlocutores/clientes" className={classes.nested} >
             <ListItemIcon>
               <PeopleIcon />
             </ListItemIcon>
             <ListItemText primary="Clientes" />
-          </ListItem>                        
-          <ListItem button className={classes.nested}>
+          </ListItem>
+          <Divider />                        
+          <ListItem component={Link} button to="/interlocutores/empleados" className={classes.nested}>
             <ListItemIcon>
               <ContactsIcon />
             </ListItemIcon>

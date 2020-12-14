@@ -2,9 +2,11 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { ListSubheader, List } from "@material-ui/core";
 import Parametros from "./Parametros";
-import GestionUsuarios from "./GestionUsuarios";
+import Usuarios from "./Usuarios";
 import Interlocutores from "./Interlocutores";
 import Activos from "./Activos";
+import Almacenes from "./Almacenes";
+import Mantenimiento from "./Mantenimiento";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -37,9 +39,11 @@ function Administrador() {
             className={classes.root}
         >
             <Parametros />
-            <GestionUsuarios />
+            <Usuarios />
             <Interlocutores />
             <Activos />
+            <Almacenes />
+            <Mantenimiento />
       
         </List>
     );

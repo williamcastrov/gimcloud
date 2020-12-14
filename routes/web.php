@@ -34,9 +34,25 @@ Route::get('/parametros/ciudades', 'App\Http\Controllers\GimController@index');
 Route::get('/parametros/estados', 'App\Http\Controllers\GimController@index');
 Route::get('/parametros/frecuencias', 'App\Http\Controllers\GimController@index');
 Route::get('/parametros/tiposmtto', 'App\Http\Controllers\GimController@index');
+Route::get('/parametros/unidades', 'App\Http\Controllers\GimController@index');
+Route::get('/parametros/monedas', 'App\Http\Controllers\GimController@index');
 
 // Rutas del Modulo de Interlocutores
 Route::get('/interlocutores/tipointerlocutores', 'App\Http\Controllers\GimController@index');
 Route::get('/interlocutores/especialidades', 'App\Http\Controllers\GimController@index');
 Route::get('/interlocutores/proveedores', 'App\Http\Controllers\GimController@index');
 Route::get('/interlocutores/clientes', 'App\Http\Controllers\GimController@index');
+Route::get('/interlocutores/empleados', 'App\Http\Controllers\GimController@index');
+
+// Rutas del Modulo de Mantenimiento
+Route::get('/mantenimiento/marcas', 'App\Http\Controllers\GimController@index');
+Route::get('/mantenimiento/tiposequipos', 'App\Http\Controllers\GimController@index');
+Route::get('/mantenimiento/clasificacionabc', 'App\Http\Controllers\GimController@index');
+Route::get('/mantenimiento/referencias', 'App\Http\Controllers\GimController@index');
+Route::get('/mantenimiento/garantias', 'App\Http\Controllers\GimController@index');
+Route::get('/mantenimiento/equipos', 'App\Http\Controllers\GimController@index');
+
+// Rutas del Modulo de Activos
+Route::get('/activos/areas', 'App\Http\Controllers\GimController@index');
+Route::get('/activos/cencostos', 'App\Http\Controllers\GimController@index');
+

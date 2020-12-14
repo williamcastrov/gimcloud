@@ -17,4 +17,6 @@ class Paises extends Model
         'codigo_pai',
         'nombre_pai'
     ];
+
+    public $timestamps = false;
 }
