@@ -3,6 +3,7 @@ import axios from "axios";
 import MaterialTable from "material-table";
 import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
+import SaveIcon from '@material-ui/icons/Save';
 
 // Componentes de Conexion con el Backend
 import departamentosServices from "../../../services/Parameters/Departamentos";
@@ -289,7 +290,8 @@ function Departamentos() {
 
   return (
     <div className="App">
-    <Button onClick={()=> abrirCerrarModalInsertar() } >Insertar Departamento</Button>
+    <br />
+    <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={()=> abrirCerrarModalInsertar() } >Insertar Departamentos</Button>
      <MaterialTable
        columns={columnas}
        data={listDepartamentos}

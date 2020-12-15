@@ -3,6 +3,7 @@ import axios from "axios";
 import MaterialTable from "material-table";
 import {Modal, TextField, Button } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
+import SaveIcon from '@material-ui/icons/Save';
 
 import paisServices from "../../../services/Parameters/Paises";
 
@@ -232,7 +233,8 @@ function Paises() {
 
   return (
     <div className="App">
-    <Button onClick={()=> abrirCerrarModalInsertar() } >Insertar Pais</Button>
+    <br />
+    <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={()=> abrirCerrarModalInsertar() } >Insertar Pais</Button>
      <MaterialTable
        columns={columnas}
        data={listPaises}

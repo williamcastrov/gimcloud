@@ -60,7 +60,7 @@ class GarantiasController extends Controller
           $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est, t3.nombre_equ
           FROM garantias as t0 INNER JOIN empresa as t1 INNER JOIN estados as t2 INNER JOIN equipos as t3
           WHERE t0.id_gar = $id_gar and t0.empresa_gar = t1.id_emp and t0.estado_gar = t2.id_est and t0.id_gar = t3.id_equ");
-      
+          
           if ($data) {
               $response['data'] = $data;
               $response['message'] = "Load successful";

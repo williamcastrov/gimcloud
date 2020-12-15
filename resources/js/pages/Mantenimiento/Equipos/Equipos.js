@@ -83,8 +83,6 @@ function Equipos() {
         'codigo_equ': "",
         'empresa_equ': "",
         'nombre_equ': "",
-        'grupo_equ': "",
-        'subgrupo_equ': "",
         'frecuencia_equ': "",
         'estado_equ': "",
         'propietario_equ': "",
@@ -99,9 +97,7 @@ function Equipos() {
         'valoradquisicion': "",
         'tipomoneda_equ': "",
         'clasificacionABC_equ': "",
-        'centrodecosto_equ': "",
-        'fechainiciagarantia_equ': "",
-        'fechafingarantia_equ': ""
+        'centrodecosto_equ': ""
   })
 
   useEffect(() => {
@@ -241,16 +237,6 @@ function Equipos() {
       formOk = false;
     }
 
-    if (!equiposSeleccionado.grupo_equ) {
-      errors.grupo_equ = true;
-      formOk = false;
-    }
-
-    if (!equiposSeleccionado.subgrupo_equ) {
-      errors.subgrupo_equ = true;
-      formOk = false;
-    }
-
     if (!equiposSeleccionado.frecuencia_equ) {
       errors.frecuencia_equ = true;
       formOk = false;
@@ -326,16 +312,6 @@ function Equipos() {
       formOk = false;
     }
 
-    if (!equiposSeleccionado.fechainiciagarantia_equ) {
-      errors.fechainiciagarantia_equ = true;
-      formOk = false;
-    }
-
-    if (!equiposSeleccionado.fechafingarantia_equ) {
-      errors.fechafingarantia_equ = true;
-      formOk = false;
-    }
-    
     setFormError(errors);
 
     if (formOk) {
@@ -349,8 +325,6 @@ function Equipos() {
         delete equiposSeleccionado.codigo_equ;
         delete equiposSeleccionado.empresa_equ;
         delete equiposSeleccionado.nombre_equ;
-        delete equiposSeleccionado.grupo_equ;
-        delete equiposSeleccionado.subgrupo_equ;
         delete equiposSeleccionado.frecuencia_equ;
         delete equiposSeleccionado.estado_equ;
         delete equiposSeleccionado.propietario_equ;
@@ -366,8 +340,6 @@ function Equipos() {
         delete equiposSeleccionado.tipomoneda_equ;
         delete equiposSeleccionado.clasificacionABC_equ;
         delete equiposSeleccionado.centrodecosto_equ;
-        delete equiposSeleccionado.fechainiciagarantia_equ;
-        delete equiposSeleccionado.fechafingarantia_equ;
       } else
       {
         alert("Error Creando el Equipo");
@@ -404,16 +376,6 @@ function Equipos() {
       formOk = false;
     }
 
-    if (!equiposSeleccionado.grupo_equ) {
-      errors.grupo_equ = true;
-      formOk = false;
-    }
-
-    if (!equiposSeleccionado.subgrupo_equ) {
-      errors.subgrupo_equ = true;
-      formOk = false;
-    }
-
     if (!equiposSeleccionado.frecuencia_equ) {
       errors.frecuencia_equ = true;
       formOk = false;
@@ -489,16 +451,6 @@ function Equipos() {
       formOk = false;
     }
 
-    if (!equiposSeleccionado.fechainiciagarantia_equ) {
-      errors.fechainiciagarantia_equ = true;
-      formOk = false;
-    }
-
-    if (!equiposSeleccionado.fechafingarantia_equ) {
-      errors.fechafingarantia_equ = true;
-      formOk = false;
-    }
-
     setFormError(errors);
 
     if (formOk) {
@@ -512,8 +464,6 @@ function Equipos() {
         delete equiposSeleccionado.codigo_equ;
         delete equiposSeleccionado.empresa_equ;
         delete equiposSeleccionado.nombre_equ;
-        delete equiposSeleccionado.grupo_equ;
-        delete equiposSeleccionado.subgrupo_equ;
         delete equiposSeleccionado.frecuencia_equ;
         delete equiposSeleccionado.estado_equ;
         delete equiposSeleccionado.propietario_equ;
@@ -529,8 +479,6 @@ function Equipos() {
         delete equiposSeleccionado.tipomoneda_equ;
         delete equiposSeleccionado.clasificacionABC_equ;
         delete equiposSeleccionado.centrodecosto_equ;
-        delete equiposSeleccionado.fechainiciagarantia_equ;
-        delete equiposSeleccionado.fechafingarantia_equ;
     } else
     {
         alert("Error Actualizando el Equipo");
@@ -585,14 +533,6 @@ function Equipos() {
     title: 'Descripción  del Equipo'
   },
   {
-    field: 'grupo_equ',
-    title: 'Cod. Grupo'
-  },
-  {
-    field: 'subgrupo_equ',
-    title: 'Cod. SubGrupo'
-  },
-  {
     field: 'frecuencia_equ',
     title: 'Frecuencia'
   },
@@ -637,8 +577,8 @@ function Equipos() {
     title: 'Tipo'
   },
   {
-    field: 'Descripción del tipo de Equipo',
-    title: 'nombre_tequ'
+    field: 'nombre_tequ',
+    title: 'Descripción del tipo de Equipo'
   },
   {
     field: 'serie_equ',
@@ -683,14 +623,6 @@ function Equipos() {
   {
     field: 'nombre_cco',
     title: 'Nombre Cencosto'
-  },
-  {
-    field: 'fechainiciagarantia_equ',
-    title: 'Fecha Inicia Garantía'
-  },
-  {
-    field: 'fechafingarantia_equ',
-    title: 'Fecha Fin Garantía'
   }
   ]
   
@@ -726,11 +658,6 @@ function Equipos() {
 
       <Grid container spacing={2} > 
         <Grid item xs={12} md={6}> <TextField  name="nombre_equ" label="Descripción del Equipo" fullWidth onChange={handleChange} /> </Grid>
-        <Grid item xs={12} md={6}> <TextField  name="grupo_equ" label="Código Grupo" fullWidth onChange={handleChange} /> </Grid>
-      </Grid>
-
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> <TextField  name="subgrupo_equ" label="Código SubGrupo" fullWidth onChange={handleChange} /> </Grid>
         <Grid item xs={12} md={6}> 
         <FormControl className={styles.formControl}>
           <InputLabel id="idselectFrecuencia">Frecuencia</InputLabel>
@@ -929,11 +856,6 @@ function Equipos() {
         </Grid>
       </Grid>
 
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> <TextField  name="fechainiciagarantia_equ" label="Fecha Inicia Garantía" onChange={handleChange} fullWidth /> </Grid>    
-        <Grid item xs={12} md={6}> <TextField  name="fechafingarantia_equ" label="Fecha Fin Garantía" onChange={handleChange} fullWidth /> </Grid>
-      </Grid>
-          
       <br /><br />
       <div align="right">    
         <Button color="primary" onClick = { () => grabarEquipo() } >Insertar</Button>
@@ -978,15 +900,6 @@ function Equipos() {
       <Grid container spacing={2} > 
         <Grid item xs={12} md={6}> <TextField  name="nombre_equ" label="Descripción del Equipo"
           fullWidth onChange={handleChange} value={equiposSeleccionado&&equiposSeleccionado.nombre_equ} />
-        </Grid>
-        <Grid item xs={12} md={6}> <TextField  name="grupo_equ" label="Código Grupo" 
-          fullWidth onChange={handleChange} value={equiposSeleccionado&&equiposSeleccionado.grupo_equ} /> 
-        </Grid>
-      </Grid>
-
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> <TextField  name="subgrupo_equ" label="Código SubGrupo" 
-          fullWidth onChange={handleChange}  value={equiposSeleccionado&&equiposSeleccionado.subgrupo_equ} />
         </Grid>
         <Grid item xs={12} md={6}> 
         <FormControl className={styles.formControl}>
@@ -1208,21 +1121,12 @@ function Equipos() {
         </Grid>
       </Grid>
 
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> <TextField  name="fechainiciagarantia_equ" label="Fecha Inicia Garantía"
-          onChange={handleChange} fullWidth value={equiposSeleccionado&&equiposSeleccionado.fechainiciagarantia_equ} /> 
-        </Grid>    
-        <Grid item xs={12} md={6}> <TextField  name="fechafingarantia_equ" label="Fecha Fin Garantía" 
-          onChange={handleChange} fullWidth value={equiposSeleccionado&&equiposSeleccionado.fechafingarantia_equ} /> 
-        </Grid>
-      </Grid>
-
       <br /><br />
       <div align="right">
         <Button color="primary"  onClick={()=>actualizarEquipo()} >Editar</Button>
         <Button onClick={()=>abrirCerrarModalEditar()}>Cancelar</Button>
       </div>
-      <DatosEquipos equipoID={equiposSeleccionado.id_equ} />
+      <DatosEquipos equipoID={equiposSeleccionado.id_equ} equipoCodigo={equiposSeleccionado.codigo_equ} />
     </div>
   )
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
 import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
+import SaveIcon from '@material-ui/icons/Save';
 
 // Componentes de Conexion con el Backend
 import monedasServices from "../../../services/Parameters/Monedas";
@@ -53,7 +54,7 @@ function Monedas() {
     async function fetchDataMonedas() {
       const res = await monedasServices.listMonedas();
       setListMonedas(res.data);
-      console.log(res.data)
+      //console.log(res.data)
     }
     fetchDataMonedas();
   }, [])
@@ -62,7 +63,7 @@ function Monedas() {
       async function fetchDataEmpresas() {
       const res = await empresasServices.listEmpresas();
       setListarEmpresas(res.data) 
-      console.log(res.data);
+      //console.log(res.data);
     }
     fetchDataEmpresas();
   }, [])
@@ -71,7 +72,7 @@ function Monedas() {
     async function fetchDataEstados() {
     const res = await estadosServices.listEstados();
     setListarEstados(res.data) 
-    console.log(res.data);
+    //console.log(res.data);
   }
   fetchDataEstados();
   }, [])
@@ -375,11 +376,12 @@ function Monedas() {
 
   return (
     <div className="App">
-    <Button onClick={()=> abrirCerrarModalInsertar() } >Insertar Tipo de Moneda</Button>
+    <br />
+    <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={()=> abrirCerrarModalInsertar() } >Insertar Tipo de Moneda</Button>
      <MaterialTable
        columns={columnas}
        data={listMonedas}
-       title="Maestra de Tipos de MOneda"
+       title="Maestra de Tipos de Moneda"
        actions={[
          {
            icon     : 'edit',

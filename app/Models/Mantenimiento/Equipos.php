@@ -17,8 +17,6 @@ class Equipos extends Model
         'codigo_equ',
         'empresa_equ',
         'nombre_equ',
-        'grupo_equ',
-        'subgrupo_equ',
         'frecuencia_equ',
         'estado_equ',
         'propietario_equ',
@@ -33,9 +31,7 @@ class Equipos extends Model
         'valoradquisicion',
         'tipomoneda_equ',
         'clasificacionABC_equ',
-        'centrodecosto_equ',
-        'fechainiciagarantia_equ',
-        'fechafingarantia_equ',
+        'centrodecosto_equ'
     ];
 
     public $timestamps = false;

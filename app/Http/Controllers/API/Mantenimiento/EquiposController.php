@@ -26,8 +26,6 @@ class EquiposController extends Controller
           $insert['codigo_equ']              = $request['codigo_equ'];
           $insert['empresa_equ']             = $request['empresa_equ'];
           $insert['nombre_equ']              = $request['nombre_equ'];
-          $insert['grupo_equ']               = $request['grupo_equ'];
-          $insert['subgrupo_equ']            = $request['subgrupo_equ'];
           $insert['frecuencia_equ']          = $request['frecuencia_equ'];
           $insert['estado_equ']              = $request['estado_equ'];
           $insert['propietario_equ']         = $request['propietario_equ'];
@@ -43,8 +41,6 @@ class EquiposController extends Controller
           $insert['tipomoneda_equ']          = $request['tipomoneda_equ'];
           $insert['clasificacionABC_equ']    = $request['clasificacionABC_equ'];
           $insert['centrodecosto_equ']       = $request['centrodecosto_equ'];
-          $insert['fechainiciagarantia_equ'] = $request['fechainiciagarantia_equ'];
-          $insert['fechafingarantia_equ']    = $request['fechafingarantia_equ'];
               
           Equipos::insert($insert);
       
@@ -119,8 +115,6 @@ class EquiposController extends Controller
           $data['codigo_equ']              = $request['codigo_equ'];
           $data['empresa_equ']             = $request['empresa_equ'];
           $data['nombre_equ']              = $request['nombre_equ'];
-          $data['grupo_equ']               = $request['grupo_equ'];
-          $data['subgrupo_equ']            = $request['subgrupo_equ'];
           $data['frecuencia_equ']          = $request['frecuencia_equ'];
           $data['estado_equ']              = $request['estado_equ'];
           $data['propietario_equ']         = $request['propietario_equ'];
@@ -136,9 +130,7 @@ class EquiposController extends Controller
           $data['tipomoneda_equ']          = $request['tipomoneda_equ'];
           $data['clasificacionABC_equ']    = $request['clasificacionABC_equ'];
           $data['centrodecosto_equ']       = $request['centrodecosto_equ'];
-          $data['fechainiciagarantia_equ'] = $request['fechainiciagarantia_equ'];
-          $data['fechafingarantia_equ']    = $request['fechafingarantia_equ'];
-    
+         
           $res = Equipos::where("id_equ",$id_equ)->update($data);
     
           $response['res'] = $res;

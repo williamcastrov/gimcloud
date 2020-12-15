@@ -414,11 +414,13 @@ function Proveedores() {
   {
     field: 'fecha_creacion_int',
     title: 'Fecha de Creación',
+    type: 'date',
     cellStyle : { minWidth: 120}
   },
   {
     field: 'fecha_modificacion_int',
     title: 'Fecha de Modificación',
+    type: 'date',
     cellStyle : { minWidth: 120}
   },
   {
@@ -641,11 +643,11 @@ function Proveedores() {
               </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}> <TextField  name="fecha_creacion_int" label="Fecha Creacion" fullWidth 
+        <Grid item xs={12} md={6}> <TextField type="date" name="fecha_creacion_int" label="Fecha Creacion" fullWidth 
           onChange={handleChange} value={proveedoresSeleccionado&&proveedoresSeleccionado.fecha_creacion_int} /> </Grid>
       </Grid>
       <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> <TextField  name="fecha_modificacion_int" label="Fecha Modificación" fullWidth 
+        <Grid item xs={12} md={6}> <TextField type="date" name="fecha_modificacion_int" label="Fecha Modificación" fullWidth 
           onChange={handleChange} value={proveedoresSeleccionado&&proveedoresSeleccionado.fecha_modificacion_int} />
         </Grid>
         <Grid item xs={12} md={6}> 

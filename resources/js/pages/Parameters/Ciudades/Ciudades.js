@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MaterialTable from "material-table";
-import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
+import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
+import SaveIcon from '@material-ui/icons/Save';
 
 // Componentes de Conexion con el Backend
 import ciudadesServices from "../../../services/Parameters/Ciudades";
@@ -263,29 +264,43 @@ function Ciudades() {
 
   const ciudadEditar=(
     <div className={styles.modal}>
-      <br />
-      <TextField className={styles.inputMaterial} label="Código" name="codigo_ciu" onChange={handleChange} value={ciudadSeleccionado&&ciudadSeleccionado.codigo_ciu}/>
-      <br />
-      <TextField className={styles.inputMaterial} label="Ciudad" name="nombre_ciu" onChange={handleChange} value={ciudadSeleccionado&&ciudadSeleccionado.nombre_ciu}/>
-      <br />
-      <FormControl className={styles.formControl} value={ciudadSeleccionado&&ciudadSeleccionado.departamento_ciu} >
-        <InputLabel id="idselectDepartamento">Departamento</InputLabel>
-        <Select
-          labelId="selectDepartamento"
-          name="departamento_ciu"
-          id="idselectDepartamento"
-          onChange={handleChange}
-        >
-          <MenuItem value="">  <em>None</em> </MenuItem>
-          {
-            listarDepartamentos.map((itemselect) => {
-              return (
-                <MenuItem value={itemselect.id_dep }>{itemselect.nombre_dep}</MenuItem>
-              )
-            })
-          }
-        </Select>
-      </FormControl>
+      <Grid container spacing={2} > 
+        <Grid item xs={12} md={12}>
+          <TextField className={styles.inputMaterial} label="Código" name="codigo_ciu" fullWidth
+          onChange={handleChange} value={ciudadSeleccionado&&ciudadSeleccionado.codigo_ciu}/>
+        </Grid>
+      </Grid>
+      
+      <Grid container spacing={2} >   
+        <Grid item xs={12} md={12}>
+          <TextField className={styles.inputMaterial} label="Ciudad" name="nombre_ciu" fullWidth
+          onChange={handleChange} value={ciudadSeleccionado&&ciudadSeleccionado.nombre_ciu}/>
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2} > 
+        <Grid item xs={12} md={12}>
+          <FormControl className={styles.formControl} value={ciudadSeleccionado&&ciudadSeleccionado.departamento_ciu} >
+            <InputLabel id="idselectDepartamento">Departamento</InputLabel>
+            <Select
+              labelId="selectDepartamento"
+              name="departamento_ciu"
+              id="idselectDepartamento"
+              onChange={handleChange}
+            >
+              <MenuItem value="">  <em>None</em> </MenuItem>
+              {
+                listarDepartamentos.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_dep }>{itemselect.nombre_dep}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid> 
+      </Grid>
+      
       <br /><br />
       <div align="right">
         <Button color="primary"  onClick={()=>actualizarCiudad()} >Editar</Button>
@@ -308,8 +323,9 @@ function Ciudades() {
 
   return (
     <div className="App">
-    <Button onClick={()=> abrirCerrarModalInsertar() } >Insertar Ciudad</Button>
-     <MaterialTable
+    <br />
+    <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={()=> abrirCerrarModalInsertar() } >Insertar Ciudad</Button>
+    <MaterialTable
        columns={columnas}
        data={listCiudades}
        title="Maestra de Ciudades"
