@@ -16,37 +16,42 @@ import RegistrarUsuario from "./components/Auth/RegistrarUsuario";
 import Auth from "./pages/Auth";
 import Management from './components/Management/Management';
 
-// Componentes adicionales
+// Componentes Modulo Parametros Genrales
 import Paises from './pages/Parameters/Paises';
 import Regiones from './pages/Parameters/Regiones';
 import Empresa from './pages/Parameters/Empresa';
 import Departamentos from './pages/Parameters/Departamentos';
 import Ciudades from './pages/Parameters/Ciudades';
-
 import Estados from './pages/Parameters/Estados';
-import Frecuencias from './pages/Parameters/Frecuencias';
-import Tiposmtto from './pages/Parameters/Tiposmtto';
+import Unidades from './pages/Parameters/Unidades';
+import Monedas from './pages/Parameters/Monedas';
+
+// Componentes Modulo Gestión Mantenimiento
+import Frecuencias from './pages/Mantenimiento/Frecuencias';
+import Tiposmtto from './pages/Mantenimiento/Tiposmtto';
+import Equipos from './pages/Mantenimiento/Equipos';
+import Garantias from './pages/Mantenimiento/Garantias';
+import Tiposequipos from './pages/Mantenimiento/Tiposequipos';
+import Referencias from './pages/Mantenimiento/Referencias';
+import Marcas from './pages/Mantenimiento/Marcas';
+import ClasificacionABC from './pages/Mantenimiento/ClasificacionABC';
 
 //Componentes Modulo Interlocutores
 import TipoInterlocutores from './pages/Interlocutores/Parameters/TipoInterlocutores';
 import Especialidades from './pages/Interlocutores/Parameters/Especialidades';
 import Proveedores from './pages/Interlocutores/Proveedores';
 import Clientes from './pages/Interlocutores/Clientes';
-import Unidades from './pages/Parameters/Unidades';
-import Monedas from './pages/Parameters/Monedas';
 import Empleados from './pages/Interlocutores/Empleados';
-import Marcas from './pages/Mantenimiento/Marcas';
+
+//Componentes Modulo Activos
 import Areas from './pages/Activos/Areas';
 import Cencostos from './pages/Activos/Cencostos';
-import Equipos from './pages/Mantenimiento/Equipos';
-import Garantias from './pages/Mantenimiento/Garantias';
 
 import {
   BrowserRouter as Router,
   Switch,
   Route
 } from "react-router-dom";
-
 
 function Main() {
   const [user, setUser] = useState(false);
@@ -86,8 +91,6 @@ function Main() {
               <Route path="/parametros/departamentos" component={Departamentos} />
               <Route path="/parametros/ciudades" component={Ciudades} />
               <Route path="/parametros/estados" component={Estados} />
-              <Route path="/parametros/frecuencias" component={Frecuencias} />
-              <Route path="/parametros/tiposmtto" component={Tiposmtto} />
               <Route path="/parametros/unidades" component={Unidades} />
               <Route path="/parametros/monedas" component={Monedas} />
 
@@ -98,6 +101,11 @@ function Main() {
               <Route path="/interlocutores/empleados" component={Empleados} />
 
               <Route path="/mantenimiento/marcas" component={Marcas} />
+              <Route path="/mantenimiento/tiposmtto" component={Tiposmtto} />
+              <Route path="/mantenimiento/tiposequipos" component={Tiposequipos} />
+              <Route path="/mantenimiento/clasificacionABC" component={ClasificacionABC} />
+              <Route path="/mantenimiento/referencias" component={Referencias} />
+              <Route path="/mantenimiento/frecuencias" component={Frecuencias} />
               <Route path="/mantenimiento/equipos" component={Equipos} />
               <Route path="/mantenimiento/garantias" component={Garantias} />
 

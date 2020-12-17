@@ -409,15 +409,11 @@ function Empleados() {
     title: 'Id'
   },
   {
-    field: 'codigo_tipo_int',
-    title: 'Codigo',
-  },
-  {
     field: 'nit_int',
     title: 'Nit'
   },
   {
-    field: 'estado_int',
+    field: 'nombre_est',
     title: 'Estado'
   },
   {
@@ -437,13 +433,13 @@ function Empleados() {
     title: 'Segundo Apellido'
   },
   {
-    field: 'ciudad_int',
+    field: 'nombre_ciu',
     title: 'Ciudad'
   },
   {
     field: 'direccion_int',
     title: 'Dirección',
-    cellStyle : { minWidth: 250}
+    cellStyle : { minWidth: 200}
   },
   {
     field: 'telefono_int',
@@ -456,21 +452,19 @@ function Empleados() {
     width: '400'
   },
   {
-    field: 'empresa_int',
-    title: 'Empresa'
-  },
-  {
     field: 'fecha_creacion_int',
     title: 'Fecha de Creación',
-    cellStyle : { minWidth: 120}
+    type: "date",
+    cellStyle : { minWidth: 100}
   },
   {
     field: 'fecha_modificacion_int',
     title: 'Fecha de Modificación',
-    cellStyle : { minWidth: 120}
+    type: "date",
+    cellStyle : { minWidth: 100}
   },
   {
-    field: 'especialidad_int',
+    field: 'nombre_esp',
     title: 'Especialidad'
   }
   ]
@@ -605,7 +599,7 @@ function Empleados() {
 
   const empleadoEditar=(
     <div className={styles.modal}>
-      <h3>Actualizar Empleado</h3>
+      <h3 align="center" >Actualizar Empleado</h3>
       <Grid container spacing={2} > 
         <Grid item xs={12} md={6}> <TextField  name="codigo_tipo_int" label="Tipo Interlocutor" fullWidth disabled="true"
           onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.codigo_tipo_int} /> </Grid>
@@ -750,7 +744,7 @@ function Empleados() {
   return (
     <div className="App">
       <br />
-      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Insertar</Button>
+      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Empleado</Button>
       <MaterialTable
         columns={columnas}
         data={listarEmpleados}

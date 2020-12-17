@@ -3,9 +3,11 @@ import axios from "axios";
 import MaterialTable from "material-table";
 import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
+import SaveIcon from '@material-ui/icons/Save';
 
 // Componentes de Conexion con el Backend
 import especialidadesServices from "../../../../services/Interlocutores/Especialidades";
+import estadosServices from "../../../../services/Parameters/Estados";
 import empresasServices from "../../../../services/Empresa";
 
 const useStyles = makeStyles((theme) => ({
@@ -40,6 +42,7 @@ function Especialidades() {
   const [modalEliminar, setModalEliminar]= useState(false);
   const [formError, setFormError] = useState(false);
   const [listarEmpresas, setListarEmpresas] = useState([]);
+  const [listarEstados, setListarEstados] = useState([]);
   const [especialidadesSeleccionado, setEspecialidadesSeleccionado] = useState({
     id_esp: "",
     codigo_esp: "",
@@ -51,10 +54,20 @@ function Especialidades() {
       async function fetchDataEspecialidad() {
       const res = await empresasServices.listEmpresas();
       setListarEmpresas(res.data) 
-      console.log(res.data);
+      //console.log(res.data);
     }
     fetchDataEspecialidad();
   }, [])
+
+  useEffect (() => {
+    async function fetchDataEstados() {
+    const res = await estadosServices.listEstados();
+    setListarEstados(res.data) 
+    console.log(res.data);
+  }
+  fetchDataEstados();
+  }, [])
+
 
   const handleChange = e => {
     const {name, value} = e.target;
@@ -250,7 +263,24 @@ function Especialidades() {
       <br />
       <TextField className={styles.inputMaterial} label="Descripción" name="nombre_esp" onChange={handleChange} />          
       <br />
-      <TextField className={styles.inputMaterial} label="Estado" name="estado_esp" onChange={handleChange} />          
+      <FormControl className={styles.formControl}>
+        <InputLabel id="idselectEstado">Estado</InputLabel>
+        <Select
+          labelId="selectEstado"
+          name="estado_esp"
+          id="idselectEstado"
+          onChange={handleChange}
+        >
+          <MenuItem value=""> <em>None</em> </MenuItem>
+          {
+            listarEstados.map((itemselect) => {
+              return (
+                <MenuItem value={itemselect.id_est }>{itemselect.nombre_est}</MenuItem>
+              )
+            })
+          }
+        </Select>
+      </FormControl>         
       <br />
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectEmpresa">Empresa</InputLabel>
@@ -280,20 +310,39 @@ function Especialidades() {
 
   const especialidadesEditar=(
     <div className={styles.modal}>
-      <br />
+      <h3 align="center" >Actualizar Especialidades</h3>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_esp" onChange={handleChange} value={especialidadesSeleccionado&&especialidadesSeleccionado.codigo_esp}/>
       <br />
       <TextField className={styles.inputMaterial} label="Descripción" name="nombre_esp" onChange={handleChange} value={especialidadesSeleccionado&&especialidadesSeleccionado.nombre_esp}/>
       <br />
-      <TextField className={styles.inputMaterial} label="Estado" name="estado_esp" onChange={handleChange} value={especialidadesSeleccionado&&especialidadesSeleccionado.estado_esp} />          
+      <FormControl className={styles.formControl}>
+        <InputLabel id="idselectEstado">Estado</InputLabel>
+        <Select
+          labelId="selectEstado"
+          name="estado_esp"
+          id="idselectEstado"
+          onChange={handleChange}
+          value={especialidadesSeleccionado&&especialidadesSeleccionado.estado_esp}
+        >
+          <MenuItem value=""> <em>None</em> </MenuItem>
+          {
+            listarEstados.map((itemselect) => {
+              return (
+                <MenuItem value={itemselect.id_est }>{itemselect.nombre_est}</MenuItem>
+              )
+            })
+          }
+        </Select>
+      </FormControl>                
       <br />
-      <FormControl className={styles.formControl} value={especialidadesSeleccionado&&especialidadesSeleccionado.empresa_esp} >
+      <FormControl className={styles.formControl} >
         <InputLabel id="idselectEmpresa">Empresa</InputLabel>
         <Select
           labelId="selectEmpresa"
           name="empresa_esp"
           id="idselectEmpresa"
           onChange={handleChange}
+          value={especialidadesSeleccionado&&especialidadesSeleccionado.empresa_esp}
         >
           <MenuItem value="">  <em>None</em> </MenuItem>
           {
@@ -327,32 +376,33 @@ function Especialidades() {
 
   return (
     <div className="App">
-    <Button onClick={()=> abrirCerrarModalInsertar() } >Insertar Especialidad del Interlocutor</Button>
-     <MaterialTable
-       columns={columnas}
-       data={listEspecialidades}
-       title="Maestra de Especialidades"
-       actions={[
-         {
-           icon     : 'edit',
-           tooltip  : 'Editar Especialidad',
-           onClick  : (event, rowData) => seleccionarEspecialidad(rowData, "Editar")
-         },
-         {
-          icon     : 'delete',
-          tooltip  : 'Borrar Especialidad',
-          onClick  : (event, rowData) =>   seleccionarEspecialidad(rowData, "Eliminar")
-         } 
-       ]}
-       options={{
-         actionsColumnIndex: -1
-       }}
-       localization={{
-         header: {
-           actions: "Acciones"
-         }
-       }}
-    />{}
+      <br />
+      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={()=> abrirCerrarModalInsertar() } >Agregar Especialidad del Interlocutor</Button>
+      <MaterialTable
+        columns={columnas}
+        data={listEspecialidades}
+        title="Maestra de Especialidades"
+        actions={[
+          {
+            icon     : 'edit',
+            tooltip  : 'Editar Especialidad',
+            onClick  : (event, rowData) => seleccionarEspecialidad(rowData, "Editar")
+          },
+          {
+            icon     : 'delete',
+            tooltip  : 'Borrar Especialidad',
+            onClick  : (event, rowData) =>   seleccionarEspecialidad(rowData, "Eliminar")
+          } 
+        ]}
+        options={{
+          actionsColumnIndex: -1
+        }}
+        localization={{
+          header: {
+            actions: "Acciones"
+          }
+        }}
+        />{}
     <Modal
       open={modalInsertar}
       onClose={abrirCerrarModalInsertar}

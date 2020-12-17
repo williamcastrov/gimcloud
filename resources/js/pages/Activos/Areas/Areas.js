@@ -312,7 +312,7 @@ function Areas() {
 
   const areaEditar = (
     <div className={styles.modal}>
-      <br />
+      <h3 align="center" >Actualizar Area</h3>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_are" onChange={handleChange} value={areasSeleccionado&&areasSeleccionado.codigo_are}/>
       <br />
       <TextField className={styles.inputMaterial} label="Descripción" name="nombre_are" onChange={handleChange} value={areasSeleccionado&&areasSeleccionado.nombre_are}/>
@@ -324,6 +324,7 @@ function Areas() {
           name="empresa_are"
           id="idselectEmpresa"
           onChange={handleChange}
+          value={areasSeleccionado&&areasSeleccionado.empresa_are}
         >
           <MenuItem value="">  <em>None</em> </MenuItem>
           {
@@ -343,6 +344,7 @@ function Areas() {
           name="estado_are"
           id="idselectEstado"
           onChange={handleChange}
+          value={areasSeleccionado&&areasSeleccionado.estado_are}
         >
           <MenuItem value=""> <em>None</em> </MenuItem>
           {

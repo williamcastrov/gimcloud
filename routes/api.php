@@ -57,18 +57,6 @@ Route::get('/estados/get/{id}', 'App\Http\Controllers\API\Parameters\EstadosCont
 Route::delete('/estados/delete/{id}', 'App\Http\Controllers\API\Parameters\EstadosController@delete');
 Route::put('/estados/update/{id}', 'App\Http\Controllers\API\Parameters\EstadosController@update');
 
-Route::get('/frecuencias/listar_frecuencias', 'App\Http\Controllers\API\Parameters\FrecuenciasController@listar_frecuencias');
-Route::post('/frecuencias/create', 'App\Http\Controllers\API\Parameters\FrecuenciasController@create');
-Route::get('/frecuencias/get/{id}', 'App\Http\Controllers\API\Parameters\FrecuenciasController@get');
-Route::delete('/frecuencias/delete/{id}', 'App\Http\Controllers\API\Parameters\FrecuenciasController@delete');
-Route::put('/frecuencias/update/{id}', 'App\Http\Controllers\API\Parameters\FrecuenciasController@update');
-
-Route::get('/tiposmtto/listar_tiposmtto', 'App\Http\Controllers\API\Parameters\TiposmttoController@listar_tiposmtto');
-Route::post('/tiposmtto/create', 'App\Http\Controllers\API\Parameters\TiposmttoController@create');
-Route::get('/tiposmtto/get/{id}', 'App\Http\Controllers\API\Parameters\TiposmttoController@get');
-Route::delete('/tiposmtto/delete/{id}', 'App\Http\Controllers\API\Parameters\TiposmttoController@delete');
-Route::put('/tiposmtto/update/{id}', 'App\Http\Controllers\API\Parameters\TiposmttoController@update');
-
 Route::get('/monedas/listar_monedas', 'App\Http\Controllers\API\Parameters\MonedasController@listar_monedas');
 Route::post('/monedas/create', 'App\Http\Controllers\API\Parameters\MonedasController@create');
 Route::get('/monedas/get/{id}', 'App\Http\Controllers\API\Parameters\MonedasController@get');
@@ -121,7 +109,7 @@ Route::delete('/usuarios/delete/{id}', 'App\Http\Controllers\API\Parameters\Usua
 
 Route::get('/dashboard/listar_dashboard', 'App\Http\Controllers\API\DashboardController@listar_dashboard');
 
-// Rutas Gestión Equipos
+// Rutas Gestión Mantenimiento
 Route::get('/marcas/listar_marcas', 'App\Http\Controllers\API\Mantenimiento\MarcasController@listar_marcas');
 Route::post('/marcas/create', 'App\Http\Controllers\API\Mantenimiento\MarcasController@create');
 Route::get('/marcas/get/{id}', 'App\Http\Controllers\API\Mantenimiento\MarcasController@get');
@@ -133,6 +121,18 @@ Route::post('/tiposequipos/create', 'App\Http\Controllers\API\Mantenimiento\Tipo
 Route::get('/tiposequipos/get/{id}', 'App\Http\Controllers\API\Mantenimiento\TiposEquiposController@get');
 Route::delete('/tiposequipos/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\TiposEquiposController@delete');
 Route::put('/tiposequipos/update/{id}', 'App\Http\Controllers\API\Mantenimiento\TiposEquiposController@update');
+
+Route::get('/frecuencias/listar_frecuencias', 'App\Http\Controllers\API\Mantenimiento\FrecuenciasController@listar_frecuencias');
+Route::post('/frecuencias/create', 'App\Http\Controllers\API\Mantenimiento\FrecuenciasController@create');
+Route::get('/frecuencias/get/{id}', 'App\Http\Controllers\API\Mantenimiento\FrecuenciasController@get');
+Route::delete('/frecuencias/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\FrecuenciasController@delete');
+Route::put('/frecuencias/update/{id}', 'App\Http\Controllers\API\Mantenimiento\FrecuenciasController@update');
+
+Route::get('/tiposmtto/listar_tiposmtto', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@listar_tiposmtto');
+Route::post('/tiposmtto/create', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@create');
+Route::get('/tiposmtto/get/{id}', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@get');
+Route::delete('/tiposmtto/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@delete');
+Route::put('/tiposmtto/update/{id}', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@update');
 
 Route::get('/clasificacionabc/listar_clasificacionabc', 'App\Http\Controllers\API\Mantenimiento\ClasificacionABCController@listar_clasificacionabc');
 Route::post('/clasificacionabc/create', 'App\Http\Controllers\API\Mantenimiento\ClasificacionABCController@create');

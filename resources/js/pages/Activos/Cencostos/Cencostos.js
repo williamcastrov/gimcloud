@@ -362,7 +362,7 @@ function Cencostos() {
 
   const cencostoEditar = (
     <div className={styles.modal}>
-      <br />
+      <h3 align="center" >Actualizar Centro de Costo</h3>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_cco" onChange={handleChange} value={cencostosSeleccionado&&cencostosSeleccionado.codigo_cco}/>
       <br />
       <TextField className={styles.inputMaterial} label="Descripción" name="nombre_cco" onChange={handleChange} value={cencostosSeleccionado&&cencostosSeleccionado.nombre_cco}/>
@@ -371,9 +371,10 @@ function Cencostos() {
         <InputLabel id="idselectArea">Area</InputLabel>
         <Select
           labelId="selectArea"
-          name="empresa_cco"
+          name="area_cco"
           id="idselectArea"
           onChange={handleChange}
+          value={cencostosSeleccionado&&cencostosSeleccionado.area_cco}
         >
           <MenuItem value="">  <em>None</em> </MenuItem>
           {
@@ -393,6 +394,7 @@ function Cencostos() {
           name="empresa_cco"
           id="idselectEmpresa"
           onChange={handleChange}
+          value={cencostosSeleccionado&&cencostosSeleccionado.empresa_cco}
         >
           <MenuItem value="">  <em>None</em> </MenuItem>
           {
@@ -412,6 +414,7 @@ function Cencostos() {
           name="estado_cco"
           id="idselectEstado"
           onChange={handleChange}
+          value={cencostosSeleccionado&&cencostosSeleccionado.estado_cco}
         >
           <MenuItem value=""> <em>None</em> </MenuItem>
           {

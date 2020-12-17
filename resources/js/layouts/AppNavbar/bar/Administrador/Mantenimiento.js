@@ -15,6 +15,7 @@ import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 import PermDataSettingIcon from '@material-ui/icons/PermDataSetting';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ReceiptIcon from '@material-ui/icons/Receipt';
+import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,19 +68,19 @@ function Mantenimiento() {
           </ListItem>
           <Collapse in={openGA} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItem button className={classes.nested}>
+              <ListItem component={Link} button to="/mantenimiento/tiposequipos" className={classes.nested}>
                 <ListItemIcon>
                   <CategoryIcon />
                 </ListItemIcon>
                 <ListItemText primary="Tipos de Equipos" />
               </ListItem>
-              <ListItem component={Link} button to="/parametros/frecuencias" className={classes.nested}>
+              <ListItem component={Link} button to="/mantenimiento/frecuencias" className={classes.nested}>
                 <ListItemIcon>
                   <SyncIcon />
                 </ListItemIcon>
                 <ListItemText primary="Frecuencia" />
               </ListItem>
-              <ListItem component={Link} button to="/parametros/tiposmtto" className={classes.nested}>
+              <ListItem component={Link} button to="/mantenimiento/tiposmtto" className={classes.nested}>
                 <ListItemIcon>
                   <SettingsApplicationsIcon />
                 </ListItemIcon>
@@ -91,17 +92,17 @@ function Mantenimiento() {
                 </ListItemIcon>
                 <ListItemText primary="Marcas de Equipos" />
               </ListItem>
-              <ListItem button className={classes.nested}>
+              <ListItem component={Link} button to="/mantenimiento/referencias" className={classes.nested}>
                 <ListItemIcon>
                   <CenterFocusWeakIcon />
                 </ListItemIcon>
                 <ListItemText primary="Referencias" />
               </ListItem>
-              <ListItem button className={classes.nested}>
+              <ListItem component={Link} button to="/mantenimiento/clasificacionABC" className={classes.nested}>
                 <ListItemIcon>
                   <StarBorderIcon />
                 </ListItemIcon>
-                <ListItemText primary="Indicador ABC" />
+                <ListItemText primary="Clasificación ABC" />
               </ListItem>
             </List>
           </Collapse>
@@ -119,7 +120,7 @@ function Mantenimiento() {
             <List component="div" disablePadding>
             <ListItem component={Link} button to="/mantenimiento/equipos" className={classes.nested}>
                 <ListItemIcon>
-                  <SettingsIcon  />
+                  <LocalShippingIcon  />
                 </ListItemIcon>
                 <ListItemText primary="Equipos" />
               </ListItem>

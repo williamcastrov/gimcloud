@@ -264,6 +264,7 @@ function Ciudades() {
 
   const ciudadEditar=(
     <div className={styles.modal}>
+      <h3 align="center" >Actualizar Ciudades</h3>
       <Grid container spacing={2} > 
         <Grid item xs={12} md={12}>
           <TextField className={styles.inputMaterial} label="Código" name="codigo_ciu" fullWidth
@@ -287,6 +288,7 @@ function Ciudades() {
               name="departamento_ciu"
               id="idselectDepartamento"
               onChange={handleChange}
+              value={ciudadSeleccionado&&ciudadSeleccionado.departamento_ciu}
             >
               <MenuItem value="">  <em>None</em> </MenuItem>
               {
@@ -324,7 +326,7 @@ function Ciudades() {
   return (
     <div className="App">
     <br />
-    <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={()=> abrirCerrarModalInsertar() } >Insertar Ciudad</Button>
+    <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={()=> abrirCerrarModalInsertar() } >Agregar Ciudad</Button>
     <MaterialTable
        columns={columnas}
        data={listCiudades}

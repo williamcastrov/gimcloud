@@ -4,6 +4,8 @@ import MaterialTable from "material-table";
 import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid, Typography  } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 // Componentes de Conexion con el Backend
 import proveedoresServices from "../../../services/Interlocutores/Proveedores";
@@ -38,11 +40,17 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0),
     minWidth: 250,
-  }
+  },
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: 200,
+  },
 }));
 
 function Proveedores() {
   const styles = useStyles();
+  const [startDate, setStartDate] = useState(new Date());
   const [listarProveedores, setListarProveedores] = useState([]);
   const [modalInsertar, setModalInsertar ] = useState(false);
   const [modalEditar, setModalEditar]= useState(false);
@@ -373,24 +381,20 @@ function Proveedores() {
     title: 'Id'
   },
   {
-    field: 'codigo_tipo_int',
-    title: 'Codigo',
-  },
-  {
     field: 'nit_int',
     title: 'Nit'
   },
   {
-    field: 'estado_int',
+    field: 'nombre_est',
     title: 'Estado'
   },
   {
     field: 'razonsocial_int',
     title: 'Razón Social',
-    cellStyle : { minWidth: 250}
+    cellStyle : { minWidth: 200}
   },
   {
-    field: 'ciudad_int',
+    field: 'nombre_ciu',
     title: 'Ciudad'
   },
   {
@@ -408,10 +412,6 @@ function Proveedores() {
     width: '400'
   },
   {
-    field: 'empresa_int',
-    title: 'Empresa'
-  },
-  {
     field: 'fecha_creacion_int',
     title: 'Fecha de Creación',
     type: 'date',
@@ -424,7 +424,7 @@ function Proveedores() {
     cellStyle : { minWidth: 120}
   },
   {
-    field: 'especialidad_int',
+    field: 'nombre_esp',
     title: 'Especialidad'
   }
   ]
@@ -513,14 +513,16 @@ function Proveedores() {
               </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <TextField type="date" defaultValue="2020-12-03" name="fecha_creacion_int" label="Fecha Creación" fullWidth onChange={handleChange} />
+        <Grid item xs={12} md={6} >
+          <TextField type="date" name="fecha_creacion_int" label="Fecha de Creación"
+           InputLabelProps={{ shrink: true}} fullWidth onChange={handleChange} />
         </Grid>
       </Grid>
       
       <Grid container spacing={2} > 
         <Grid item xs={12} md={6}> 
-          <TextField type="date" defaultValue="2020-12-03"name="fecha_modificacion_int" label="Fecha Modificación" fullWidth onChange={handleChange} />
+          <TextField type="date" name="fecha_modificacion_int" label="Fecha Modificación"
+           InputLabelProps={{ shrink: true}} fullWidth onChange={handleChange} />
         </Grid>
         <Grid item xs={12} md={6}> 
           <FormControl className={styles.formControl}>
@@ -554,7 +556,7 @@ function Proveedores() {
 
   const proveedorEditar=(
     <div className={styles.modal}>
-      <h3>Actualizar Proveedor</h3>
+      <h3  align="center" >Actualizar Proveedor</h3>
       <Grid container spacing={2} > 
         <Grid item xs={12} md={6}> <TextField  name="codigo_tipo_int" label="Tipo Interlocutor" fullWidth disabled="true"
           onChange={handleChange} value={proveedoresSeleccionado&&proveedoresSeleccionado.codigo_tipo_int} /> </Grid>
@@ -643,11 +645,14 @@ function Proveedores() {
               </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}> <TextField type="date" name="fecha_creacion_int" label="Fecha Creacion" fullWidth 
-          onChange={handleChange} value={proveedoresSeleccionado&&proveedoresSeleccionado.fecha_creacion_int} /> </Grid>
+        <Grid item xs={12} md={6}> 
+          <TextField name="fecha_creacion_int" label="Fecha Creación" fullWidth 
+          onChange={handleChange} value={proveedoresSeleccionado&&proveedoresSeleccionado.fecha_creacion_int} />
+        </Grid>
       </Grid>
       <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> <TextField type="date" name="fecha_modificacion_int" label="Fecha Modificación" fullWidth 
+        <Grid item xs={12} md={6}> 
+          <TextField name="fecha_modificacion_int" label="Fecha Modificación" fullWidth 
           onChange={handleChange} value={proveedoresSeleccionado&&proveedoresSeleccionado.fecha_modificacion_int} />
         </Grid>
         <Grid item xs={12} md={6}> 
@@ -693,7 +698,7 @@ function Proveedores() {
   return (
     <div className="App">
       <br />
-      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Insertar</Button>
+      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Proveedor</Button>
       <MaterialTable
         columns={columnas}
         data={listarProveedores}

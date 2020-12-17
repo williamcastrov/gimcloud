@@ -3,6 +3,7 @@ import axios from "axios";
 import MaterialTable from "material-table";
 import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
+import SaveIcon from '@material-ui/icons/Save';
 
 // Componentes de Conexion con el Backend
 import tipointerlocutoresServices from "../../../../services/Interlocutores/TipoInterlocutores";
@@ -262,18 +263,19 @@ function TipoInterlocutores() {
 
   const tipointerlocutorEditar=(
     <div className={styles.modal}>
-      <br />
+      <h3 align="center" >Actualizar Tipo Interlocutor</h3>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_tint" onChange={handleChange} value={tipointerlocutorSeleccionado&&tipointerlocutorSeleccionado.codigo_tint}/>
       <br />
       <TextField className={styles.inputMaterial} label="Ciudad" name="nombre_tint" onChange={handleChange} value={tipointerlocutorSeleccionado&&tipointerlocutorSeleccionado.nombre_tint}/>
       <br />
-      <FormControl className={styles.formControl} value={tipointerlocutorSeleccionado&&tipointerlocutorSeleccionado.empresa_tint} >
+      <FormControl className={styles.formControl}>
         <InputLabel id="idselectEmpresa">Empresa</InputLabel>
         <Select
           labelId="selectEmpresa"
           name="empresa_tint"
           id="idselectEmpresa"
           onChange={handleChange}
+          value={tipointerlocutorSeleccionado&&tipointerlocutorSeleccionado.empresa_tint}
         >
           <MenuItem value="">  <em>None</em> </MenuItem>
           {
@@ -307,31 +309,32 @@ function TipoInterlocutores() {
 
   return (
     <div className="App">
-    <Button onClick={()=> abrirCerrarModalInsertar() } >Insertar Tipo Interlocutor</Button>
-     <MaterialTable
-       columns={columnas}
-       data={listTipoInterlocutores}
-       title="Maestra de Tipos de Interlocutores"
-       actions={[
-         {
+      <br />
+      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={()=> abrirCerrarModalInsertar() } >Agregar Tipo Interlocutor</Button>
+      <MaterialTable
+        columns={columnas}
+        data={listTipoInterlocutores}
+        title="Maestra de Tipos de Interlocutores"
+        actions={[
+        {
            icon     : 'edit',
            tooltip  : 'Editar Tipos de Interlocutores',
            onClick  : (event, rowData) => seleccionarTipoInterlocutores(rowData, "Editar")
-         },
-         {
+        },
+        {
           icon     : 'delete',
           tooltip  : 'Borrar Tipos de Interlocutores',
           onClick  : (event, rowData) =>   seleccionarTipoInterlocutores(rowData, "Eliminar")
-         } 
-       ]}
-       options={{
-         actionsColumnIndex: -1
-       }}
-       localization={{
-         header: {
-           actions: "Acciones"
-         }
-       }}
+        } 
+      ]}
+      options={{
+        actionsColumnIndex: -1
+      }}
+      localization={{
+        header: {
+          actions: "Acciones"
+        }
+      }}
     />{}
     <Modal
       open={modalInsertar}

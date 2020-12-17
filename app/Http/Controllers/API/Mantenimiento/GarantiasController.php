@@ -101,9 +101,9 @@ class GarantiasController extends Controller
             return $response;
     }
     
-    public function delete($equipo_gar){ 
+    public function delete($id_gar){ 
         try {
-          $res = Garantias::where("equipo_gar",$id_gar)->delete($id_gar);
+          $res = Garantias::where("id_gar",$id_gar)->delete($id_gar);
           $response['res'] = $res;
     
           $response['message'] = "Deleted successful";

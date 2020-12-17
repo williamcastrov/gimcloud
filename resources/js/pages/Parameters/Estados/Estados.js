@@ -263,18 +263,19 @@ function Estados() {
 
   const estadoEditar=(
     <div className={styles.modal}>
-      <br />
+      <h3 align="center" >Actualizar Estados</h3>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_est" onChange={handleChange} value={estadoSeleccionado&&estadoSeleccionado.codigo_est}/>
       <br />
       <TextField className={styles.inputMaterial} label="Descripción" name="nombre_est" onChange={handleChange} value={estadoSeleccionado&&estadoSeleccionado.nombre_est}/>
       <br />
-      <FormControl className={styles.formControl} value={estadoSeleccionado&&estadoSeleccionado.empresa_est} >
+      <FormControl className={styles.formControl} >
         <InputLabel id="idselectEmpresa">Empresa</InputLabel>
         <Select
           labelId="selectEmpresa"
           name="empresa_est"
           id="idselectEmpresa"
           onChange={handleChange}
+          value={estadoSeleccionado&&estadoSeleccionado.empresa_est}
         >
           <MenuItem value="">  <em>None</em> </MenuItem>
           {
@@ -309,7 +310,7 @@ function Estados() {
   return (
     <div className="App">
     <br />
-    <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={()=> abrirCerrarModalInsertar() } >Insertar Estados</Button>
+    <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={()=> abrirCerrarModalInsertar() } >Agregar Estado</Button>
      <MaterialTable
        columns={columnas}
        data={listEstados}

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
 import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
+import SaveIcon from '@material-ui/icons/Save';
 
 // Componentes de Conexion con el Backend
 import unidadesServices from "../../../services/Parameters/Unidades";
@@ -312,7 +313,7 @@ function Unidades() {
 
   const unidadEditar = (
     <div className={styles.modal}>
-      <br />
+      <h3 align="center" >Actualizar Unidades</h3>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_und" onChange={handleChange} value={unidadesSeleccionado&&unidadesSeleccionado.codigo_und}/>
       <br />
       <TextField className={styles.inputMaterial} label="Descripción" name="nombre_und" onChange={handleChange} value={unidadesSeleccionado&&unidadesSeleccionado.nombre_und}/>
@@ -324,6 +325,7 @@ function Unidades() {
           name="empresa_und"
           id="idselectEmpresa"
           onChange={handleChange}
+          value={unidadesSeleccionado&&unidadesSeleccionado.empresa_und}
         >
           <MenuItem value="">  <em>None</em> </MenuItem>
           {
@@ -343,6 +345,7 @@ function Unidades() {
           name="estado_und"
           id="idselectEstado"
           onChange={handleChange}
+          value={unidadesSeleccionado&&unidadesSeleccionado.estado_und}
         >
           <MenuItem value=""> <em>None</em> </MenuItem>
           {
@@ -374,7 +377,8 @@ function Unidades() {
 
   return (
     <div className="App">
-    <Button onClick={()=> abrirCerrarModalInsertar() } >Insertar Unidad de Medida</Button>
+    <br />
+    <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={()=> abrirCerrarModalInsertar() } >Agregar Unidad de Medida</Button>
      <MaterialTable
        columns={columnas}
        data={listUnidades}

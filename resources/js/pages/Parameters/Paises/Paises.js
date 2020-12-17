@@ -207,7 +207,7 @@ function Paises() {
 
   const paisEditar=(
     <div className={styles.modal}>
-      <br />
+      <h3 align="center" >Actualizar Datos Paises</h3>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_pai" onChange={handleChange} value={paisSeleccionado&&paisSeleccionado.codigo_pai}/>
       <br />
       <TextField className={styles.inputMaterial} label="País" name="nombre_pai" onChange={handleChange} value={paisSeleccionado&&paisSeleccionado.nombre_pai}/>          

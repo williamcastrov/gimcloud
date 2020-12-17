@@ -10,7 +10,7 @@ tiposequipos.save = async (data) => {
     return res;
 }
 
-tiposequipos.listTiposEquipos = async () => {
+tiposequipos.listTiposequipos = async () => {
     const urlList = baseUrl+"/listar_tiposequipos"
     const res = await axios.get(urlList)
     .then(response=>{ return response.data; })

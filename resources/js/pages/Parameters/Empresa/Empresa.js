@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MaterialTable from "material-table";
-import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
+import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 
 import empresaServices from "../../../services/Empresa";
 import paisServices from "../../../services/Parameters/Paises";
 import ciudadServices from "../../../services/Parameters/Ciudades";
+import SaveIcon from '@material-ui/icons/Save';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
     position: 'absolute',
-    width: 400,
+    width: 500,
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
@@ -20,24 +21,24 @@ const useStyles = makeStyles((theme) => ({
     left: '50%',
     transform: 'translate(-50%, -50%)'
   },
-  iconos:{
+  iconos: {
     cursor: 'pointer'
-  }, 
-  inputMaterial:{
+  },
+  inputMaterial: {
     width: '100%'
   },
   formControl: {
     margin: theme.spacing(0),
-    minWidth: 315,
+    minWidth: 415,
   }
 }));
 
 function Empresa() {
   const styles = useStyles();
   const [listarEmpresas, setListEmpresas] = useState([]);
-  const [modalInsertar, setModalInsertar ] = useState(false);
-  const [modalEditar, setModalEditar]= useState(false);
-  const [modalEliminar, setModalEliminar]= useState(false);
+  const [modalInsertar, setModalInsertar] = useState(false);
+  const [modalEditar, setModalEditar] = useState(false);
+  const [modalEliminar, setModalEliminar] = useState(false);
   const [formError, setFormError] = useState(false);
   const [listarPaises, setListarPaises] = useState([]);
   const [listarCiudades, setListarCiudades] = useState([]);
@@ -62,37 +63,37 @@ function Empresa() {
     fetchDataEmpresa();
   }, [])
 
-  useEffect (() => {
-      async function fetchDataPais() {
+  useEffect(() => {
+    async function fetchDataPais() {
       const res = await paisServices.listPaises();
       console.log(res.data);
-      setListarPaises(res.data) 
+      setListarPaises(res.data)
       console.log(listarPaises);
-	  }
+    }
     fetchDataPais();
   }, [])
 
-  useEffect (() => {
+  useEffect(() => {
     async function fetchDataCiudad() {
-    const res = await ciudadServices.listCiudades();
-    setListarCiudades(res.data) 
-    //console.log(res.data);
-  }
-  fetchDataCiudad();
+      const res = await ciudadServices.listCiudades();
+      setListarCiudades(res.data)
+      //console.log(res.data);
+    }
+    fetchDataCiudad();
   }, [])
 
   const handleChange = e => {
-    const {name, value} = e.target;
+    const { name, value } = e.target;
 
-    setEmpresaSeleccionado( prevState => ({
+    setEmpresaSeleccionado(prevState => ({
       ...prevState,
       [name]: value
     }));
   }
 
-  const seleccionarEmpresa=(empresa, caso)=>{
+  const seleccionarEmpresa = (empresa, caso) => {
     setEmpresaSeleccionado(empresa);
-    (caso==="Editar") ? abrirCerrarModalEditar() : abrirCerrarModalEliminar()
+    (caso === "Editar") ? abrirCerrarModalEditar() : abrirCerrarModalEliminar()
   }
 
   const abrirCerrarModalInsertar = () => {
@@ -117,41 +118,41 @@ function Empresa() {
       errors.nombre_emp = true;
       formOk = false;
     }
-    
+
     if (!empresaSeleccionado.nit_emp) {
-        errors.nit_emp = true;
-        formOk = false;
+      errors.nit_emp = true;
+      formOk = false;
     }
-  
+
     if (!empresaSeleccionado.digitochequeo_emp) {
-        errors.digitochequeo_emp = true;
-        formOk = false;
+      errors.digitochequeo_emp = true;
+      formOk = false;
     }
-    
+
     if (!empresaSeleccionado.direccion_emp) {
-        errors.direccion_emp = true;
-        formOk = false;
+      errors.direccion_emp = true;
+      formOk = false;
     }
-  
+
     if (!empresaSeleccionado.fecha_creacion_emp) {
-        errors.fecha_creacion_emp = true;
-        formOk = false;
+      errors.fecha_creacion_emp = true;
+      formOk = false;
     }
-  
+
     if (!empresaSeleccionado.fecha_modificacion_emp) {
-        errors.fecha_modificacion_emp = true;
-        formOk = false;
+      errors.fecha_modificacion_emp = true;
+      formOk = false;
     }
-    
+
     if (!empresaSeleccionado.ciudad_emp) {
-        errors.ciudad_emp = true;
-        formOk = false;
+      errors.ciudad_emp = true;
+      formOk = false;
     }
-  
+
     if (!empresaSeleccionado.pais_emp) {
-        errors.pais_emp = true;
-        formOk = false;
-    }  
+      errors.pais_emp = true;
+      formOk = false;
+    }
 
     setFormError(errors);
 
@@ -172,8 +173,7 @@ function Empresa() {
         delete empresaSeleccionado.fecha_modificación_emp;
         delete empresaSeleccionado.ciudad_emp;
         delete empresaSeleccionado.pais_emp;
-      } else
-      {
+      } else {
         alert("Error Creando la Empresa");
         console.log(res.message);
         abrirCerrarModalInsertar();
@@ -187,7 +187,7 @@ function Empresa() {
   }
 
   const actualizarEmpresa = async () => {
-  
+
     setFormError({});
     let errors = {};
     let formOk = true;
@@ -196,48 +196,48 @@ function Empresa() {
       errors.nombre_emp = true;
       formOk = false;
     }
-    
+
     if (!empresaSeleccionado.nit_emp) {
-        errors.nit_emp = true;
-        formOk = false;
+      errors.nit_emp = true;
+      formOk = false;
     }
-  
+
     if (!empresaSeleccionado.digitochequeo_emp) {
-        errors.digitochequeo_emp = true;
-        formOk = false;
+      errors.digitochequeo_emp = true;
+      formOk = false;
     }
-    
+
     if (!empresaSeleccionado.direccion_emp) {
-        errors.direccion_emp = true;
-        formOk = false;
+      errors.direccion_emp = true;
+      formOk = false;
     }
-  
+
     if (!empresaSeleccionado.fecha_creacion_emp) {
-        errors.fecha_creacion_emp = true;
-        formOk = false;
+      errors.fecha_creacion_emp = true;
+      formOk = false;
     }
-  
+
     if (!empresaSeleccionado.fecha_modificacion_emp) {
-        errors.fecha_modificacion_emp = true;
-        formOk = false;
+      errors.fecha_modificacion_emp = true;
+      formOk = false;
     }
-    
+
     if (!empresaSeleccionado.ciudad_emp) {
-        errors.ciudad_emp = true;
-        formOk = false;
+      errors.ciudad_emp = true;
+      formOk = false;
     }
-  
+
     if (!empresaSeleccionado.pais_emp) {
-        errors.pais_emp = true;
-        formOk = false;
-    }  
+      errors.pais_emp = true;
+      formOk = false;
+    }
 
     setFormError(errors);
 
     if (formOk) {
       const res = await empresaServices.update(empresaSeleccionado);
 
-    if (res.success) {
+      if (res.success) {
         alert("Empresa Actualizada de forma Correcta")
         console.log(res.message)
         abrirCerrarModalEditar();
@@ -250,37 +250,36 @@ function Empresa() {
         delete empresaSeleccionado.fecha_modificación_emp;
         delete empresaSeleccionado.ciudad_emp;
         delete empresaSeleccionado.pais_emp;
-    } else
-    {
+      } else {
         alert("Error Actualizando la Empresa");
         console.log(res.message);
         abrirCerrarModalEditar();
-    }
+      }
     }
     else {
       alert("Debe Ingresar Todos los Datos, Error Actualizando la Empresa");
       console.log(res.message);
       abrirCerrarModalEditar();
-    } 
+    }
   }
 
-  const borrarEmpresa = async()=>{
-    
+  const borrarEmpresa = async () => {
+
     const res = await empresaServices.delete(empresaSeleccionado.id_emp);
 
     if (res.success) {
-        alert("Empresa Borrada de forma Correcta")
-        console.log(res.message)
-        abrirCerrarModalEliminar();
+      alert("Empresa Borrada de forma Correcta")
+      console.log(res.message)
+      abrirCerrarModalEliminar();
     }
     else {
-        alert("Error Brorrando la Empresa");
-        console.log(res.message);
-        abrirCerrarModalEliminar();
+      alert("Error Brorrando la Empresa");
+      console.log(res.message);
+      abrirCerrarModalEliminar();
     }
-    
+
   }
-  
+
   const columnas = [
     {
       title: 'Codigo',
@@ -310,7 +309,7 @@ function Empresa() {
     {
       title: 'Fecha Modificación',
       field: 'fecha_modificacion_emp',
-      type:  'date'
+      type: 'date'
     },
     {
       title: 'Ciudad',
@@ -321,22 +320,22 @@ function Empresa() {
       field: 'pais_emp'
     }
   ]
-  
-  const empresaInsertar=(
+
+  const empresaInsertar = (
     <div className={styles.modal}>
       <h3>Agregar Nueva Empresa</h3>
-      <TextField className={styles.inputMaterial} label="Nombre" name="nombre_emp" onChange={handleChange} />         
+      <TextField className={styles.inputMaterial} label="Nombre" name="nombre_emp" onChange={handleChange} />
       <br />
-      <TextField className={styles.inputMaterial} label="Nit" name="nit_emp" onChange={handleChange} />         
+      <TextField className={styles.inputMaterial} label="Nit" name="nit_emp" onChange={handleChange} />
       <br />
-      <TextField className={styles.inputMaterial} label="Digito Chequeo" name="digitochequeo_emp" onChange={handleChange} />         
+      <TextField className={styles.inputMaterial} label="Digito Chequeo" name="digitochequeo_emp" onChange={handleChange} />
       <br />
-      <TextField className={styles.inputMaterial} label="Dirección" name="direccion_emp" onChange={handleChange} />         
+      <TextField className={styles.inputMaterial} label="Dirección" name="direccion_emp" onChange={handleChange} />
       <br />
-      <TextField className={styles.inputMaterial} label="Fecha Creación" name="fecha_creacion_emp" onChange={handleChange} />         
+      <TextField className={styles.inputMaterial} label="Fecha Creación" name="fecha_creacion_emp" onChange={handleChange} />
       <br />
-      <TextField className={styles.inputMaterial} label="Fecha Modificación" name="fecha_modificacion_emp" onChange={handleChange} />         
-      
+      <TextField className={styles.inputMaterial} label="Fecha Modificación" name="fecha_modificacion_emp" onChange={handleChange} />
+
       <br />
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectCiudad">Ciudad</InputLabel>
@@ -350,14 +349,14 @@ function Empresa() {
           {
             listarCiudades.map((itemselect) => {
               return (
-                <MenuItem value={itemselect.id_ciu }>{itemselect.nombre_ciu}</MenuItem>
+                <MenuItem value={itemselect.id_ciu}>{itemselect.nombre_ciu}</MenuItem>
               )
             })
           }
         </Select>
       </FormControl>
       <br />
-      
+
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectPais">Pais</InputLabel>
         <Select
@@ -370,45 +369,79 @@ function Empresa() {
           {
             listarPaises.map((itemselect) => {
               return (
-                <MenuItem value={itemselect.id_pai }>{itemselect.nombre_pai}</MenuItem>
+                <MenuItem value={itemselect.id_pai}>{itemselect.nombre_pai}</MenuItem>
               )
             })
           }
         </Select>
       </FormControl>
       <br />
-      <br />  
-  
-      <div align="right">    
-        <Button color="primary" onClick = { () => grabarEmpresa() } >Insertar</Button>
-        <Button onClick={()=> abrirCerrarModalInsertar()} >Cancelar</Button>
+      <br />
+
+      <div align="right">
+        <Button color="primary" onClick={() => grabarEmpresa()} >Insertar</Button>
+        <Button onClick={() => abrirCerrarModalInsertar()} >Cancelar</Button>
       </div>
     </div>
   )
 
-  const empresaEditar=(
+  const empresaEditar = (
     <div className={styles.modal}>
-      <h3>Editar País</h3>
-
-      <TextField className={styles.inputMaterial} label="Nombre" name="nombre_emp" onChange={handleChange}  value={empresaSeleccionado&&empresaSeleccionado.nombre_emp} />         
+      <h3 align="center" >Actualizar Datos de la Empresa</h3>
+      <TextField className={styles.inputMaterial} label="Nombre" name="nombre_emp" onChange={handleChange} value={empresaSeleccionado && empresaSeleccionado.nombre_emp} />
       <br />
-      <TextField className={styles.inputMaterial} label="Nit" name="nit_emp" onChange={handleChange} value={empresaSeleccionado&&empresaSeleccionado.nit_emp} />         
+      <TextField className={styles.inputMaterial} label="Nit" name="nit_emp" onChange={handleChange} value={empresaSeleccionado && empresaSeleccionado.nit_emp} />
       <br />
-      <TextField className={styles.inputMaterial} label="Digito Chequeo" name="digitochequeo_emp" onChange={handleChange} value={empresaSeleccionado&&empresaSeleccionado.digitochequeo_emp} />         
+      <TextField className={styles.inputMaterial} label="Digito Chequeo" name="digitochequeo_emp" onChange={handleChange} value={empresaSeleccionado && empresaSeleccionado.digitochequeo_emp} />
       <br />
-      <TextField className={styles.inputMaterial} label="Dirección" name="direccion_emp" onChange={handleChange} value={empresaSeleccionado&&empresaSeleccionado.direccion_emp} />         
+      <TextField className={styles.inputMaterial} label="Dirección" name="direccion_emp" onChange={handleChange} value={empresaSeleccionado && empresaSeleccionado.direccion_emp} />
       <br />
-      <TextField className={styles.inputMaterial} label="Fecha Creación" name="fecha_creacion_emp" onChange={handleChange} value={empresaSeleccionado&&empresaSeleccionado.fecha_creacion_emp} />         
+      <TextField className={styles.inputMaterial} label="Fecha Creación" name="fecha_creacion_emp" onChange={handleChange} value={empresaSeleccionado && empresaSeleccionado.fecha_creacion_emp} />
       <br />
-      <TextField className={styles.inputMaterial} label="Fecha Modificación" name="fecha_modificacion_emp" onChange={handleChange} value={empresaSeleccionado&&empresaSeleccionado.fecha_modificacion_emp} />         
+      <TextField className={styles.inputMaterial} label="Fecha Modificación" name="fecha_modificacion_emp" onChange={handleChange} value={empresaSeleccionado && empresaSeleccionado.fecha_modificacion_emp} />
       <br />
-      <TextField className={styles.inputMaterial} label="Ciudad" name="ciudad_emp" onChange={handleChange} value={empresaSeleccionado&&empresaSeleccionado.ciudad_emp} />         
+      <FormControl className={styles.formControl}>
+        <InputLabel id="idselectCiudad">Ciudad</InputLabel>
+        <Select
+          labelId="selectCiudad"
+          name="ciudad_emp"
+          id="idselectCiudad"
+          onChange={handleChange}
+          value={empresaSeleccionado && empresaSeleccionado.ciudad_emp}
+        >
+          <MenuItem value="">  <em>None</em> </MenuItem>
+          {
+            listarCiudades.map((itemselect) => {
+              return (
+                <MenuItem value={itemselect.id_ciu}>{itemselect.nombre_ciu}</MenuItem>
+              )
+            })
+          }
+        </Select>
+      </FormControl>
       <br />
-      <TextField className={styles.inputMaterial} label="Pais" name="pais_emp" onChange={handleChange} value={empresaSeleccionado&&empresaSeleccionado.pais_emp} />       
- 
+      <FormControl className={styles.formControl}>
+        <InputLabel id="idselectPais">Pais</InputLabel>
+        <Select
+          labelId="selectPaises"
+          name="pais_emp"
+          id="idselectPais"
+          onChange={handleChange}
+          value={empresaSeleccionado && empresaSeleccionado.pais_emp}
+        >
+          <MenuItem value="">  <em>None</em> </MenuItem>
+          {
+            listarPaises.map((itemselect) => {
+              return (
+                <MenuItem value={itemselect.id_pai}>{itemselect.nombre_pai}</MenuItem>
+              )
+            })
+          }
+        </Select>
+      </FormControl>
       <div align="right">
-        <Button color="primary" onClick={()=>actualizarEmpresa()} >Editar</Button>
-        <Button onClick={()=>abrirCerrarModalEditar()}>Cancelar</Button>
+        <Button color="primary" onClick={() => actualizarEmpresa()} >Editar</Button>
+        <Button onClick={() => abrirCerrarModalEditar()}>Cancelar</Button>
       </div>
     </div>
   )
@@ -417,8 +450,8 @@ function Empresa() {
     <div className={styles.modal}>
       <p>Estás seguro que deseas eliminar la Empresa <b>{empresaSeleccionado && empresaSeleccionado.nombre_emp}</b>? </p>
       <div align="right">
-        <Button color="secondary" onClick = {() => borrarEmpresa() }> Confirmar </Button>
-        <Button onClick={()=>abrirCerrarModalEliminar()}> Cancelar </Button>
+        <Button color="secondary" onClick={() => borrarEmpresa()}> Confirmar </Button>
+        <Button onClick={() => abrirCerrarModalEliminar()}> Cancelar </Button>
 
       </div>
 
@@ -427,52 +460,53 @@ function Empresa() {
 
   return (
     <div className="App">
-    <Button onClick={()=> abrirCerrarModalInsertar() } >Nueva Empresa</Button>
-     <MaterialTable
-       columns={columnas}
-       data={listarEmpresas}
-       title="Maestra de Empresa"
-       actions={[
-         {
-           icon     : 'edit',
-           tooltip  : 'Editar Empresa',
-           onClick  : (event, rowData) => seleccionarEmpresa(rowData, "Editar")
-         },
-         {
-          icon     : 'delete',
-          tooltip  : 'Borrar Empresa',
-          onClick  : (event, rowData) => seleccionarEmpresa(rowData, "Eliminar")
-         } 
-       ]}
-       options={{
-         actionsColumnIndex: -1
-       }}
-       localization={{
-         header: {
-           actions: "Acciones"
-         }
-       }}
-    />{}
-    <Modal
-      open={modalInsertar}
-      onClose={abrirCerrarModalInsertar}
-    >
-      {empresaInsertar}
-    </Modal>
+      <br />
+      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Empresa</Button>
+      <MaterialTable
+        columns={columnas}
+        data={listarEmpresas}
+        title="Maestra de Empresa"
+        actions={[
+          {
+            icon: 'edit',
+            tooltip: 'Editar Empresa',
+            onClick: (event, rowData) => seleccionarEmpresa(rowData, "Editar")
+          },
+          {
+            icon: 'delete',
+            tooltip: 'Borrar Empresa',
+            onClick: (event, rowData) => seleccionarEmpresa(rowData, "Eliminar")
+          }
+        ]}
+        options={{
+          actionsColumnIndex: -1
+        }}
+        localization={{
+          header: {
+            actions: "Acciones"
+          }
+        }}
+      />{ }
+      <Modal
+        open={modalInsertar}
+        onClose={abrirCerrarModalInsertar}
+      >
+        {empresaInsertar}
+      </Modal>
 
-    <Modal
-      open={modalEditar}
-      onClose={abrirCerrarModalEditar}
-    >
-      {empresaEditar}
-    </Modal>
+      <Modal
+        open={modalEditar}
+        onClose={abrirCerrarModalEditar}
+      >
+        {empresaEditar}
+      </Modal>
 
-    <Modal
-      open={modalEliminar}
-      onClose={abrirCerrarModalEliminar}
-    >
-      {empresaEliminar}
-    </Modal>
+      <Modal
+        open={modalEliminar}
+        onClose={abrirCerrarModalEliminar}
+      >
+        {empresaEliminar}
+      </Modal>
     </div>
   );
 }

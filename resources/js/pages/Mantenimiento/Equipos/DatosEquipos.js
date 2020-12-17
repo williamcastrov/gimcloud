@@ -5,7 +5,9 @@ import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
-
+import RoomIcon from '@material-ui/icons/Room';
+import DescriptionIcon from '@material-ui/icons/Description';
+import RecentActorsIcon from '@material-ui/icons/RecentActors';
 
 // Floating Button
 import { Container, Button, Link, lightColors, darkColors } from 'react-floating-action-button'
@@ -87,25 +89,40 @@ export default function DatosEquipos(props) {
 
       <Container>
         <Button
-          tooltip="Garantias"
+          tooltip="Hoja de Vida"
           rotate={true}
           styles={{ backgroundColor: darkColors.grey, color: lightColors.white }}
-          onClick={() => setModalGarantias(true)} ><VerifiedUserIcon /></Button>
+          onClick={() => alert('Datos Hoja de Vida del Equipo!')} ><RecentActorsIcon />
+        </Button>
+        <Button
+          tooltip="Ubicación"
+          rotate={true}
+          styles={{ backgroundColor: darkColors.purple, color: lightColors.white }}
+          onClick={() => alert('Aqui van los datos de Ubicación!')} ><RoomIcon />
+        </Button>
+        <Button
+          tooltip="Garantias"
+          rotate={true}
+          styles={{ backgroundColor: darkColors.green, color: lightColors.white }}
+          onClick={() => setModalGarantias(true)} ><VerifiedUserIcon />
+        </Button>
         <Button
           tooltip="Ficha Técnica"
           rotate={true}
           styles={{ backgroundColor: darkColors.cyan, color: lightColors.white }}
-          onClick={() => handleClick()} ><ListAltIcon /></Button>
+          onClick={() => alert('Aqui van los datos de la Ficha Técnica!')} ><DescriptionIcon />
+        </Button>
         <Button
-          tooltip="Contrato"
+          tooltip="Contratos"
           rotate={true}
-          styles={{ backgroundColor: darkColors.green, color: lightColors.white }}
-          onClick={() => setModalListar(true)} ><SupervisorAccountIcon /></Button>
+          styles={{ backgroundColor: darkColors.red, color: lightColors.white }}
+          onClick={() => alert('Información de Contratos!')} ><SupervisorAccountIcon />
+        </Button>
         <Button
-          tooltip="Mas Acciones!"
+          tooltip="Información Equipos!"
           rotate={true}
           styles={{ backgroundColor: darkColors.lightBlue, color: lightColors.white }}
-          onClick={() => alert('FAB Rocks!')} ><ZoomOutMapIcon /></Button>
+          onClick={() => alert('Selecciona Datos Adicionales de los Equipos!')} ><ZoomOutMapIcon /></Button>
       </Container>
     </div>
 

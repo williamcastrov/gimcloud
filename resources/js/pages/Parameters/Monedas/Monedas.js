@@ -314,7 +314,7 @@ function Monedas() {
 
   const monedaEditar = (
     <div className={styles.modal}>
-      <br />
+      <h3 align="center" >Actualizar Tipos de Monedas</h3>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_mon" onChange={handleChange} value={monedasSeleccionado&&monedasSeleccionado.codigo_mon}/>
       <br />
       <TextField className={styles.inputMaterial} label="Descripción" name="nombre_mon" onChange={handleChange} value={monedasSeleccionado&&monedasSeleccionado.nombre_mon}/>
@@ -326,6 +326,7 @@ function Monedas() {
           name="empresa_mon"
           id="idselectEmpresa"
           onChange={handleChange}
+          value={monedasSeleccionado&&monedasSeleccionado.empresa_mon}
         >
           <MenuItem value="">  <em>None</em> </MenuItem>
           {
@@ -345,6 +346,7 @@ function Monedas() {
           name="estado_mon"
           id="idselectEstado"
           onChange={handleChange}
+          value={monedasSeleccionado&&monedasSeleccionado.estado_mon}
         >
           <MenuItem value=""> <em>None</em> </MenuItem>
           {

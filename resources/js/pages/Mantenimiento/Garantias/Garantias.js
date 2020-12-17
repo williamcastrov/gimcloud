@@ -34,12 +34,16 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0),
     minWidth: 300,
+  },
+  formControl2: {
+    margin: theme.spacing(0),
+    minWidth: 200,
   }
 }));
 
 function Garantias(props) {
   const { equipoID, equipoCodigo } = props;
-  console.log(equipoCodigo);
+  //console.log(equipoCodigo);
 
   const styles = useStyles();
   const [listGarantias, setListGarantias] = useState([]);
@@ -50,6 +54,7 @@ function Garantias(props) {
   const [listarEstados, setListarEstados] = useState([]);
   const [listarEmpresas, setListarEmpresas] = useState([]);
   const [listarEquipos, setListarEquipos] = useState([]);
+  let itemsToRender; 
 
   const [garantiaSeleccionado, setGarantiaSeleccionado] = useState({
     equipo_gar: "",
@@ -188,6 +193,7 @@ function Garantias(props) {
     }
     else {
       alert("Debe Ingresar Todos los Datos, Error Creando la Garantia");
+      //console.log(garantiaSeleccionado);
       //console.log(res.message);
       abrirCerrarModalInsertar();
     }
@@ -266,7 +272,7 @@ function Garantias(props) {
 
   const borrarGarantia = async () => {
 
-    const res = await garantiasServices.delete(garantiaSeleccionado.equipo_gar);
+    const res = await garantiasServices.delete(garantiaSeleccionado.id_gar);
 
     if (res.success) {
       alert("Garantia Borrada de forma Correcta")
@@ -319,15 +325,37 @@ function Garantias(props) {
   const garantiaInsertar = (
     <div className={styles.modal}>
       <br />
-      <h3>Agregar Nueva Garantia del Equipo</h3>
+      <h3>Agregar Garantia del Equipo</h3>
       <Grid container spacing={2} >
         <Grid item xs={12} md={4}>
-          <TextField className={styles.inputMaterial} label="ID Garantía" name="id_gar" defaultValue={equipoID} disabled="true"
-          fullWidth onChange={handleChange} />
+          <FormControl className={styles.formControl2}>
+            <InputLabel id="idselectIdEquipo">Id Garantía</InputLabel>
+            
+            <Select
+              labelId="selectIdIdEquipo"
+              name="id_gar"
+              id="idselectIdIdEquipo"
+              fullWidth
+              onChange={handleChange}
+            >
+              <MenuItem value={equipoID}>{equipoID}</MenuItem>  
+            </Select>
+          </FormControl>
         </Grid>
         <Grid item xs={12} md={4}>
-          <TextField className={styles.inputMaterial} label="Código del Equipo" name="equipo_gar"  defaultValue={equipoCodigo} disabled="true"
-          fullWidth onChange={handleChange} />
+          <FormControl className={styles.formControl2}>
+            <InputLabel id="idselectCodigoEquipo">Código del Equipo</InputLabel>
+          
+            <Select
+              labelId="selectCodigoEquipo"
+              name="equipo_gar"
+              id="idselectCodigoEquipo"
+              fullWidth
+              onChange={handleChange}
+            >
+              <MenuItem value={equipoCodigo}>{equipoCodigo}</MenuItem>
+            </Select>
+          </FormControl>
         </Grid>
         <Grid item xs={12} md={4}>
           <TextField className={styles.inputMaterial} label="ID Garantía" name="idgarantia_gar" fullWidth onChange={handleChange} />
@@ -373,13 +401,13 @@ function Garantias(props) {
           </FormControl>
         </Grid>
         <Grid item xs={12} md={6}>
-          <TextField className={styles.inputMaterial} label="Fecha Inicial" name="fechainicial_gar" fullWidth onChange={handleChange} />
+          <TextField type="date" className={styles.inputMaterial} label="Fecha Inicial" name="fechainicial_gar" fullWidth onChange={handleChange} />
         </Grid>
         <Grid item xs={12} md={6}>
-          <TextField className={styles.inputMaterial} label="Fecha Final" name="fechafinal_gar" fullWidth onChange={handleChange} />
+          <TextField type="date" className={styles.inputMaterial} label="Fecha Final" name="fechafinal_gar" fullWidth onChange={handleChange} />
         </Grid>
         <Grid item xs={12} md={12}>
-          <TextField className={styles.inputMaterial} label="Observación" name="oberrvacion_gar" fullWidth onChange={handleChange} />
+          <TextField className={styles.inputMaterial} label="Observación" name="observacion_gar" fullWidth onChange={handleChange} />
         </Grid>
       </Grid>
       <br /><br />
@@ -393,18 +421,20 @@ function Garantias(props) {
   const garantiaEditar = (
     <div className={styles.modal}>
       <h3>Actualizar Garantia del Equipo</h3>
-
       <Grid container spacing={2} >
-        <Grid item xs={12} md={6}>
-          <TextField className={styles.inputMaterial} label="Código del Equipo" name="equipo_gar"
+        <Grid item xs={12} md={4}>
+          <TextField className={styles.inputMaterial} label="Id Equipo" name="id_gar" disabled="true"
+            fullWidth onChange={handleChange} value={garantiaSeleccionado && garantiaSeleccionado.id_gar} />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <TextField className={styles.inputMaterial} label="Código del Equipo" name="equipo_gar" disabled="true"
             fullWidth onChange={handleChange} value={garantiaSeleccionado && garantiaSeleccionado.equipo_gar} />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={4}>
           <TextField className={styles.inputMaterial} label="ID Garantía" name="idgarantia_gar"
             fullWidth onChange={handleChange} value={garantiaSeleccionado && garantiaSeleccionado.idgarantia_gar} />
         </Grid>
-      </Grid>
-      <Grid container spacing={2} >
+
         <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl}>
             <InputLabel id="idselectEmpresa">Empresa</InputLabel>
@@ -447,8 +477,6 @@ function Garantias(props) {
             </Select>
           </FormControl>
         </Grid>
-      </Grid>
-      <Grid container spacing={2} >
         <Grid item xs={12} md={6}>
           <TextField className={styles.inputMaterial} label="Fecha Inicial" name="fechainicial_gar"
             fullWidth onChange={handleChange} value={garantiaSeleccionado && garantiaSeleccionado.fechainicial_gar} />
@@ -457,9 +485,8 @@ function Garantias(props) {
           <TextField className={styles.inputMaterial} label="Fecha Final" name="fechafinal_gar"
             fullWidth onChange={handleChange} value={garantiaSeleccionado && garantiaSeleccionado.fechafinal_gar} />
         </Grid>
-      </Grid><Grid container spacing={2} >
         <Grid item xs={12} md={12}>
-          <TextField className={styles.inputMaterial} label="Observación" name="oberrvacion_gar"
+          <TextField className={styles.inputMaterial} label="Observación" name="observacion_gar"
             fullWidth onChange={handleChange} value={garantiaSeleccionado && garantiaSeleccionado.observacion_gar} />
         </Grid>
       </Grid>
@@ -492,7 +519,7 @@ function Garantias(props) {
         <MaterialTable
           columns={columnas}
           data={listGarantias}
-          title="Maestra de Garantias"
+          title="Información de la Garantia del Equipo"
           actions={[
             {
               icon: 'edit',

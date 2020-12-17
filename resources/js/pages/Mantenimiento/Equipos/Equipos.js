@@ -12,7 +12,7 @@ import empresasServices from "../../../services/Empresa";
 import estadosServices from "../../../services/Parameters/Estados";
 import clasificacionabcServices from "../../../services/Mantenimiento/ClasificacionABC";
 import cencostosServices from "../../../services/Activos/Cencostos";
-import frecuenciasServices from "../../../services/Parameters/Frecuencias";
+import frecuenciasServices from "../../../services/Mantenimiento/Frecuencias";
 import propietariosServices from "../../../services/Interlocutores/Clientes";
 import marcasServices from "../../../services/Mantenimiento/Marcas";
 import monedasServices from "../../../services/Parameters/Monedas";
@@ -521,44 +521,27 @@ function Equipos() {
     title: 'Codigo',
   },
   {
-    field: 'empresa_equ',
-    title: 'Empresa'
-  },
-  {
     field: 'nombre_emp',
-    title: 'Nombre Empresa'
+    title: 'Nombre Empresa',
+    cellStyle: { minWidth: 150 }
   },
   {
     field: 'nombre_equ',
-    title: 'Descripción  del Equipo'
-  },
-  {
-    field: 'frecuencia_equ',
-    title: 'Frecuencia'
+    title: 'Descripción  del Equipo',
+    cellStyle: { minWidth: 200 }
   },
   {
     field: 'nombre_fre',
     title: 'Descripcion de la Frecuencia'
   },
   {
-    field: 'estado_equ',
-    title: 'Estado'
-  },
-  {
     field: 'nombre_est',
     title: 'Descripción Estado'
   },
   {
-    field: 'propietario_equ',
-    title: 'Propietario'
-  },
-  {
     field: 'razonsocial_int',
-    title: 'Nombre Propietario'
-  },
-  {
-    field: 'marca_equ',
-    title: 'Cod. Marca'
+    title: 'Nombre Propietario',
+    cellStyle: { minWidth: 200 }
   },
   {
     field: 'nombre_mar',
@@ -570,11 +553,16 @@ function Equipos() {
   },
   {
     field: 'antiguedad_equ',
-    title: 'Antiguedad'
+    title: 'Antiguedad Años',
+    cellStyle : { width:10, maxWidth: 10},
+    headerStyle: { width:10, maxWidth: 10}
+
   },
   {
     field: 'tipoequipo_equ',
-    title: 'Tipo'
+    title: 'Tipo',
+    cellStyle : { width:10, maxWidth: 10},
+    headerStyle: { width:10, maxWidth: 10}
   },
   {
     field: 'nombre_tequ',
@@ -586,11 +574,13 @@ function Equipos() {
   },
   {
     field: 'fechacreacion_equ',
-    title: 'Fecha de Creación'
+    title: 'Fecha de Creación',
+    type: "date"
   },
   {
     field: 'fechamodificacion_equ',
-    title: 'Fecha de Modificacón'
+    title: 'Fecha de Modificacón',
+    type: "date"
   },
   {
     field: 'direccion_equ',
@@ -601,16 +591,8 @@ function Equipos() {
     title: 'Valor de Compra'
   },
   {
-    field: 'tipomoneda_equ',
-    title: 'Modena'
-  },
-  {
     field: 'nombre_mon',
     title: 'Nombre Moneda'
-  },
-  {
-    field: 'clasificacionABC_equ',
-    title: 'Clasificación'
   },
   {
     field: 'nombre_abc',
@@ -1161,7 +1143,7 @@ function Equipos() {
           } 
         ]}
         options={{
-         actionsColumnIndex: 12
+         actionsColumnIndex: 10
         }}
         localization={{
           header: {

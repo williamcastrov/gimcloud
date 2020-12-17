@@ -262,12 +262,30 @@ function Departamentos() {
 
   const departamentoEditar=(
     <div className={styles.modal}>
-      <br />
+      <h3 align="center" >Actualizar Departamentos</h3>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_dep" onChange={handleChange} value={departamentoSeleccionado&&departamentoSeleccionado.codigo_dep}/>
       <br />
       <TextField className={styles.inputMaterial} label="Departamento" name="nombre_dep" onChange={handleChange} value={departamentoSeleccionado&&departamentoSeleccionado.nombre_dep}/>
       <br />
-      <TextField className={styles.inputMaterial} label="Región" name="region_dep" onChange={handleChange} value={departamentoSeleccionado&&departamentoSeleccionado.region_dep}/>          
+      <FormControl className={styles.formControl}>
+        <InputLabel id="idselectRegion">Región</InputLabel>
+        <Select
+          labelId="selectRegion"
+          name="region_dep"
+          id="idselectRegion"
+          onChange={handleChange}
+          value={departamentoSeleccionado&&departamentoSeleccionado.region_dep}
+        >
+          <MenuItem value="">  <em>None</em> </MenuItem>
+          {
+            listarRegiones.map((itemselect) => {
+              return (
+                <MenuItem value={itemselect.id_reg }>{itemselect.nombre_reg}</MenuItem>
+              )
+            })
+          }
+        </Select>
+      </FormControl>          
       <br /><br />
       <div align="right">
         <Button color="primary"  onClick={()=>actualizarDepartamento()} >Editar</Button>
@@ -291,7 +309,7 @@ function Departamentos() {
   return (
     <div className="App">
     <br />
-    <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={()=> abrirCerrarModalInsertar() } >Insertar Departamentos</Button>
+    <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={()=> abrirCerrarModalInsertar() } >Agregar Departamento</Button>
      <MaterialTable
        columns={columnas}
        data={listDepartamentos}

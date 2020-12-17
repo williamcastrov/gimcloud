@@ -373,24 +373,20 @@ function Clientes() {
     title: 'Id'
   },
   {
-    field: 'codigo_tipo_int',
-    title: 'Codigo',
-  },
-  {
     field: 'nit_int',
     title: 'Nit'
   },
   {
-    field: 'estado_int',
+    field: 'nombre_est',
     title: 'Estado'
   },
   {
     field: 'razonsocial_int',
     title: 'Razón Social',
-    cellStyle : { minWidth: 250}
+    cellStyle : { minWidth: 200}
   },
   {
-    field: 'ciudad_int',
+    field: 'nombre_ciu',
     title: 'Ciudad'
   },
   {
@@ -408,21 +404,19 @@ function Clientes() {
     width: '400'
   },
   {
-    field: 'empresa_int',
-    title: 'Empresa'
-  },
-  {
     field: 'fecha_creacion_int',
     title: 'Fecha de Creación',
-    cellStyle : { minWidth: 120}
+    type:  "date",
+    cellStyle : { minWidth: 100}
   },
   {
     field: 'fecha_modificacion_int',
     title: 'Fecha de Modificación',
-    cellStyle : { minWidth: 120}
+    type:  "date",
+    cellStyle : { minWidth: 100}
   },
   {
-    field: 'especialidad_int',
+    field: 'nombre_esp',
     title: 'Especialidad'
   }
   ]
@@ -512,13 +506,15 @@ function Clientes() {
           </FormControl>
         </Grid>
         <Grid item xs={12} md={6}>
-          <TextField type="date" defaultValue="2020-12-03" name="fecha_creacion_int" label="Fecha Creación" fullWidth onChange={handleChange} />
+          <TextField type="date" InputLabelProps={{ shrink: true}} name="fecha_creacion_int" label="Fecha Creación"
+           fullWidth onChange={handleChange} />
         </Grid>
       </Grid>
       
       <Grid container spacing={2} > 
         <Grid item xs={12} md={6}> 
-          <TextField type="date" defaultValue="2020-12-03"name="fecha_modificacion_int" label="Fecha Modificación" fullWidth onChange={handleChange} />
+          <TextField type="date" InputLabelProps={{ shrink: true}} name="fecha_modificacion_int" label="Fecha Modificación"
+           fullWidth onChange={handleChange} />
         </Grid>
         <Grid item xs={12} md={6}> 
           <FormControl className={styles.formControl}>
@@ -552,7 +548,7 @@ function Clientes() {
 
   const clienteEditar=(
     <div className={styles.modal}>
-      <h3>Actualizar Cliente</h3>
+      <h3 align="center" >Actualizar Clientes</h3>
       <Grid container spacing={2} > 
         <Grid item xs={12} md={6}> <TextField  name="codigo_tipo_int" label="Tipo Interlocutor" fullWidth disabled="true"
           onChange={handleChange} value={clientesSeleccionado&&clientesSeleccionado.codigo_tipo_int} /> </Grid>
@@ -691,7 +687,7 @@ function Clientes() {
   return (
     <div className="App">
       <br />
-      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Insertar</Button>
+      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregrar Cliente</Button>
       <MaterialTable
         columns={columnas}
         data={listarClientes}

@@ -21,7 +21,7 @@ referencias.listReferencias = async () => {
 
 referencias.update = async (data) => {
     console.log(data);
-    const urlUpdate = baseUrl+"/update/"+data.equipo_ref
+    const urlUpdate = baseUrl+"/update/"+data.id_ref
     const res = await axios.put(urlUpdate, data)
     .then(response=>{ return response.data; })
     .catch(error=>{ return error; })
@@ -29,8 +29,8 @@ referencias.update = async (data) => {
     return res;
 }
 
-referencias.delete = async (equipo_ref) => {
-    const urlDelete = baseUrl+"/delete/"+equipo_ref
+referencias.delete = async (id_ref) => {
+    const urlDelete = baseUrl+"/delete/"+id_ref
     const res = await axios.delete(urlDelete)
     .then(response=> { return response.data })
     .catch(error =>{ return error })

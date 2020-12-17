@@ -262,12 +262,30 @@ function Regiones() {
 
   const regionEditar=(
     <div className={styles.modal}>
-      <br />
+      <h3 align="center" >Actualizar Regiones</h3>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_reg" onChange={handleChange} value={regionSeleccionado&&regionSeleccionado.codigo_reg}/>
       <br />
       <TextField className={styles.inputMaterial} label="Región" name="nombre_reg" onChange={handleChange} value={regionSeleccionado&&regionSeleccionado.nombre_reg}/>
       <br />
-      <TextField className={styles.inputMaterial} label="País" name="pais_reg" onChange={handleChange} value={regionSeleccionado&&regionSeleccionado.pais_reg}/>          
+      <FormControl className={styles.formControl}>
+        <InputLabel id="idselectPais">País</InputLabel>
+        <Select
+          labelId="selectPaises"
+          name="pais_reg"
+          id="idselectPais"
+          onChange={handleChange}
+          value={regionSeleccionado&&regionSeleccionado.pais_reg}
+        >
+          <MenuItem value="">  <em>None</em> </MenuItem>
+          {
+            listarPaises.map((itemselect) => {
+              return (
+                <MenuItem value={itemselect.id_pai }>{itemselect.nombre_pai}</MenuItem>
+              )
+            })
+          }
+        </Select>
+      </FormControl>         
       <br /><br />
       <div align="right">
         <Button color="primary"  onClick={()=>actualizarRegion()} >Editar</Button>
@@ -291,7 +309,7 @@ function Regiones() {
   return (
     <div className="App">
     <br />
-    <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={()=> abrirCerrarModalInsertar() } >Insertar Región</Button>
+    <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={()=> abrirCerrarModalInsertar() } >Agregar Región</Button>
      <MaterialTable
        columns={columnas}
        data={listRegiones}

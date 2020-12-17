@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
 import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
+import SaveIcon from '@material-ui/icons/Save';
 
 // Componentes de Conexion con el Backend
 import marcasServices from "../../../services/Mantenimiento/Marcas";
@@ -312,7 +313,7 @@ function Marcas() {
 
   const marcaEditar = (
     <div className={styles.modal}>
-      <br />
+      <h3 align="center" >Actualizar Marca del Equipo</h3>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_mar" onChange={handleChange} value={marcasSeleccionado&&marcasSeleccionado.codigo_mar}/>
       <br />
       <TextField className={styles.inputMaterial} label="Descripción" name="nombre_mar" onChange={handleChange} value={marcasSeleccionado&&marcasSeleccionado.nombre_mar}/>
@@ -324,6 +325,7 @@ function Marcas() {
           name="empresa_mar"
           id="idselectEmpresa"
           onChange={handleChange}
+          value={marcasSeleccionado&&marcasSeleccionado.empresa_mar}
         >
           <MenuItem value="">  <em>None</em> </MenuItem>
           {
@@ -343,6 +345,7 @@ function Marcas() {
           name="estado_mar"
           id="idselectEstado"
           onChange={handleChange}
+          value={marcasSeleccionado&&marcasSeleccionado.estado_mar}
         >
           <MenuItem value=""> <em>None</em> </MenuItem>
           {
@@ -374,7 +377,8 @@ function Marcas() {
 
   return (
     <div className="App">
-    <Button onClick={()=> abrirCerrarModalInsertar() } >Insertar Marca</Button>
+     <br />
+     <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Marca del Equipo</Button>
      <MaterialTable
        columns={columnas}
        data={listMarcas}

@@ -7,6 +7,8 @@ import Interlocutores from "./Interlocutores";
 import Activos from "./Activos";
 import Almacenes from "./Almacenes";
 import Mantenimiento from "./Mantenimiento";
+import Ordenes from "./Ordenes";
+import Planeacion from "./Planeacion";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -44,6 +46,8 @@ function Administrador() {
             <Activos />
             <Almacenes />
             <Mantenimiento />
+            <Ordenes />
+            <Planeacion />
       
         </List>
     );
