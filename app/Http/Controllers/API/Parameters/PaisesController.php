@@ -21,7 +21,7 @@ class PaisesController extends Controller
                 $response['success'] = true;
             }   catch (\Exception $e) {
                 $response['message'] = $e->getMessage();
-                $response['success'] = true;
+                $response['success'] = false;
         }       
         return $response;
     }

@@ -15,10 +15,10 @@ class ClasificacionABCController extends Controller
     
     public function create(Request $request){
         try { 
-          $insert['codigo_abc']  = $request['codigo_abc'];
-          $insert['nombre_abc']  = $request['nombre_abc'];
-          $insert['empresa_abc'] = $request['empresa_abc'];
-          $insert['estado_abc']  = $request['estado_abc'];
+          $insert['codigo_abc']       = $request['codigo_abc'];
+          $insert['descripcion_abc']  = $request['descripcion_abc'];
+          $insert['empresa_abc']      = $request['empresa_abc'];
+          $insert['estado_abc']       = $request['estado_abc'];
               
           ClasificacionABC::insert($insert);
       
@@ -27,7 +27,7 @@ class ClasificacionABCController extends Controller
       
         } catch (\Exception $e) {
             $response['message'] = $e->getMessage();
-            $response['success'] = true;
+            $response['success'] = false;
         }
         return $response;
     }

@@ -424,7 +424,7 @@ function Proveedores() {
     cellStyle : { minWidth: 120}
   },
   {
-    field: 'nombre_esp',
+    field: 'descripcion_esp',
     title: 'Especialidad'
   }
   ]
@@ -538,7 +538,7 @@ function Proveedores() {
               {
                 listarEspecialidades.map((itemselect) => {
                 return (
-                  <MenuItem value={itemselect.id_esp }>{itemselect.nombre_esp}</MenuItem>
+                  <MenuItem value={itemselect.id_esp }>{itemselect.descripcion_esp}</MenuItem>
                 )
                 })
               }
@@ -669,7 +669,7 @@ function Proveedores() {
               {
                 listarEspecialidades.map((itemselect) => {
                 return (
-                  <MenuItem value={itemselect.id_esp }>{itemselect.nombre_esp}</MenuItem>
+                  <MenuItem value={itemselect.id_esp }>{itemselect.descripcion_esp}</MenuItem>
                 )
                 })
               }

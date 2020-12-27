@@ -15,23 +15,18 @@ class Equipos extends Model
 
     protected $fillable = [
         'codigo_equ',
+        'descripcion_equ',
         'empresa_equ',
-        'nombre_equ',
         'frecuencia_equ',
-        'estado_equ',
         'propietario_equ',
         'marca_equ',
-        'modelo_equ',
         'antiguedad_equ',
-        'tipoequipo_equ',
-        'serie_equ',
-        'fechacreacion_equ',
-        'fechamodificacion_equ',
-        'direccion_equ',
-        'valoradquisicion',
-        'tipomoneda_equ',
-        'clasificacionABC_equ',
-        'centrodecosto_equ'
+        'grupoequipo_equ',
+        'valoradquisicion_equ',
+        'estadocontable_equ',
+        'estadocliente_equ',
+        'estadomtto_equ',
+        'ctacontable_equ'
     ];
 
     public $timestamps = false;

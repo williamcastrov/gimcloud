@@ -14,8 +14,7 @@ class MarcasController extends Controller
     //
     public function create(Request $request){
         try { 
-          $insert['codigo_mar']  = $request['codigo_mar'];
-          $insert['nombre_mar']  = $request['nombre_mar'];
+          $insert['descripcion_mar']  = $request['descripcion_mar'];
           $insert['empresa_mar'] = $request['empresa_mar'];
           $insert['estado_mar']  = $request['estado_mar'];
               
@@ -26,7 +25,7 @@ class MarcasController extends Controller
       
         } catch (\Exception $e) {
             $response['message'] = $e->getMessage();
-            $response['success'] = true;
+            $response['success'] = false;
         }
         return $response;
     }
@@ -75,10 +74,9 @@ class MarcasController extends Controller
     
     public function update(Request $request, $id_mar){
         try {
-          $data['codigo_mar']  = $request['codigo_mar'];
-          $data['nombre_mar']  = $request['nombre_mar'];
-          $data['empresa_mar'] = $request['empresa_mar'];
-          $data['estado_mar']  = $request['estado_mar'];
+          $data['descripcion_mar']  = $request['descripcion_mar'];
+          $data['empresa_mar']      = $request['empresa_mar'];
+          $data['estado_mar']       = $request['estado_mar'];
     
           $res = Marcas::where("id_mar",$id_mar)->update($data);
     

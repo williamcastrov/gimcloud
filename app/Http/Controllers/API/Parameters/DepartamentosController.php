@@ -24,7 +24,7 @@ class DepartamentosController extends Controller
     
           } catch (\Exception $e) {
             $response['message'] = $e->getMessage();
-            $response['success'] = true;
+            $response['success'] = false;
           }
            
           return $response;

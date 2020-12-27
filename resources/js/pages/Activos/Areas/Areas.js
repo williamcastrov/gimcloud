@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
 import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
+import SaveIcon from '@material-ui/icons/Save';
 
 // Componentes de Conexion con el Backend
 import areasServices from "../../../services/Activos/Areas";
@@ -112,7 +113,7 @@ function Areas() {
       formOk = false;
     }
 
-    if (!areasSeleccionado.nombre_are) {
+    if (!areasSeleccionado.descripcion_are) {
       errors.nombre_are = true;
       formOk = false;
     }
@@ -138,7 +139,7 @@ function Areas() {
         console.log(res.message)
         abrirCerrarModalInsertar();
         delete areasSeleccionado.codigo_are;
-        delete areasSeleccionado.nombre_are;
+        delete areasSeleccionado.descripcion_are;
         delete areasSeleccionado.empresa_are;
         delete areasSeleccionado.estado_are;
       } else
@@ -166,7 +167,7 @@ function Areas() {
       formOk = false;
     }
 
-    if (!areasSeleccionado.nombre_are) {
+    if (!areasSeleccionado.descripcion_are) {
       errors.nombre_are = true;
       formOk = false;
     }
@@ -192,7 +193,7 @@ function Areas() {
         console.log(res.message)
         abrirCerrarModalEditar();
         delete areasSeleccionado.codigo_are;
-        delete areasSeleccionado.nombre_are;
+        delete areasSeleccionado.descripcion_are;
         delete areasSeleccionado.empresa_are;
         delete areasSeleccionado.estado_are;
     } else
@@ -238,7 +239,7 @@ function Areas() {
     },
     {
       title: 'Descripcion',
-      field: 'nombre_are'
+      field: 'descripcion_are'
     },
     {
       title: 'Código',
@@ -263,7 +264,7 @@ function Areas() {
       <h3>Agregar Nueva Area</h3>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_are" onChange={handleChange} />
       <br />
-      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_are" onChange={handleChange} />          
+      <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_are" onChange={handleChange} />          
       <br />
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectEmpresa">Empresa</InputLabel>
@@ -315,7 +316,7 @@ function Areas() {
       <h3 align="center" >Actualizar Area</h3>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_are" onChange={handleChange} value={areasSeleccionado&&areasSeleccionado.codigo_are}/>
       <br />
-      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_are" onChange={handleChange} value={areasSeleccionado&&areasSeleccionado.nombre_are}/>
+      <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_are" onChange={handleChange} value={areasSeleccionado&&areasSeleccionado.descripcion_are}/>
       <br />
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectEmpresa">Empresa</InputLabel>
@@ -376,8 +377,9 @@ function Areas() {
 
   return (
     <div className="App">
-    <Button onClick={()=> abrirCerrarModalInsertar() } >Insertar Area</Button>
-     <MaterialTable
+    <br />
+    <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Area</Button>
+      <MaterialTable
        columns={columnas}
        data={listAreas}
        title="Maestra de Areas"

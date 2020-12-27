@@ -16,6 +16,8 @@ import PermDataSettingIcon from '@material-ui/icons/PermDataSetting';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ReceiptIcon from '@material-ui/icons/Receipt';
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
+import DonutSmallIcon from '@material-ui/icons/DonutSmall';
+import CommuteIcon from '@material-ui/icons/Commute';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,11 +70,29 @@ function Mantenimiento() {
           </ListItem>
           <Collapse in={openGA} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItem component={Link} button to="/mantenimiento/tiposequipos" className={classes.nested}>
+              <ListItem component={Link} button to="/mantenimiento/estadosclientes" className={classes.nested}>
+                <ListItemIcon>
+                  <CenterFocusWeakIcon />
+                </ListItemIcon>
+                <ListItemText primary="Estados Clientes" />
+              </ListItem>
+              <ListItem component={Link} button to="/mantenimiento/estadosmtto" className={classes.nested}>
+                <ListItemIcon>
+                  <CenterFocusWeakIcon />
+                </ListItemIcon>
+                <ListItemText primary="Estados Mantenimiento" />
+              </ListItem>
+              <ListItem component={Link} button to="/mantenimiento/gruposequipos" className={classes.nested}>
                 <ListItemIcon>
                   <CategoryIcon />
                 </ListItemIcon>
-                <ListItemText primary="Tipos de Equipos" />
+                <ListItemText primary="Grupos de Equipos" />
+              </ListItem>
+              <ListItem component={Link} button to="/mantenimiento/subgruposequipos" className={classes.nested}>
+                <ListItemIcon>
+                  <CategoryIcon />
+                </ListItemIcon>
+                <ListItemText primary="Sub Grupos de Equipos" />
               </ListItem>
               <ListItem component={Link} button to="/mantenimiento/frecuencias" className={classes.nested}>
                 <ListItemIcon>
@@ -86,17 +106,23 @@ function Mantenimiento() {
                 </ListItemIcon>
                 <ListItemText primary="Tipos de Mantenimiento" />
               </ListItem>
+              <ListItem component={Link} button to="/mantenimiento/tiposllantas" className={classes.nested}>
+                <ListItemIcon>
+                  <DonutSmallIcon />
+                </ListItemIcon>
+                <ListItemText primary="Tipos de Llantas" />
+              </ListItem>
+              <ListItem component={Link} button to="/mantenimiento/tiposequipos" className={classes.nested}>
+                <ListItemIcon>
+                  <SettingsApplicationsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Tipos de Equipos" />
+              </ListItem>
               <ListItem component={Link} button to="/mantenimiento/marcas" className={classes.nested}>
                 <ListItemIcon>
-                  <ClassIcon />
+                  <CommuteIcon />
                 </ListItemIcon>
                 <ListItemText primary="Marcas de Equipos" />
-              </ListItem>
-              <ListItem component={Link} button to="/mantenimiento/referencias" className={classes.nested}>
-                <ListItemIcon>
-                  <CenterFocusWeakIcon />
-                </ListItemIcon>
-                <ListItemText primary="Referencias" />
               </ListItem>
               <ListItem component={Link} button to="/mantenimiento/clasificacionABC" className={classes.nested}>
                 <ListItemIcon>

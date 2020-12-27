@@ -14,8 +14,7 @@ class Marcas extends Model
     protected $primaryKey = "id_mar";
 
     protected $fillable = [
-        'codigo_mar',
-        'nombre_mar',
+        'descripcion_mar',
         'empresa_mar',
         'estado_mar',
     ];

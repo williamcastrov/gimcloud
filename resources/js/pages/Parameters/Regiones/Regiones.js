@@ -229,7 +229,7 @@ function Regiones() {
 
   const regionInsertar=(
     <div className={styles.modal}>
-      <h3>Agregar Nueva Región</h3>
+      <h3 align="center" >Agregar Nueva Región</h3>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_reg" onChange={handleChange} />
       <br />
       <TextField className={styles.inputMaterial} label="Región" name="nombre_reg" onChange={handleChange} />          

@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MaterialTable from "material-table";
-import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid } from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
+import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
 
 // Componentes de Conexion con el Backend
 import frecuenciasServices from "../../../services/Mantenimiento/Frecuencias";
 import estadosServices from "../../../services/Parameters/Estados";
+import unidadesServices from "../../../services/Parameters/Unidades";
 import empresasServices from "../../../services/Empresa";
-
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -23,10 +23,10 @@ const useStyles = makeStyles((theme) => ({
     left: '50%',
     transform: 'translate(-50%, -50%)'
   },
-  iconos:{
+  iconos: {
     cursor: 'pointer'
-  }, 
-  inputMaterial:{
+  },
+  inputMaterial: {
     width: '100%'
   },
   formControl: {
@@ -38,17 +38,19 @@ const useStyles = makeStyles((theme) => ({
 function Frecuencias() {
   const styles = useStyles();
   const [listFrecuencias, setListFrecuencias] = useState([]);
-  const [modalInsertar, setModalInsertar ] = useState(false);
-  const [modalEditar, setModalEditar]= useState(false);
-  const [modalEliminar, setModalEliminar]= useState(false);
+  const [modalInsertar, setModalInsertar] = useState(false);
+  const [modalEditar, setModalEditar] = useState(false);
+  const [modalEliminar, setModalEliminar] = useState(false);
   const [formError, setFormError] = useState(false);
   const [listarEstados, setListarEstados] = useState([]);
   const [listarEmpresas, setListarEmpresas] = useState([]);
-  
+  const [listarUnidades, setListarUnidades] = useState([]);
+
   const [frecuenciasSeleccionado, setFrecuenciasSeleccionado] = useState({
     id_fre: "",
-    codigo_fre: "",
-    nombre_fre: "",
+    descripcion_fre: "",
+    periodicidad_fre: "",
+    unidad_fre: "",
     empresa_fre: "",
     estado_fre: ""
   })
@@ -61,36 +63,45 @@ function Frecuencias() {
     fetchDataFrecuencias();
   }, [])
 
-  useEffect (() => {
-      async function fetchDataEmpresas() {
+  useEffect(() => {
+    async function fetchDataEmpresas() {
       const res = await empresasServices.listEmpresas();
-      setListarEmpresas(res.data) 
+      setListarEmpresas(res.data)
       console.log(res.data);
     }
     fetchDataEmpresas();
   }, [])
 
-  useEffect (() => {
+  useEffect(() => {
     async function fetchDataEstados() {
-    const res = await estadosServices.listEstados();
-    setListarEstados(res.data) 
-    console.log(res.data);
-  }
-  fetchDataEstados();
+      const res = await estadosServices.listEstados();
+      setListarEstados(res.data)
+      console.log(res.data);
+    }
+    fetchDataEstados();
+  }, [])
+
+  useEffect(() => {
+    async function fetchDataUnidades() {
+      const res = await unidadesServices.listUnidades();
+      setListarUnidades(res.data)
+      console.log(res.data);
+    }
+    fetchDataUnidades();
   }, [])
 
   const handleChange = e => {
-    const {name, value} = e.target;
+    const { name, value } = e.target;
 
-    setFrecuenciasSeleccionado( prevState => ({
+    setFrecuenciasSeleccionado(prevState => ({
       ...prevState,
       [name]: value
     }));
   }
 
-  const seleccionarFrecuencia=(frecuencia, caso)=>{
+  const seleccionarFrecuencia = (frecuencia, caso) => {
     setFrecuenciasSeleccionado(frecuencia);
-    (caso==="Editar") ? abrirCerrarModalEditar() : abrirCerrarModalEliminar()
+    (caso === "Editar") ? abrirCerrarModalEditar() : abrirCerrarModalEliminar()
   }
 
   const abrirCerrarModalInsertar = () => {
@@ -111,13 +122,18 @@ function Frecuencias() {
     let errors = {};
     let formOk = true;
 
-    if (!frecuenciasSeleccionado.codigo_fre) {
-      errors.codigo_fre = true;
+    if (!frecuenciasSeleccionado.descripcion_fre) {
+      errors.descripcion_fre = true;
       formOk = false;
     }
 
-    if (!frecuenciasSeleccionado.nombre_fre) {
-      errors.nombre_fre = true;
+    if (!frecuenciasSeleccionado.periodicidad_fre) {
+      errors.periodicidad_fre = true;
+      formOk = false;
+    }
+
+    if (!frecuenciasSeleccionado.unidad_fre) {
+      errors.unidad_fre = true;
       formOk = false;
     }
 
@@ -141,12 +157,12 @@ function Frecuencias() {
         alert("Frecuencia Creada de forma Correcta")
         console.log(res.message)
         abrirCerrarModalInsertar();
-        delete frecuenciasSeleccionado.codigo_fre;
-        delete frecuenciasSeleccionado.nombre_fre;
+        delete frecuenciasSeleccionado.descripcion_fre;
+        delete frecuenciasSeleccionado.periodicidad_fre;
+        delete frecuenciasSeleccionado.unidad_fre;
         delete frecuenciasSeleccionado.empresa_fre;
         delete frecuenciasSeleccionado.estado_fre;
-      } else
-      {
+      } else {
         alert("Error Creando la Frecuencia");
         console.log(res.message);
         abrirCerrarModalInsertar();
@@ -160,18 +176,23 @@ function Frecuencias() {
   }
 
   const actualizarFrecuencia = async () => {
-  
+
     setFormError({});
     let errors = {};
     let formOk = true;
 
-    if (!frecuenciasSeleccionado.codigo_fre) {
-      errors.codigo_fre = true;
+    if (!frecuenciasSeleccionado.descripcion_fre) {
+      errors.descripcion_fre = true;
       formOk = false;
     }
 
-    if (!frecuenciasSeleccionado.nombre_fre) {
-      errors.nombre_fre = true;
+    if (!frecuenciasSeleccionado.periodicidad_fre) {
+      errors.periodicidad_fre = true;
+      formOk = false;
+    }
+
+    if (!frecuenciasSeleccionado.unidad_fre) {
+      errors.unidad_fre = true;
       formOk = false;
     }
 
@@ -188,61 +209,64 @@ function Frecuencias() {
     setFormError(errors);
 
     if (formOk) {
-    
-    const res = await frecuenciasServices.update(frecuenciasSeleccionado);
 
-    if (res.success) {
+      const res = await frecuenciasServices.update(frecuenciasSeleccionado);
+
+      if (res.success) {
         alert("Frecuencia actualizada de forma Correcta")
         console.log(res.message)
         abrirCerrarModalEditar();
-        delete frecuenciasSeleccionado.codigo_fre;
-        delete frecuenciasSeleccionado.nombre_fre;
+        delete frecuenciasSeleccionado.descripcion_fre;
+        delete frecuenciasSeleccionado.periodicidad_fre;
+        delete frecuenciasSeleccionado.unidad_fre;
         delete frecuenciasSeleccionado.empresa_fre;
         delete frecuenciasSeleccionado.estado_fre;
-    } else
-    {
+      } else {
         alert("Error Actualizando la Frecuencia");
         console.log(res.message);
         abrirCerrarModalEditar();
-    }
+      }
     }
     else {
       alert("Debe Ingresar Todos los Datos, Error Actualizando la Frecuencia");
       console.log(res.message);
       abrirCerrarModalEditar();
-    } 
+    }
   }
 
-  const borrarFrecuencia = async()=>{
-   
+  const borrarFrecuencia = async () => {
+
     const res = await frecuenciasServices.delete(frecuenciasSeleccionado.id_fre);
 
     if (res.success) {
-        alert("Frecuencia Borrada de forma Correcta")
-        console.log(res.message)
-        abrirCerrarModalEliminar();
+      alert("Frecuencia Borrada de forma Correcta")
+      console.log(res.message)
+      abrirCerrarModalEliminar();
     }
     else {
-        alert("Error Borrando la Frecuencia");
-        console.log(res.message);
-        abrirCerrarModalEliminar();
+      alert("Error Borrando la Frecuencia");
+      console.log(res.message);
+      abrirCerrarModalEliminar();
     }
-    
+
   }
- // "string","boolean","numeric","date","datetime","time","currency"
+  // "string","boolean","numeric","date","datetime","time","currency"
   const columnas = [
     {
       title: 'Id',
-      field: 'id_fre',
-      type: 'numeric'
+      field: 'id_fre'
     },
     {
-      title: 'Codigo',
-      field: 'codigo_fre'
+      title: 'Frecuencia',
+      field: 'descripcion_fre'
     },
     {
-      title: 'Descripción',
-      field: 'nombre_fre'
+      title: 'Periodicidad',
+      field: 'periodicidad_fre'
+    },
+    {
+      title: 'Unidad',
+      field: 'descripcion_und'
     },
     {
       title: 'Codigo Empresa',
@@ -262,17 +286,37 @@ function Frecuencias() {
     }
   ]
 
-  const frecuenciaInsertar=(
+  const frecuenciaInsertar = (
     <div className={styles.modal}>
       <br />
       <h3>Frecuencias para Mantenimiento</h3>
- 
-      <Grid container spacing={2} > 
+
+      <Grid container spacing={2} >
         <Grid item xs={12} md={12}>
-          <TextField className={styles.inputMaterial} label="Código" name="codigo_fre" fullWidth onChange={handleChange} />
+          <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_fre" fullWidth onChange={handleChange} />
         </Grid>
-        <Grid item xs={12} md={12}> 
-          <TextField className={styles.inputMaterial} label="Descripción" name="nombre_fre" fullWidth onChange={handleChange} />  
+        <Grid item xs={12} md={12}>
+          <TextField className={styles.inputMaterial} label="Periodicidad" name="periodicidad_fre" fullWidth onChange={handleChange} />
+        </Grid>
+        <Grid item xs={12} md={12}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectUnidad">Unidad Asignada a la Frecuencia</InputLabel>
+            <Select
+              labelId="selectUnidad"
+              name="unidad_fre"
+              id="idselectUnidad"
+              onChange={handleChange}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarUnidades.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_und}>{itemselect.descripcion_und}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
         </Grid>
         <Grid item xs={12} md={12}>
           <FormControl className={styles.formControl}>
@@ -287,49 +331,68 @@ function Frecuencias() {
               {
                 listarEmpresas.map((itemselect) => {
                   return (
-                  <MenuItem value={itemselect.id_emp }>{itemselect.nombre_emp}</MenuItem>
-                )
-              })
-            }
+                    <MenuItem value={itemselect.id_emp}>{itemselect.nombre_emp}</MenuItem>
+                  )
+                })
+              }
             </Select>
           </FormControl>
         </Grid>
-          <Grid item xs={12} md={12}>
-            <FormControl className={styles.formControl}>
-              <InputLabel id="idselectEstado">Estado</InputLabel>
-              <Select
-                labelId="selectEstado"
-                name="estado_fre"
-                id="idselectEstado"
-                onChange={handleChange}
-              >
+        <Grid item xs={12} md={12}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectEstado">Estado</InputLabel>
+            <Select
+              labelId="selectEstado"
+              name="estado_fre"
+              id="idselectEstado"
+              onChange={handleChange}
+            >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
                 listarEstados.map((itemselect) => {
                   return (
-                    <MenuItem value={itemselect.id_est }>{itemselect.nombre_est}</MenuItem>
+                    <MenuItem value={itemselect.id_est}>{itemselect.nombre_est}</MenuItem>
                   )
                 })
               }
-              </Select>
-            </FormControl>
-          </Grid>
+            </Select>
+          </FormControl>
+        </Grid>
       </Grid>
       <br /><br />
-      <div align="right">    
-        <Button color="primary" onClick = { () => grabarFrecuencia() } >Insertar</Button>
-        <Button onClick={()=> abrirCerrarModalInsertar()} >Cancelar</Button>
+      <div align="right">
+        <Button color="primary" onClick={() => grabarFrecuencia()} >Insertar</Button>
+        <Button onClick={() => abrirCerrarModalInsertar()} >Cancelar</Button>
       </div>
     </div>
   )
 
-  const frecuenciaEditar=(
+  const frecuenciaEditar = (
     <div className={styles.modal}>
       <h3 align="center" >Actualizar Frecuencia de Mantenimiento</h3>
-      <TextField className={styles.inputMaterial} label="Código" name="codigo_fre" onChange={handleChange} value={frecuenciasSeleccionado&&frecuenciasSeleccionado.codigo_fre} />   
+      <TextField className={styles.inputMaterial} label="Frecuencia" name="descripcion_fre" onChange={handleChange} value={frecuenciasSeleccionado && frecuenciasSeleccionado.descripcion_fre} />
       <br />
-      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_fre" onChange={handleChange} value={frecuenciasSeleccionado&&frecuenciasSeleccionado.nombre_fre} />          
+      <TextField className={styles.inputMaterial} label="Periodicidad" name="periodicidad_fre" onChange={handleChange} value={frecuenciasSeleccionado && frecuenciasSeleccionado.periodicidad_fre} />
       <br />
+      <FormControl className={styles.formControl}>
+        <InputLabel id="idselectUnidad">Unidad Asignada a la Frecuencia</InputLabel>
+        <Select
+          labelId="selectUnidad"
+          name="unidad_fre"
+          id="idselectUnidad"
+          onChange={handleChange}
+          value={frecuenciasSeleccionado && frecuenciasSeleccionado.unidad_fre}
+        >
+          <MenuItem value=""> <em>None</em> </MenuItem>
+          {
+            listarUnidades.map((itemselect) => {
+              return (
+                <MenuItem value={itemselect.id_und}>{itemselect.descripcion_und}</MenuItem>
+              )
+            })
+          }
+        </Select>
+      </FormControl>
       <FormControl className={styles.formControl} >
         <InputLabel id="idselectEmpresa">Empresa</InputLabel>
         <Select
@@ -337,13 +400,13 @@ function Frecuencias() {
           name="empresa_fre"
           id="idselectEmpresa"
           onChange={handleChange}
-          value={frecuenciasSeleccionado&&frecuenciasSeleccionado.empresa_fre} 
+          value={frecuenciasSeleccionado && frecuenciasSeleccionado.empresa_fre}
         >
           <MenuItem value=""> <em>None</em> </MenuItem>
           {
             listarEmpresas.map((itemselect) => {
               return (
-                <MenuItem value={itemselect.id_emp }>{itemselect.nombre_emp}</MenuItem>
+                <MenuItem value={itemselect.id_emp}>{itemselect.nombre_emp}</MenuItem>
               )
             })
           }
@@ -356,13 +419,13 @@ function Frecuencias() {
           name="estado_fre"
           id="idselectEstado"
           onChange={handleChange}
-          value={frecuenciasSeleccionado&&frecuenciasSeleccionado.estado_fre} 
+          value={frecuenciasSeleccionado && frecuenciasSeleccionado.estado_fre}
         >
           <MenuItem value=""> <em>None</em> </MenuItem>
           {
             listarEstados.map((itemselect) => {
               return (
-                <MenuItem value={itemselect.id_est }>{itemselect.nombre_est}</MenuItem>
+                <MenuItem value={itemselect.id_est}>{itemselect.nombre_est}</MenuItem>
               )
             })
           }
@@ -370,18 +433,18 @@ function Frecuencias() {
       </FormControl>
       <br /><br />
       <div align="right">
-        <Button color="primary"  onClick={()=>actualizarFrecuencia()} >Editar</Button>
-        <Button onClick={()=>abrirCerrarModalEditar()}>Cancelar</Button>
+        <Button color="primary" onClick={() => actualizarFrecuencia()} >Editar</Button>
+        <Button onClick={() => abrirCerrarModalEditar()}>Cancelar</Button>
       </div>
     </div>
   )
 
   const frecuenciaEliminar = (
     <div className={styles.modal}>
-      <p>Estás seguro que deseas eliminar la Frecuencia <b>{frecuenciasSeleccionado && frecuenciasSeleccionado.nombre_fre}</b>? </p>
+      <p>Estás seguro que deseas eliminar la Frecuencia <b>{frecuenciasSeleccionado && frecuenciasSeleccionado.descripcion_fre}</b>? </p>
       <div align="right">
-        <Button color="secondary" onClick = {() => borrarFrecuencia() }> Confirmar </Button>
-        <Button onClick={()=>abrirCerrarModalEliminar()}> Cancelar </Button>
+        <Button color="secondary" onClick={() => borrarFrecuencia()}> Confirmar </Button>
+        <Button onClick={() => abrirCerrarModalEliminar()}> Cancelar </Button>
 
       </div>
 
@@ -390,53 +453,53 @@ function Frecuencias() {
 
   return (
     <div className="App">
-    <br />
-    <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Frecuencia</Button>
-     <MaterialTable
-       columns={columnas}
-       data={listFrecuencias}
-       title="Maestra de Frecuencias para Mantenimiento"
-       actions={[
-         {
-           icon     : 'edit',
-           tooltip  : 'Editar Frecuencia',
-           onClick  : (event, rowData) => seleccionarFrecuencia(rowData, "Editar")
-         },
-         {
-          icon     : 'delete',
-          tooltip  : 'Borrar Frecuencia',
-          onClick  : (event, rowData) =>   seleccionarFrecuencia(rowData, "Eliminar")
-         } 
-       ]}
-       options={{
-         actionsColumnIndex: -1
-       }}
-       localization={{
-         header: {
-           actions: "Acciones"
-         }
-       }}
-    />{}
-    <Modal
-      open={modalInsertar}
-      onClose={abrirCerrarModalInsertar}
-    >
-      {frecuenciaInsertar}
-    </Modal>
+      <br />
+      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Frecuencia</Button>
+      <MaterialTable
+        columns={columnas}
+        data={listFrecuencias}
+        title="Maestra de Frecuencias para Mantenimiento"
+        actions={[
+          {
+            icon: 'edit',
+            tooltip: 'Editar Frecuencia',
+            onClick: (event, rowData) => seleccionarFrecuencia(rowData, "Editar")
+          },
+          {
+            icon: 'delete',
+            tooltip: 'Borrar Frecuencia',
+            onClick: (event, rowData) => seleccionarFrecuencia(rowData, "Eliminar")
+          }
+        ]}
+        options={{
+          actionsColumnIndex: -1
+        }}
+        localization={{
+          header: {
+            actions: "Acciones"
+          }
+        }}
+      />{ }
+      <Modal
+        open={modalInsertar}
+        onClose={abrirCerrarModalInsertar}
+      >
+        {frecuenciaInsertar}
+      </Modal>
 
-    <Modal
-      open={modalEditar}
-      onClose={abrirCerrarModalEditar}
-    >
-      {frecuenciaEditar}
-    </Modal>
+      <Modal
+        open={modalEditar}
+        onClose={abrirCerrarModalEditar}
+      >
+        {frecuenciaEditar}
+      </Modal>
 
-    <Modal
-      open={modalEliminar}
-      onClose={abrirCerrarModalEliminar}
-    >
-      {frecuenciaEliminar}
-    </Modal>
+      <Modal
+        open={modalEliminar}
+        onClose={abrirCerrarModalEliminar}
+      >
+        {frecuenciaEliminar}
+      </Modal>
     </div>
   );
 }

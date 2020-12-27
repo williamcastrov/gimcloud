@@ -54,23 +54,23 @@ function Empleados() {
   const [listarEspecialidades, setListarEspecialidades] = useState([]);
   const [fechaHoy, setFechaHoy] = useState(new Date());
   const [empleadosSeleccionado, setEmpleadosSeleccionado] = useState({
-    id_int: "",
-    codigo_tipo_int: 3,
-    nit_int: "",
-    estado_int: "",
-    primer_nombre_int: "", 
-    segundo_nombre_int: "",
-    primer_apellido_int: "",
-    segundo_apellido_int: "",
-    razonsocial_int: "",
-    ciudad_int: "",
-    direccion_int: "",
-    telefono_int: "",
-    email_int: "",
-    empresa_int: "",
-    fecha_creacion_int: fechaHoy,
-    fecha_modificacion_int: fechaHoy, 
-    especialidad_int: ""
+    id_emp: "",
+    codigo_tipo_emp: 3,
+    nit_emp: "",
+    estado_emp: "",
+    primer_nombre_emp: "", 
+    segundo_nombre_emp: "",
+    primer_apellido_emp: "",
+    segundo_apellido_emp: "",
+    razonsocial_emp: "",
+    ciudad_emp: "",
+    direccion_emp: "",
+    telefono_emp: "",
+    email_emp: "",
+    empresa_emp: "",
+    fecha_creacion_emp: fechaHoy,
+    fecha_modificacion_emp: fechaHoy, 
+    especialidad_emp: ""
   })
 
   useEffect(() => {
@@ -150,78 +150,78 @@ function Empleados() {
     let errors = {};
     let formOk = true;
 
-    if (!empleadosSeleccionado.codigo_tipo_int) {
-      errors.codigo_tipo_int = true;
+    if (!empleadosSeleccionado.codigo_tipo_emp) {
+      errors.codigo_tipo_emp = true;
       formOk = false;
     }
 
-    if (!empleadosSeleccionado.nit_int) {
-      errors.nit_int = true;
+    if (!empleadosSeleccionado.nit_emp) {
+      errors.nit_emp = true;
       formOk = false;
     }
 
-    if (!empleadosSeleccionado.estado_int) {
-      errors.estado_int = true;
+    if (!empleadosSeleccionado.estado_emp) {
+      errors.estado_emp = true;
       formOk = false;
     }
 
-    if (!empleadosSeleccionado.primer_nombre_int) {
-      errors.primer_nombre_int = true;
+    if (!empleadosSeleccionado.primer_nombre_emp) {
+      errors.primer_nombre_emp = true;
       formOk = false;
     }
 
-    if (!empleadosSeleccionado.segundo_nombre_int) {
-      errors.segundo_nombre_int = true;
+    if (!empleadosSeleccionado.segundo_nombre_emp) {
+      errors.segundo_nombre_emp = true;
       formOk = false;
     }
 
-    if (!empleadosSeleccionado.primer_apellido_int) {
-      errors.primer_apellido_int = true;
+    if (!empleadosSeleccionado.primer_apellido_emp) {
+      errors.primer_apellido_emp = true;
       formOk = false;
     }
 
-    if (!empleadosSeleccionado.segundo_apellido_int) {
-      errors.segundo_apellido_int = true;
+    if (!empleadosSeleccionado.segundo_apellido_emp) {
+      errors.segundo_apellido_emp = true;
       formOk = false;
     }
 
-    if (!empleadosSeleccionado.ciudad_int) {
-      errors.ciudad_int = true;
+    if (!empleadosSeleccionado.ciudad_emp) {
+      errors.ciudad_emp = true;
       formOk = false;
     }
 
-    if (!empleadosSeleccionado.direccion_int) {
-      errors.direccion_int = true;
+    if (!empleadosSeleccionado.direccion_emp) {
+      errors.direccion_emp = true;
       formOk = false;
     }
 
-    if (!empleadosSeleccionado.telefono_int) {
-      errors.telefono_int = true;
+    if (!empleadosSeleccionado.telefono_emp) {
+      errors.telefono_emp = true;
       formOk = false;
     }
 
-    if (!empleadosSeleccionado.email_int) {
-      errors.email_int = true;
+    if (!empleadosSeleccionado.email_emp) {
+      errors.email_emp = true;
       formOk = false;
     }
     
-    if (!empleadosSeleccionado.empresa_int) {
-      errors.empresa_int = true;
+    if (!empleadosSeleccionado.empresa_emp) {
+      errors.empresa_emp = true;
       formOk = false;
     }
 
-    if (!empleadosSeleccionado.fecha_creacion_int) {
-      errors.fecha_creacion_int = true;
+    if (!empleadosSeleccionado.fecha_creacion_emp) {
+      errors.fecha_creacion_emp = true;
       formOk = false;
     }
 
-    if (!empleadosSeleccionado.fecha_modificacion_int) {
-      errors.fecha_modificacion_int = true;
+    if (!empleadosSeleccionado.fecha_modificacion_emp) {
+      errors.fecha_modificacion_emp = true;
       formOk = false;
     }
 
-    if (!empleadosSeleccionado.especialidad_int) {
-      errors.especialidad_int = true;
+    if (!empleadosSeleccionado.especialidad_emp) {
+      errors.especialidad_emp = true;
       formOk = false;
     }
 
@@ -235,21 +235,21 @@ function Empleados() {
         alert("Empleado Creado de forma Correcta")
         console.log(res.message)
         abrirCerrarModalInsertar();
-        delete empleadosSeleccionado.codigo_tipo_int;
-        delete empleadosSeleccionado.nit_int;
-        delete empleadosSeleccionado.estado_int;
-        delete empleadosSeleccionado.primer_nombre_int; 
-        delete empleadosSeleccionado.segundo_nombre_int;
-        delete empleadosSeleccionado.primer_apellido_int;
-        delete empleadosSeleccionado.segundo_apellido_int; 
-        delete empleadosSeleccionado.ciudad_int;
-        delete empleadosSeleccionado.direccion_int;
-        delete empleadosSeleccionado.telefono_int;
-        delete empleadosSeleccionado.email_int;
-        delete empleadosSeleccionado.empresa_int;
-        delete empleadosSeleccionado.fecha_creacion_int;
-        delete empleadosSeleccionado.fecha_modificacion_int; 
-        delete empleadosSeleccionado.especialidad_int;
+        delete empleadosSeleccionado.codigo_tipo_emp;
+        delete empleadosSeleccionado.nit_emp;
+        delete empleadosSeleccionado.estado_emp;
+        delete empleadosSeleccionado.primer_nombre_emp; 
+        delete empleadosSeleccionado.segundo_nombre_emp;
+        delete empleadosSeleccionado.primer_apellido_emp;
+        delete empleadosSeleccionado.segundo_apellido_emp; 
+        delete empleadosSeleccionado.ciudad_emp;
+        delete empleadosSeleccionado.direccion_emp;
+        delete empleadosSeleccionado.telefono_emp;
+        delete empleadosSeleccionado.email_emp;
+        delete empleadosSeleccionado.empresa_emp;
+        delete empleadosSeleccionado.fecha_creacion_emp;
+        delete empleadosSeleccionado.fecha_modificacion_emp; 
+        delete empleadosSeleccionado.especialidad_emp;
       } else
       {
         alert("Error Creando el Empleado");
@@ -271,78 +271,78 @@ function Empleados() {
     let errors = {};
     let formOk = true;
 
-    if (!empleadosSeleccionado.codigo_tipo_int) {
-      errors.codigo_tipo_int = true;
+    if (!empleadosSeleccionado.codigo_tipo_emp) {
+      errors.codigo_tipo_emp = true;
       formOk = false;
     }
 
-    if (!empleadosSeleccionado.nit_int) {
-      errors.nit_int = true;
+    if (!empleadosSeleccionado.nit_emp) {
+      errors.nit_emp = true;
       formOk = false;
     }
 
-    if (!empleadosSeleccionado.estado_int) {
-      errors.estado_int = true;
+    if (!empleadosSeleccionado.estado_emp) {
+      errors.estado_emp = true;
       formOk = false;
     }
 
-    if (!empleadosSeleccionado.primer_nombre_int) {
-      errors.primer_nombre_int = true;
+    if (!empleadosSeleccionado.primer_nombre_emp) {
+      errors.primer_nombre_emp = true;
       formOk = false;
     }
 
-    if (!empleadosSeleccionado.segundo_nombre_int) {
-      errors.segundo_nombre_int = true;
+    if (!empleadosSeleccionado.segundo_nombre_emp) {
+      errors.segundo_nombre_emp = true;
       formOk = false;
     }
 
-    if (!empleadosSeleccionado.primer_apellido_int) {
-      errors.primer_apellido_int = true;
+    if (!empleadosSeleccionado.primer_apellido_emp) {
+      errors.primer_apellido_emp = true;
       formOk = false;
     }
 
-    if (!empleadosSeleccionado.segundo_apellido_int) {
-      errors.segundo_apellido_int = true;
+    if (!empleadosSeleccionado.segundo_apellido_emp) {
+      errors.segundo_apellido_emp = true;
       formOk = false;
     }
     
-    if (!empleadosSeleccionado.ciudad_int) {
-      errors.ciudad_int = true;
+    if (!empleadosSeleccionado.ciudad_emp) {
+      errors.ciudad_emp = true;
       formOk = false;
     }
 
-    if (!empleadosSeleccionado.direccion_int) {
-      errors.direccion_int = true;
+    if (!empleadosSeleccionado.direccion_emp) {
+      errors.direccion_emp = true;
       formOk = false;
     }
 
-    if (!empleadosSeleccionado.telefono_int) {
-      errors.telefono_int = true;
+    if (!empleadosSeleccionado.telefono_emp) {
+      errors.telefono_emp = true;
       formOk = false;
     }
 
-    if (!empleadosSeleccionado.email_int) {
-      errors.email_int = true;
+    if (!empleadosSeleccionado.email_emp) {
+      errors.email_emp = true;
       formOk = false;
     }
     
-    if (!empleadosSeleccionado.empresa_int) {
-      errors.empresa_int = true;
+    if (!empleadosSeleccionado.empresa_emp) {
+      errors.empresa_emp = true;
       formOk = false;
     }
 
-    if (!empleadosSeleccionado.fecha_creacion_int) {
-      errors.fecha_creacion_int = true;
+    if (!empleadosSeleccionado.fecha_creacion_emp) {
+      errors.fecha_creacion_emp = true;
       formOk = false;
     }
 
-    if (!empleadosSeleccionado.fecha_modificacion_int) {
-      errors.fecha_modificacion_int = true;
+    if (!empleadosSeleccionado.fecha_modificacion_emp) {
+      errors.fecha_modificacion_emp = true;
       formOk = false;
     }
 
-    if (!empleadosSeleccionado.especialidad_int) {
-      errors.especialidad_int = true;
+    if (!empleadosSeleccionado.especialidad_emp) {
+      errors.especialidad_emp = true;
       formOk = false;
     }
 
@@ -356,21 +356,21 @@ function Empleados() {
         alert("Empleado actualizado de forma Correcta")
         console.log(res.message)
         abrirCerrarModalEditar();
-        delete empleadosSeleccionado.codigo_tipo_int;
-        delete empleadosSeleccionado.nit_int;
-        delete empleadosSeleccionado.estado_int;
-        delete empleadosSeleccionado.primer_nombre_int; 
-        delete empleadosSeleccionado.segundo_nombre_int;
-        delete empleadosSeleccionado.primer_apellido_int;
-        delete empleadosSeleccionado.segundo_apellido_int; 
-        delete empleadosSeleccionado.ciudad_int;
-        delete empleadosSeleccionado.direccion_int;
-        delete empleadosSeleccionado.telefono_int;
-        delete empleadosSeleccionado.email_int;
-        delete empleadosSeleccionado.empresa_int;
-        delete empleadosSeleccionado.fecha_creacion_int;
-        delete empleadosSeleccionado.fecha_modificacion_int; 
-        delete empleadosSeleccionado.especialidad_int;
+        delete empleadosSeleccionado.codigo_tipo_emp;
+        delete empleadosSeleccionado.nit_emp;
+        delete empleadosSeleccionado.estado_emp;
+        delete empleadosSeleccionado.primer_nombre_emp; 
+        delete empleadosSeleccionado.segundo_nombre_emp;
+        delete empleadosSeleccionado.primer_apellido_emp;
+        delete empleadosSeleccionado.segundo_apellido_emp; 
+        delete empleadosSeleccionado.ciudad_emp;
+        delete empleadosSeleccionado.direccion_emp;
+        delete empleadosSeleccionado.telefono_emp;
+        delete empleadosSeleccionado.email_emp;
+        delete empleadosSeleccionado.empresa_emp;
+        delete empleadosSeleccionado.fecha_creacion_emp;
+        delete empleadosSeleccionado.fecha_modificacion_emp; 
+        delete empleadosSeleccionado.especialidad_emp;
     } else
     {
         alert("Error Actualizando el Empleado");
@@ -387,7 +387,7 @@ function Empleados() {
 
   const borrarEmpleado = async()=>{
    
-    const res = await empleadosServices.delete(empleadosSeleccionado.id_int);
+    const res = await empleadosServices.delete(empleadosSeleccionado.id_emp);
 
     if (res.success) {
         alert("Empleado Borrado de forma Correcta")
@@ -405,77 +405,62 @@ function Empleados() {
   // "string","boolean","numeric","date","datetime","time","currency"
   const columnas = [
   {
-    field: 'id_int',
-    title: 'Id'
-  },
-  {
-    field: 'nit_int',
-    title: 'Nit'
+    field: 'nit_emp',
+    title: 'Nit',
+    cellStyle : { minWidth: 100}
   },
   {
     field: 'nombre_est',
     title: 'Estado'
   },
   {
-    field: 'primer_nombre_int',
-    title: 'Primero Nombre'
+    field: 'primer_nombre_emp',
+    title: 'Primero Nombre',
+    cellStyle : { minWidth: 100}
   },
   {
-    field: 'segundo_nombre_int',
-    title: 'Segundo Nombre'
+    field: 'segundo_nombre_emp',
+    title: 'Segundo Nombre',
+    cellStyle : { minWidth: 100}
   },
   {
-    field: 'primer_apellido_int',
-    title: 'Primer Apelllido'
+    field: 'primer_apellido_emp',
+    title: 'Primer Apelllido',
+    cellStyle : { minWidth: 100}
   },
   {
-    field: 'segundo_apellido_int',
-    title: 'Segundo Apellido'
+    field: 'segundo_apellido_emp',
+    title: 'Segundo Apellido',
+    cellStyle : { minWidth: 100}
   },
   {
     field: 'nombre_ciu',
     title: 'Ciudad'
   },
   {
-    field: 'direccion_int',
+    field: 'direccion_emp',
     title: 'Dirección',
-    cellStyle : { minWidth: 200}
+    cellStyle : { minWidth: 175}
   },
   {
-    field: 'telefono_int',
+    field: 'telefono_emp',
     title: 'Teléfono',
-    cellStyle : { minWidth: 120}
+    cellStyle : { minWidth: 130}
   },
   {
-    field: 'email_int',
+    field: 'email_emp',
     title: 'Email',
     width: '400'
-  },
-  {
-    field: 'fecha_creacion_int',
-    title: 'Fecha de Creación',
-    type: "date",
-    cellStyle : { minWidth: 100}
-  },
-  {
-    field: 'fecha_modificacion_int',
-    title: 'Fecha de Modificación',
-    type: "date",
-    cellStyle : { minWidth: 100}
-  },
-  {
-    field: 'nombre_esp',
-    title: 'Especialidad'
   }
   ]
   
   const empleadoInsertar=(
     <div className={styles.modal}>
-      <h3>Agregar Nuevo Empleado</h3>
+      <h3  align="center" >Agregar Nuevo Empleado</h3>
       <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> <TextField  name="codigo_tipo_int" label="Tipo Interlocutor" defaultValue="3" disabled="true"
+        <Grid item xs={12} md={6}> <TextField  name="codigo_tipo_emp" label="Tipo Interlocutor" defaultValue="3" disabled="true"
          fullWidth onChange={handleChange} /> </Grid>
-        <Grid item xs={12} md={6}> <TextField  name="nit_int" label="Nit del Interlocutor" fullWidth onChange={handleChange} /> </Grid>
+        <Grid item xs={12} md={6}> <TextField  name="nit_emp" label="Nit del Interlocutor" fullWidth onChange={handleChange} /> </Grid>
       </Grid>
       <Grid container spacing={2} > 
         <Grid item xs={12} md={6}> 
@@ -483,7 +468,7 @@ function Empleados() {
         <InputLabel id="idselectEstado"  >Estado</InputLabel>
           <Select
             labelId="selectEstado"
-            name="estado_int"
+            name="estado_emp"
             id="idselectEstado"
             fullWidth 
             onChange={handleChange}
@@ -499,14 +484,14 @@ function Empleados() {
           </Select>
         </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}> <TextField  name="primer_nombre_int" label="Primero Nombre" fullWidth onChange={handleChange} /> </Grid>
+        <Grid item xs={12} md={6}> <TextField  name="primer_nombre_emp" label="Primero Nombre" fullWidth onChange={handleChange} /> </Grid>
       </Grid>
       <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> <TextField  name="segundo_nombre_int" label="Segundo Nombre" fullWidth onChange={handleChange} /> </Grid>
-        <Grid item xs={12} md={6}> <TextField  name="primer_apellido_int" label="Primer Apellido" fullWidth onChange={handleChange} /> </Grid>
+        <Grid item xs={12} md={6}> <TextField  name="segundo_nombre_emp" label="Segundo Nombre" fullWidth onChange={handleChange} /> </Grid>
+        <Grid item xs={12} md={6}> <TextField  name="primer_apellido_emp" label="Primer Apellido" fullWidth onChange={handleChange} /> </Grid>
       </Grid>
       <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> <TextField  name="segundo_apellido_int" label="Segundo Apellido" onChange={handleChange} fullWidth /> </Grid>
+        <Grid item xs={12} md={6}> <TextField  name="segundo_apellido_emp" label="Segundo Apellido" onChange={handleChange} fullWidth /> </Grid>
       </Grid>
       <Grid container spacing={2} > 
         <Grid item xs={12} md={6}>
@@ -514,7 +499,7 @@ function Empleados() {
             <InputLabel id="idselectCiudad"  >Ciudad</InputLabel>
               <Select
                 labelId="selecCiudad"
-                name="ciudad_int"
+                name="ciudad_emp"
                 id="idselectCiudad"
                 fullWidth 
                 onChange={handleChange}
@@ -530,11 +515,11 @@ function Empleados() {
               </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}> <TextField  name="direccion_int" label="Direccion" onChange={handleChange} fullWidth /> </Grid>
+        <Grid item xs={12} md={6}> <TextField  name="direccion_emp" label="Direccion" onChange={handleChange} fullWidth /> </Grid>
       </Grid>
       <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> <TextField  name="telefono_int" label="Telefono" fullWidth onChange={handleChange} /> </Grid>
-        <Grid item xs={12} md={6}> <TextField  name="email_int" label="Email" fullWidth onChange={handleChange} /> </Grid>
+        <Grid item xs={12} md={6}> <TextField  name="telefono_emp" label="Telefono" fullWidth onChange={handleChange} /> </Grid>
+        <Grid item xs={12} md={6}> <TextField  name="email_emp" label="Email" fullWidth onChange={handleChange} /> </Grid>
       </Grid>     
       <Grid container spacing={2} > 
         <Grid item xs={12} md={6}>
@@ -542,7 +527,7 @@ function Empleados() {
             <InputLabel id="idselectCiudad" >Empresa</InputLabel>
               <Select
                 labelId="selecEmpresa"
-                name="empresa_int"
+                name="empresa_emp"
                 id="idselectEmpresa"
                 fullWidth 
                 onChange={handleChange}
@@ -559,20 +544,20 @@ function Empleados() {
           </FormControl>
         </Grid>
         <Grid item xs={12} md={6}>
-          <TextField type="date" defaultValue="2020-12-03" name="fecha_creacion_int" label="Fecha Creación" fullWidth onChange={handleChange} />
+          <TextField type="date" defaultValue="2020-12-03" name="fecha_creacion_emp" label="Fecha Creación" fullWidth onChange={handleChange} />
         </Grid>
       </Grid>
       
       <Grid container spacing={2} > 
         <Grid item xs={12} md={6}> 
-          <TextField type="date" defaultValue="2020-12-03"name="fecha_modificacion_int" label="Fecha Modificación" fullWidth onChange={handleChange} />
+          <TextField type="date" defaultValue="2020-12-03"name="fecha_modificacion_emp" label="Fecha Modificación" fullWidth onChange={handleChange} />
         </Grid>
         <Grid item xs={12} md={6}> 
           <FormControl className={styles.formControl}>
             <InputLabel id="idselectEspecialidad" >Especialidad</InputLabel>
               <Select
                 labelId="selecEspecialidad"
-                name="especialidad_int"
+                name="especialidad_emp"
                 id="idselectEspecialidad"
                 fullWidth 
                 onChange={handleChange}
@@ -581,7 +566,7 @@ function Empleados() {
               {
                 listarEspecialidades.map((itemselect) => {
                 return (
-                  <MenuItem value={itemselect.id_esp }>{itemselect.nombre_esp}</MenuItem>
+                  <MenuItem value={itemselect.id_esp }>{itemselect.descripcion_esp}</MenuItem>
                 )
                 })
               }
@@ -601,10 +586,10 @@ function Empleados() {
     <div className={styles.modal}>
       <h3 align="center" >Actualizar Empleado</h3>
       <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> <TextField  name="codigo_tipo_int" label="Tipo Interlocutor" fullWidth disabled="true"
-          onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.codigo_tipo_int} /> </Grid>
-        <Grid item xs={12} md={6}> <TextField  name="nit_int" label="Nit del Interlocutor" fullWidth 
-          onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.nit_int} /> </Grid>
+        <Grid item xs={12} md={6}> <TextField  name="codigo_tipo_emp" label="Tipo Interlocutor" fullWidth disabled="true"
+          onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.codigo_tipo_emp} /> </Grid>
+        <Grid item xs={12} md={6}> <TextField  name="nit_emp" label="Nit del Interlocutor" fullWidth 
+          onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.nit_emp} /> </Grid>
       </Grid>
       <Grid container spacing={2} > 
         <Grid item xs={12} md={6}>
@@ -612,10 +597,10 @@ function Empleados() {
             <InputLabel id="idselectEstado"  >Estado</InputLabel>
               <Select
                 labelId="selectEstado"
-                name="estado_int"
+                name="estado_emp"
                 id="idselectEstado"
                 fullWidth 
-                onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.estado_int}
+                onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.estado_emp}
               >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
@@ -628,18 +613,18 @@ function Empleados() {
           </Select>
         </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}> <TextField  name="primer_nombre_int" label="Primero Nombre" fullWidth 
-          onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.primer_nombre_int} /> </Grid>
+        <Grid item xs={12} md={6}> <TextField  name="primer_nombre_emp" label="Primero Nombre" fullWidth 
+          onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.primer_nombre_emp} /> </Grid>
       </Grid>
       <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> <TextField  name="segundo_nombre_int" label="Segundo Nombre" fullWidth 
-          onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.segundo_nombre_int} /> </Grid>
-        <Grid item xs={12} md={6}> <TextField  name="primer_apellido_int" label="Primer Apellido" fullWidth 
-          onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.primer_apellido_int} /> </Grid>
+        <Grid item xs={12} md={6}> <TextField  name="segundo_nombre_emp" label="Segundo Nombre" fullWidth 
+          onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.segundo_nombre_emp} /> </Grid>
+        <Grid item xs={12} md={6}> <TextField  name="primer_apellido_emp" label="Primer Apellido" fullWidth 
+          onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.primer_apellido_emp} /> </Grid>
       </Grid>
       <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> <TextField  name="segundo_apellido_int" label="Segundo Apellido" fullWidth 
-          onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.segundo_apellido_int} /> </Grid>
+        <Grid item xs={12} md={6}> <TextField  name="segundo_apellido_emp" label="Segundo Apellido" fullWidth 
+          onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.segundo_apellido_emp} /> </Grid>
       </Grid>
       <Grid container spacing={2} > 
         <Grid item xs={12} md={6}>
@@ -647,10 +632,10 @@ function Empleados() {
             <InputLabel id="idselectCiudad"  >Ciudad</InputLabel>
               <Select
                 labelId="selecCiudad"
-                name="ciudad_int"
+                name="ciudad_emp"
                 id="idselectCiudad"
                 fullWidth 
-                onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.ciudad_int}
+                onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.ciudad_emp}
               >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
@@ -663,14 +648,14 @@ function Empleados() {
               </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}> <TextField  name="direccion_int" label="Direccion" fullWidth 
-          onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.direccion_int} /> </Grid>
+        <Grid item xs={12} md={6}> <TextField  name="direccion_emp" label="Direccion" fullWidth 
+          onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.direccion_emp} /> </Grid>
       </Grid>
       <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> <TextField  name="telefono_int" label="Telefono" fullWidth 
-          onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.telefono_int} /> </Grid>
-        <Grid item xs={12} md={6}> <TextField  name="email_int" label="Email" fullWidth 
-          onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.email_int} /> </Grid>
+        <Grid item xs={12} md={6}> <TextField  name="telefono_emp" label="Telefono" fullWidth 
+          onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.telefono_emp} /> </Grid>
+        <Grid item xs={12} md={6}> <TextField  name="email_emp" label="Email" fullWidth 
+          onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.email_emp} /> </Grid>
       </Grid>
       <Grid container spacing={2} > 
         <Grid item xs={12} md={6}> 
@@ -678,10 +663,10 @@ function Empleados() {
             <InputLabel id="idselectCiudad" >Empresa</InputLabel>
               <Select
                 labelId="selecEmpresa"
-                name="empresa_int"
+                name="empresa_emp"
                 id="idselectEmpresa"
                 fullWidth 
-                onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.empresa_int}
+                onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.empresa_emp}
               >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
@@ -694,28 +679,28 @@ function Empleados() {
               </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}> <TextField  name="fecha_creacion_int" label="Fecha Creacion" fullWidth 
-          onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.fecha_creacion_int} /> </Grid>
+        <Grid item xs={12} md={6}> <TextField  name="fecha_creacion_emp" label="Fecha Creacion" fullWidth 
+          onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.fecha_creacion_emp} /> </Grid>
       </Grid>
       <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> <TextField  name="fecha_modificacion_int" label="Fecha Modificación" fullWidth 
-          onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.fecha_modificacion_int} />
+        <Grid item xs={12} md={6}> <TextField  name="fecha_modificacion_emp" label="Fecha Modificación" fullWidth 
+          onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.fecha_modificacion_emp} />
         </Grid>
         <Grid item xs={12} md={6}> 
           <FormControl className={styles.formControl}>
             <InputLabel id="idselectEspecialidad" >Especialidad</InputLabel>
               <Select
                 labelId="selecEspecialidad"
-                name="especialidad_int"
+                name="especialidad_emp"
                 id="idselectEspecialidad"
                 fullWidth 
-                onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.especialidad_int}
+                onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.especialidad_emp}
               >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
                 listarEspecialidades.map((itemselect) => {
                 return (
-                  <MenuItem value={itemselect.id_esp }>{itemselect.nombre_esp}</MenuItem>
+                  <MenuItem value={itemselect.id_esp }>{itemselect.descripcion_esp}</MenuItem>
                 )
                 })
               }
@@ -733,7 +718,7 @@ function Empleados() {
 
   const empleadoEliminar = (
     <div className={styles.modal}>
-      <p>Estás seguro que deseas eliminar el CLiente <b>{empleadosSeleccionado && empleadosSeleccionado.primer_nombre_int}</b>? </p>
+      <p>Estás seguro que deseas eliminar el CLiente <b>{empleadosSeleccionado && empleadosSeleccionado.primer_nombre_emp}</b>? </p>
       <div align="right">
         <Button color="secondary" onClick = {() => borrarEmpleado() }> Confirmar </Button>
         <Button onClick={()=>abrirCerrarModalEliminar()}> Cancelar </Button>
@@ -769,6 +754,26 @@ function Empleados() {
             actions: "Acciones"
           }
         }}
+        detailPanel={[
+          {
+            tooltip: 'Datos de Fechas',
+            render: rowData => {
+              return (
+                <div
+                  style={{
+                    fontSize: 14,
+                    textAlign: 'center',
+                    color: 'white',
+                    backgroundColor: '#9e9e9e',
+                  }}
+                >
+                  <Button variant="contained">Fecha de Creación : {rowData.fecha_creacion_emp}</Button> { }
+                  <Button variant="contained">Fecha de Modificación  : {rowData.fecha_modificacion_emp}</Button> { }
+                </div>
+              )
+            },
+          },
+        ]}
       />
       {}
 

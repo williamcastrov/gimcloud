@@ -5,13 +5,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
 
 // Componentes de Conexion con el Backend
-import garantiasServices from "../../../services/Mantenimiento/Garantias";
+import garantiasServices from "../../../services/DatosEquipos/Garantias";
 import estadosServices from "../../../services/Parameters/Estados";
 import empresasServices from "../../../services/Empresa";
 import equiposServices from "../../../services/Mantenimiento/Equipos";
 
 //Estilos
-import "../Equipos/Equipos.css";
+import "../../Mantenimiento/Equipos/Equipos.css";
 
 const useStyles = makeStyles((theme) => ({
   modal: {

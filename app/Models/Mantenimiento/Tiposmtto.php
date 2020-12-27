@@ -14,14 +14,10 @@ class Tiposmtto extends Model
     protected $primaryKey = "id_tmt";
 
     protected $fillable = [
-        'codigo_tmt',
-        'nombre_tmt',
-        'empresa_tmt'
+        'descripcion_tmt',
+        'empresa_tmt',
+        'estado_tmt'
     ];
-
-    public function empresa(){
-        return $this->belongsTo("App\Models\Parameters\Empresa","empresa_tmt");
-    }
 
     public $timestamps = false;
 }

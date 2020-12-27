@@ -216,6 +216,10 @@ function Ciudades() {
       field: 'codigo_ciu'
     },
     {
+      title: 'CodigoInterno',
+      field: 'codigointerno_ciu'
+    },
+    {
       title: 'Ciudad',
       field: 'nombre_ciu'
     },
@@ -233,6 +237,8 @@ function Ciudades() {
     <div className={styles.modal}>
       <h3>Agregar Nueva Ciudad</h3>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_ciu" onChange={handleChange} />
+      <br />
+      <TextField className={styles.inputMaterial} label="CódigoInterno" name="codigointerno_ciu" onChange={handleChange} />
       <br />
       <TextField className={styles.inputMaterial} label="Ciudad" name="nombre_ciu" onChange={handleChange} />          
       <br />
@@ -270,16 +276,14 @@ function Ciudades() {
           <TextField className={styles.inputMaterial} label="Código" name="codigo_ciu" fullWidth
           onChange={handleChange} value={ciudadSeleccionado&&ciudadSeleccionado.codigo_ciu}/>
         </Grid>
-      </Grid>
-      
-      <Grid container spacing={2} >   
+        <Grid item xs={12} md={12}>
+          <TextField className={styles.inputMaterial} label="CódigoInterno" name="codigointerno_ciu" fullWidth
+          onChange={handleChange} value={ciudadSeleccionado&&ciudadSeleccionado.codigointerno_ciu}/>
+        </Grid>
         <Grid item xs={12} md={12}>
           <TextField className={styles.inputMaterial} label="Ciudad" name="nombre_ciu" fullWidth
           onChange={handleChange} value={ciudadSeleccionado&&ciudadSeleccionado.nombre_ciu}/>
         </Grid>
-      </Grid>
-
-      <Grid container spacing={2} > 
         <Grid item xs={12} md={12}>
           <FormControl className={styles.formControl} value={ciudadSeleccionado&&ciudadSeleccionado.departamento_ciu} >
             <InputLabel id="idselectDepartamento">Departamento</InputLabel>

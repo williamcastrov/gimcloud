@@ -30,11 +30,20 @@ import Monedas from './pages/Parameters/Monedas';
 import Frecuencias from './pages/Mantenimiento/Frecuencias';
 import Tiposmtto from './pages/Mantenimiento/Tiposmtto';
 import Equipos from './pages/Mantenimiento/Equipos';
-import Garantias from './pages/Mantenimiento/Garantias';
-import Tiposequipos from './pages/Mantenimiento/Tiposequipos';
+import Gruposequipos from './pages/Mantenimiento/Gruposequipos';
+import SubGruposequipos from './pages/Mantenimiento/SubGruposequipos';
 import Referencias from './pages/Mantenimiento/Referencias';
 import Marcas from './pages/Mantenimiento/Marcas';
 import ClasificacionABC from './pages/Mantenimiento/ClasificacionABC';
+import EstadosClientes from './pages/Mantenimiento/EstadosClientes';
+import EstadosMtto from './pages/Mantenimiento/EstadosMtto';
+
+// Componentes Modulo Datos Adicionales Equipos
+import Garantias from './pages/DatosEquipos/Garantias';
+import Contratos from './pages/DatosEquipos/Contratos';
+import FichaTecnica from './pages/DatosEquipos/FichaTecnica';
+import TiposLlantas from './pages/DatosEquipos/TiposLlantas';
+import TiposEquipos from './pages/DatosEquipos/TiposEquipos';
 
 //Componentes Modulo Interlocutores
 import TipoInterlocutores from './pages/Interlocutores/Parameters/TipoInterlocutores';
@@ -101,13 +110,20 @@ function Main() {
               <Route path="/interlocutores/empleados" component={Empleados} />
 
               <Route path="/mantenimiento/marcas" component={Marcas} />
+              <Route path="/mantenimiento/tiposllantas" component={TiposLlantas} />
+              <Route path="/mantenimiento/tiposequipos" component={TiposEquipos} />
+              <Route path="/mantenimiento/estadosclientes" component={EstadosClientes} />
+              <Route path="/mantenimiento/estadosmtto" component={EstadosMtto} />
               <Route path="/mantenimiento/tiposmtto" component={Tiposmtto} />
-              <Route path="/mantenimiento/tiposequipos" component={Tiposequipos} />
+              <Route path="/mantenimiento/gruposequipos" component={Gruposequipos} />
+              <Route path="/mantenimiento/subgruposequipos" component={SubGruposequipos} />
               <Route path="/mantenimiento/clasificacionABC" component={ClasificacionABC} />
               <Route path="/mantenimiento/referencias" component={Referencias} />
               <Route path="/mantenimiento/frecuencias" component={Frecuencias} />
               <Route path="/mantenimiento/equipos" component={Equipos} />
               <Route path="/mantenimiento/garantias" component={Garantias} />
+              <Route path="/mantenimiento/contratos" component={Contratos} />
+              <Route path="/mantenimiento/fichatecnica" component={FichaTecnica} />
 
               <Route path="/activos/areas" component={Areas} />
               <Route path="/activos/cencostos" component={Cencostos} />

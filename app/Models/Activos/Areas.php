@@ -15,7 +15,7 @@ class Areas extends Model
 
     protected $fillable = [
         'codigo_are',
-        'nombre_are',
+        'descripcion_are',
         'empresa_are',
         'estado_are',
     ];

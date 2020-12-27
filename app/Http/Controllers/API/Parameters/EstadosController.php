@@ -12,8 +12,6 @@ class EstadosController extends Controller
     public function create(Request $request){
 
         try {
-      
-            $insert['codigo_est'] = $request['codigo_est'];
             $insert['nombre_est'] = $request['nombre_est'];
             $insert['empresa_est'] = $request['empresa_est'];
   
@@ -24,7 +22,7 @@ class EstadosController extends Controller
     
           } catch (\Exception $e) {
             $response['message'] = $e->getMessage();
-            $response['success'] = true;
+            $response['success'] = false;
           }
            
           return $response;
@@ -74,8 +72,6 @@ class EstadosController extends Controller
         public function update(Request $request, $id_est){
   
           try {
-          
-            $data['codigo_est'] = $request['codigo_est'];
             $data['nombre_est'] = $request['nombre_est'];
             $data['empresa_est'] = $request['empresa_est'];
   

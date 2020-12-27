@@ -7,7 +7,7 @@ import SaveIcon from '@material-ui/icons/Save';
 
 // Componentes de Conexion con el Backend
 import referenciasServices from "../../../services/Mantenimiento/Referencias";
-import tiposequiposServices from "../../../services/Mantenimiento/TiposEquipos";
+import tiposequiposServices from "../../../services/Mantenimiento/GruposEquipos";
 import estadosServices from "../../../services/Parameters/Estados";
 import empresasServices from "../../../services/Empresa";
 

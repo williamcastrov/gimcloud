@@ -14,7 +14,6 @@ class Estados extends Model
     protected $primaryKey = "id_est";
 
     protected $fillable = [
-        'codigo_est',
         'nombre_est',
         'empresa_est'
     ];
@@ -24,5 +23,4 @@ class Estados extends Model
     }
 
     public $timestamps = false;
-
 }

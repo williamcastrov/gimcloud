@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import MaterialTable from "material-table";
 import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
 
 // Componentes de Conexion con el Backend
-import tiposequiposServices from "../../../services/Mantenimiento/TiposEquipos";
+import tiposequiposServices from "../../../services/DatosEquipos/TiposEquipos"
 import estadosServices from "../../../services/Parameters/Estados";
 import empresasServices from "../../../services/Empresa";
 
@@ -33,38 +34,30 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Tiposequipos() {
+function TiposEquipos() {
   const styles = useStyles();
-  const [listTiposequipos, setListTiposequipos] = useState([]);
+  const [listarTiposEquipos, setListarTiposEquipos] = useState([]);
   const [modalInsertar, setModalInsertar ] = useState(false);
   const [modalEditar, setModalEditar]= useState(false);
   const [modalEliminar, setModalEliminar]= useState(false);
   const [formError, setFormError] = useState(false);
   const [listarEmpresas, setListarEmpresas] = useState([]);
   const [listarEstados, setListarEstados] = useState([]);
-  const [tiposequiposSeleccionado, setTiposequiposSeleccionado] = useState({
-    id_tequ: "",
-    codigo_tequ: "",
-    nombre_tequ: "",
-    empresa_tequ: "",
-    estado_tequ: ""
+  const [tiposequiposSeleccionado, setTiposEquiposSeleccionado ] = useState({
+    'id_tequ'         : "",
+    'descripcion_tequ': "",
+    'observacion_tequ': "",
+    'empresa_tequ'    : "",
+    'estado_tequ'     : "",
   })
 
-  useEffect(() => {
-    async function fetchDataTiposequipos() {
-      const res = await tiposequiposServices.listTiposequipos();
-      setListTiposequipos(res.data);
-    }
-    fetchDataTiposequipos();
-  }, [])
-
   useEffect (() => {
-      async function fetchDataEmpresas() {
-      const res = await empresasServices.listEmpresas();
-      setListarEmpresas(res.data) 
-      //console.log(res.data);
+      async function fetchDataTiposEquipos() {
+      const res = await tiposequiposServices.listTiposEquipos();
+      setListarTiposEquipos(res.data) 
+      console.log(res.data);
     }
-    fetchDataEmpresas();
+    fetchDataTiposEquipos();
   }, [])
 
   useEffect (() => {
@@ -76,18 +69,26 @@ function Tiposequipos() {
   fetchDataEstados();
   }, [])
 
+  useEffect(() => {
+    async function fetchDataEmpresas() {
+      const res = await empresasServices.listEmpresas();
+      setListarEmpresas(res.data)
+      //console.log(res.data);
+    }
+    fetchDataEmpresas();
+  }, [])
+
   const handleChange = e => {
     const {name, value} = e.target;
 
-    setTiposequiposSeleccionado( prevState => ({
+    setTiposEquiposSeleccionado( prevState => ({
       ...prevState,
       [name]: value
     }));
   }
 
-  const seleccionarTipoequipo=(tipoequipo, caso)=>{
-    console.log(tipoequipo)
-    setTiposequiposSeleccionado(tipoequipo);
+  const seleccionarTiposEquipos=(especialidad, caso)=>{
+    setTiposEquiposSeleccionado(especialidad);
     (caso==="Editar") ? abrirCerrarModalEditar() : abrirCerrarModalEliminar()
   }
 
@@ -103,19 +104,19 @@ function Tiposequipos() {
     setModalEliminar(!modalEliminar);
   }
 
-  const grabarTipoequipo = async () => {
+  const grabarTipoEquipo = async () => {
 
     setFormError({});
     let errors = {};
     let formOk = true;
 
-    if (!tiposequiposSeleccionado.codigo_tequ) {
-      errors.codigo_tequ = true;
+    if (!tiposequiposSeleccionado.descripcion_tequ) {
+      errors.descripcion_tequ = true;
       formOk = false;
     }
-
-    if (!tiposequiposSeleccionado.nombre_tequ) {
-      errors.nombre_tequ = true;
+    
+    if (!tiposequiposSeleccionado.observacion_tequ) {
+      errors.observacion_tequ = true;
       formOk = false;
     }
 
@@ -132,15 +133,15 @@ function Tiposequipos() {
     setFormError(errors);
 
     if (formOk) {
-      console.log(tiposequiposSeleccionado);
+      //console.log(tiposequiposSeleccionado);
       const res = await tiposequiposServices.save(tiposequiposSeleccionado);
 
       if (res.success) {
         alert("Tipo de Equipo Creado de forma Correcta")
         console.log(res.message)
         abrirCerrarModalInsertar();
-        delete tiposequiposSeleccionado.codigo_tequ;
-        delete tiposequiposSeleccionado.nombre_tequ;
+        delete tiposequiposSeleccionado.descripcion_tequ;
+        delete tiposequiposSeleccionado.observacion_tequ;
         delete tiposequiposSeleccionado.empresa_tequ;
         delete tiposequiposSeleccionado.estado_tequ;
       } else
@@ -152,24 +153,25 @@ function Tiposequipos() {
     }
     else {
       alert("Debe Ingresar Todos los Datos, Error Creando el Tipo de Equipo");
+      //console.log(tiposequiposSeleccionado);
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
   }
 
-  const actualizarTipoequipo = async () => {
+  const actualizarTipoEquipo = async () => {
   
     setFormError({});
     let errors = {};
     let formOk = true;
-
-    if (!tiposequiposSeleccionado.codigo_tequ) {
-      errors.codigo_tequ = true;
+    
+    if (!tiposequiposSeleccionado.descripcion_tequ) {
+      errors.descripcion_tequ = true;
       formOk = false;
     }
-
-    if (!tiposequiposSeleccionado.nombre_tequ) {
-      errors.nombre_tequ = true;
+    
+    if (!tiposequiposSeleccionado.observacion_tequ) {
+      errors.observacion_tequ = true;
       formOk = false;
     }
 
@@ -182,7 +184,6 @@ function Tiposequipos() {
       errors.estado_tequ = true;
       formOk = false;
     }
-
     setFormError(errors);
 
     if (formOk) {
@@ -190,11 +191,11 @@ function Tiposequipos() {
     const res = await tiposequiposServices.update(tiposequiposSeleccionado);
 
     if (res.success) {
-        alert("Tipo Equipo actualizado de forma Correcta")
+        alert("Tipo de Equipo actualizado de forma Correcta")
         console.log(res.message)
         abrirCerrarModalEditar();
-        delete tiposequiposSeleccionado.codigo_tequ;
-        delete tiposequiposSeleccionado.nombre_tequ;
+        delete tiposequiposSeleccionado.descripcion_tequ;
+        delete tiposequiposSeleccionado.observacion_tequ;
         delete tiposequiposSeleccionado.empresa_tequ;
         delete tiposequiposSeleccionado.estado_tequ;
     } else
@@ -211,12 +212,12 @@ function Tiposequipos() {
     } 
   }
 
-  const borrarTipoequipo = async()=>{
+  const borrarTipoEquipo = async()=>{
    
     const res = await tiposequiposServices.delete(tiposequiposSeleccionado.id_tequ);
 
     if (res.success) {
-        alert("Tipo Equipo Borrado de forma Correcta")
+        alert("El Tipo de Equipo Borrado de forma Correcta")
         console.log(res.message)
         abrirCerrarModalEliminar();
     }
@@ -234,15 +235,12 @@ function Tiposequipos() {
       field: 'id_tequ'
     },
     {
-      title: 'Código',
-      field: 'codigo_tequ'
+      title: 'Descripción',
+      field: 'descripcion_tequ',
+      cellStyle: { minWidth: 300 }
     },
     {
-      title: 'Descripcion',
-      field: 'nombre_tequ'
-    },
-    {
-      title: 'Código',
+      title: 'Codigo Empresa',
       field: 'empresa_tequ'
     },
     {
@@ -251,39 +249,19 @@ function Tiposequipos() {
     },
     {
       title: 'Estado',
-      field: 'estado_tequ'
+      field: 'nombre_est'
     },
     {
-      title: 'Nombre Estado',
-      field: 'nombre_est'
+      title: 'Observación',
+      field: 'observacion_tequ',
+      cellStyle: { minWidth: 600 }
     }
   ]
 
-  const tipoequipoInsertar=(
+  const tiposequiposInsertar = (
     <div className={styles.modal}>
-      <h3>Agregar Nueva Marca</h3>
-      <TextField className={styles.inputMaterial} label="Código" name="codigo_tequ" onChange={handleChange} />
-      <br />
-      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_tequ" onChange={handleChange} />          
-      <br />
-      <FormControl className={styles.formControl}>
-        <InputLabel id="idselectEmpresa">Empresa</InputLabel>
-        <Select
-          labelId="selectEmpresa"
-          name="empresa_tequ"
-          id="idselectEmpresa"
-          onChange={handleChange}
-        >
-          <MenuItem value="">  <em>None</em> </MenuItem>
-          {
-            listarEmpresas.map((itemselect) => {
-              return (
-                <MenuItem value={itemselect.id_emp }>{itemselect.nombre_emp}</MenuItem>
-              )
-            })
-          }
-        </Select>
-      </FormControl>
+      <h3 align="center" >Agregar Nuevo Tipo de Equipo</h3>
+      <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_tequ" onChange={handleChange} />          
       <br />
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectEstado">Estado</InputLabel>
@@ -302,21 +280,7 @@ function Tiposequipos() {
             })
           }
         </Select>
-      </FormControl>
-      <br /><br />
-      <div align="right">    
-        <Button color="primary" onClick = { () => grabarTipoequipo() } >Insertar</Button>
-        <Button onClick={()=> abrirCerrarModalInsertar()} >Cancelar</Button>
-      </div>
-    </div>
-  )
-
-  const tipoequipoEditar = (
-    <div className={styles.modal}>
-      <br />
-      <TextField className={styles.inputMaterial} label="Código" name="codigo_tequ" onChange={handleChange} value={tiposequiposSeleccionado&&tiposequiposSeleccionado.codigo_tequ}/>
-      <br />
-      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_tequ" onChange={handleChange} value={tiposequiposSeleccionado&&tiposequiposSeleccionado.nombre_tequ}/>
+      </FormControl>         
       <br />
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectEmpresa">Empresa</InputLabel>
@@ -325,7 +289,6 @@ function Tiposequipos() {
           name="empresa_tequ"
           id="idselectEmpresa"
           onChange={handleChange}
-          value={tiposequiposSeleccionado&&tiposequiposSeleccionado.empresa_tequ}
         >
           <MenuItem value="">  <em>None</em> </MenuItem>
           {
@@ -337,6 +300,19 @@ function Tiposequipos() {
           }
         </Select>
       </FormControl>
+      <TextField className={styles.inputMaterial} label="Observación" name="observacion_tequ" onChange={handleChange} />
+      <br /><br />
+      <div align="right">    
+        <Button color="primary" onClick = { () => grabarTipoEquipo() } >Insertar</Button>
+        <Button onClick={()=> abrirCerrarModalInsertar()} >Cancelar</Button>
+      </div>
+    </div>
+  )
+
+  const tiposequiposEditar=(
+    <div className={styles.modal}>
+      <h3 align="center" >Actualizar Tipo de Equipo</h3>
+      <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_tequ" onChange={handleChange} value={tiposequiposSeleccionado&&tiposequiposSeleccionado.descripcion_tequ}/>
       <br />
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectEstado">Estado</InputLabel>
@@ -356,20 +332,42 @@ function Tiposequipos() {
             })
           }
         </Select>
+      </FormControl>                
+      <br />
+      <FormControl className={styles.formControl} >
+        <InputLabel id="idselectEmpresa">Empresa</InputLabel>
+        <Select
+          labelId="selectEmpresa"
+          name="empresa_tequ"
+          id="idselectEmpresa"
+          onChange={handleChange}
+          value={tiposequiposSeleccionado&&tiposequiposSeleccionado.empresa_tequ}
+        >
+          <MenuItem value="">  <em>None</em> </MenuItem>
+          {
+            listarEmpresas.map((itemselect) => {
+              return (
+                <MenuItem value={itemselect.id_emp }>{itemselect.nombre_emp}</MenuItem>
+              )
+            })
+          }
+        </Select>
       </FormControl>
+      <TextField className={styles.inputMaterial} label="Observación" name="observacion_tequ" 
+      onChange={handleChange}value={tiposequiposSeleccionado&&tiposequiposSeleccionado.observacion_tequ} />
       <br /><br />
       <div align="right">
-        <Button color="primary"  onClick={()=>actualizarTipoequipo()} >Editar</Button>
+        <Button color="primary"  onClick={()=>actualizarTipoEquipo()} >Editar</Button>
         <Button onClick={()=>abrirCerrarModalEditar()}>Cancelar</Button>
       </div>
     </div>
   )
 
-  const tipoequipoEliminar = (
+  const tiposequiposEliminar = (
     <div className={styles.modal}>
-      <p>Estás seguro que deseas eliminar el Tipo de Equipo <b>{tiposequiposSeleccionado && tiposequiposSeleccionado.nombre_tequ}</b>? </p>
+      <p>Estás seguro que deseas eliminar el Tipo de Equipo <b>{tiposequiposSeleccionado && tiposequiposSeleccionado.descripcion_tequ}</b>? </p>
       <div align="right">
-        <Button color="secondary" onClick = {() => borrarTipoequipo() }> Confirmar </Button>
+        <Button color="secondary" onClick = {() => borrarTipoEquipo() }> Confirmar </Button>
         <Button onClick={()=>abrirCerrarModalEliminar()}> Cancelar </Button>
       </div>
     </div>
@@ -377,55 +375,55 @@ function Tiposequipos() {
 
   return (
     <div className="App">
-     <br />
-     <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Tipo de Equipo</Button>
-     <MaterialTable
-       columns={columnas}
-       data={listTiposequipos}
-       title="Maestra de Tipos de Equipos"
-       actions={[
-         {
-           icon     : 'edit',
-           tooltip  : 'Editar Tipo Equipo',
-           onClick  : (event, rowData) => seleccionarTipoequipo(rowData, "Editar")
-         },
-         {
-          icon     : 'delete',
-          tooltip  : 'Borrar Tipo Equipo',
-          onClick  : (event, rowData) =>   seleccionarTipoequipo(rowData, "Eliminar")
-         } 
-       ]}
-       options={{
-         actionsColumnIndex: -1
-       }}
-       localization={{
-         header: {
-           actions: "Acciones"
-         }
-       }}
-    />{}
+      <br />
+      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={()=> abrirCerrarModalInsertar() } >Agregar Tipo de Equipo</Button>
+      <MaterialTable
+        columns={columnas}
+        data={listarTiposEquipos}
+        title="Maestra de Tipos de Equipos"
+        actions={[
+          {
+            icon     : 'edit',
+            tooltip  : 'Editar Tipo de Equipo',
+            onClick  : (event, rowData) => seleccionarTiposEquipos(rowData, "Editar")
+          },
+          {
+            icon     : 'delete',
+            tooltip  : 'Borrar tipo de Equipo',
+            onClick  : (event, rowData) =>   seleccionarTiposEquipos(rowData, "Eliminar")
+          } 
+        ]}
+        options={{
+          actionsColumnIndex: -1
+        }}
+        localization={{
+          header: {
+            actions: "Acciones"
+          }
+        }}
+        />{}
     <Modal
       open={modalInsertar}
       onClose={abrirCerrarModalInsertar}
     >
-      {tipoequipoInsertar}
+      {tiposequiposInsertar}
     </Modal>
 
     <Modal
       open={modalEditar}
       onClose={abrirCerrarModalEditar}
     >
-      {tipoequipoEditar}
+      {tiposequiposEditar}
     </Modal>
 
     <Modal
       open={modalEliminar}
       onClose={abrirCerrarModalEliminar}
     >
-      {tipoequipoEliminar}
+      {tiposequiposEliminar}
     </Modal>
     </div>
   );
 }
 
-export default Tiposequipos;
+export default TiposEquipos;

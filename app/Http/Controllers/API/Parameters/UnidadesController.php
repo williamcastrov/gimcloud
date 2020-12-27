@@ -14,10 +14,9 @@ class UnidadesController extends Controller
     //
     public function create(Request $request){
         try { 
-          $insert['codigo_und']  = $request['codigo_und'];
-          $insert['nombre_und']  = $request['nombre_und'];
-          $insert['empresa_und'] = $request['empresa_und'];
-          $insert['estado_und']  = $request['estado_und'];
+          $insert['descripcion_und']  = $request['descripcion_und'];
+          $insert['empresa_und']      = $request['empresa_und'];
+          $insert['estado_und']       = $request['estado_und'];
               
           Unidades::insert($insert);
       
@@ -26,7 +25,7 @@ class UnidadesController extends Controller
       
         } catch (\Exception $e) {
             $response['message'] = $e->getMessage();
-            $response['success'] = true;
+            $response['success'] = false;
         }
         return $response;
       }
@@ -75,10 +74,9 @@ class UnidadesController extends Controller
     
       public function update(Request $request, $id_und){
         try {
-          $data['codigo_und']  = $request['codigo_und'];
-          $data['nombre_und']  = $request['nombre_und'];
-          $data['empresa_und'] = $request['empresa_und'];
-          $data['estado_und']  = $request['estado_und'];
+          $data['descripcion_und']  = $request['descripcion_und'];
+          $data['empresa_und']      = $request['empresa_und'];
+          $data['estado_und']       = $request['estado_und'];
     
           $res = Unidades::where("id_und",$id_und)->update($data);
     

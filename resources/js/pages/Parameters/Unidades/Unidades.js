@@ -44,8 +44,7 @@ function Unidades() {
   const [listarEstados, setListarEstados] = useState([]);
   const [unidadesSeleccionado, setUnidadesSeleccionado] = useState({
     id_und: "",
-    codigo_und: "",
-    nombre_und: "",
+    descripcion_und: "",
     empresa_und: "",
     estado_und: ""
   })
@@ -108,12 +107,7 @@ function Unidades() {
     let errors = {};
     let formOk = true;
 
-    if (!unidadesSeleccionado.codigo_und) {
-      errors.codigo_und = true;
-      formOk = false;
-    }
-
-    if (!unidadesSeleccionado.nombre_und) {
+    if (!unidadesSeleccionado.descripcion_und) {
       errors.nombre_und = true;
       formOk = false;
     }
@@ -138,8 +132,7 @@ function Unidades() {
         alert("Unidad de Medida Creada de forma Correcta")
         console.log(res.message)
         abrirCerrarModalInsertar();
-        delete unidadesSeleccionado.codigo_und;
-        delete unidadesSeleccionado.nombre_und;
+        delete unidadesSeleccionado.descripcion_und;
         delete unidadesSeleccionado.empresa_und;
         delete unidadesSeleccionado.estado_und;
       } else
@@ -162,13 +155,8 @@ function Unidades() {
     let errors = {};
     let formOk = true;
 
-    if (!unidadesSeleccionado.codigo_und) {
-      errors.codigo_und = true;
-      formOk = false;
-    }
-
-    if (!unidadesSeleccionado.nombre_und) {
-      errors.nombre_und = true;
+    if (!unidadesSeleccionado.descripcion_und) {
+      errors.descripcion_und = true;
       formOk = false;
     }
 
@@ -192,8 +180,7 @@ function Unidades() {
         alert("unidad de Medida actualizads de forma Correcta")
         console.log(res.message)
         abrirCerrarModalEditar();
-        delete unidadesSeleccionado.codigo_und;
-        delete unidadesSeleccionado.nombre_und;
+        delete unidadesSeleccionado.descripcion_und;
         delete unidadesSeleccionado.empresa_und;
         delete unidadesSeleccionado.estado_und;
     } else
@@ -234,12 +221,8 @@ function Unidades() {
       type: 'numeric'
     },
     {
-      title: 'Código',
-      field: 'codigo_und'
-    },
-    {
       title: 'Descripcion',
-      field: 'nombre_und'
+      field: 'descripcion_und'
     },
     {
       title: 'Código',
@@ -261,10 +244,9 @@ function Unidades() {
 
   const unidadInsertar=(
     <div className={styles.modal}>
-      <h3>Agregar Nuevo Tipo de Unidad</h3>
-      <TextField className={styles.inputMaterial} label="Código" name="codigo_und" onChange={handleChange} />
+      <h3 align="center" >Agregar Nuevo Tipo de Unidad</h3>
       <br />
-      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_und" onChange={handleChange} />          
+      <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_und" onChange={handleChange} />          
       <br />
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectEmpresa">Empresa</InputLabel>
@@ -314,9 +296,8 @@ function Unidades() {
   const unidadEditar = (
     <div className={styles.modal}>
       <h3 align="center" >Actualizar Unidades</h3>
-      <TextField className={styles.inputMaterial} label="Código" name="codigo_und" onChange={handleChange} value={unidadesSeleccionado&&unidadesSeleccionado.codigo_und}/>
       <br />
-      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_und" onChange={handleChange} value={unidadesSeleccionado&&unidadesSeleccionado.nombre_und}/>
+      <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_und" onChange={handleChange} value={unidadesSeleccionado&&unidadesSeleccionado.descripcion_und}/>
       <br />
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectEmpresa">Empresa</InputLabel>
@@ -367,7 +348,7 @@ function Unidades() {
 
   const unidadEliminar = (
     <div className={styles.modal}>
-      <p>Estás seguro que deseas eliminar la Unidad de Medida <b>{unidadesSeleccionado && unidadesSeleccionado.nombre_und}</b>? </p>
+      <p>Estás seguro que deseas eliminar la Unidad de Medida <b>{unidadesSeleccionado && unidadesSeleccionado.descripcion_und}</b>? </p>
       <div align="right">
         <Button color="secondary" onClick = {() => borrarUnidad() }> Confirmar </Button>
         <Button onClick={()=>abrirCerrarModalEliminar()}> Cancelar </Button>

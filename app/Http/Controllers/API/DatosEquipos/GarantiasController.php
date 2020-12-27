@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API\Mantenimiento;
+namespace App\Http\Controllers\API\DatosEquipos;
 use Illuminate\Support\Facades\DB;
 
 use App\Http\Controllers\Controller;
@@ -8,21 +8,21 @@ use Illuminate\Http\Request;
 use App\Models\Parameters\Empresa;
 use App\Models\Parameters\Estados;
 use App\Models\Mantenimiento\Equipos;
-use App\Models\Mantenimiento\Garantias;
+use App\Models\DatosEquipos\Garantias;
 
 class GarantiasController extends Controller
 {
     //
     public function create(Request $request){
         try { 
-          $insert['id_gar']             = $request['id_gar'];
-          $insert['equipo_gar']         = $request['equipo_gar'];
-          $insert['idgarantia_gar']     = $request['idgarantia_gar'];
-          $insert['empresa_gar']        = $request['empresa_gar'];
-          $insert['fechainicial_gar']   = $request['fechainicial_gar'];
-          $insert['fechafinal_gar']     = $request['fechafinal_gar'];
-          $insert['estado_gar']         = $request['estado_gar'];
-          $insert['observacion_gar']    = $request['observacion_gar'];
+          $insert['id_gar']           = $request['id_gar'];
+          $insert['equipo_gar']       = $request['equipo_gar'];
+          $insert['idgarantia_gar']   = $request['idgarantia_gar'];
+          $insert['empresa_gar']      = $request['empresa_gar'];
+          $insert['fechainicial_gar'] = $request['fechainicial_gar'];
+          $insert['fechafinal_gar']   = $request['fechafinal_gar'];
+          $insert['estado_gar']       = $request['estado_gar'];
+          $insert['observacion_gar']  = $request['observacion_gar'];
 
           Garantias::insert($insert);
       
@@ -31,7 +31,7 @@ class GarantiasController extends Controller
       
         } catch (\Exception $e) {
             $response['message'] = $e->getMessage();
-            $response['success'] = true;
+            $response['success'] = false;
         }
         return $response;
     }

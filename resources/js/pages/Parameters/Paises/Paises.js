@@ -193,7 +193,7 @@ function Paises() {
 
   const paisInsertar=(
     <div className={styles.modal}>
-      <h3>Agregar Nuevo País</h3>
+      <h3 align="center" >Agregar Nuevo País</h3>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_pai" onChange={handleChange} />
       <br />
       <TextField className={styles.inputMaterial} label="País" name="nombre_pai" onChange={handleChange} />          

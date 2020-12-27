@@ -14,6 +14,7 @@ class CiudadesController extends Controller
         try {
       
             $insert['codigo_ciu'] = $request['codigo_ciu'];
+            $insert['codigointerno_ciu'] = $request['codigointerno_ciu'];
             $insert['nombre_ciu'] = $request['nombre_ciu'];
             $insert['departamento_ciu'] = $request['departamento_ciu'];
   
@@ -76,6 +77,7 @@ class CiudadesController extends Controller
           try {
           
             $data['codigo_ciu'] = $request['codigo_ciu'];
+            $data['codigointerno_ciu'] = $request['codigointerno_ciu'];
             $data['nombre_ciu'] = $request['nombre_ciu'];
             $data['departamento_ciu'] = $request['departamento_ciu'];
   

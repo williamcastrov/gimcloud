@@ -15,7 +15,7 @@ class Cencosto extends Model
 
     protected $fillable = [
         'codigo_cco',
-        'nombre_cco',
+        'descripcion_cco',
         'area_cco',
         'empresa_cco',
         'estado_cco',

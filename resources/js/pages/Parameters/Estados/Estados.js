@@ -43,18 +43,25 @@ function Estados() {
   const [listarEmpresas, setListarEmpresas] = useState([]);
   const [estadoSeleccionado, setEstadoSeleccionado] = useState({
     id_est: "",
-    codigo_est: "",
     nombre_est: "",
     empresa_est: ""
   })
 
-  useEffect (() => {
-      async function fetchDataEstados() {
-      const res = await empresasServices.listEmpresas();
-      setListarEmpresas(res.data) 
-      console.log(res.data);
+  useEffect(() => {
+    async function fetchDataEstados() {
+      const res = await estadosServices.listEstados();
+      setListEstados(res.data);
     }
     fetchDataEstados();
+  }, [])
+
+  useEffect(() => {
+    async function fetchDataEmpresas() {
+      const res = await empresasServices.listEmpresas();
+      setListarEmpresas(res.data)
+      console.log(res.data);
+    }
+    fetchDataEmpresas();
   }, [])
 
   const handleChange = e => {
@@ -83,24 +90,11 @@ function Estados() {
     setModalEliminar(!modalEliminar);
   }
 
-  useEffect(() => {
-    async function fetchDataEstados() {
-      const res = await estadosServices.listEstados();
-      setListEstados(res.data);
-    }
-    fetchDataEstados();
-  }, [])
-
   const grabarEstado = async () => {
 
     setFormError({});
     let errors = {};
     let formOk = true;
-
-    if (!estadoSeleccionado.codigo_est) {
-      errors.codigo_est = true;
-      formOk = false;
-    }
 
     if (!estadoSeleccionado.nombre_est) {
       errors.nombre_est = true;
@@ -122,7 +116,6 @@ function Estados() {
         alert("Estado Creado de forma Correcta")
         console.log(res.message)
         abrirCerrarModalInsertar();
-        delete estadoSeleccionado.codigo_est;
         delete estadoSeleccionado.nombre_est;
         delete estadoSeleccionado.empresa_est;
       } else
@@ -145,11 +138,6 @@ function Estados() {
     let errors = {};
     let formOk = true;
 
-    if (!estadoSeleccionado.codigo_est) {
-      errors.codigo_est = true;
-      formOk = false;
-    }
-
     if (!estadoSeleccionado.nombre_est) {
       errors.nombre_est = true;
       formOk = false;
@@ -170,7 +158,6 @@ function Estados() {
         alert("Estado actualizado de forma Correcta")
         console.log(res.message)
         abrirCerrarModalEditar();
-        delete estadoSeleccionado.codigo_est;
         delete estadoSeleccionado.nombre_est;
         delete estadoSeleccionado.empresa_est;
     } else
@@ -207,12 +194,7 @@ function Estados() {
   const columnas = [
     {
       title: 'Id',
-      field: 'id_est',
-      type: 'numeric'
-    },
-    {
-      title: 'Codigo',
-      field: 'codigo_est'
+      field: 'id_est'
     },
     {
       title: 'Descripción',
@@ -230,9 +212,7 @@ function Estados() {
 
   const estadoInsertar = (
     <div className={styles.modal}>
-      <h3>Agregar Nuevo Estado</h3>
-      <TextField className={styles.inputMaterial} label="Código" name="codigo_est" onChange={handleChange} />
-      <br />
+      <h3  align="center" >Agregar Nuevo Estado</h3>
       <TextField className={styles.inputMaterial} label="Descripción" name="nombre_est" onChange={handleChange} />          
       <br />
       <FormControl className={styles.formControl}>
@@ -264,8 +244,6 @@ function Estados() {
   const estadoEditar=(
     <div className={styles.modal}>
       <h3 align="center" >Actualizar Estados</h3>
-      <TextField className={styles.inputMaterial} label="Código" name="codigo_est" onChange={handleChange} value={estadoSeleccionado&&estadoSeleccionado.codigo_est}/>
-      <br />
       <TextField className={styles.inputMaterial} label="Descripción" name="nombre_est" onChange={handleChange} value={estadoSeleccionado&&estadoSeleccionado.nombre_est}/>
       <br />
       <FormControl className={styles.formControl} >

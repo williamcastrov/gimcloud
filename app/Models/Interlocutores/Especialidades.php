@@ -14,15 +14,10 @@ class Especialidades extends Model
     protected $primaryKey = "id_esp";
 
     protected $fillable = [
-        'codigo_esp',
-        'nombre_esp',
+        'descripcion_esp',
         'empresa_esp',
         'estado_esp'
     ];
-
-    public function empresa(){
-        return $this->belongsTo("App\Models\Parameters\Empresa","empresa_esp");
-    }
 
     public $timestamps = false;
 }

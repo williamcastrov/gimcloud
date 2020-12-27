@@ -14,8 +14,7 @@ class Unidades extends Model
     protected $primaryKey = "id_und";
 
     protected $fillable = [
-        'codigo_und',
-        'nombre_und',
+        'descripcion_und',
         'empresa_und',
         'estado_und',
     ];

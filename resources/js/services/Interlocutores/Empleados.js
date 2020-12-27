@@ -22,7 +22,7 @@ empleados.listEmpleados = async () => {
 
 empleados.update = async (data) => {
     console.log(data);
-    const urlUpdate = baseUrl+"/update/"+data.id_int
+    const urlUpdate = baseUrl+"/update/"+data.id_emp
     const res = await axios.put(urlUpdate, data)
     .then(response=>{ return response.data; })
     .catch(error=>{ return error; })
@@ -30,8 +30,8 @@ empleados.update = async (data) => {
     return res;
 }
 
-empleados.delete = async (id_int) => {
-    const urlDelete = baseUrl+"/delete/"+id_int
+empleados.delete = async (id_emp) => {
+    const urlDelete = baseUrl+"/delete/"+id_emp
     const res = await axios.delete(urlDelete)
     .then(response=> { return response.data })
     .catch(error =>{ return error })

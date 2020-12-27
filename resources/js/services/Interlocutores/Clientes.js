@@ -22,7 +22,7 @@ clientes.listClientes = async () => {
 
 clientes.update = async (data) => {
     console.log(data);
-    const urlUpdate = baseUrl+"/update/"+data.id_int
+    const urlUpdate = baseUrl+"/update/"+data.id_cli
     const res = await axios.put(urlUpdate, data)
     .then(response=>{ return response.data; })
     .catch(error=>{ return error; })
@@ -30,8 +30,8 @@ clientes.update = async (data) => {
     return res;
 }
 
-clientes.delete = async (id_int) => {
-    const urlDelete = baseUrl+"/delete/"+id_int
+clientes.delete = async (id_cli) => {
+    const urlDelete = baseUrl+"/delete/"+id_cli
     const res = await axios.delete(urlDelete)
     .then(response=> { return response.data })
     .catch(error =>{ return error })

@@ -15,7 +15,7 @@ class ClasificacionABC extends Model
 
     protected $fillable = [
         'codigo_abc',
-        'nombre_abc',
+        'descripcion_abc',
         'empresa_abc',
         'estado_abc',
     ];

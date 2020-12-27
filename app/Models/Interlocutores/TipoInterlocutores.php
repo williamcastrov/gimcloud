@@ -14,14 +14,10 @@ class TipoInterlocutores extends Model
     protected $primaryKey = "id_tint";
 
     protected $fillable = [
-        'codigo_tint',
-        'nombre_tint',
-        'empresa_tint'
+        'descripcion_tint',
+        'empresa_tint',
+        'estado_tint',
     ];
-
-    public function empresa(){
-        return $this->belongsTo("App\Models\Parameters\Empresa","empresa_tint");
-    }
-
+    
     public $timestamps = false;
 }

@@ -45,8 +45,8 @@ function ClasificacionABC() {
   const [abcSeleccionado, setABCSeleccionado] = useState({
     id_abc: "",
     codigo_abc: "",
+    descripcion_abc: "",
     empresa_abc: "",
-    nombre_abc: "",
     estado_abc: ""
   })
 
@@ -113,8 +113,8 @@ function ClasificacionABC() {
       formOk = false;
     }
 
-    if (!abcSeleccionado.nombre_abc) {
-      errors.nombre_abc = true;
+    if (!abcSeleccionado.descripcion_abc) {
+      errors.descripcion_abc = true;
       formOk = false;
     }
 
@@ -167,8 +167,8 @@ function ClasificacionABC() {
       formOk = false;
     }
 
-    if (!abcSeleccionado.nombre_abc) {
-      errors.nombre_abc = true;
+    if (!abcSeleccionado.descripcion_abc) {
+      errors.descripcion_abc = true;
       formOk = false;
     }
 
@@ -193,7 +193,7 @@ function ClasificacionABC() {
         console.log(res.message)
         abrirCerrarModalEditar();
         delete abcSeleccionado.codigo_abc;
-        delete abcSeleccionado.nombre_abc;
+        delete abcSeleccionado.descripcion_abc;
         delete abcSeleccionado.empresa_abc;
         delete abcSeleccionado.estado_abc;
     } else
@@ -238,7 +238,7 @@ function ClasificacionABC() {
     },
     {
       title: 'Descripcion',
-      field: 'nombre_abc'
+      field: 'descripcion_abc'
     },
     {
       title: 'Código',
@@ -263,7 +263,7 @@ function ClasificacionABC() {
       <h3>Agregar Clasificación ABC</h3>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_abc" onChange={handleChange} />
       <br />
-      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_abc" onChange={handleChange} />          
+      <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_abc" onChange={handleChange} />          
       <br />
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectEmpresa">Empresa</InputLabel>
@@ -315,7 +315,7 @@ function ClasificacionABC() {
       <h3 align="center" >Actualizar Clasificación ABC</h3>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_abc" onChange={handleChange} value={abcSeleccionado&&abcSeleccionado.codigo_abc}/>
       <br />
-      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_abc" onChange={handleChange} value={abcSeleccionado&&abcSeleccionado.nombre_abc}/>
+      <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_abc" onChange={handleChange} value={abcSeleccionado&&abcSeleccionado.descripcion_abc}/>
       <br />
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectEmpresa">Empresa</InputLabel>
@@ -366,7 +366,7 @@ function ClasificacionABC() {
 
   const abcEliminar = (
     <div className={styles.modal}>
-      <p>Estás seguro que deseas eliminar Clasificación ABC <b>{abcSeleccionado && abcSeleccionado.nombre_abc}</b>? </p>
+      <p>Estás seguro que deseas eliminar Clasificación ABC <b>{abcSeleccionado && abcSeleccionado.descripcion_abc}</b>? </p>
       <div align="right">
         <Button color="secondary" onClick = {() => borrarABC() }> Confirmar </Button>
         <Button onClick={()=>abrirCerrarModalEliminar()}> Cancelar </Button>

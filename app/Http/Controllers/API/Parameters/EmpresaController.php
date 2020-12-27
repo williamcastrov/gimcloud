@@ -1,11 +1,14 @@
 <?php
 
 namespace App\Http\Controllers\API\Parameters;
+use Illuminate\Support\Facades\DB;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Parameters\Empresa;
 use App\Models\Parameters\Paises;
+use App\Models\Parameters\Departamentos;
+use App\Models\Parameters\Ciudades;
 
 class EmpresaController extends Controller
 {
@@ -37,7 +40,7 @@ class EmpresaController extends Controller
     
           } catch (\Exception $e) {
             $response['message'] = $e->getMessage();
-            $response['success'] = true;
+            $response['success'] = false;
           }
            
           return $response;
@@ -46,8 +49,11 @@ class EmpresaController extends Controller
         public function listar_empresa(){
   
           try {
-  
-            $data = Empresa::with("pais")->get();
+            //$data = Empresa::with("pais")->get();
+            
+            $data = DB::select("SELECT t0.*, t1.nombre_ciu, t1.codigo_ciu
+            FROM empresa as t0 INNER JOIN ciudades as t1
+            WHERE t0.ciudad_emp = t1.id_ciu" );
   
             $response['data'] = $data;
             $response['message'] = "load successful";
@@ -63,9 +69,11 @@ class EmpresaController extends Controller
       public function get($id_emp){
   
           try {
-    
-            $data = Empresa::find($id_emp);
-    
+            //$data = Empresa::find($id_emp);
+            $data = DB::select("SELECT t0.*, t1.nombre_ciu, t1.codigo_ciu
+            FROM empresa as t0 INNER JOIN ciudades as t1 
+            WHERE t0.id_emp = $id_emp and t0.ciudad_emp = t1.id_ciu");
+
             if ($data) {
               $response['data'] = $data;
               $response['message'] = "Load successful";

@@ -14,10 +14,10 @@ class AreasController extends Controller
     //
     public function create(Request $request){
         try { 
-          $insert['codigo_are']  = $request['codigo_are'];
-          $insert['nombre_are']  = $request['nombre_are'];
-          $insert['empresa_are'] = $request['empresa_are'];
-          $insert['estado_are']  = $request['estado_are'];
+          $insert['codigo_are']       = $request['codigo_are'];
+          $insert['descripcion_are']  = $request['descripcion_are'];
+          $insert['empresa_are']      = $request['empresa_are'];
+          $insert['estado_are']       = $request['estado_are'];
               
           Areas::insert($insert);
       
@@ -32,8 +32,7 @@ class AreasController extends Controller
     }
     
     public function listar_areas(){  
-        try {
-          
+        try { 
           $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est
           FROM areas as t0 INNER JOIN empresa as t1 INNER JOIN estados as t2
           WHERE t0.empresa_are = t1.id_emp and t0.estado_are = t2.id_est ");
@@ -75,10 +74,10 @@ class AreasController extends Controller
     
     public function update(Request $request, $id_are){
         try {
-          $data['codigo_are']  = $request['codigo_are'];
-          $data['nombre_are']  = $request['nombre_are'];
-          $data['empresa_are'] = $request['empresa_are'];
-          $data['estado_are']  = $request['estado_are'];
+          $data['codigo_are']       = $request['codigo_are'];
+          $data['descripcion_are']  = $request['descripcion_are'];
+          $data['empresa_are']      = $request['empresa_are'];
+          $data['estado_are']       = $request['estado_are'];
     
           $res = Areas::where("id_are",$id_are)->update($data);
     

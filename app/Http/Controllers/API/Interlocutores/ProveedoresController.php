@@ -41,7 +41,7 @@ class ProveedoresController extends Controller
       
         } catch (\Exception $e) {
             $response['message'] = $e->getMessage();
-            $response['success'] = true;
+            $response['success'] = false;
         }
         return $response;
       }
@@ -49,7 +49,7 @@ class ProveedoresController extends Controller
       public function listar_proveedores(){  
         try {
           //Muestra Unicamente los tipos de Interlocutores PROVEEDORES = 1
-          $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est, t3.nombre_ciu, t4.nombre_esp,  t5.nombre_tint
+          $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est, t3.nombre_ciu, t4.descripcion_esp,  t5.descripcion_tint
           FROM interlocutores as t0 INNER JOIN empresa as t1 INNER JOIN estados as t2 INNER JOIN ciudades as t3
           INNER JOIN especialidades_int as t4  INNER JOIN tipo_interlocutor as t5
           WHERE t0.codigo_tipo_int = 1 and t0.empresa_int = t1.id_emp and t0.estado_int = t2.id_est 

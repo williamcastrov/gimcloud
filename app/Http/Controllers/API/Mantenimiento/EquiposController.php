@@ -7,13 +7,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Parameters\Empresa;
 use App\Models\Parameters\Estados;
-use App\Models\Mantenimiento\ClasificacionABC;
-use App\Models\Activos\Cencosto;
 use App\Models\Parameters\Frecuencias;
 use App\Models\Interlocutores\Interlocutores;
 use App\Models\Mantenimiento\Marcas;
-use App\Models\Parameters\Monedas;
-use App\Models\Mantenimiento\TiposEquipos;
+use App\Models\Mantenimiento\SubGruposEquipos;
+use App\Models\Mantenimiento\GruposEquipos;
 use App\Models\Mantenimiento\Equipos;
 
 //DROP TABLE IF EXISTS `grupos`;
@@ -24,24 +22,19 @@ class EquiposController extends Controller
     public function create(Request $request){
         try { 
           $insert['codigo_equ']              = $request['codigo_equ'];
+          $insert['descripcion_equ']         = $request['descripcion_equ'];
           $insert['empresa_equ']             = $request['empresa_equ'];
-          $insert['nombre_equ']              = $request['nombre_equ'];
           $insert['frecuencia_equ']          = $request['frecuencia_equ'];
-          $insert['estado_equ']              = $request['estado_equ'];
           $insert['propietario_equ']         = $request['propietario_equ'];
           $insert['marca_equ']               = $request['marca_equ'];
-          $insert['modelo_equ']              = $request['modelo_equ'];
           $insert['antiguedad_equ']          = $request['antiguedad_equ'];
-          $insert['tipoequipo_equ']          = $request['tipoequipo_equ'];
-          $insert['serie_equ']               = $request['serie_equ'];
-          $insert['fechacreacion_equ']       = $request['fechacreacion_equ'];
-          $insert['fechamodificacion_equ']   = $request['fechamodificacion_equ'];
-          $insert['direccion_equ']           = $request['direccion_equ'];
-          $insert['valoradquisicion']        = $request['valoradquisicion'];
-          $insert['tipomoneda_equ']          = $request['tipomoneda_equ'];
-          $insert['clasificacionABC_equ']    = $request['clasificacionABC_equ'];
-          $insert['centrodecosto_equ']       = $request['centrodecosto_equ'];
-              
+          $insert['grupoequipo_equ']         = $request['grupoequipo_equ'];
+          $insert['valoradquisicion_equ']    = $request['valoradquisicion_equ'];
+          $insert['estadocontable_equ']      = $request['estadocontable_equ'];
+          $insert['estadocliente_equ']       = $request['estadocliente_equ'];
+          $insert['estadomtto_equ']          = $request['estadomtto_equ'];
+          $insert['ctacontable_equ']         = $request['ctacontable_equ'];
+          
           Equipos::insert($insert);
       
           $response['message'] = "Equipo Grabado de forma correcta";
@@ -49,7 +42,7 @@ class EquiposController extends Controller
       
         } catch (\Exception $e) {
             $response['message'] = $e->getMessage();
-            $response['success'] = true;
+            $response['success'] = false;
         }
         return $response;
       }
@@ -57,17 +50,17 @@ class EquiposController extends Controller
       public function listar_equipos(){  
         try {
           //Muestra Unicamente los tipos de Interlocutores PROVEEDORES = 1
-          $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est, t3.nombre_abc, t4.nombre_cco,  t5.nombre_fre,
-                                           t6.razonsocial_int, t7.nombre_mar, t8.nombre_mon, t9.nombre_tequ
-          FROM equipos as t0 INNER JOIN empresa as       t1 INNER JOIN estados as     t2 INNER JOIN clasificacionABC as t3
-                             INNER JOIN centrodecosto as t4 INNER JOIN frecuencias as t5 INNER JOIN interlocutores   as t6 
-                             INNER JOIN marcas as        t7 INNER JOIN monedas as     t8 INNER JOIN tiposequipos     as t9
-          WHERE t0.empresa_equ = t1.id_emp       and t0.estado_equ = t2.id_est     and t0.clasificacionABC_equ = t3.id_abc and
-                t0.centrodecosto_equ = t4.id_cco and t0.frecuencia_equ = t5.id_fre and t0.propietario_equ = t6.id_int      and
-                t6.codigo_tipo_int   = 2         and t0.marca_equ = t7.id_mar      and t0.tipomoneda_equ = t8.id_mon       and
-                t0.tipoequipo_equ    = t9.id_tequ");
+          $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.descripcion_fre, t3.razonsocial_int, t4.descripcion_mar,
+                                     t5.descripcion_grp,  t5.codigogrupo_grp, t6.nombre_est, t7.nombre_estcli, t8.nombre_estmtto
+          FROM equipos as t0 INNER JOIN empresa as t1 INNER JOIN frecuencias   as t2 INNER JOIN interlocutores as t3
+                             INNER JOIN marcas  as t4 INNER JOIN gruposequipos as t5 INNER JOIN estados        as t6
+                             INNER JOIN estadoscliente as t7 INNER JOIN estadosmtto as t8
+          WHERE t0.empresa_equ        = t1.id_emp and t0.frecuencia_equ     = t2.id_fre    and t0.propietario_equ = t3.id_int     and
+                t3.codigo_tipo_int    = 2         and t0.marca_equ          = t4.id_mar    and t0.grupoequipo_equ = t5.id_grp     and
+                t0.estadocontable_equ = t6.id_est and t0.estadocliente_equ  = t7.id_estcli and t0.estadomtto_equ  = t8.id_estmtto");
   
           $response['data'] = $data;
+          
           // $response['data'] = $data1;
           $response['message'] = "load successful";
           $response['success'] = true;
@@ -83,15 +76,15 @@ class EquiposController extends Controller
         try { 
           //$data = Frecuencias::find($id_fre);
          
-          $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est, t3.nombre_abc, t4.nombre_cco,  t5.nombre_fre,
-                                           t6.razonsocial_int, t7.nombre_mar, t8.nombre_mon, t9.nombre_tequ
-          FROM  equipos as t0 INNER JOIN empresa as      t1 INNER JOIN estados as     t2 INNER JOIN clasificacionABC as t3
-                             INNER JOIN centrodecosto as t4 INNER JOIN frecuencias as t5 INNER JOIN interlocutores   as t6 
-                             INNER JOIN marcas as        t7 INNER JOIN monedas as     t8 INNER JOIN tiposequipos     as t9
-          WHERE t0.empresa_equ = t1.id_emp        and t0.estado_equ = t2.id_est     and t0.clasificacionABC_equ = t3.id_abc and
-                t0.centrodecosto_equ = t4.id_cco  and t0.frecuencia_equ = t5.id_fre and t0.propietario_equ = t6.id_int      and
-                t6.codigo_tipo_int   = 2          and t0.marca_equ = t7.id_mar      and t0.tipomoneda_equ = t8.id_mon       and
-                t0.tipoequipo_equ    = t9.id_tequ and t0.id_equ = $id_equ ");
+          $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.descripcion_fre, t3.razonsocial_int, t4.descripcion_mar,
+                                     t5.descripcion_grp,  t5.codigogrupo_grp, t6.nombre_est, t7.nombre_estcli, t8.nombre_estmtto
+          FROM equipos as t0 INNER JOIN empresa as t1 INNER JOIN frecuencias   as t2 INNER JOIN interlocutores as t3
+                             INNER JOIN marcas  as t4 INNER JOIN gruposequipos as t5 INNER JOIN estados        as t6
+                             INNER JOIN estadoscliente as t7 INNER JOIN estadosmtto as t8
+          WHERE t0.empresa_equ        = t1.id_emp and t0.frecuencia_equ    = t2.id_fre    and t0.propietario_equ = t3.id_int     and
+                t3.codigo_tipo_int    = 2         and t0.marca_equ         = t4.id_mar    and t0.grupoequipo_equ = t5.id_grp     and
+                t0.estadocontable_equ = t6.id_est and t0.estadocliente_equ = t7.id_estcli and t0.estadomtto_equ  = t8.id_estmtto and
+                t0.id_equ = $id_equ");
 
           if ($data) {
               $response['data'] = $data;
@@ -112,25 +105,20 @@ class EquiposController extends Controller
     
       public function update(Request $request, $id_equ){
         try {
-          $data['codigo_equ']              = $request['codigo_equ'];
-          $data['empresa_equ']             = $request['empresa_equ'];
-          $data['nombre_equ']              = $request['nombre_equ'];
-          $data['frecuencia_equ']          = $request['frecuencia_equ'];
-          $data['estado_equ']              = $request['estado_equ'];
-          $data['propietario_equ']         = $request['propietario_equ'];
-          $data['marca_equ']               = $request['marca_equ'];
-          $data['modelo_equ']              = $request['modelo_equ'];
-          $data['antiguedad_equ']          = $request['antiguedad_equ'];
-          $data['tipoequipo_equ']          = $request['tipoequipo_equ'];
-          $data['serie_equ']               = $request['serie_equ'];
-          $data['fechacreacion_equ']       = $request['fechacreacion_equ'];
-          $data['fechamodificacion_equ']   = $request['fechamodificacion_equ'];
-          $data['direccion_equ']           = $request['direccion_equ'];
-          $data['valoradquisicion']        = $request['valoradquisicion'];
-          $data['tipomoneda_equ']          = $request['tipomoneda_equ'];
-          $data['clasificacionABC_equ']    = $request['clasificacionABC_equ'];
-          $data['centrodecosto_equ']       = $request['centrodecosto_equ'];
-         
+          $data['codigo_equ']           = $request['codigo_equ'];
+          $data['descripcion_equ']      = $request['descripcion_equ'];
+          $data['empresa_equ']          = $request['empresa_equ'];
+          $data['frecuencia_equ']       = $request['frecuencia_equ'];
+          $data['propietario_equ']      = $request['propietario_equ'];
+          $data['marca_equ']            = $request['marca_equ'];
+          $data['antiguedad_equ']       = $request['antiguedad_equ'];
+          $data['grupoequipo_equ']      = $request['grupoequipo_equ'];
+          $data['valoradquisicion_equ'] = $request['valoradquisicion_equ'];
+          $data['estadocontable_equ']   = $request['estadocontable_equ'];
+          $data['estadocliente_equ']    = $request['estadocliente_equ'];
+          $data['estadomtto_equ']       = $request['estadomtto_equ'];
+          $data['ctacontable_equ']      = $request['ctacontable_equ'];
+            
           $res = Equipos::where("id_equ",$id_equ)->update($data);
     
           $response['res'] = $res;

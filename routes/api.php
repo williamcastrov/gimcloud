@@ -116,11 +116,29 @@ Route::get('/marcas/get/{id}', 'App\Http\Controllers\API\Mantenimiento\MarcasCon
 Route::delete('/marcas/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\MarcasController@delete');
 Route::put('/marcas/update/{id}', 'App\Http\Controllers\API\Mantenimiento\MarcasController@update');
 
-Route::get('/tiposequipos/listar_tiposequipos', 'App\Http\Controllers\API\Mantenimiento\TiposEquiposController@listar_tiposequipos');
-Route::post('/tiposequipos/create', 'App\Http\Controllers\API\Mantenimiento\TiposEquiposController@create');
-Route::get('/tiposequipos/get/{id}', 'App\Http\Controllers\API\Mantenimiento\TiposEquiposController@get');
-Route::delete('/tiposequipos/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\TiposEquiposController@delete');
-Route::put('/tiposequipos/update/{id}', 'App\Http\Controllers\API\Mantenimiento\TiposEquiposController@update');
+Route::get('/estadosclientes/listar_estadosclientes', 'App\Http\Controllers\API\Mantenimiento\EstadosClienteController@listar_estadosclientes');
+Route::post('/estadosclientes/create', 'App\Http\Controllers\API\Mantenimiento\EstadosClienteController@create');
+Route::get('/estadosclientes/get/{id}', 'App\Http\Controllers\API\Mantenimiento\EstadosClienteController@get');
+Route::delete('/estadosclientes/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\EstadosClienteController@delete');
+Route::put('/estadosclientes/update/{id}', 'App\Http\Controllers\API\Mantenimiento\EstadosClienteController@update');
+
+Route::get('/estadosmtto/listar_estadosmtto', 'App\Http\Controllers\API\Mantenimiento\EstadosMttoController@listar_estadosmtto');
+Route::post('/estadosmtto/create', 'App\Http\Controllers\API\Mantenimiento\EstadosMttoController@create');
+Route::get('/estadosmtto/get/{id}', 'App\Http\Controllers\API\Mantenimiento\EstadosMttoController@get');
+Route::delete('/estadosmtto/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\EstadosMttoController@delete');
+Route::put('/estadosmtto/update/{id}', 'App\Http\Controllers\API\Mantenimiento\EstadosMttoController@update');
+
+Route::get('/gruposequipos/listar_gruposequipos', 'App\Http\Controllers\API\Mantenimiento\GruposEquiposController@listar_gruposequipos');
+Route::post('/gruposequipos/create', 'App\Http\Controllers\API\Mantenimiento\GruposEquiposController@create');
+Route::get('/gruposequipos/get/{id}', 'App\Http\Controllers\API\Mantenimiento\GruposEquiposController@get');
+Route::delete('/gruposequipos/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\GruposEquiposController@delete');
+Route::put('/gruposequipos/update/{id}', 'App\Http\Controllers\API\Mantenimiento\GruposEquiposController@update');
+
+Route::get('/subgruposequipos/listar_subgruposequipos', 'App\Http\Controllers\API\Mantenimiento\SubGruposEquiposController@listar_subgruposequipos');
+Route::post('/subgruposequipos/create', 'App\Http\Controllers\API\Mantenimiento\SubGruposEquiposController@create');
+Route::get('/subgruposequipos/get/{id}', 'App\Http\Controllers\API\Mantenimiento\SubGruposEquiposController@get');
+Route::delete('/subgruposequipos/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\SubGruposEquiposController@delete');
+Route::put('/subgruposequipos/update/{id}', 'App\Http\Controllers\API\Mantenimiento\SubGruposEquiposController@update');
 
 Route::get('/frecuencias/listar_frecuencias', 'App\Http\Controllers\API\Mantenimiento\FrecuenciasController@listar_frecuencias');
 Route::post('/frecuencias/create', 'App\Http\Controllers\API\Mantenimiento\FrecuenciasController@create');
@@ -146,17 +164,49 @@ Route::get('/referencias/get/{id}', 'App\Http\Controllers\API\Mantenimiento\Refe
 Route::delete('/referencias/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\ReferenciasController@delete');
 Route::put('/referencias/update/{id}', 'App\Http\Controllers\API\Mantenimiento\ReferenciasController@update');
 
-Route::get('/garantias/listar_garantias', 'App\Http\Controllers\API\Mantenimiento\GarantiasController@listar_garantias');
-Route::post('/garantias/create', 'App\Http\Controllers\API\Mantenimiento\GarantiasController@create');
-Route::get('/garantias/get/{id}', 'App\Http\Controllers\API\Mantenimiento\GarantiasController@get');
-Route::delete('/garantias/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\GarantiasController@delete');
-Route::put('/garantias/update/{id}', 'App\Http\Controllers\API\Mantenimiento\GarantiasController@update');
-
 Route::get('/equipos/listar_equipos', 'App\Http\Controllers\API\Mantenimiento\EquiposController@listar_equipos');
 Route::post('/equipos/create', 'App\Http\Controllers\API\Mantenimiento\EquiposController@create');
 Route::get('/equipos/get/{id}', 'App\Http\Controllers\API\Mantenimiento\EquiposController@get');
 Route::delete('/equipos/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\EquiposController@delete');
 Route::put('/equipos/update/{id}', 'App\Http\Controllers\API\Mantenimiento\EquiposController@update');
+
+
+// Rutas Gestión Datos Adicionales de los Equipos
+Route::get('/datosequipos/listar_datosequipos', 'App\Http\Controllers\API\DatosEquipos\DatosEquiposController@listar_datosequipos');
+Route::post('/datosequipos/create', 'App\Http\Controllers\API\DatosEquipos\DatosEquiposController@create');
+Route::get('/datosequipos/get/{id}', 'App\Http\Controllers\API\DatosEquipos\DatosEquiposController@get');
+Route::delete('/datosequipos/delete/{id}', 'App\Http\Controllers\API\DatosEquipos\DatosEquiposController@delete');
+Route::put('/datosequipos/update/{id}', 'App\Http\Controllers\API\DatosEquipos\DatosEquiposController@update');
+
+Route::get('/garantias/listar_garantias', 'App\Http\Controllers\API\DatosEquipos\GarantiasController@listar_garantias');
+Route::post('/garantias/create', 'App\Http\Controllers\API\DatosEquipos\GarantiasController@create');
+Route::get('/garantias/get/{id}', 'App\Http\Controllers\API\DatosEquipos\GarantiasController@get');
+Route::delete('/garantias/delete/{id}', 'App\Http\Controllers\API\DatosEquipos\GarantiasController@delete');
+Route::put('/garantias/update/{id}', 'App\Http\Controllers\API\DatosEquipos\GarantiasController@update');
+
+Route::get('/contratos/listar_contratos', 'App\Http\Controllers\API\DatosEquipos\ContratosController@listar_contratos');
+Route::post('/contratos/create', 'App\Http\Controllers\API\DatosEquipos\ContratosController@create');
+Route::get('/contratos/get/{id}', 'App\Http\Controllers\API\DatosEquipos\ContratosController@get');
+Route::delete('/contratos/delete/{id}', 'App\Http\Controllers\API\DatosEquipos\ContratosController@delete');
+Route::put('/contratos/update/{id}', 'App\Http\Controllers\API\DatosEquipos\ContratosController@update');
+
+Route::get('/fichatecnica/listar_fichatecnica', 'App\Http\Controllers\API\DatosEquipos\FichaTecnicaController@listar_fichatecnica');
+Route::post('/fichatecnica/create', 'App\Http\Controllers\API\DatosEquipos\FichaTecnicaController@create');
+Route::get('/fichatecnica/get/{id}', 'App\Http\Controllers\API\DatosEquipos\FichaTecnicaController@get');
+Route::delete('/fichatecnica/delete/{id}', 'App\Http\Controllers\API\DatosEquipos\FichaTecnicaController@delete');
+Route::put('/fichatecnica/update/{id}', 'App\Http\Controllers\API\DatosEquipos\FichaTecnicaController@update');
+
+Route::get('/tiposllantas/listar_tiposllantas', 'App\Http\Controllers\API\DatosEquipos\TiposLlantasController@listar_tiposllantas');
+Route::post('/tiposllantas/create', 'App\Http\Controllers\API\DatosEquipos\TiposLlantasController@create');
+Route::get('/tiposllantas/get/{id}', 'App\Http\Controllers\API\DatosEquipos\TiposLlantasController@get');
+Route::delete('/tiposllantas/delete/{id}', 'App\Http\Controllers\API\DatosEquipos\TiposLlantasController@delete');
+Route::put('/tiposllantas/update/{id}', 'App\Http\Controllers\API\DatosEquipos\TiposLlantasController@update');
+
+Route::get('/tiposequipos/listar_tiposequipos', 'App\Http\Controllers\API\DatosEquipos\TiposEquiposController@listar_tiposequipos');
+Route::post('/tiposequipos/create', 'App\Http\Controllers\API\DatosEquipos\TiposEquiposController@create');
+Route::get('/tiposequipos/get/{id}', 'App\Http\Controllers\API\DatosEquipos\TiposEquiposController@get');
+Route::delete('/tiposequipos/delete/{id}', 'App\Http\Controllers\API\DatosEquipos\TiposEquiposController@delete');
+Route::put('/tiposequipos/update/{id}', 'App\Http\Controllers\API\DatosEquipos\TiposEquiposController@update');
 
 // Rutas Administración Activos
 Route::get('/areas/listar_areas', 'App\Http\Controllers\API\Activos\AreasController@listar_areas');

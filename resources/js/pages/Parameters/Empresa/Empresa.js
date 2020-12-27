@@ -312,18 +312,18 @@ function Empresa() {
       type: 'date'
     },
     {
-      title: 'Ciudad',
-      field: 'ciudad_emp'
+      title: 'Codigo',
+      field: 'codigo_ciu'
     },
     {
-      title: 'Pais',
-      field: 'pais_emp'
+      title: 'Descripción',
+      field: 'nombre_ciu'
     }
   ]
 
   const empresaInsertar = (
     <div className={styles.modal}>
-      <h3>Agregar Nueva Empresa</h3>
+      <h3 align="center" >Agregar Nueva Empresa</h3>
       <TextField className={styles.inputMaterial} label="Nombre" name="nombre_emp" onChange={handleChange} />
       <br />
       <TextField className={styles.inputMaterial} label="Nit" name="nit_emp" onChange={handleChange} />
@@ -356,28 +356,6 @@ function Empresa() {
         </Select>
       </FormControl>
       <br />
-
-      <FormControl className={styles.formControl}>
-        <InputLabel id="idselectPais">Pais</InputLabel>
-        <Select
-          labelId="selectPaises"
-          name="pais_emp"
-          id="idselectPais"
-          onChange={handleChange}
-        >
-          <MenuItem value="">  <em>None</em> </MenuItem>
-          {
-            listarPaises.map((itemselect) => {
-              return (
-                <MenuItem value={itemselect.id_pai}>{itemselect.nombre_pai}</MenuItem>
-              )
-            })
-          }
-        </Select>
-      </FormControl>
-      <br />
-      <br />
-
       <div align="right">
         <Button color="primary" onClick={() => grabarEmpresa()} >Insertar</Button>
         <Button onClick={() => abrirCerrarModalInsertar()} >Cancelar</Button>
@@ -419,26 +397,7 @@ function Empresa() {
           }
         </Select>
       </FormControl>
-      <br />
-      <FormControl className={styles.formControl}>
-        <InputLabel id="idselectPais">Pais</InputLabel>
-        <Select
-          labelId="selectPaises"
-          name="pais_emp"
-          id="idselectPais"
-          onChange={handleChange}
-          value={empresaSeleccionado && empresaSeleccionado.pais_emp}
-        >
-          <MenuItem value="">  <em>None</em> </MenuItem>
-          {
-            listarPaises.map((itemselect) => {
-              return (
-                <MenuItem value={itemselect.id_pai}>{itemselect.nombre_pai}</MenuItem>
-              )
-            })
-          }
-        </Select>
-      </FormControl>
+      <br/>
       <div align="right">
         <Button color="primary" onClick={() => actualizarEmpresa()} >Editar</Button>
         <Button onClick={() => abrirCerrarModalEditar()}>Cancelar</Button>

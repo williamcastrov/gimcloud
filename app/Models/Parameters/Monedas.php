@@ -14,8 +14,7 @@ class Monedas extends Model
     protected $primaryKey = "id_mon";
 
     protected $fillable = [
-        'codigo_mon',
-        'nombre_mon',
+        'descripcion_mon',
         'empresa_mon',
         'estado_mon',
     ];

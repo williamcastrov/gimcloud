@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
 import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
+import SaveIcon from '@material-ui/icons/Save';
 
 // Componentes de Conexion con el Backend
 import cencostosServices from "../../../services/Activos/Cencostos";
@@ -46,7 +47,7 @@ function Cencostos() {
   const [cencostosSeleccionado, setCencostosSeleccionado] = useState({
     id_cco: "",
     codigo_cco: "",
-    nombre_cco: "",
+    descripcion_cco: "",
     area_cco: "",
     empresa_cco: "",
     estado_cco: ""
@@ -123,7 +124,7 @@ function Cencostos() {
       formOk = false;
     }
 
-    if (!cencostosSeleccionado.nombre_cco) {
+    if (!cencostosSeleccionado.descripcion_cco) {
       errors.nombre_cco = true;
       formOk = false;
     }
@@ -154,7 +155,7 @@ function Cencostos() {
         console.log(res.message)
         abrirCerrarModalInsertar();
         delete cencostosSeleccionado.codigo_cco;
-        delete cencostosSeleccionado.nombre_cco;
+        delete cencostosSeleccionado.descripcion_cco;
         delete cencostosSeleccionado.empresa_cco;
         delete cencostosSeleccionado.empresa_cco;
         delete cencostosSeleccionado.estado_cco;
@@ -183,7 +184,7 @@ function Cencostos() {
       formOk = false;
     }
 
-    if (!cencostosSeleccionado.nombre_cco) {
+    if (!cencostosSeleccionado.descripcion_cco) {
       errors.nombre_cco = true;
       formOk = false;
     }
@@ -214,7 +215,7 @@ function Cencostos() {
         console.log(res.message)
         abrirCerrarModalEditar();
         delete cencostosSeleccionado.codigo_cco;
-        delete cencostosSeleccionado.nombre_cco;
+        delete cencostosSeleccionado.descripcion_cco;
         delete cencostosSeleccionado.empresa_cco;
         delete cencostosSeleccionado.empresa_cco;
         delete cencostosSeleccionado.estado_cco;
@@ -252,8 +253,7 @@ function Cencostos() {
   const columnas = [
     {
       title: 'Id',
-      field: 'id_cco',
-      type: 'numeric'
+      field: 'id_cco'
     },
     {
       title: 'Código',
@@ -261,7 +261,7 @@ function Cencostos() {
     },
     {
       title: 'Descripcion',
-      field: 'nombre_cco'
+      field: 'descripcion_cco'
     },
     {
       title: 'Area',
@@ -269,7 +269,7 @@ function Cencostos() {
     },
     {
       title: 'Nombre Area',
-      field: 'nombre_are'
+      field: 'descripcion_are'
     },
     {
       title: 'Código',
@@ -291,10 +291,10 @@ function Cencostos() {
 
   const cencostoInsertar = (
     <div className={styles.modal}>
-      <h3>Agregar Nuevo Centro de Costo</h3>
+      <h3 align="center" >Agregar Nuevo Centro de Costo</h3>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_cco" onChange={handleChange} />
       <br />
-      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_cco" onChange={handleChange} />          
+      <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_cco" onChange={handleChange} />          
       <br />
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectArea">Area</InputLabel>
@@ -308,7 +308,7 @@ function Cencostos() {
           {
             listarAreas.map((itemselect) => {
               return (
-                <MenuItem value={itemselect.id_are }>{itemselect.nombre_are}</MenuItem>
+                <MenuItem value={itemselect.id_are }>{itemselect.descripcion_are}</MenuItem>
               )
             })
           }
@@ -365,7 +365,7 @@ function Cencostos() {
       <h3 align="center" >Actualizar Centro de Costo</h3>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_cco" onChange={handleChange} value={cencostosSeleccionado&&cencostosSeleccionado.codigo_cco}/>
       <br />
-      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_cco" onChange={handleChange} value={cencostosSeleccionado&&cencostosSeleccionado.nombre_cco}/>
+      <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_cco" onChange={handleChange} value={cencostosSeleccionado&&cencostosSeleccionado.descripcion_cco}/>
       <br />
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectArea">Area</InputLabel>
@@ -380,7 +380,7 @@ function Cencostos() {
           {
             listarAreas.map((itemselect) => {
               return (
-                <MenuItem value={itemselect.id_are }>{itemselect.nombre_are}</MenuItem>
+                <MenuItem value={itemselect.id_are }>{itemselect.descripcion_are}</MenuItem>
               )
             })
           }
@@ -446,7 +446,8 @@ function Cencostos() {
 
   return (
     <div className="App">
-    <Button onClick={()=> abrirCerrarModalInsertar() } >Insertar Centro de Costo</Button>
+    <br />
+    <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Centro de Costo</Button>
      <MaterialTable
        columns={columnas}
        data={listCencostos}

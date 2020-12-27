@@ -44,7 +44,6 @@ function Monedas() {
   const [listarEstados, setListarEstados] = useState([]);
   const [monedasSeleccionado, setMonedasSeleccionado] = useState({
     id_mon: "",
-    codigo_mon: "", 
     nombre_mon: "",
     empresa_mon: "",
     estado_mon: ""
@@ -109,12 +108,7 @@ function Monedas() {
     let errors = {};
     let formOk = true;
 
-    if (!monedasSeleccionado.codigo_mon) {
-      errors.codigo_mon = true;
-      formOk = false;
-    }
-
-    if (!monedasSeleccionado.nombre_mon) {
+    if (!monedasSeleccionado.descripcion_mon) {
       errors.nombre_mon = true;
       formOk = false;
     }
@@ -139,8 +133,7 @@ function Monedas() {
         alert("Tipo de Moneda Creada de forma Correcta")
         console.log(res.message)
         abrirCerrarModalInsertar();
-        delete monedasSeleccionado.codigo_mon;
-        delete monedasSeleccionado.nombre_mon;
+        delete monedasSeleccionado.descripcion_mon;
         delete monedasSeleccionado.empresa_mon;
         delete monedasSeleccionado.estado_mon;
       } else
@@ -162,11 +155,6 @@ function Monedas() {
     setFormError({});
     let errors = {};
     let formOk = true;
-
-    if (!monedasSeleccionado.codigo_mon) {
-      errors.codigo_mon = true;
-      formOk = false;
-    }
 
     if (!monedasSeleccionado.nombre_mon) {
       errors.nombre_mon = true;
@@ -193,8 +181,7 @@ function Monedas() {
         alert("Tipo de Moneda actualizada de forma Correcta")
         console.log(res.message)
         abrirCerrarModalEditar();
-        delete monedasSeleccionado.codigo_mon;
-        delete monedasSeleccionado.nombre_mon;
+        delete monedasSeleccionado.descripcion_mon;
         delete monedasSeleccionado.empresa_mon;
         delete monedasSeleccionado.estado_mon;
     } else
@@ -231,16 +218,11 @@ function Monedas() {
   const columnas = [
     {
       title: 'Id',
-      field: 'id_mon',
-      type: 'numeric'
-    },
-    {
-      title: 'Código',
-      field: 'codigo_mon'
+      field: 'id_mon'
     },
     {
       title: 'Descripcion',
-      field: 'nombre_mon'
+      field: 'descripcion_mon'
     },
     {
       title: 'Código',
@@ -262,10 +244,8 @@ function Monedas() {
 
   const monedaInsertar=(
     <div className={styles.modal}>
-      <h3>Agregar Nuevo Tipo de Moneda</h3>
-      <TextField className={styles.inputMaterial} label="Código" name="codigo_mon" onChange={handleChange} />
-      <br />
-      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_mon" onChange={handleChange} />          
+      <h3 align="center" >Agregar Nuevo Tipo de Moneda</h3>
+      <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_mon" onChange={handleChange} />          
       <br />
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectEmpresa">Empresa</InputLabel>
@@ -315,9 +295,7 @@ function Monedas() {
   const monedaEditar = (
     <div className={styles.modal}>
       <h3 align="center" >Actualizar Tipos de Monedas</h3>
-      <TextField className={styles.inputMaterial} label="Código" name="codigo_mon" onChange={handleChange} value={monedasSeleccionado&&monedasSeleccionado.codigo_mon}/>
-      <br />
-      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_mon" onChange={handleChange} value={monedasSeleccionado&&monedasSeleccionado.nombre_mon}/>
+      <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_mon" onChange={handleChange} value={monedasSeleccionado&&monedasSeleccionado.nombre_mon}/>
       <br />
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectEmpresa">Empresa</InputLabel>
@@ -368,7 +346,7 @@ function Monedas() {
 
   const monedaEliminar = (
     <div className={styles.modal}>
-      <p>Estás seguro que deseas eliminar el tipo de Moneda <b>{monedasSeleccionado && monedasSeleccionado.nombre_mon}</b>? </p>
+      <p>Estás seguro que deseas eliminar el tipo de Moneda <b>{monedasSeleccionado && monedasSeleccionado.descripcion_mon}</b>? </p>
       <div align="right">
         <Button color="secondary" onClick = {() => borrarMoneda() }> Confirmar </Button>
         <Button onClick={()=>abrirCerrarModalEliminar()}> Cancelar </Button>

@@ -14,8 +14,9 @@ class Frecuencias extends Model
     protected $primaryKey = "id_fre";
 
     protected $fillable = [
-        'codigo_fre',
-        'nombre_fre',
+        'descripcion_fre',
+        'periodicidad_fre',
+        'unidad_fre',
         'empresa_fre',
         'estado_fre',
     ];

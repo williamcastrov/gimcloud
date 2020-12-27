@@ -1,8 +1,8 @@
-const baseUrl = "http://127.0.0.1:8000/api/tiposequipos";   
+const baseUrl = "http://127.0.0.1:8000/api/subgruposequipos";   
 import axios from "axios";
-const tiposequipos = {};
+const subgruposequipos = {};
 
-tiposequipos.save = async (data) => {
+subgruposequipos.save = async (data) => {
     const urlSave = baseUrl + "/create"
     const res = await axios.post(urlSave, data)
         .then(response => { return response.data })
@@ -10,8 +10,8 @@ tiposequipos.save = async (data) => {
     return res;
 }
 
-tiposequipos.listTiposequipos = async () => {
-    const urlList = baseUrl+"/listar_tiposequipos"
+subgruposequipos.listSubGruposequipos = async () => {
+    const urlList = baseUrl+"/listar_subgruposequipos"
     const res = await axios.get(urlList)
     .then(response=>{ return response.data; })
     .catch(error=>{ return error; })
@@ -19,9 +19,9 @@ tiposequipos.listTiposequipos = async () => {
     return res;
 }
 
-tiposequipos.update = async (data) => {
+subgruposequipos.update = async (data) => {
     console.log(data);
-    const urlUpdate = baseUrl+"/update/"+data.id_tequ
+    const urlUpdate = baseUrl+"/update/"+data.id_sgre
     const res = await axios.put(urlUpdate, data)
     .then(response=>{ return response.data; })
     .catch(error=>{ return error; })
@@ -29,8 +29,8 @@ tiposequipos.update = async (data) => {
     return res;
 }
 
-tiposequipos.delete = async (id_tequ) => {
-    const urlDelete = baseUrl+"/delete/"+id_tequ
+subgruposequipos.delete = async (id_sgre) => {
+    const urlDelete = baseUrl+"/delete/"+id_sgre
     const res = await axios.delete(urlDelete)
     .then(response=> { return response.data })
     .catch(error =>{ return error })
@@ -38,4 +38,4 @@ tiposequipos.delete = async (id_tequ) => {
     return res;
 }
   
-export default tiposequipos;
+export default subgruposequipos;

@@ -15,6 +15,7 @@ class Ciudades extends Model
 
     protected $fillable = [
         'codigo_ciu',
+        'codigointerno_ciu',
         'nombre_ciu',
         'departamento_ciu'
     ];

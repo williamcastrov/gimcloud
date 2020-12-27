@@ -1,10 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\API\Interlocutores;
+use Illuminate\Support\Facades\DB;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Interlocutores\Especialidades;
+use App\Models\Parameters\Empresa;
+use App\Models\Parameters\Estados;
 
 class EspecialidadesController extends Controller
 {
@@ -12,9 +15,7 @@ class EspecialidadesController extends Controller
     public function create(Request $request){
 
         try {
-      
-            $insert['codigo_esp'] = $request['codigo_esp'];
-            $insert['nombre_esp'] = $request['nombre_esp'];
+            $insert['descripcion_esp'] = $request['descripcion_esp'];
             $insert['empresa_esp'] = $request['empresa_esp'];
             $insert['estado_esp'] = $request['estado_esp'];
   
@@ -25,7 +26,7 @@ class EspecialidadesController extends Controller
     
           } catch (\Exception $e) {
             $response['message'] = $e->getMessage();
-            $response['success'] = true;
+            $response['success'] = false;
           }
            
           return $response;
@@ -34,8 +35,10 @@ class EspecialidadesController extends Controller
     public function listar_especialidades(){
   
         try {
-  
-            $data = Especialidades::with("empresa")->get();
+            //$data = Especialidades::with("empresa")->get();
+            $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est 
+            FROM especialidades_int as t0 INNER JOIN empresa as t1 INNER JOIN estados as t2 
+            WHERE t0.empresa_esp = t1.id_emp and t0.estado_esp = t2.id_est" );
   
             $response['data'] = $data;
             $response['message'] = "load successful";
@@ -50,9 +53,11 @@ class EspecialidadesController extends Controller
   
     public function get($id_esp){
   
-        try {
-            
-            $data = Especialidades::find($id_esp);
+        try {    
+            //$data = Especialidades::find($id_esp);
+            $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est 
+            FROM especialidades_int as t0 INNER JOIN empresa as t1 INNER JOIN estados as t2 
+            WHERE t0.id_esp = $id_esp and t0.empresa_esp = t1.id_emp and t0.estado_esp = t2.id_est" );
     
             if ($data) {
               $response['data'] = $data;
@@ -75,9 +80,7 @@ class EspecialidadesController extends Controller
     public function update(Request $request, $id_esp){
   
           try {
-          
-            $data['codigo_esp'] = $request['codigo_esp'];
-            $data['nombre_esp'] = $request['nombre_esp'];
+            $data['descripcion_esp'] = $request['descripcion_esp'];
             $data['empresa_esp'] = $request['empresa_esp'];
             $data['estado_esp'] = $request['estado_esp'];
   

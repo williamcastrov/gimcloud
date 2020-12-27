@@ -68,6 +68,14 @@ function Especialidades() {
   fetchDataEstados();
   }, [])
 
+  useEffect(() => {
+    async function fetchDataEstados() {
+      const res = await estadosServices.listEstados();
+      setListarEstados(res.data)
+      console.log(res.data);
+    }
+    fetchDataEstados();
+  }, [])
 
   const handleChange = e => {
     const {name, value} = e.target;
@@ -109,13 +117,8 @@ function Especialidades() {
     let errors = {};
     let formOk = true;
 
-    if (!especialidadesSeleccionado.codigo_esp) {
-      errors.codigo_ciu = true;
-      formOk = false;
-    }
-
-    if (!especialidadesSeleccionado.nombre_esp) {
-      errors.nombre_ciu = true;
+    if (!especialidadesSeleccionado.descripcion_esp) {
+      errors.descripcion_esp = true;
       formOk = false;
     }
 
@@ -139,8 +142,7 @@ function Especialidades() {
         alert("Especialidad del Interlocutor Creada de forma Correcta")
         console.log(res.message)
         abrirCerrarModalInsertar();
-        delete especialidadesSeleccionado.codigo_esp;
-        delete especialidadesSeleccionado.nombre_esp;
+        delete especialidadesSeleccionado.descripcion_esp;
         delete especialidadesSeleccionado.empresa_esp;
         delete especialidadesSeleccionado.estado_esp;
       } else
@@ -163,13 +165,8 @@ function Especialidades() {
     let errors = {};
     let formOk = true;
 
-    if (!especialidadesSeleccionado.codigo_esp) {
-      errors.codigo_ciu = true;
-      formOk = false;
-    }
-
-    if (!especialidadesSeleccionado.nombre_esp) {
-      errors.nombre_ciu = true;
+    if (!especialidadesSeleccionado.descripcion_esp) {
+      errors.descripcion_esp = true;
       formOk = false;
     }
 
@@ -193,8 +190,7 @@ function Especialidades() {
         alert("Especialidades del Interlocutor actualizada de forma Correcta")
         console.log(res.message)
         abrirCerrarModalEditar();
-        delete especialidadesSeleccionado.codigo_esp;
-        delete especialidadesSeleccionado.nombre_esp;
+        delete especialidadesSeleccionado.descripcion_esp;
         delete especialidadesSeleccionado.empresa_esp;
         delete especialidadesSeleccionado.estado_esp;
     } else
@@ -231,16 +227,11 @@ function Especialidades() {
   const columnas = [
     {
       title: 'Id',
-      field: 'id_esp',
-      type: 'numeric'
-    },
-    {
-      title: 'Codigo',
-      field: 'codigo_esp'
+      field: 'id_esp'
     },
     {
       title: 'Descripción',
-      field: 'nombre_esp'
+      field: 'descripcion_esp'
     },
     {
       title: 'Codigo Empresa',
@@ -248,7 +239,7 @@ function Especialidades() {
     },
     {
       title: 'Nombre Empresa',
-      field: 'empresa.nombre_emp'
+      field: 'nombre_emp'
     },
     {
       title: 'Estado',
@@ -259,9 +250,7 @@ function Especialidades() {
   const especialidadesInsertar = (
     <div className={styles.modal}>
       <h3>Agregar Nueva Especialidad</h3>
-      <TextField className={styles.inputMaterial} label="Código" name="codigo_esp" onChange={handleChange} />
-      <br />
-      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_esp" onChange={handleChange} />          
+      <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_esp" onChange={handleChange} />          
       <br />
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectEstado">Estado</InputLabel>
@@ -311,9 +300,7 @@ function Especialidades() {
   const especialidadesEditar=(
     <div className={styles.modal}>
       <h3 align="center" >Actualizar Especialidades</h3>
-      <TextField className={styles.inputMaterial} label="Código" name="codigo_esp" onChange={handleChange} value={especialidadesSeleccionado&&especialidadesSeleccionado.codigo_esp}/>
-      <br />
-      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_esp" onChange={handleChange} value={especialidadesSeleccionado&&especialidadesSeleccionado.nombre_esp}/>
+      <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_esp" onChange={handleChange} value={especialidadesSeleccionado&&especialidadesSeleccionado.descripcion_esp}/>
       <br />
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectEstado">Estado</InputLabel>

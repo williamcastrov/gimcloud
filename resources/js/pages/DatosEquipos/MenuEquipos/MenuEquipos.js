@@ -3,16 +3,19 @@ import { Modal } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
-import ListAltIcon from '@material-ui/icons/ListAlt';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import RoomIcon from '@material-ui/icons/Room';
 import DescriptionIcon from '@material-ui/icons/Description';
 import RecentActorsIcon from '@material-ui/icons/RecentActors';
+import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 
 // Floating Button
 import { Container, Button, Link, lightColors, darkColors } from 'react-floating-action-button'
 
 import Garantias from "../Garantias";
+import DatosEquipos from "../DatosEquipos";
+import Contratos from "../Contratos";
+import FichaTecnica from "../FichaTecnica";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -35,10 +38,18 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0),
     minWidth: 250,
+  },
+  floatingbutton : {
+      margin: 35,
+      top: 'auto',
+      right: 20,
+      bottom: 20,
+      left: 'auto',
+      position: 'fixed',
   }
 }));
 
-export default function DatosEquipos(props) {
+export default function MenuEquipos(props) {
   const { equipoID, equipoCodigo } = props;
 
   const styles = useStyles();
@@ -49,13 +60,11 @@ export default function DatosEquipos(props) {
   const [listGarantia, setListGarantia] = useState([]);
   const [modalInsertar, setModalInsertar] = useState(false);
   const [modalEditar, setModalEditar] = useState(false);
-  const [modalEliminar, setModalEliminar] = useState(false);
+  const [modalDatosEquipos, setModalDatosEquipos] = useState(false);
   const [modalGarantias, setModalGarantias] = useState(false);
-  const [formError, setFormError] = useState(false);
-  const [listarEstados, setListarEstados] = useState([]);
-  const [listarEmpresas, setListarEmpresas] = useState([]);
-  const [listarEquipos, setListarEquipos] = useState([]);
-
+  const [modalContratos, setModalContratos] = useState(false);
+  const [modalFichaTecnica, setModalFichaTecnica] = useState(false);
+ 
   const abrirCerrarModalInsertar = () => {
     setModalInsertar(!modalInsertar);
   }
@@ -64,9 +73,25 @@ export default function DatosEquipos(props) {
     setModalEditar(!modalEditar);
   }
 
-  const abrirCerrarModalEliminar = () => {
-    setModalEliminar(!modalEliminar);
+  const abrirCerrarModalDatosEquipos = () => {
+    setModalDatosEquipos(!modalDatosEquipos);
   }
+  
+  const datosequipos = (
+    <div>
+      <DatosEquipos equipoID={equipoID} equipoCodigo={equipoCodigo} />
+    </div>
+  )
+
+  const abrirCerrarModalContratos = () => {
+    setModalContratos(!modalContratos);
+  }
+  
+  const contratos = (
+    <div>
+      <Contratos equipoID={equipoID} equipoCodigo={equipoCodigo} />
+    </div>
+  )
 
   const abrirCerrarModalGarantias = () => {
     setModalGarantias(!modalGarantias);
@@ -75,6 +100,16 @@ export default function DatosEquipos(props) {
   const garantias = (
     <div>
       <Garantias equipoID={equipoID} equipoCodigo={equipoCodigo} />
+    </div>
+  )
+  
+  const abrirCerrarModalFichaTecnica = () => {
+    setModalFichaTecnica(!modalFichaTecnica);
+  }
+
+  const fichatecnica = (
+    <div>
+      <FichaTecnica equipoID={equipoID} equipoCodigo={equipoCodigo} />
     </div>
   )
 
@@ -87,7 +122,28 @@ export default function DatosEquipos(props) {
         {garantias}
       </Modal>
 
-      <Container>
+      <Modal
+        open={modalDatosEquipos}
+        onClose={abrirCerrarModalDatosEquipos}
+      >
+        {datosequipos}
+      </Modal>
+
+      <Modal
+        open={modalContratos}
+        onClose={abrirCerrarModalContratos}
+      >
+        {contratos}
+      </Modal>
+
+      <Modal
+        open={modalFichaTecnica}
+        onClose={abrirCerrarModalFichaTecnica}
+      >
+        {fichatecnica}
+      </Modal>
+
+      <Container className={styles.floatingbutton} >
         <Button
           tooltip="Hoja de Vida"
           rotate={true}
@@ -110,19 +166,25 @@ export default function DatosEquipos(props) {
           tooltip="Ficha Técnica"
           rotate={true}
           styles={{ backgroundColor: darkColors.cyan, color: lightColors.white }}
-          onClick={() => alert('Aqui van los datos de la Ficha Técnica!')} ><DescriptionIcon />
+          onClick={() => setModalFichaTecnica(true)} ><DescriptionIcon />
         </Button>
         <Button
           tooltip="Contratos"
           rotate={true}
           styles={{ backgroundColor: darkColors.red, color: lightColors.white }}
-          onClick={() => alert('Información de Contratos!')} ><SupervisorAccountIcon />
+          onClick={() => setModalContratos(true)} ><SupervisorAccountIcon />
+        </Button>
+        <Button
+          tooltip="Datos Adicionales de Equipos"
+          rotate={true}
+          styles={{ backgroundColor: darkColors.blue, color: lightColors.white }}
+          onClick={() => setModalDatosEquipos(true)} > <SettingsApplicationsIcon />
         </Button>
         <Button
           tooltip="Información Equipos!"
           rotate={true}
           styles={{ backgroundColor: darkColors.lightBlue, color: lightColors.white }}
-          onClick={() => alert('Selecciona Datos Adicionales de los Equipos!')} ><ZoomOutMapIcon /></Button>
+          onClick={() => alert('Seleccione Información relaciona con la Gestión de los Equipos!')} ><ZoomOutMapIcon /></Button>
       </Container>
     </div>
 

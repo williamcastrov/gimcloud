@@ -1,10 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\API\Interlocutores;
+use Illuminate\Support\Facades\DB;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Interlocutores\TipoInterlocutores;
+use App\Models\Parameters\Empresa;
+use App\Models\Parameters\Estados;
 
 class TipoInterlocutoresController extends Controller
 {
@@ -12,10 +15,9 @@ class TipoInterlocutoresController extends Controller
     public function create(Request $request){
 
         try {
-      
-            $insert['codigo_tint'] = $request['codigo_tint'];
             $insert['nombre_tint'] = $request['nombre_tint'];
             $insert['empresa_tint'] = $request['empresa_tint'];
+            $insert['estado_tint'] = $request['estado_tint'];
   
             TipoInterlocutores::insert($insert);
     
@@ -24,7 +26,7 @@ class TipoInterlocutoresController extends Controller
     
           } catch (\Exception $e) {
             $response['message'] = $e->getMessage();
-            $response['success'] = true;
+            $response['success'] = false;
           }
            
           return $response;
@@ -33,8 +35,11 @@ class TipoInterlocutoresController extends Controller
         public function listar_tipointerlocutor(){
   
           try {
-  
-            $data = TipoInterlocutores::with("empresa")->get();
+            //$data = TipoInterlocutores::with("empresa")->get();
+
+            $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est 
+            FROM tipo_interlocutor as t0 INNER JOIN empresa as t1 INNER JOIN estados as t2 
+            WHERE t0.empresa_tint = t1.id_emp and t0.estado_tint = t2.id_est" );
   
             $response['data'] = $data;
             $response['message'] = "load successful";
@@ -50,8 +55,11 @@ class TipoInterlocutoresController extends Controller
         public function get($id_tint){
   
           try {
-    
-            $data = TipoInterlocutores::find($id_tint);
+            //$data = TipoInterlocutores::find($id_tint);
+            
+            $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est 
+            FROM tipo_interlocutor as t0 INNER JOIN empresa as t1 INNER JOIN estados as t2 
+            WHERE t0.id_tint = $id_tint and t0.empresa_tint = t1.id_emp and t0.estado_tint = t2.id_est" );
     
             if ($data) {
               $response['data'] = $data;
@@ -74,11 +82,10 @@ class TipoInterlocutoresController extends Controller
         public function update(Request $request, $id_tint){
   
           try {
-          
-            $data['codigo_tint'] = $request['codigo_tint'];
             $data['nombre_tint'] = $request['nombre_tint'];
             $data['empresa_tint'] = $request['empresa_tint'];
-  
+            $data['estado_tint'] = $request['estado_tint'];
+
             //Console::info('mymessage');
   
             $res = TipoInterlocutores::where("id_tint",$id_tint)->update($data);

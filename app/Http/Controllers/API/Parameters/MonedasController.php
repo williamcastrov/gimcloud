@@ -14,8 +14,7 @@ class MonedasController extends Controller
     //
     public function create(Request $request){
         try { 
-          $insert['codigo_mon']  = $request['codigo_mon'];
-          $insert['nombre_mon']  = $request['nombre_mon'];
+          $insert['descripcion_mon']  = $request['descripcion_mon'];
           $insert['empresa_mon'] = $request['empresa_mon'];
           $insert['estado_mon']  = $request['estado_mon'];
               
@@ -26,7 +25,7 @@ class MonedasController extends Controller
       
         } catch (\Exception $e) {
             $response['message'] = $e->getMessage();
-            $response['success'] = true;
+            $response['success'] = false;
         }
         return $response;
       }
@@ -75,8 +74,7 @@ class MonedasController extends Controller
     
       public function update(Request $request, $id_mon){
         try {
-          $data['codigo_mon']  = $request['codigo_mon'];
-          $data['nombre_mon']  = $request['nombre_mon'];
+          $data['descripcion_mon']  = $request['descripcion_mon'];
           $data['empresa_mon'] = $request['empresa_mon'];
           $data['estado_mon']  = $request['estado_mon'];
     

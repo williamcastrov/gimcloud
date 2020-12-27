@@ -44,8 +44,7 @@ function Marcas() {
   const [listarEstados, setListarEstados] = useState([]);
   const [marcasSeleccionado, setMarcasSeleccionado] = useState({
     id_mar: "",
-    codigo_mar: "",
-    nombre_mar: "",
+    descripcion_mar: "",
     empresa_mar: "",
     estado_mar: ""
   })
@@ -108,13 +107,8 @@ function Marcas() {
     let errors = {};
     let formOk = true;
 
-    if (!marcasSeleccionado.codigo_mar) {
-      errors.codigo_mar = true;
-      formOk = false;
-    }
-
-    if (!marcasSeleccionado.nombre_mar) {
-      errors.nombre_mar = true;
+    if (!marcasSeleccionado.descripcion_mar) {
+      errors.descripcion_mar = true;
       formOk = false;
     }
 
@@ -138,8 +132,7 @@ function Marcas() {
         alert("Marca Creada de forma Correcta")
         console.log(res.message)
         abrirCerrarModalInsertar();
-        delete marcasSeleccionado.codigo_mar;
-        delete marcasSeleccionado.nombre_mar;
+        delete marcasSeleccionado.descripcion_mar;
         delete marcasSeleccionado.empresa_mar;
         delete marcasSeleccionado.estado_mar;
       } else
@@ -161,11 +154,6 @@ function Marcas() {
     setFormError({});
     let errors = {};
     let formOk = true;
-
-    if (!marcasSeleccionado.codigo_mar) {
-      errors.codigo_mar = true;
-      formOk = false;
-    }
 
     if (!marcasSeleccionado.nombre_mar) {
       errors.nombre_mar = true;
@@ -192,7 +180,6 @@ function Marcas() {
         alert("Marca actualizada de forma Correcta")
         console.log(res.message)
         abrirCerrarModalEditar();
-        delete marcasSeleccionado.codigo_mar;
         delete marcasSeleccionado.nombre_mar;
         delete marcasSeleccionado.empresa_mar;
         delete marcasSeleccionado.estado_mar;
@@ -230,16 +217,11 @@ function Marcas() {
   const columnas = [
     {
       title: 'Id',
-      field: 'id_mar',
-      type: 'numeric'
-    },
-    {
-      title: 'Código',
-      field: 'codigo_mar'
+      field: 'id_mar'
     },
     {
       title: 'Descripcion',
-      field: 'nombre_mar'
+      field: 'descripcion_mar'
     },
     {
       title: 'Código',
@@ -262,9 +244,7 @@ function Marcas() {
   const marcaInsertar=(
     <div className={styles.modal}>
       <h3>Agregar Nueva Marca</h3>
-      <TextField className={styles.inputMaterial} label="Código" name="codigo_mar" onChange={handleChange} />
-      <br />
-      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_mar" onChange={handleChange} />          
+      <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_mar" onChange={handleChange} />          
       <br />
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectEmpresa">Empresa</InputLabel>
@@ -314,9 +294,7 @@ function Marcas() {
   const marcaEditar = (
     <div className={styles.modal}>
       <h3 align="center" >Actualizar Marca del Equipo</h3>
-      <TextField className={styles.inputMaterial} label="Código" name="codigo_mar" onChange={handleChange} value={marcasSeleccionado&&marcasSeleccionado.codigo_mar}/>
-      <br />
-      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_mar" onChange={handleChange} value={marcasSeleccionado&&marcasSeleccionado.nombre_mar}/>
+      <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_mar" onChange={handleChange} value={marcasSeleccionado&&marcasSeleccionado.descripcion_mar}/>
       <br />
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectEmpresa">Empresa</InputLabel>
@@ -367,7 +345,7 @@ function Marcas() {
 
   const marcaEliminar = (
     <div className={styles.modal}>
-      <p>Estás seguro que deseas eliminar la Marca <b>{marcasSeleccionado && marcasSeleccionado.nombre_mar}</b>? </p>
+      <p>Estás seguro que deseas eliminar la Marca <b>{marcasSeleccionado && marcasSeleccionado.descripcion_mar}</b>? </p>
       <div align="right">
         <Button color="secondary" onClick = {() => borrarMarca() }> Confirmar </Button>
         <Button onClick={()=>abrirCerrarModalEliminar()}> Cancelar </Button>

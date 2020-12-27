@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Mantenimiento;
+namespace App\Models\DatosEquipos;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,10 +14,10 @@ class TiposEquipos extends Model
     protected $primaryKey = "id_tequ";
 
     protected $fillable = [
-        'codigo_tequ',
+        'descripcion_tequ',
+        'observacion_tequ',
         'empresa_tequ',
-        'nombre_tequ',  
-        'estado_tequ',
+        'estado_tequ'
     ];
 
     public $timestamps = false;

@@ -16,7 +16,7 @@ class CencostoController extends Controller
     public function create(Request $request){
         try { 
           $insert['codigo_cco']  = $request['codigo_cco'];
-          $insert['nombre_cco']  = $request['nombre_cco'];
+          $insert['descripcion_cco']  = $request['descripcion_cco'];
           $insert['area_cco']    = $request['area_cco'];
           $insert['empresa_cco'] = $request['empresa_cco'];
           $insert['estado_cco']  = $request['estado_cco'];
@@ -36,7 +36,7 @@ class CencostoController extends Controller
     public function listar_cencostos(){  
         try {
           
-          $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est, t3.nombre_are
+          $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est, t3.descripcion_are
           FROM centrodecosto as t0 INNER JOIN empresa as t1 INNER JOIN estados as t2 INNER JOIN areas as t3
           WHERE t0.empresa_cco = t1.id_emp and t0.estado_cco = t2.id_est and t0.area_cco = t3.id_are ");
   
@@ -54,7 +54,7 @@ class CencostoController extends Controller
     
     public function get($id_cco){
         try { 
-          $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est, t3.nombre_are
+          $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est, t3.descripcion_are
           FROM centrodecosto as t0 INNER JOIN empresa as t1 INNER JOIN estados as t2 INNER JOIN areas as t3
           WHERE t0.id_cco = $id_cco and t0.empresa_cco = t1.id_emp and t0.estado_cco = t2.id_est and t0.area_cco = t3.id_are");
       
@@ -78,7 +78,7 @@ class CencostoController extends Controller
     public function update(Request $request, $id_cco){
         try {
           $data['codigo_cco']   = $request['codigo_cco'];
-          $data['nombre_cco']   = $request['nombre_cco'];
+          $data['descripcion_cco']   = $request['descripcion_cco'];
           $data['area_cco']     = $request['area_cco'];
           $data['empresa_cco']  = $request['empresa_cco'];
           $data['estado_cco']   = $request['estado_cco'];

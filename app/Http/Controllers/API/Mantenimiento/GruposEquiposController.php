@@ -7,36 +7,36 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Parameters\Empresa;
 use App\Models\Parameters\Estados;
-use App\Models\Mantenimiento\TiposEquipos;
+use App\Models\Mantenimiento\GruposEquipos;
 
-class TiposEquiposController extends Controller
+class GruposEquiposController extends Controller
 {
     //
     public function create(Request $request){
         try { 
-          $insert['codigo_tequ']  = $request['codigo_tequ'];
-          $insert['nombre_tequ']  = $request['nombre_tequ'];
-          $insert['empresa_tequ'] = $request['empresa_tequ'];
-          $insert['estado_tequ']  = $request['estado_tequ'];
+          $insert['codigogrupo_grp']  = $request['codigogrupo_grp'];
+          $insert['descripcion_grp']  = $request['descripcion_grp'];
+          $insert['empresa_grp']      = $request['empresa_grp'];
+          $insert['estado_grp']       = $request['estado_grp'];
               
-          TiposEquipos::insert($insert);
+          GruposEquipos::insert($insert);
       
           $response['message'] = "Tipo de Equipo Grabado de forma correcta";
           $response['success'] = true;
       
         } catch (\Exception $e) {
             $response['message'] = $e->getMessage();
-            $response['success'] = true;
+            $response['success'] = false;
         }
         return $response;
     }
     
-    public function listar_tiposequipos(){  
+    public function listar_gruposequipos(){  
         try {
           
           $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est
-          FROM tiposequipos as t0 INNER JOIN empresa as t1 INNER JOIN estados as t2
-          WHERE t0.empresa_tequ = t1.id_emp and t0.estado_tequ = t2.id_est ");
+          FROM gruposequipos as t0 INNER JOIN empresa as t1 INNER JOIN estados as t2
+          WHERE t0.empresa_grp = t1.id_emp and t0.estado_grp = t2.id_est ");
   
           $response['data'] = $data;
           // $response['data'] = $data1;
@@ -53,8 +53,8 @@ class TiposEquiposController extends Controller
     public function get($id_tequ){
         try { 
           $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est
-          FROM tiposequipos as t0 INNER JOIN empresa as t1 INNER JOIN estados as t2
-          WHERE t0.id_tequ = $id_tequ and t0.empresa_tequ = t1.id_emp and t0.estado_tequ = t2.id_est");
+          FROM gruposequipos as t0 INNER JOIN empresa as t1 INNER JOIN estados as t2
+          WHERE t0.id_grp = $id_grp and t0.empresa_grp = t1.id_emp and t0.estado_grp = t2.id_est");
       
           if ($data) {
               $response['data'] = $data;
@@ -63,7 +63,7 @@ class TiposEquiposController extends Controller
           }
           else {
               $response['data'] = null;
-              $response['message'] = "Not found data id_tequ => $id_tequ";
+              $response['message'] = "Not found data id_tequ => $id_grp";
               $response['success'] = false;
           }
           } catch (\Exception $e) {
@@ -73,14 +73,14 @@ class TiposEquiposController extends Controller
           return $response;
     }
     
-    public function update(Request $request, $id_tequ){
+    public function update(Request $request, $id_grp){
         try {
-          $data['codigo_tequ']  = $request['codigo_tequ'];
-          $data['nombre_tequ']  = $request['nombre_tequ'];
-          $data['empresa_tequ'] = $request['empresa_tequ'];
-          $data['estado_tequ']  = $request['estado_tequ'];
+          $data['codigogrupo_grp']  = $request['codigogrupo_grp'];
+          $data['descripcion_grp']  = $request['descripcion_grp'];
+          $data['empresa_grp']      = $request['empresa_grp'];
+          $data['estado_grp']       = $request['estado_grp'];
     
-          $res = TiposEquipos::where("id_tequ",$id_tequ)->update($data);
+          $res = GruposEquipos::where("id_grp",$id_grp)->update($data);
     
           $response['res'] = $res;
           $response['message'] = "Updated successful";
@@ -92,9 +92,9 @@ class TiposEquiposController extends Controller
         return $response;
     }
     
-    public function delete($id_tequ){ 
+    public function delete($id_grp){ 
         try {
-          $res = TiposEquipos::where("id_tequ",$id_tequ)->delete($id_tequ);
+          $res = GruposEquipos::where("id_grp",$id_grp)->delete($id_grp);
           $response['res'] = $res;
     
           $response['message'] = "Deleted successful";
@@ -105,5 +105,4 @@ class TiposEquiposController extends Controller
         }
           return $response;
     }
-
 }
