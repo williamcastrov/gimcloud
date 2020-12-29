@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
-import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid } from "@material-ui/core";
+import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid, ButtonGroup } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
+import CachedIcon from '@material-ui/icons/Cached';
 
 // Componentes de Conexion con el Backend
 import garantiasServices from "../../../services/DatosEquipos/Garantias";
 import estadosServices from "../../../services/Parameters/Estados";
 import empresasServices from "../../../services/Empresa";
 import equiposServices from "../../../services/Mantenimiento/Equipos";
+import tipogarantiaServices from "../../../services/DatosEquipos/TipoGarantia";
+import clientesServices from "../../../services/Interlocutores/Clientes";
+import proveedoresServices from "../../../services/Interlocutores/Proveedores";
 
 //Estilos
 import "../../Mantenimiento/Equipos/Equipos.css";
@@ -37,13 +41,12 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl2: {
     margin: theme.spacing(0),
-    minWidth: 200,
+    minWidth: 617,
   }
 }));
 
 function Garantias(props) {
   const { equipoID, equipoCodigo } = props;
-  //console.log(equipoCodigo);
 
   const styles = useStyles();
   const [listGarantias, setListGarantias] = useState([]);
@@ -54,16 +57,23 @@ function Garantias(props) {
   const [listarEstados, setListarEstados] = useState([]);
   const [listarEmpresas, setListarEmpresas] = useState([]);
   const [listarEquipos, setListarEquipos] = useState([]);
-  let itemsToRender; 
+  const [listarTipoGarantia, setListarTipoGarantia] = useState([]);
+  const [listarClientes, setListarClientes] = useState([]);
+  const [listarProveedores, setListarProveedores] = useState([]);
+
+  let itemsToRender;
 
   const [garantiaSeleccionado, setGarantiaSeleccionado] = useState({
-    equipo_gar: "",
-    idgarantia_gar: "",
-    empresa_gar: "",
-    fechainicial_gar: "",
-    fechafinal_gar: "",
-    estado_gar: "",
-    observacion_gar: "",
+    'equipo_gar': equipoID,
+    'tipogarantia_gar':"",
+    'IDgarantia_gar':"",
+    'proveedor_gar':"",
+    'cliente_gar':"",
+    'empresa_gar':"",
+    'fechainicial_gar':"",
+    'fechafinal_gar':"",
+    'estado_gar':"",
+    'observacion_gar':""
   })
 
   useEffect(() => {
@@ -101,6 +111,33 @@ function Garantias(props) {
     fetchDataEquipos();
   }, [])
 
+  useEffect(() => {
+    async function fetchDataClientes() {
+      const res = await clientesServices.listClientes();
+      setListarClientes(res.data)
+      //console.log(res.data);
+    }
+    fetchDataClientes();
+  }, [])
+
+  useEffect(() => {
+    async function fetchDataProveedores() {
+      const res = await proveedoresServices.listProveedores();
+      setListarProveedores(res.data)
+      //console.log(res.data);
+    }
+    fetchDataProveedores();
+  }, [])
+
+  useEffect(() => {
+    async function fetchDataTipoGarantia() {
+      const res = await tipogarantiaServices.listTipogarantia();
+      setListarTipoGarantia(res.data)
+      //console.log(res.data);
+    }
+    fetchDataTipoGarantia();
+  }, [])
+
   const handleChange = e => {
     const { name, value } = e.target;
 
@@ -108,6 +145,15 @@ function Garantias(props) {
       ...prevState,
       [name]: value
     }));
+  }
+
+  const recargarDatosGarantia = () => {
+    async function fetchDataGarantias() {
+      const res = await garantiasServices.listUnaGarantia(equipoID);
+      setListGarantias(res.data);
+      console.log("Carga de Datos", res.data);
+    }
+    fetchDataGarantias();
   }
 
   const seleccionarGarantia = (garantia, caso) => {
@@ -138,8 +184,23 @@ function Garantias(props) {
       formOk = false;
     }
 
-    if (!garantiaSeleccionado.idgarantia_gar) {
-      errors.idgarantia_gar = true;
+    if (!garantiaSeleccionado.tipogarantia_gar) {
+      errors.tipogarantia_gar = true;
+      formOk = false;
+    }
+
+    if (!garantiaSeleccionado.IDgarantia_gar) {
+      errors.IDgarantia_gar = true;
+      formOk = false;
+    }
+
+    if (!garantiaSeleccionado.proveedor_gar) {
+      errors.proveedor_gar = true;
+      formOk = false;
+    }
+
+    if (!garantiaSeleccionado.cliente_gar) {
+      errors.cliente_gar = true;
       formOk = false;
     }
 
@@ -179,7 +240,10 @@ function Garantias(props) {
         //console.log(res.message)
         abrirCerrarModalInsertar();
         delete garantiaSeleccionado.equipo_gar;
-        delete garantiaSeleccionado.idgarantia_gar;
+        delete garantiaSeleccionado.tipogarantia_gar;
+        delete garantiaSeleccionado.IDgarantia_gar;
+        delete garantiaSeleccionado.proveedor_gar;
+        delete garantiaSeleccionado.cliente_gar;
         delete garantiaSeleccionado.empresa_gar;
         delete garantiaSeleccionado.fechainicial_gar;
         delete garantiaSeleccionado.fechafinal_gar;
@@ -193,7 +257,7 @@ function Garantias(props) {
     }
     else {
       alert("Debe Ingresar Todos los Datos, Error Creando la Garantia");
-      //console.log(garantiaSeleccionado);
+      console.log(garantiaSeleccionado);
       //console.log(res.message);
       abrirCerrarModalInsertar();
     }
@@ -210,8 +274,23 @@ function Garantias(props) {
       formOk = false;
     }
 
-    if (!garantiaSeleccionado.idgarantia_gar) {
-      errors.idgarantia_gar = true;
+    if (!garantiaSeleccionado.tipogarantia_gar) {
+      errors.tipogarantia_gar = true;
+      formOk = false;
+    }
+
+    if (!garantiaSeleccionado.IDgarantia_gar) {
+      errors.IDgarantia_gar = true;
+      formOk = false;
+    }
+
+    if (!garantiaSeleccionado.proveedor_gar) {
+      errors.proveedor_gar = true;
+      formOk = false;
+    }
+
+    if (!garantiaSeleccionado.cliente_gar) {
+      errors.cliente_gar = true;
       formOk = false;
     }
 
@@ -251,7 +330,10 @@ function Garantias(props) {
         //console.log(res.message)
         abrirCerrarModalEditar();
         delete garantiaSeleccionado.equipo_gar;
-        delete garantiaSeleccionado.idgarantia_gar;
+        delete garantiaSeleccionado.tipogarantia_gar;
+        delete garantiaSeleccionado.IDgarantia_gar;
+        delete garantiaSeleccionado.proveedor_gar;
+        delete garantiaSeleccionado.cliente_gar;
         delete garantiaSeleccionado.empresa_gar;
         delete garantiaSeleccionado.fechainicial_gar;
         delete garantiaSeleccionado.fechafinal_gar;
@@ -290,11 +372,22 @@ function Garantias(props) {
   const columnas = [
     {
       title: 'Codigo Equipo',
-      field: 'equipo_gar'
+      field: 'descripcion_equ',
+      cellStyle: { minWidth: 250 }
+    },
+    {
+      title: 'Tipo Garantía',
+      field: 'descripcion_tga',
+      cellStyle: { minWidth: 150 }
     },
     {
       title: 'IDGarantía',
-      field: 'idgarantia_gar'
+      field: 'IDgarantia_gar'
+    },
+    {
+      title: 'Cliente',
+      field: 'razonsocial_cli',
+      cellStyle: { minWidth: 100 }
     },
     {
       title: 'Descripción',
@@ -314,59 +407,67 @@ function Garantias(props) {
     {
       title: 'Descripción',
       field: 'nombre_est'
-    },
-    {
-      title: 'Observación',
-      field: 'observacion_gar',
-      cellStyle: { minWidth: 250 }
     }
   ]
 
   const garantiaInsertar = (
     <div className={styles.modal}>
       <br />
-      <h3>Agregar Garantia del Equipo</h3>
+      <h3 align="center" >Agregar Garantia del Equipo { }  {equipoCodigo} </h3>
       <Grid container spacing={2} >
-        <Grid item xs={12} md={4}>
-          <FormControl className={styles.formControl2}>
-            <InputLabel id="idselectIdEquipo">Id Garantía</InputLabel>
-            
-            <Select
-              labelId="selectIdIdEquipo"
-              name="id_gar"
-              id="idselectIdIdEquipo"
-              fullWidth
-              onChange={handleChange}
-            >
-              <MenuItem value={equipoID}>{equipoID}</MenuItem>  
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <FormControl className={styles.formControl2}>
-            <InputLabel id="idselectCodigoEquipo">Código del Equipo</InputLabel>
-          
-            <Select
-              labelId="selectCodigoEquipo"
-              name="equipo_gar"
-              id="idselectCodigoEquipo"
-              fullWidth
-              onChange={handleChange}
-            >
-              <MenuItem value={equipoCodigo}>{equipoCodigo}</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <TextField className={styles.inputMaterial} label="ID Garantía" name="idgarantia_gar" fullWidth onChange={handleChange} />
+        <Grid item xs={12} md={6}> <TextField name="equipo_gar" label="ID Equipo" defaultValue={equipoID} disabled="true"
+          fullWidth onChange={handleChange} />
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl}>
-            <InputLabel id="idselectEmpresa">Empresa</InputLabel>
+            <InputLabel id="idselectTipogarantia">Tipo Garantía</InputLabel>
             <Select
-              labelId="selectEmpresa"
+              labelId="selecttipogarantia_gar"
+              name="tipogarantia_gar"
+              id="idselecttipogarantia_gar"
+              onChange={handleChange}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarTipoGarantia.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_tga}>{itemselect.descripcion_tga}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <TextField className={styles.inputMaterial} label="ID Garantía" name="IDgarantia_gar" fullWidth onChange={handleChange} />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectproveedor_gar">Proveedor</InputLabel>
+            <Select
+              labelId="selectproveedor_gar"
+              name="proveedor_gar"
+              id="idselectproveedor_gar"
+              onChange={handleChange}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarProveedores.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_int}>{itemselect.razonsocial_int}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectempresa_gar">Empresa</InputLabel>
+            <Select
+              labelId="selectempresa_gar"
               name="empresa_gar"
-              id="idselectEmpresa"
+              id="idselectempresa_gar"
               onChange={handleChange}
             >
               <MenuItem value=""> <em>None</em> </MenuItem>
@@ -400,11 +501,31 @@ function Garantias(props) {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <TextField type="date" className={styles.inputMaterial} label="Fecha Inicial" name="fechainicial_gar" fullWidth onChange={handleChange} />
+        <Grid item xs={12} md={6}> <TextField type="date" InputLabelProps={{ shrink: true}} name="fechainicial_gar"
+              label="Fecha Inicia la Garantía" fullWidth onChange={handleChange} /> 
+        </Grid>
+        <Grid item xs={12} md={6}> <TextField type="date" InputLabelProps={{ shrink: true}} name="fechafinal_gar" 
+              label="Fecha Fin de la Garantía" fullWidth onChange={handleChange} /> 
         </Grid>
         <Grid item xs={12} md={6}>
-          <TextField type="date" className={styles.inputMaterial} label="Fecha Final" name="fechafinal_gar" fullWidth onChange={handleChange} />
+          <FormControl className={styles.formControl2}>
+            <InputLabel id="idselectcliente_gar">Clientes</InputLabel>
+            <Select
+              labelId="selectcliente_gar"
+              name="cliente_gar"
+              id="idselectcliente_gar"
+              onChange={handleChange}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarClientes.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_cli}>{itemselect.razonsocial_cli}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
         </Grid>
         <Grid item xs={12} md={12}>
           <TextField className={styles.inputMaterial} label="Observación" name="observacion_gar" fullWidth onChange={handleChange} />
@@ -417,31 +538,67 @@ function Garantias(props) {
       </div>
     </div>
   )
-
+  
   const garantiaEditar = (
     <div className={styles.modal}>
       <h3>Actualizar Garantia del Equipo</h3>
       <Grid container spacing={2} >
-        <Grid item xs={12} md={4}>
-          <TextField className={styles.inputMaterial} label="Id Equipo" name="id_gar" disabled="true"
-            fullWidth onChange={handleChange} value={garantiaSeleccionado && garantiaSeleccionado.id_gar} />
+        <Grid item xs={12} md={6}> <TextField name="equipo_gar" label="ID Equipo" defaultValue={equipoID} disabled="true"
+          fullWidth onChange={handleChange} value={garantiaSeleccionado && garantiaSeleccionado.equipo_gar} />
         </Grid>
-        <Grid item xs={12} md={4}>
-          <TextField className={styles.inputMaterial} label="Código del Equipo" name="equipo_gar" disabled="true"
-            fullWidth onChange={handleChange} value={garantiaSeleccionado && garantiaSeleccionado.equipo_gar} />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <TextField className={styles.inputMaterial} label="ID Garantía" name="idgarantia_gar"
-            fullWidth onChange={handleChange} value={garantiaSeleccionado && garantiaSeleccionado.idgarantia_gar} />
-        </Grid>
-
         <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl}>
-            <InputLabel id="idselectEmpresa">Empresa</InputLabel>
+            <InputLabel id="idselectTipogarantia">Tipo Garantía</InputLabel>
             <Select
-              labelId="selectEmpresa"
+              labelId="selecttipogarantia_gar"
+              name="tipogarantia_gar"
+              id="idselecttipogarantia_gar"
+              onChange={handleChange}
+              value={garantiaSeleccionado && garantiaSeleccionado.tipogarantia_gar}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarTipoGarantia.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_tga}>{itemselect.descripcion_tga}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <TextField className={styles.inputMaterial} label="ID Garantía" name="IDgarantia_gar" fullWidth onChange={handleChange}
+          value={garantiaSeleccionado && garantiaSeleccionado.IDgarantia_gar} />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectproveedor_gar">Proveedor</InputLabel>
+            <Select
+              labelId="selectproveedor_gar"
+              name="proveedor_gar"
+              id="idselectproveedor_gar"
+              onChange={handleChange}
+              value={garantiaSeleccionado && garantiaSeleccionado.proveedor_gar}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarProveedores.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_int}>{itemselect.razonsocial_int}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectempresa_gar">Empresa</InputLabel>
+            <Select
+              labelId="selectempresa_gar"
               name="empresa_gar"
-              id="idselectEmpresa"
+              id="idselectempresa_gar"
               onChange={handleChange}
               value={garantiaSeleccionado && garantiaSeleccionado.empresa_gar}
             >
@@ -464,7 +621,7 @@ function Garantias(props) {
               name="estado_gar"
               id="idselectEstado"
               onChange={handleChange}
-              value={garantiaSeleccionado && garantiaSeleccionado.empresa_gar}
+              value={garantiaSeleccionado && garantiaSeleccionado.estado_gar}
             >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
@@ -477,17 +634,38 @@ function Garantias(props) {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <TextField className={styles.inputMaterial} label="Fecha Inicial" name="fechainicial_gar"
-            fullWidth onChange={handleChange} value={garantiaSeleccionado && garantiaSeleccionado.fechainicial_gar} />
+        <Grid item xs={12} md={6}> <TextField type="date"  label="Fecha Inicia la Garantía" fullWidth onChange={handleChange}
+              InputLabelProps={{ shrink: true}} name="fechainicial_gar"
+              value={garantiaSeleccionado && garantiaSeleccionado.fechainicial_gar} /> 
+        </Grid>
+        <Grid item xs={12} md={6}> <TextField type="date" InputLabelProps={{ shrink: true}} name="fechafinal_gar" 
+              label="Fecha Fin de la Garantía" fullWidth onChange={handleChange}
+              value={garantiaSeleccionado && garantiaSeleccionado.fechafinal_gar} /> 
         </Grid>
         <Grid item xs={12} md={6}>
-          <TextField className={styles.inputMaterial} label="Fecha Final" name="fechafinal_gar"
-            fullWidth onChange={handleChange} value={garantiaSeleccionado && garantiaSeleccionado.fechafinal_gar} />
+          <FormControl className={styles.formControl2}>
+            <InputLabel id="idselectcliente_gar">Clientes</InputLabel>
+            <Select
+              labelId="selectcliente_gar"
+              name="cliente_gar"
+              id="idselectcliente_gar"
+              onChange={handleChange}
+              value={garantiaSeleccionado && garantiaSeleccionado.cliente_gar}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarClientes.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_cli}>{itemselect.razonsocial_cli}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
         </Grid>
         <Grid item xs={12} md={12}>
           <TextField className={styles.inputMaterial} label="Observación" name="observacion_gar"
-            fullWidth onChange={handleChange} value={garantiaSeleccionado && garantiaSeleccionado.observacion_gar} />
+                     fullWidth onChange={handleChange}  value={garantiaSeleccionado && garantiaSeleccionado.observacion_gar} />
         </Grid>
       </Grid>
       <br /><br />
@@ -511,10 +689,13 @@ function Garantias(props) {
   )
 
   return (
-    <div className="App">
+    <div className="App" >
       <br />
-      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Insertar</Button>
-
+        <ButtonGroup  >
+          <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Insertar</Button>
+          <Button variant="contained" startIcon={<CachedIcon />} color="primary" onClick={() => recargarDatosGarantia()} >Recargar Datos</Button>
+        </ButtonGroup>
+  
       <div className="datosequipos">
         <MaterialTable
           columns={columnas}
@@ -540,12 +721,26 @@ function Garantias(props) {
               actions: "Acciones"
             }
           }}
-
-        />{ }
-
+          detailPanel={[
+            {
+              tooltip: 'Estados del Equipo',
+              render: rowData => {
+                return (
+                  <div
+                    style={{
+                      fontSize: 14,
+                      color: 'white',
+                      backgroundColor: '#0277bd',
+                    }}
+                  >
+                    <Button variant="contained">Observación : {rowData.observacion_gar}</Button> { }
+                  </div>
+                )
+              },
+            },  
+          ]}
+        />
       </div>
-
-
       <Modal
         open={modalInsertar}
         onClose={abrirCerrarModalInsertar}

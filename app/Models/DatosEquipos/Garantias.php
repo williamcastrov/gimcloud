@@ -14,8 +14,11 @@ class Garantias extends Model
     protected $primaryKey = "id_gar";
 
     protected $fillable = [
-        "equipo_gar",
-        'idgarantia_gar',
+        'equipo_gar',
+        'tipogarantia_gar',
+        'IDgarantia_gar',
+        'proveedor_gar',
+        'cliente_gar',
         'empresa_gar',
         'fechainicial_gar',
         'fechafinal_gar',

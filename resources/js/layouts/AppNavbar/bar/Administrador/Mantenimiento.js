@@ -6,14 +6,12 @@ import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak';
 import BuildIcon from '@material-ui/icons/Build';
 import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
-import ClassIcon from '@material-ui/icons/Class';
 import CategoryIcon from '@material-ui/icons/Category';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import Divider from '@material-ui/core/Divider';
 import SyncIcon from '@material-ui/icons/Sync';
 import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 import PermDataSettingIcon from '@material-ui/icons/PermDataSetting';
-import SettingsIcon from '@material-ui/icons/Settings';
 import ReceiptIcon from '@material-ui/icons/Receipt';
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 import DonutSmallIcon from '@material-ui/icons/DonutSmall';
@@ -99,6 +97,12 @@ function Mantenimiento() {
                   <SyncIcon />
                 </ListItemIcon>
                 <ListItemText primary="Frecuencia" />
+              </ListItem>
+              <ListItem component={Link} button to="/mantenimiento/tipogarantia" className={classes.nested}>
+                <ListItemIcon>
+                  <SettingsApplicationsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Tipos de Garantias" />
               </ListItem>
               <ListItem component={Link} button to="/mantenimiento/tiposmtto" className={classes.nested}>
                 <ListItemIcon>

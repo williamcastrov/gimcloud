@@ -178,6 +178,12 @@ Route::get('/datosequipos/get/{id}', 'App\Http\Controllers\API\DatosEquipos\Dato
 Route::delete('/datosequipos/delete/{id}', 'App\Http\Controllers\API\DatosEquipos\DatosEquiposController@delete');
 Route::put('/datosequipos/update/{id}', 'App\Http\Controllers\API\DatosEquipos\DatosEquiposController@update');
 
+Route::get('/tipogarantia/listar_tipogarantia', 'App\Http\Controllers\API\DatosEquipos\TipoGarantiaController@listar_tipogarantia');
+Route::post('/tipogarantia/create', 'App\Http\Controllers\API\DatosEquipos\TipoGarantiaController@create');
+Route::get('/tipogarantia/get/{id}', 'App\Http\Controllers\API\DatosEquipos\TipoGarantiaController@get');
+Route::delete('/tipogarantia/delete/{id}', 'App\Http\Controllers\API\DatosEquipos\TipoGarantiaController@delete');
+Route::put('/tipogarantia/update/{id}', 'App\Http\Controllers\API\DatosEquipos\TipoGarantiaController@update');
+
 Route::get('/garantias/listar_garantias', 'App\Http\Controllers\API\DatosEquipos\GarantiasController@listar_garantias');
 Route::post('/garantias/create', 'App\Http\Controllers\API\DatosEquipos\GarantiasController@create');
 Route::get('/garantias/get/{id}', 'App\Http\Controllers\API\DatosEquipos\GarantiasController@get');
@@ -207,6 +213,12 @@ Route::post('/tiposequipos/create', 'App\Http\Controllers\API\DatosEquipos\Tipos
 Route::get('/tiposequipos/get/{id}', 'App\Http\Controllers\API\DatosEquipos\TiposEquiposController@get');
 Route::delete('/tiposequipos/delete/{id}', 'App\Http\Controllers\API\DatosEquipos\TiposEquiposController@delete');
 Route::put('/tiposequipos/update/{id}', 'App\Http\Controllers\API\DatosEquipos\TiposEquiposController@update');
+
+Route::get('/ubicaciones/listar_ubicaciones', 'App\Http\Controllers\API\DatosEquipos\UbicacionesController@listar_ubicaciones');
+Route::post('/ubicaciones/create', 'App\Http\Controllers\API\DatosEquipos\UbicacionesController@create');
+Route::get('/ubicaciones/get/{id}', 'App\Http\Controllers\API\DatosEquipos\UbicacionesController@get');
+Route::delete('/ubicaciones/delete/{id}', 'App\Http\Controllers\API\DatosEquipos\UbicacionesController@delete');
+Route::put('/ubicaciones/update/{id}', 'App\Http\Controllers\API\DatosEquipos\UbicacionesController@update');
 
 // Rutas Administración Activos
 Route::get('/areas/listar_areas', 'App\Http\Controllers\API\Activos\AreasController@listar_areas');

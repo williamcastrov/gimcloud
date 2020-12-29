@@ -54,13 +54,14 @@ Route::get('/mantenimiento/clasificacionABC', 'App\Http\Controllers\GimControlle
 Route::get('/mantenimiento/referencias', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/equipos', 'App\Http\Controllers\GimController@index');
 
-
 // Rutas de Datos Adicionales de los Equipos
+Route::get('/mantenimiento/tipogarantia', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/garantias', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/contratos', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/fichatecnica', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/tiposllantas', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/tiposequipos', 'App\Http\Controllers\GimController@index');
+Route::get('/mantenimiento/ubicaciones', 'App\Http\Controllers\GimController@index');
 
 // Rutas del Modulo de Activos
 Route::get('/activos/areas', 'App\Http\Controllers\GimController@index');

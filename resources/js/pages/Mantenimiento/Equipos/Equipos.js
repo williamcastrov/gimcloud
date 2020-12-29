@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import MaterialTable from "material-table";
-import { Modal, Button, TextField, Select, MenuItem, FormControl, InputLabel, Grid, Typography } from "@material-ui/core";
+import { Modal, Button, TextField, Select, MenuItem, FormControl, InputLabel, Grid, InputAdornment  } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
-import NavigationIcon from '@material-ui/icons/Navigation';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import NumberFormat from 'react-number-format';
 
 // Componentes de Conexion con el Backend
 import empresasServices from "../../../services/Empresa";
@@ -61,6 +62,20 @@ const useStyles = makeStyles((theme) => ({
     position: 'fixed',
   },
 }));
+
+function NumberFormatCustom(props) {
+  const { inputRef, ...other } = props;
+  //console.log(inputRef);
+  return (
+    <NumberFormat
+      {...other}
+      getInputRef={inputRef}
+      thousandSeparator={','}
+      decimalSeparator={'.'}
+
+    />
+  );
+}
 
 function Equipos() {
   const styles = useStyles();
@@ -498,7 +513,7 @@ function Equipos() {
     },
     {
       field: 'valoradquisicion_equ',
-      title: 'Valor de Compra'
+      title: 'Valor de Compra',
     }
   ]
 
@@ -621,7 +636,15 @@ function Equipos() {
           </FormControl>
         </Grid>
         <Grid item xs={12} md={6}> 
-          <TextField name="valoradquisicion_equ" label="Valor de compra" fullWidth onChange={handleChange} />
+          <TextField type="number" name="valoradquisicion_equ" label="Valor de compra" InputLabelProps={{ shrink: true }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                < AttachMoneyIcon />
+              </InputAdornment>
+            ),
+          }}
+          fullWidth onChange={handleChange} />
         </Grid>
         <Grid item xs={12} md={4}>
           <FormControl className={styles.formControlEstados}>
@@ -821,8 +844,17 @@ function Equipos() {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}> <TextField name="valoradquisicion_equ" label="Valor de compra"
-          fullWidth onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.valoradquisicion_equ} />
+        <Grid item xs={12} md={6}> 
+          <TextField type="number" name="valoradquisicion_equ" label="Valor de compra" InputLabelProps={{ shrink: true }} 
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                < AttachMoneyIcon />
+              </InputAdornment>
+            ),
+          }}
+          fullWidth onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.valoradquisicion_equ} 
+          />
         </Grid>
         <Grid item xs={12} md={4}>
           <FormControl className={styles.formControlEstados}>

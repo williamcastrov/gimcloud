@@ -16,6 +16,7 @@ import Garantias from "../Garantias";
 import DatosEquipos from "../DatosEquipos";
 import Contratos from "../Contratos";
 import FichaTecnica from "../FichaTecnica";
+import Ubicaciones from "../Ubicaciones";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -64,15 +65,9 @@ export default function MenuEquipos(props) {
   const [modalGarantias, setModalGarantias] = useState(false);
   const [modalContratos, setModalContratos] = useState(false);
   const [modalFichaTecnica, setModalFichaTecnica] = useState(false);
+  const [modalUbicaciones, setModalUbicaciones] = useState(false);
+  const [modalHojaVida, setModalHojaVida] = useState(false);
  
-  const abrirCerrarModalInsertar = () => {
-    setModalInsertar(!modalInsertar);
-  }
-
-  const abrirCerrarModalEditar = () => {
-    setModalEditar(!modalEditar);
-  }
-
   const abrirCerrarModalDatosEquipos = () => {
     setModalDatosEquipos(!modalDatosEquipos);
   }
@@ -113,6 +108,24 @@ export default function MenuEquipos(props) {
     </div>
   )
 
+  const abrirCerrarModalUbicaciones = () => {
+    setModalUbicaciones(!modalUbicaciones);
+  }
+
+  const ubicaciones = (
+    <div> 
+      <Ubicaciones equipoID={equipoID} equipoCodigo={equipoCodigo} />
+    </div>
+  )
+
+  const abrirCerrarModalHojaVida = () => {
+    setModalHojaVida(!modalHojaVida);
+  }
+
+  const hojavida = (
+    <Ubicaciones equipoID={equipoID} equipoCodigo={equipoCodigo} />
+  )
+
   return (
     <div>
       <Modal
@@ -143,18 +156,32 @@ export default function MenuEquipos(props) {
         {fichatecnica}
       </Modal>
 
+      <Modal
+        open={modalUbicaciones}
+        onClose={abrirCerrarModalUbicaciones}
+      >
+        {ubicaciones}
+      </Modal>
+
+      <Modal
+        open={modalHojaVida}
+        onClose={abrirCerrarModalHojaVida}
+      >
+        {hojavida}
+      </Modal>
+
       <Container className={styles.floatingbutton} >
         <Button
           tooltip="Hoja de Vida"
           rotate={true}
           styles={{ backgroundColor: darkColors.grey, color: lightColors.white }}
-          onClick={() => alert('Datos Hoja de Vida del Equipo!')} ><RecentActorsIcon />
+          onClick={() => setModalHojaVida(true)} ><RecentActorsIcon />
         </Button>
         <Button
           tooltip="Ubicación"
           rotate={true}
           styles={{ backgroundColor: darkColors.purple, color: lightColors.white }}
-          onClick={() => alert('Aqui van los datos de Ubicación!')} ><RoomIcon />
+          onClick={() => setModalUbicaciones(true)} ><RoomIcon />
         </Button>
         <Button
           tooltip="Garantias"

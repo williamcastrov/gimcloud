@@ -20,7 +20,6 @@ datosequipos.listDatosEquipos = async () => {
 }
 
 datosequipos.listUnDatoEquipo = async (equipoID) => {
-    console.log("Cual es el Equipo", equipoID);
     const urlList = baseUrl+"/get/"+equipoID
     const res = await axios.get(urlList)
     .then(response=>{ return response.data; })

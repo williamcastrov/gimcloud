@@ -39,11 +39,13 @@ import EstadosClientes from './pages/Mantenimiento/EstadosClientes';
 import EstadosMtto from './pages/Mantenimiento/EstadosMtto';
 
 // Componentes Modulo Datos Adicionales Equipos
+import TipoGarantia from './pages/DatosEquipos/TipoGarantia';
 import Garantias from './pages/DatosEquipos/Garantias';
 import Contratos from './pages/DatosEquipos/Contratos';
 import FichaTecnica from './pages/DatosEquipos/FichaTecnica';
 import TiposLlantas from './pages/DatosEquipos/TiposLlantas';
 import TiposEquipos from './pages/DatosEquipos/TiposEquipos';
+import Ubicaciones from './pages/DatosEquipos/Ubicaciones';
 
 //Componentes Modulo Interlocutores
 import TipoInterlocutores from './pages/Interlocutores/Parameters/TipoInterlocutores';
@@ -91,6 +93,7 @@ function Main() {
               :
               <Route path="/login" component={Login} />
               }
+              
               <Route path="/auth/registrarusuario" component={RegistrarUsuario} />
               <Route path="/login" component={Login} />
 
@@ -121,9 +124,11 @@ function Main() {
               <Route path="/mantenimiento/referencias" component={Referencias} />
               <Route path="/mantenimiento/frecuencias" component={Frecuencias} />
               <Route path="/mantenimiento/equipos" component={Equipos} />
+              <Route path="/mantenimiento/tipogarantia" component={TipoGarantia} />
               <Route path="/mantenimiento/garantias" component={Garantias} />
               <Route path="/mantenimiento/contratos" component={Contratos} />
               <Route path="/mantenimiento/fichatecnica" component={FichaTecnica} />
+              <Route path="/mantenimiento/ubicaciones" component={Ubicaciones} />
 
               <Route path="/activos/areas" component={Areas} />
               <Route path="/activos/cencostos" component={Cencostos} />

@@ -15,9 +15,11 @@ class GarantiasController extends Controller
     //
     public function create(Request $request){
         try { 
-          $insert['id_gar']           = $request['id_gar'];
           $insert['equipo_gar']       = $request['equipo_gar'];
-          $insert['idgarantia_gar']   = $request['idgarantia_gar'];
+          $insert['tipogarantia_gar'] = $request['tipogarantia_gar'];
+          $insert['IDgarantia_gar']   = $request['IDgarantia_gar'];
+          $insert['proveedor_gar']    = $request['proveedor_gar'];
+          $insert['cliente_gar']      = $request['cliente_gar']; 
           $insert['empresa_gar']      = $request['empresa_gar'];
           $insert['fechainicial_gar'] = $request['fechainicial_gar'];
           $insert['fechafinal_gar']   = $request['fechafinal_gar'];
@@ -39,9 +41,12 @@ class GarantiasController extends Controller
     public function listar_garantias(){  
         try {
           
-          $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est, t3.nombre_equ
-          FROM garantias as t0 INNER JOIN empresa as t1 INNER JOIN estados as t2 INNER JOIN equipos as t3
-          WHERE t0.empresa_gar = t1.id_emp and t0.estado_gar = t2.id_est and t0.id_gar = t3.id_equ");
+          $data = DB::select("SELECT t0.*, t1.nombre_emp,  t2.nombre_est, t3.descripcion_equ, t4.descripcion_tga,
+                                           t5.razonsocial_cli
+          FROM garantias as t0 INNER JOIN empresa      as t1 INNER JOIN estados as t2 INNER JOIN equipos as t3
+                               INNER JOIN tipogarantia as t4 INNER JOIN interlocutores_cli as t5
+          WHERE t0.empresa_gar      = t1.id_emp and t0.estado_gar  = t2.id_est and t0.equipo_gar = t3.id_equ 
+            and t0.tipogarantia_gar = t4.id_tga and t0.cliente_gar = t5.id_cli");
   
           $response['data'] = $data;
           // $response['data'] = $data1;
@@ -55,12 +60,15 @@ class GarantiasController extends Controller
           return $response;
     }
     
-    public function get($id_gar){
+    public function get($equipo_gar){
         try { 
-          $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est, t3.nombre_equ
-          FROM garantias as t0 INNER JOIN empresa as t1 INNER JOIN estados as t2 INNER JOIN equipos as t3
-          WHERE t0.id_gar = $id_gar and t0.empresa_gar = t1.id_emp and t0.estado_gar = t2.id_est and t0.id_gar = t3.id_equ");
-          
+          $data = DB::select("SELECT t0.*, t1.nombre_emp,  t2.nombre_est, t3.descripcion_equ, t4.descripcion_tga,
+                                     t5.razonsocial_cli
+          FROM garantias as t0 INNER JOIN empresa      as t1 INNER JOIN estados            as t2 INNER JOIN equipos as t3 
+                               INNER JOIN tipogarantia as t4 INNER JOIN interlocutores_cli as t5
+          WHERE t0.equipo_gar = $equipo_gar and t0.empresa_gar      = t1.id_emp and t0.estado_gar  = t2.id_est 
+            and t0.equipo_gar = t3.id_equ   and t0.tipogarantia_gar = t4.id_tga and t0.cliente_gar = t5.id_cli");
+
           if ($data) {
               $response['data'] = $data;
               $response['message'] = "Load successful";
@@ -68,7 +76,7 @@ class GarantiasController extends Controller
           }
           else {
               $response['data'] = null;
-              $response['message'] = "Not found data equipo_gar => $id_gar";
+              $response['message'] = "Not found data equipo_gar => $equipo_gar";
               $response['success'] = false;
           }
           } catch (\Exception $e) {
@@ -80,16 +88,18 @@ class GarantiasController extends Controller
     
     public function update(Request $request, $id_gar){
         try {
-            $data['id_gar']             = $request['id_gar'];
-            $data['equipo_gar']         = $request['equipo_gar'];
-            $data['idgarantia_gar']     = $request['idgarantia_gar'];
-            $data['empresa_gar']        = $request['empresa_gar'];
-            $data['fechainicial_gar']   = $request['fechainicial_gar'];
-            $data['fechafinal_gar']     = $request['fechafinal_gar'];
-            $data['estado_gar']         = $request['estado_gar'];
-            $data['observacion_gar']    = $request['observacion_gar'];
+            $data['equipo_gar']       = $request['equipo_gar'];
+            $data['tipogarantia_gar'] = $request['tipogarantia_gar'];
+            $data['IDgarantia_gar']   = $request['IDgarantia_gar'];
+            $data['proveedor_gar']    = $request['proveedor_gar'];
+            $data['cliente_gar']      = $request['cliente_gar']; 
+            $data['empresa_gar']      = $request['empresa_gar'];
+            $data['fechainicial_gar'] = $request['fechainicial_gar'];
+            $data['fechafinal_gar']   = $request['fechafinal_gar'];
+            $data['estado_gar']       = $request['estado_gar'];
+            $data['observacion_gar']  = $request['observacion_gar'];
     
-            $res = Garantias::where("id_gar",$id_gar)->update($data);
+            $res = Garantias::where("id_gar",$id_gar )->update($data);
     
             $response['res'] = $res;
             $response['message'] = "Updated successful";

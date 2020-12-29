@@ -530,7 +530,8 @@ function Contratos(props) {
 
         <Grid item xs={12} md={6}>
           <TextField type="number" name="valorcontrato_ctr" label="Valor del Contrato" InputLabelProps={{ shrink: true }}
-            id="valorcontrato_ctr" InputProps={{
+            id="valorcontrato_ctr" 
+            InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
                   < AttachMoneyIcon />
