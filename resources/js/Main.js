@@ -38,6 +38,9 @@ import ClasificacionABC from './pages/Mantenimiento/ClasificacionABC';
 import EstadosClientes from './pages/Mantenimiento/EstadosClientes';
 import EstadosMtto from './pages/Mantenimiento/EstadosMtto';
 
+// Componentes Modulo Gestión Ordenes de Trabajo
+import Ordenes from './pages/GestionOrdenes/Ordenes';
+
 // Componentes Modulo Datos Adicionales Equipos
 import TipoGarantia from './pages/DatosEquipos/TipoGarantia';
 import Garantias from './pages/DatosEquipos/Garantias';
@@ -93,7 +96,7 @@ function Main() {
               :
               <Route path="/login" component={Login} />
               }
-              
+
               <Route path="/auth/registrarusuario" component={RegistrarUsuario} />
               <Route path="/login" component={Login} />
 
@@ -129,6 +132,8 @@ function Main() {
               <Route path="/mantenimiento/contratos" component={Contratos} />
               <Route path="/mantenimiento/fichatecnica" component={FichaTecnica} />
               <Route path="/mantenimiento/ubicaciones" component={Ubicaciones} />
+
+              <Route path="/gestionordenes/ordenes" component={Ordenes} />
 
               <Route path="/activos/areas" component={Areas} />
               <Route path="/activos/cencostos" component={Cencostos} />

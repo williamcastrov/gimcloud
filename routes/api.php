@@ -170,7 +170,6 @@ Route::get('/equipos/get/{id}', 'App\Http\Controllers\API\Mantenimiento\EquiposC
 Route::delete('/equipos/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\EquiposController@delete');
 Route::put('/equipos/update/{id}', 'App\Http\Controllers\API\Mantenimiento\EquiposController@update');
 
-
 // Rutas Gestión Datos Adicionales de los Equipos
 Route::get('/datosequipos/listar_datosequipos', 'App\Http\Controllers\API\DatosEquipos\DatosEquiposController@listar_datosequipos');
 Route::post('/datosequipos/create', 'App\Http\Controllers\API\DatosEquipos\DatosEquiposController@create');
@@ -219,6 +218,19 @@ Route::post('/ubicaciones/create', 'App\Http\Controllers\API\DatosEquipos\Ubicac
 Route::get('/ubicaciones/get/{id}', 'App\Http\Controllers\API\DatosEquipos\UbicacionesController@get');
 Route::delete('/ubicaciones/delete/{id}', 'App\Http\Controllers\API\DatosEquipos\UbicacionesController@delete');
 Route::put('/ubicaciones/update/{id}', 'App\Http\Controllers\API\DatosEquipos\UbicacionesController@update');
+
+// Rutas Gestión Ordenes de Servicio
+Route::get('/conceptooserv/listar_conceptooserv', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@listar_conceptooserv');
+Route::post('/conceptooserv/create', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@create');
+Route::get('/conceptooserv/get/{id}', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@get');
+Route::delete('/conceptooserv/delete/{id}', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@delete');
+Route::put('/conceptooserv/update/{id}', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@update');
+
+Route::get('/ordenesserv/listar_ordenesserv', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@listar_ordenesserv');
+Route::post('/ordenesserv/create', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@create');
+Route::get('/ordenesserv/get/{id}', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@get');
+Route::delete('/ordenesserv/delete/{id}', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@delete');
+Route::put('/ordenesserv/update/{id}', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@update');
 
 // Rutas Administración Activos
 Route::get('/areas/listar_areas', 'App\Http\Controllers\API\Activos\AreasController@listar_areas');

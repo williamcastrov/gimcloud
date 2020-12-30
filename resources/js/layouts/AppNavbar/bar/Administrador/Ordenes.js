@@ -27,11 +27,11 @@ const useStyles = makeStyles((theme) => ({
 
 function Ordenes() {
   const classes = useStyles();
-  const [open,    setOpen]    = React.useState(false);
-  const [openPO,  setOpenPO]  = React.useState(false);
-  const [openGO,  setOpenGO]  = React.useState(false);
-  const [openIN,  setOpenIN]  = React.useState(false);
-  const [openRP,  setOpenRP]  = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [openPO, setOpenPO] = React.useState(false);
+  const [openGO, setOpenGO] = React.useState(false);
+  const [openIN, setOpenIN] = React.useState(false);
+  const [openRP, setOpenRP] = React.useState(false);
 
   const handleClick = () => {
     setOpen(!open);
@@ -60,7 +60,7 @@ function Ordenes() {
         <ListItemIcon>
           <BorderColorIcon />
         </ListItemIcon>
-        <ListItemText primary="Ordenes de Servicio" />
+        <ListItemText primary="Ordenes de Trabajo" />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
 
@@ -102,9 +102,9 @@ function Ordenes() {
 
           <Collapse in={openGO} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-            <ListItem button className={classes.nested}>
+              <ListItem component={Link} button to="/gestionordenes/ordenes" className={classes.nested}>
                 <ListItemIcon>
-                  <LocalShippingIcon  />
+                  <LocalShippingIcon />
                 </ListItemIcon>
                 <ListItemText primary="Crear/Listar/Modificar" />
               </ListItem>
@@ -141,19 +141,19 @@ function Ordenes() {
             <List component="div" disablePadding>
               <ListItem button className={classes.nested}>
                 <ListItemIcon>
-                  <LocalShippingIcon  />
+                  <LocalShippingIcon />
                 </ListItemIcon>
                 <ListItemText primary="Generadas" />
               </ListItem>
               <ListItem button className={classes.nested}>
                 <ListItemIcon>
-                  <LocalShippingIcon  />
+                  <LocalShippingIcon />
                 </ListItemIcon>
                 <ListItemText primary="Cerradas" />
               </ListItem>
               <ListItem button className={classes.nested}>
                 <ListItemIcon>
-                  <LocalShippingIcon  />
+                  <LocalShippingIcon />
                 </ListItemIcon>
                 <ListItemText primary="Pendientes" />
               </ListItem>
@@ -165,7 +165,7 @@ function Ordenes() {
               </ListItem>
               <ListItem button className={classes.nested}>
                 <ListItemIcon>
-                  <LocalShippingIcon  />
+                  <LocalShippingIcon />
                 </ListItemIcon>
                 <ListItemText primary="Ingresos" />
               </ListItem>
@@ -183,9 +183,9 @@ function Ordenes() {
           </ListItem>
           <Collapse in={openRP} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-            <ListItem button className={classes.nested}>
+              <ListItem button className={classes.nested}>
                 <ListItemIcon>
-                  <LocalShippingIcon  />
+                  <LocalShippingIcon />
                 </ListItemIcon>
                 <ListItemText primary="Correctivo" />
               </ListItem>
