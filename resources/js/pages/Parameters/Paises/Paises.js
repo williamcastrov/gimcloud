@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MaterialTable from "material-table";
-import {Modal, TextField, Button } from "@material-ui/core";
+import {Modal, TextField, Button, Typography } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
+import swal from 'sweetalert';
 
 import paisServices from "../../../services/Parameters/Paises";
 
@@ -24,6 +25,10 @@ const useStyles = makeStyles((theme) => ({
   }, 
   inputMaterial:{
     width: '100%'
+  },
+  typography: {
+    fontSize: 16,
+    color   : "#ff3d00"
   }
 }));
 
@@ -96,20 +101,35 @@ function Paises() {
       const res = await paisServices.save(paisSeleccionado);
 
       if (res.success) {
-        alert("Pais Creado de forma Correcta")
+        swal({
+          title: "Gestión Paises",
+          text: "País Creado de forma Correcta!",
+          icon: "success",
+          button: "Aceptar"
+        });
         console.log(res.message)
         abrirCerrarModalInsertar();
         delete paisSeleccionado.codigo_pai;
         delete paisSeleccionado.nombre_pai;
       } else
       {
-        alert("Error Creando el Pais");
+        swal({
+          title : "Gestión Paises",
+          text  : "Error Creando el País!",
+          icon  : "error",
+          button: "Aceptar"
+        });
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Creando el Pais");
+      swal({
+        title : "Gestión Paises",
+        text  : "Debe ingresar todos los datos, Error creando el País!",
+        icon  : "warning",
+        button: "Aceptar"
+      });
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
@@ -193,7 +213,9 @@ function Paises() {
 
   const paisInsertar=(
     <div className={styles.modal}>
-      <h3 align="center" >Agregar Nuevo País</h3>
+      <Typography  align="center" className={ styles.typography } variant="button" display="block" >
+        Agregar Nuevo País
+      </Typography>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_pai" onChange={handleChange} />
       <br />
       <TextField className={styles.inputMaterial} label="País" name="nombre_pai" onChange={handleChange} />          
@@ -207,7 +229,9 @@ function Paises() {
 
   const paisEditar=(
     <div className={styles.modal}>
-      <h3 align="center" >Actualizar Datos Paises</h3>
+      <Typography  align="center" className={ styles.typography } variant="button" display="block" >
+        Actualizar Datos Paises
+      </Typography>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_pai" onChange={handleChange} value={paisSeleccionado&&paisSeleccionado.codigo_pai}/>
       <br />
       <TextField className={styles.inputMaterial} label="País" name="nombre_pai" onChange={handleChange} value={paisSeleccionado&&paisSeleccionado.nombre_pai}/>          
@@ -238,7 +262,7 @@ function Paises() {
      <MaterialTable
        columns={columnas}
        data={listPaises}
-       title="Maestra de Paises"
+       title="MAESTRA DE PAISES"
        actions={[
          {
            icon     : 'edit',

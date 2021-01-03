@@ -550,7 +550,7 @@ function Equipos() {
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl}>
-            <InputLabel id="idselectEmpresa" >Cliente</InputLabel>
+            <InputLabel id="idselectEmpresa" >Empresa</InputLabel>
             <Select
               labelId="selecEmpresa"
               name="empresa_equ"
@@ -584,7 +584,7 @@ function Equipos() {
               {
                 listarPropietarios.map((itemselect) => {
                   return (
-                    <MenuItem value={itemselect.id_int}>{itemselect.razonsocial_int}</MenuItem>
+                    <MenuItem value={itemselect.id_cli}>{itemselect.razonsocial_cli}</MenuItem>
                   )
                 })
               }
@@ -787,7 +787,7 @@ function Equipos() {
               {
                 listarPropietarios.map((itemselect) => {
                   return (
-                    <MenuItem value={itemselect.id_int}>{itemselect.razonsocial_int}</MenuItem>
+                    <MenuItem value={itemselect.id_cli}>{itemselect.razonsocial_cli}</MenuItem>
                   )
                 })
               }

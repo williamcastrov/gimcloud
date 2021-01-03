@@ -1,25 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles, Tabs, Tab, Typography, Box  } from '@material-ui/core';
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import PanToolIcon from '@material-ui/icons/PanTool';
-import WarningIcon from '@material-ui/icons/Warning';
 import AlarmIcon from '@material-ui/icons/Alarm';
-import NextWeekIcon from '@material-ui/icons/NextWeek';
-import MyLocationIcon from '@material-ui/icons/MyLocation';
-import DevicesOtherIcon from '@material-ui/icons/DevicesOther';
+import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
+import PeopleIcon from '@material-ui/icons/People';
+import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 
 // Paginas 
-import OrdenesActivas from "../../ListadoOrdenes/OrdenesActivas";
+import CrearOrdenes from "../../GestionOrdenes/CrearOrdenes";
 import OrdenesAprobadas from "../../ListadoOrdenes/OrdenesAprobadas.js";
 import OrdenesPorAprobar from "../../ListadoOrdenes/OrdenesPorAprobar.js";
 import OrdenesVencidas from '../../ListadoOrdenes/OrdenesVencidas.js';
 import OrdenesVencenHoy from '../../ListadoOrdenes/OrdenesVencenHoy.js';
-import OrdenesVencen8Dias from '../../ListadoOrdenes/OrdenesVencen8Dias.js';
-import OrdenesPropias from '../../ListadoOrdenes/OrdenesPropias.js';
-import OrdenesTerceros from '../../ListadoOrdenes/OrdenesTerceros.js';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -81,15 +75,15 @@ function Ordenes() {
       <div className={classes.root}>
         <div className={classes.tabs} >
           <Tabs variant="fullWidth" value={value} onChange={handleChange} aria-label="wrapped label tabs example">
-            <Tab value="1" label="Crear Orden" {...selectTab('1')} icon={<ExitToAppIcon />} />
-            <Tab value="2" label="Cumplimiento" {...selectTab('2')} icon={<AssignmentTurnedInIcon />} />
+            <Tab value="1" label="Crear Orden" {...selectTab('1')} icon={<AddBoxOutlinedIcon />} />
+            <Tab value="2" label="Cumplimiento" {...selectTab('2')} icon={<ExitToAppIcon />} />
             <Tab value="3" label="Insumos" {...selectTab('3')} icon={ <PanToolIcon />}  />
-            <Tab value="4" label="Mano de Obra" {...selectTab('4')} icon={ <WarningIcon />} />
-            <Tab value="5" label="Costos y Gastos" {...selectTab('5')} icon={<AlarmIcon />}  />
+            <Tab value="4" label="Mano de Obra" {...selectTab('4')} icon={ <PeopleIcon  />} />
+            <Tab value="5" label="Costos y Gastos" {...selectTab('5')} icon={< MonetizationOnIcon />}  />
           </Tabs>
           </div>
             <TabPanel value={value} index="1">  
-              <OrdenesActivas />
+              <CrearOrdenes />
             </TabPanel>
             <TabPanel value={value} index="2">
               <OrdenesAprobadas />

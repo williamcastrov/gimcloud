@@ -40,6 +40,7 @@ import EstadosMtto from './pages/Mantenimiento/EstadosMtto';
 
 // Componentes Modulo Gestión Ordenes de Trabajo
 import Ordenes from './pages/GestionOrdenes/Ordenes';
+import CrearOrdenes from './pages/GestionOrdenes/CrearOrdenes';
 
 // Componentes Modulo Datos Adicionales Equipos
 import TipoGarantia from './pages/DatosEquipos/TipoGarantia';
@@ -134,6 +135,7 @@ function Main() {
               <Route path="/mantenimiento/ubicaciones" component={Ubicaciones} />
 
               <Route path="/gestionordenes/ordenes" component={Ordenes} />
+              <Route path="/gestionordenes/crearordenes" component={CrearOrdenes} />
 
               <Route path="/activos/areas" component={Areas} />
               <Route path="/activos/cencostos" component={Cencostos} />
@@ -159,3 +161,4 @@ function Main() {
 }
 
 export default Main;
+

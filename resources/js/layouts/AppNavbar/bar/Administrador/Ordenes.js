@@ -13,6 +13,7 @@ import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
 import FindInPageIcon from '@material-ui/icons/FindInPage';
 import ReportIcon from '@material-ui/icons/Report';
+import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -104,7 +105,7 @@ function Ordenes() {
             <List component="div" disablePadding>
               <ListItem component={Link} button to="/gestionordenes/ordenes" className={classes.nested}>
                 <ListItemIcon>
-                  <LocalShippingIcon />
+                  <AddBoxOutlinedIcon />
                 </ListItemIcon>
                 <ListItemText primary="Crear/Listar/Modificar" />
               </ListItem>

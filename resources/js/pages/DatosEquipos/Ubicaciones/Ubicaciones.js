@@ -122,7 +122,6 @@ function Ubicaciones(props) {
     fetchDataUbicaciones();
   }
 
-
   const abrirCerrarModalInsertar = () => {
     setModalInsertar(!modalInsertar);
   }
