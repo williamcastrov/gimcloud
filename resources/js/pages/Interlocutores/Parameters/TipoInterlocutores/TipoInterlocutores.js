@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MaterialTable from "material-table";
-import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
+import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
+import swal from 'sweetalert';
 
 // Componentes de Conexion con el Backend
 import tipointerlocutoresServices from "../../../../services/Interlocutores/TipoInterlocutores";
@@ -31,6 +32,10 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0),
     minWidth: 315,
+  },
+  typography: {
+    fontSize: 16,
+    color: "#ff3d00"
   }
 }));
 
@@ -108,8 +113,8 @@ function TipoInterlocutores() {
     let errors = {};
     let formOk = true;
 
-    if (!tipointerlocutorSeleccionado.nombre_tint) {
-      errors.nombre_tint = true;
+    if (!tipointerlocutorSeleccionado.descripcion_tint) {
+      errors.descripcion_tint = true;
       formOk = false;
     }
 
@@ -130,20 +135,20 @@ function TipoInterlocutores() {
       const res = await tipointerlocutoresServices.save(tipointerlocutorSeleccionado);
 
       if (res.success) {
-        alert("Tipo Interlocutor Creado de forma Correcta")
+        swal("Tipos Interlocutores", "Creado de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalInsertar();
         delete tipointerlocutorSeleccionado.nombre_tint;
         delete tipointerlocutorSeleccionado.empresa_tint;
         delete tipointerlocutorSeleccionado.estado_tint;
       } else {
-        alert("Error Creando el Tipo de Interlocutor");
+        swal("Tipos Interlocutores", "Error Creando el Tipo de Interlocutor!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Creando el Tipo de Interlocutor");
+      swal("Tipos Interlocutores", "Debe Ingresar Todos los Datos, Revisar Información!", "warning", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
@@ -155,8 +160,8 @@ function TipoInterlocutores() {
     let errors = {};
     let formOk = true;
 
-    if (!tipointerlocutorSeleccionado.nombre_tint) {
-      errors.nombre_tint = true;
+    if (!tipointerlocutorSeleccionado.descripcion_tint) {
+      errors.descripcion_tint = true;
       formOk = false;
     }
 
@@ -177,20 +182,21 @@ function TipoInterlocutores() {
       const res = await tipointerlocutoresServices.update(tipointerlocutorSeleccionado);
 
       if (res.success) {
-        alert("Tipo de Interlocutor actualizado de forma Correcta")
+        swal("Tipos Interlocutores", "Actualizado de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalEditar();
         delete tipointerlocutorSeleccionado.nombre_tint;
         delete tipointerlocutorSeleccionado.empresa_tint;
         delete tipointerlocutorSeleccionado.estado_tint;
       } else {
-        alert("Error Actualizando el Tipo de Interlocutor");
+        swal("Tipos Interlocutores", "Error Actualizando el Tipo de Interlocutor!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalEditar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Actualizando el Tipo de Interlocutor");
+      swal("Tipos Interlocutores", "Debe Ingresar Todos los Datos, Revisar Información!", "warning", { button: "Aceptar" });
+      console.log("TIPO INTER : ", tipointerlocutorSeleccionado);
       console.log(res.message);
       abrirCerrarModalEditar();
     }
@@ -201,12 +207,12 @@ function TipoInterlocutores() {
     const res = await tipointerlocutoresServices.delete(tipointerlocutorSeleccionado.id_tint);
 
     if (res.success) {
-      alert("Tipo de Interlocutor Borrado de forma Correcta")
+      swal("Tipos Interlocutores", "Borrado de forma Correcta!", "success", { button: "Aceptar" });
       console.log(res.message)
       abrirCerrarModalEliminar();
     }
     else {
-      alert("Error Borrando el Tipo de Interlocutor");
+      swal("Tipos Interlocutores", "Error Borrando el Tipo de Interlocutor!", "error", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalEliminar();
     }
@@ -238,7 +244,9 @@ function TipoInterlocutores() {
 
   const tipointerlocutorInsertar = (
     <div className={styles.modal}>
-      <h3>Agregar Nuevo Tipo Interlocutor</h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block">
+        Agregar Nuevo Tipo Interlocutor
+      </Typography>
       <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_tint" onChange={handleChange} />
       <br />
       <FormControl className={styles.formControl}>
@@ -287,7 +295,9 @@ function TipoInterlocutores() {
 
   const tipointerlocutorEditar = (
     <div className={styles.modal}>
-      <h3 align="center" >Actualizar Tipo Interlocutor</h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block">
+        Actualizar Tipo Interlocutor
+      </Typography>
       <TextField className={styles.inputMaterial} label="Ciudad" name="descripcion_tint" onChange={handleChange} value={tipointerlocutorSeleccionado && tipointerlocutorSeleccionado.descripcion_tint} />
       <br />
       <FormControl className={styles.formControl}>
@@ -355,7 +365,7 @@ function TipoInterlocutores() {
       <MaterialTable
         columns={columnas}
         data={listTipoInterlocutores}
-        title="Maestra de Tipos de Interlocutores"
+        title="TIPOS DE INTERLOCUTORES"
         actions={[
           {
             icon: 'edit',

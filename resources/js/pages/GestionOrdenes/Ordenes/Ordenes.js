@@ -10,6 +10,7 @@ import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 
 // Paginas 
 import CrearOrdenes from "../../GestionOrdenes/CrearOrdenes";
+import CumplirOrden from "../../GestionOrdenes/CumplirOrden";
 import OrdenesAprobadas from "../../ListadoOrdenes/OrdenesAprobadas.js";
 import OrdenesPorAprobar from "../../ListadoOrdenes/OrdenesPorAprobar.js";
 import OrdenesVencidas from '../../ListadoOrdenes/OrdenesVencidas.js';
@@ -86,7 +87,7 @@ function Ordenes() {
               <CrearOrdenes />
             </TabPanel>
             <TabPanel value={value} index="2">
-              <OrdenesAprobadas />
+              <CumplirOrden />
             </TabPanel>
             <TabPanel value={value} index="3">
               <OrdenesPorAprobar />

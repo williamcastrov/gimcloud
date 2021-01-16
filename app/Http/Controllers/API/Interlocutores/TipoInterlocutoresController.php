@@ -15,9 +15,9 @@ class TipoInterlocutoresController extends Controller
     public function create(Request $request){
 
         try {
-            $insert['nombre_tint'] = $request['nombre_tint'];
-            $insert['empresa_tint'] = $request['empresa_tint'];
-            $insert['estado_tint'] = $request['estado_tint'];
+            $insert['descripcion_tint'] = $request['descripcion_tint'];
+            $insert['empresa_tint']     = $request['empresa_tint'];
+            $insert['estado_tint']      = $request['estado_tint'];
   
             TipoInterlocutores::insert($insert);
     
@@ -82,9 +82,9 @@ class TipoInterlocutoresController extends Controller
         public function update(Request $request, $id_tint){
   
           try {
-            $data['nombre_tint'] = $request['nombre_tint'];
-            $data['empresa_tint'] = $request['empresa_tint'];
-            $data['estado_tint'] = $request['estado_tint'];
+            $data['descripcion_tint'] = $request['descripcion_tint'];
+            $data['empresa_tint']     = $request['empresa_tint'];
+            $data['estado_tint']      = $request['estado_tint'];
 
             //Console::info('mymessage');
   

@@ -14,7 +14,6 @@ class Regiones extends Model
     protected $primaryKey = "id_reg";
 
     protected $fillable = [
-        'codigo_reg',
         'nombre_reg',
         'pais_reg'
     ];

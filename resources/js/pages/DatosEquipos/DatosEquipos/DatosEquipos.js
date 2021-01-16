@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link } from 'react-router-dom';
 import MaterialTable from "material-table";
-import {Modal, Button, TextField, Select, MenuItem, FormControl, InputLabel, Grid } from "@material-ui/core";
+import {Modal, Button, TextField, Select, MenuItem, FormControl, InputLabel, Grid, Typography } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
-import Fab from '@material-ui/core/Fab';
-import NavigationIcon from '@material-ui/icons/Navigation';
+import swal from 'sweetalert';
+import Moment from 'moment';
 
 // Componentes de Conexion con el Backend
 import clasificacionabcServices from "../../../services/Mantenimiento/ClasificacionABC";
@@ -49,6 +48,11 @@ const useStyles = makeStyles((theme) => ({
     right: 'auto',
     position: 'fixed',
   },
+
+  typography: {
+    fontSize: 16,
+    color: "#ff3d00"
+  }
 }));
 
 function DatosEquipos(props) {
@@ -59,8 +63,8 @@ function DatosEquipos(props) {
   const styles = useStyles();
   const [listarDatosEquipos, setListarDatosEquipos] = useState([]);
   const [modalInsertar, setModalInsertar ] = useState(false);
-  const [modalEditar, setModalEditar]= useState(false);
-  const [modalEliminar, setModalEliminar]= useState(false);
+  const [modalEditar, setModalEditar] = useState(false);
+  const [modalEliminar, setModalEliminar] = useState(false);
   const [formError, setFormError] = useState(false);
 
   const [listarClasificacionabc, setListarClasificacionabc] = useState([]);
@@ -207,7 +211,8 @@ function DatosEquipos(props) {
       const res = await datosequiposServices.save(equiposSeleccionado);
 
       if (res.success) {
-        alert("Datos Adicionales del Equipo Creado de forma Correcta")
+        alert("")
+        swal( "Datos Adicionales Equipos", "Creado de forma Correcta!", "success", { button: "Aceptar" });
         //console.log(res.message)
         abrirCerrarModalInsertar();
         delete equiposSeleccionado.codigo_equ;
@@ -223,13 +228,13 @@ function DatosEquipos(props) {
         delete equiposSeleccionado.fechamodificacion_dequ;
       } else
       {
-        alert("Error Creando Datos Adicionales del Equipo");
+        swal( "Datos Adicionales Equipos", "Error Creando Datos Adicionales del Equipo!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Creando Datos Adicionales del Equipo");
+      swal( "Datos Adicionales Equipos", "Debe Ingresar Todos los Datos, Revisar Información!", "warning", { button: "Aceptar" });
       console.log(equiposSeleccionado);
       console.log(res.message);
       abrirCerrarModalInsertar();
@@ -299,7 +304,7 @@ function DatosEquipos(props) {
     const res = await datosequiposServices.update(equiposSeleccionado);
 
     if (res.success) {
-        alert("Datos Adicionales del Equipos actualizada de forma Correcta")
+        swal( "Datos Adicionales Equipos", "Actualizados de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalEditar();
         delete equiposSeleccionado.codigo_equ;
@@ -315,13 +320,13 @@ function DatosEquipos(props) {
         delete equiposSeleccionado.fechamodificacion_dequ;
     } else
     {
-        alert("Error Actualizando Datos Adicionales del Equipo");
+        swal( "Datos Adicionales Equipos", "Error Actualizando Datos del Equipo!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalEditar();
     }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Actualizando el Equipo");
+      swal( "Datos Adicionales Equipos", "Debe Ingresar Todos los Datos, Revisar Información!", "warning", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalEditar();
     } 
@@ -332,12 +337,12 @@ function DatosEquipos(props) {
     const res = await datosequiposServices.delete(equiposSeleccionado.id_dequ);
 
     if (res.success) {
-        alert("Datos Adicionales del Equipo Borrado de forma Correcta")
+        swal( "Datos Adicionales Equipos", "Datos Adicionales Borrados de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalEliminar();
     }
     else {
-        alert("Error Borrando Datos Adicionales del Equipo");
+        swal( "Datos Adicionales Equipos", "Error Borrando Datos Adicionales del Equipo!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalEliminar();
     }
@@ -401,7 +406,9 @@ function DatosEquipos(props) {
   
   const datosequipoInsertar = (
     <div className={styles.modal}>
-      <h3 align="center" >Agregar Datos Adicionales del Equipo { } {equipoCodigo} </h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block">
+        Agregar Datos Adicionales del Equipo { } {equipoCodigo} 
+      </Typography>
       <Grid container spacing={2} > 
         <Grid item xs={12} md={6}> <TextField  name="id_dequ" label="ID del Equipo" defaultValue={equipoID} disabled="true"
           fullWidth onChange={handleChange} /> 
@@ -430,9 +437,9 @@ function DatosEquipos(props) {
               >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
-                listarClasificacionabc.map((itemselect) => {
+                listarClasificacionabc.map((itemselect, index) => {
                   return (
-                    <MenuItem value={itemselect.id_abc }>{itemselect.descripcion_abc}</MenuItem>
+                    <MenuItem key={index} value={itemselect.id_abc }>{itemselect.descripcion_abc}</MenuItem>
                   )
                 })
               }
@@ -451,9 +458,9 @@ function DatosEquipos(props) {
               >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
-                listarCencostos.map((itemselect) => {
+                listarCencostos.map((itemselect, index) => {
                   return (
-                    <MenuItem value={itemselect.id_cco }>{itemselect.descripcion_cco}</MenuItem>
+                    <MenuItem key={index} value={itemselect.id_cco }>{itemselect.descripcion_cco}</MenuItem>
                   )
                 })
               }
@@ -472,9 +479,9 @@ function DatosEquipos(props) {
               >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
-                listarMonedas.map((itemselect) => {
+                listarMonedas.map((itemselect, index) => {
                   return (
-                    <MenuItem value={itemselect.id_mon }>{itemselect.descripcion_mon}</MenuItem>
+                    <MenuItem key={index} value={itemselect.id_mon }>{itemselect.descripcion_mon}</MenuItem>
                   )
                 })
               }
@@ -502,8 +509,9 @@ function DatosEquipos(props) {
 
   const datosequipoEditar=(
     <div className={styles.modal}>
-
-      <h3 align="center" >Actualizar Datos Adicionales del Equipo { } {equipoCodigo} </h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block">
+        Actualizar Datos Adicionales del Equipo { } {equipoCodigo} 
+      </Typography>
       <Grid container spacing={2} > 
         <Grid item xs={12} md={6}> <TextField  name="id_dequ" label="ID del Equipo" defaultValue={equipoID} disabled="true"
           fullWidth onChange={handleChange} /> 
@@ -533,9 +541,9 @@ function DatosEquipos(props) {
               >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
-                listarClasificacionabc.map((itemselect) => {
+                listarClasificacionabc.map((itemselect, index) => {
                   return (
-                    <MenuItem value={itemselect.id_abc }>{itemselect.descripcion_abc}</MenuItem>
+                    <MenuItem key={index} value={itemselect.id_abc }>{itemselect.descripcion_abc}</MenuItem>
                   )
                 })
               }
@@ -555,9 +563,9 @@ function DatosEquipos(props) {
               >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
-                listarCencostos.map((itemselect) => {
+                listarCencostos.map((itemselect, index) => {
                   return (
-                    <MenuItem value={itemselect.id_cco }>{itemselect.descripcion_cco}</MenuItem>
+                    <MenuItem key={index} value={itemselect.id_cco }>{itemselect.descripcion_cco}</MenuItem>
                   )
                 })
               }
@@ -577,9 +585,9 @@ function DatosEquipos(props) {
               >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
-                listarMonedas.map((itemselect) => {
+                listarMonedas.map((itemselect, index) => {
                   return (
-                    <MenuItem value={itemselect.id_mon }>{itemselect.descripcion_mon}</MenuItem>
+                    <MenuItem key={index} value={itemselect.id_mon }>{itemselect.descripcion_mon}</MenuItem>
                   )
                 })
               }
@@ -589,11 +597,13 @@ function DatosEquipos(props) {
         <Grid item xs={12} md={12}> <TextField  name="direccion_dequ" label="Dirección donde esta Ubicado el Equipo"
           fullWidth onChange={handleChange} value={equiposSeleccionado&&equiposSeleccionado.direccion_dequ} /> 
         </Grid>
-        <Grid item xs={12} md={6}> <TextField  name="fechacreacion_dequ" label="Fecha de Creación del Equipo"
-          fullWidth onChange={handleChange}  value={equiposSeleccionado&&equiposSeleccionado.fechacreacion_dequ } /> 
+        <Grid item xs={12} md={6}> <TextField type="date" InputLabelProps={{ shrink: true}} name="fechacreacion_dequ"
+          label="Fecha de Creación del Equipo" fullWidth onChange={handleChange}
+          defaultValue={Moment(equiposSeleccionado.fechacreacion_dequ).format('YYYY-MM-DD')} /> 
         </Grid>
-        <Grid item xs={12} md={6}> <TextField  name="fechamodificacion_dequ" label="Fecha de Creación del Equipo"
-          fullWidth onChange={handleChange}   value={equiposSeleccionado&&equiposSeleccionado.fechamodificacion_dequ } /> 
+        <Grid item xs={12} md={6}> <TextField type="date" InputLabelProps={{ shrink: true}} name="fechamodificacion_dequ" 
+          label="Fecha de Creación del Equipo" fullWidth onChange={handleChange} 
+          defaultValue={Moment(equiposSeleccionado.fechamodificacion_dequ).format('YYYY-MM-DD')}/> 
         </Grid>
       </Grid>
       <br /><br />
@@ -621,7 +631,7 @@ function DatosEquipos(props) {
       <MaterialTable
         columns={columnas}
         data={listarDatosEquipos}
-        title="Datos Adicionales de los Equipos"
+        title=" DATOS ADICIONALES DE LOS EQUIPOS"
         actions={[
           {
             icon     : 'edit',

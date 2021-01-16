@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MaterialTable from "material-table";
-import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
+import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
+import swal from 'sweetalert';
 
 // Componentes de Conexion con el Backend
 import tipogarantiaServices from "../../../services/DatosEquipos/TipoGarantia"
@@ -31,6 +32,14 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0),
     minWidth: 315,
+  },
+  typography: {
+    fontSize: 16,
+    color: "#ff3d00"
+  },
+  typography: {
+    fontSize: 16,
+    color: "#ff3d00"
   }
 }));
 
@@ -131,7 +140,7 @@ function TipoGarantia() {
       const res = await tipogarantiaServices.save(tipogarantiaSeleccionado);
 
       if (res.success) {
-        alert("Tipo de Garantia Creado de forma Correcta")
+        swal( "Garantía", "Tipo de Garantía Creado de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalInsertar();
         delete tipogarantiaSeleccionado.descripcion_tga;
@@ -139,13 +148,14 @@ function TipoGarantia() {
         delete tipogarantiaSeleccionado.estado_tga;
       } else
       {
-        alert("Error Creando el Tipo de Garantia");
+        alert("");
+        swal( "Garantía", "Error Creando el Tipo de Garantía!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Creando el Tipo de garantia");
+      swal( "Garantía", "Debe Ingresar Todos los Datos, Revisar Información!", "warning", { button: "Aceptar" });
       //console.log(tipogarantiaSeleccionado);
       console.log(res.message);
       abrirCerrarModalInsertar();
@@ -180,7 +190,8 @@ function TipoGarantia() {
     const res = await tipogarantiaServices.update(tipogarantiaSeleccionado);
 
     if (res.success) {
-        alert("Tipo de Garantia actualizada de forma Correcta")
+        alert("")
+        swal( "Garantía", "Tipo de Garantía actualizada de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalEditar();
         delete tipogarantiaSeleccionado.descripcion_tga;
@@ -188,13 +199,14 @@ function TipoGarantia() {
         delete tipogarantiaSeleccionado.estado_tga;
     } else
     {
-        alert("Error Actualizando el Tipo de Garantia");
+        alert("");
+        swal( "Garantía", "Error Actualizando el Tipo de Garantia!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalEditar();
     }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Actualizando el Tipo de Garantia");
+      swal( "Garantía", "Debe Ingresar Todos los Datos, Revisar Información!", "warning", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalEditar();
     } 
@@ -205,12 +217,12 @@ function TipoGarantia() {
     const res = await tipogarantiaServices.delete(tipogarantiaSeleccionado.id_tga);
 
     if (res.success) {
-        alert("El Tipo de Garantia Borrado de forma Correcta")
+        swal( "Garantía", "El Tipo de Garantia Borrado de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalEliminar();
     }
     else {
-        alert("Error Borrando el Tipo de Garantia");
+        swal( "Garantía", "Error Borrando el Tipo de Garantia!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalEliminar();
     }
@@ -243,7 +255,7 @@ function TipoGarantia() {
 
   const tipogarantiaInsertar = (
     <div className={styles.modal}>
-      <h3 align="center" >Agregar Nuevo Tipo de Garantia</h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block">Agregar Nuevo Tipo de Garantia</Typography>
       <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_tga" onChange={handleChange} />          
       <br />
       <FormControl className={styles.formControl}>
@@ -293,7 +305,7 @@ function TipoGarantia() {
 
   const tipogarantiaEditar=(
     <div className={styles.modal}>
-      <h3 align="center" >Actualizar Tipo de Garantia</h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block">Actualizar Tipo de Garantia</Typography>
       <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_tga" onChange={handleChange} value={tipogarantiaSeleccionado&&tipogarantiaSeleccionado.descripcion_tga}/>
       <br />
       <FormControl className={styles.formControl}>
@@ -360,7 +372,7 @@ function TipoGarantia() {
       <MaterialTable
         columns={columnas}
         data={listarTipoGarantia}
-        title="Maestra de Tipos de Garantias"
+        title="TIPOS DE GARANTIAS"
         actions={[
           {
             icon     : 'edit',

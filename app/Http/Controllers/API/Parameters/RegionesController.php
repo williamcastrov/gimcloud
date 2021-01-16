@@ -12,7 +12,6 @@ class RegionesController extends Controller
     public function create(Request $request){
 
         try {
-            $insert['codigo_reg'] = $request['codigo_reg'];
             $insert['nombre_reg'] = $request['nombre_reg'];
             $insert['pais_reg'] = $request['pais_reg'];
   
@@ -72,8 +71,6 @@ class RegionesController extends Controller
       public function update(Request $request, $id_reg){
   
           try {
-          
-            $data['codigo_reg'] = $request['codigo_reg'];
             $data['nombre_reg'] = $request['nombre_reg'];
             $data['pais_reg'] = $request['pais_reg'];
             

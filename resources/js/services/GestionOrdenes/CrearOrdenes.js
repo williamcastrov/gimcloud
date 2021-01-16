@@ -20,6 +20,7 @@ crearordenes.listOrdenesServ = async () => {
 }
 
 crearordenes.listUnaOrden = async (id_otr) => {
+    console.log("DATA UNA ORDEN : ",id_otr)
     const urlList = baseUrl+"/get/"+id_otr
     const res = await axios.get(urlList)
     .then(response=>{ return response.data; })
@@ -30,7 +31,18 @@ crearordenes.listUnaOrden = async (id_otr) => {
 
 crearordenes.update = async (data) => {
     //console.log(data);
+    console.log("DATA : ", data.id_otr);
     const urlUpdate = baseUrl+"/update/"+data.id_otr
+    const res = await axios.put(urlUpdate, data)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
+crearordenes.updateestadoasignado = async (data) => {
+    console.log("DATA : ", data.id_otr);
+    const urlUpdate = baseUrl+"/updateestadoasignado/"+data.id_otr
     const res = await axios.put(urlUpdate, data)
     .then(response=>{ return response.data; })
     .catch(error=>{ return error; })

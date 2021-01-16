@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MaterialTable from "material-table";
-import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
+import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
+import swal from 'sweetalert';
 
 // Componentes de Conexion con el Backend
 import tiposequiposServices from "../../../services/DatosEquipos/TiposEquipos"
@@ -31,6 +32,14 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0),
     minWidth: 315,
+  },
+  typography: {
+    fontSize: 16,
+    color: "#ff3d00"
+  },
+  typography: {
+    fontSize: 16,
+    color: "#ff3d00"
   }
 }));
 
@@ -137,7 +146,7 @@ function TiposEquipos() {
       const res = await tiposequiposServices.save(tiposequiposSeleccionado);
 
       if (res.success) {
-        alert("Tipo de Equipo Creado de forma Correcta")
+        swal( "Tipos Equipos", "Tipo de Equipo Creado de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalInsertar();
         delete tiposequiposSeleccionado.descripcion_tequ;
@@ -146,13 +155,13 @@ function TiposEquipos() {
         delete tiposequiposSeleccionado.estado_tequ;
       } else
       {
-        alert("Error Creando el Tipo de Equipo");
+        swal( "Tipos Equipos", "Error Creando el Tipo de Equipo!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Creando el Tipo de Equipo");
+      swal( "Tipos Equipos", "Debe Ingresar Todos los Datos, Revisar Información!", "warning", { button: "Aceptar" });
       //console.log(tiposequiposSeleccionado);
       console.log(res.message);
       abrirCerrarModalInsertar();
@@ -191,7 +200,7 @@ function TiposEquipos() {
     const res = await tiposequiposServices.update(tiposequiposSeleccionado);
 
     if (res.success) {
-        alert("Tipo de Equipo actualizado de forma Correcta")
+        swal( "Tipos Equipos", "Tipo de Equipo actualizado de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalEditar();
         delete tiposequiposSeleccionado.descripcion_tequ;
@@ -200,13 +209,13 @@ function TiposEquipos() {
         delete tiposequiposSeleccionado.estado_tequ;
     } else
     {
-        alert("Error Actualizando el Tipo de Equipo");
+        swal( "Tipos Equipos", "Error Actualizando el Tipo de Equipo!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalEditar();
     }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Actualizando el Tipo de Equipo");
+      swal( "Tipos Equipos", "Debe Ingresar Todos los Datos, Revisar Información!", "warning", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalEditar();
     } 
@@ -217,12 +226,13 @@ function TiposEquipos() {
     const res = await tiposequiposServices.delete(tiposequiposSeleccionado.id_tequ);
 
     if (res.success) {
-        alert("El Tipo de Equipo Borrado de forma Correcta")
+        swal( "Tipos Equipos", "El Tipo de Equipo Borrado de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalEliminar();
     }
     else {
-        alert("Error Borrando el Tipo de Equipo");
+        alert("");
+        swal( "Tipos Equipos", "Error Borrando el Tipo de Equipo!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalEliminar();
     }
@@ -260,7 +270,7 @@ function TiposEquipos() {
 
   const tiposequiposInsertar = (
     <div className={styles.modal}>
-      <h3 align="center" >Agregar Nuevo Tipo de Equipo</h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block">Agregar Nuevo Tipo de Equipo</Typography>
       <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_tequ" onChange={handleChange} />          
       <br />
       <FormControl className={styles.formControl}>
@@ -311,7 +321,7 @@ function TiposEquipos() {
 
   const tiposequiposEditar=(
     <div className={styles.modal}>
-      <h3 align="center" >Actualizar Tipo de Equipo</h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block">Actualizar Tipo de Equipo</Typography>
       <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_tequ" onChange={handleChange} value={tiposequiposSeleccionado&&tiposequiposSeleccionado.descripcion_tequ}/>
       <br />
       <FormControl className={styles.formControl}>
@@ -380,7 +390,7 @@ function TiposEquipos() {
       <MaterialTable
         columns={columnas}
         data={listarTiposEquipos}
-        title="Maestra de Tipos de Equipos"
+        title="TIPOS DE EQUIPOS"
         actions={[
           {
             icon     : 'edit',

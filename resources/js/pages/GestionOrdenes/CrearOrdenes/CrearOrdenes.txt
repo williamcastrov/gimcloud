@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import MaterialTable from "material-table";
-import { Modal, Button, TextField, Select, MenuItem, FormControl, InputLabel, Grid, InputAdornment  } from "@material-ui/core";
+import { Modal, Button, TextField, Select, MenuItem, FormControl, InputLabel, Grid, ButtonGroup, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import NumberFormat from 'react-number-format';
+import CachedIcon from '@material-ui/icons/Cached';
+import ReplayIcon from '@material-ui/icons/Replay';
+import swal from 'sweetalert';
+import Moment from 'moment';
 
 // Componentes de Conexion con el Backend
 import empresasServices from "../../../services/Empresa";
@@ -25,7 +28,7 @@ import tiposmttoServices from "../../../services/Mantenimiento/Tiposmtto";
 const useStyles = makeStyles((theme) => ({
   modal: {
     position: 'absolute',
-    width: 700,
+    width: 1000,
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
@@ -47,11 +50,13 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl: {
     margin: theme.spacing(0),
-    minWidth: 300,
+    minWidth: 290,
+    maxWidth: 290,
   },
-  formControlEstados: {
+  formControl2: {
     margin: theme.spacing(0),
-    minWidth: 200,
+    minWidth: 600,
+    maxWidth: 600,
   },
   extendedIcon: {
     marginRight: theme.spacing(1),
@@ -62,6 +67,10 @@ const useStyles = makeStyles((theme) => ({
     right: 'auto',
     position: 'fixed',
   },
+  typography: {
+    fontSize: 16,
+    color: "#ff3d00"
+  }
 }));
 
 function NumberFormatCustom(props) {
@@ -98,7 +107,19 @@ function CrearOrdenes() {
   const [listarConceptososerv, setListarConceptosOserv] = useState([]);
   const [listarClasificacionABC, setListarClasificacionABC] = useState([]);
   const [listarTiposMtto, setListarTiposMtto] = useState([]);
+  const [estado, setEstado] = useState(0);
+  let cambio = 12;
+  console.log("CAMBIO INICIAL : ", cambio)
 
+  /*
+    const [dateDMY, setDateDMY] = useState(Moment(new Date()).format('DD-MM-YYYY'));
+    const [dateMDY, setDateMDY] = useState(Moment(new Date()).format('MM-DD-YYYY'));
+    const [dateYMD, setDateYMD] = useState(Moment(new Date()).format('YYYY-MM-DD'));
+  
+    console.log("Dia,Mes,Año : ", dateDMY);
+    console.log("Mes,Dia,Año : ", dateMDY);
+    console.log("Año,Mes,Dia : ", dateYMD);
+   */
   const [ordenSeleccionado, setOrdenSeleccionado] = useState({
     'id_otr': "",
     'estado_otr': "",
@@ -107,7 +128,7 @@ function CrearOrdenes() {
     'fechaprogramada_otr': "",
     'fechainicia_otr': "",
     'fechafinal_otr': "",
-    'diasoperacion_otr': "",
+    'diasoperacion_otr': 0,
     'equipo_otr': "",
     'proveedor_otr': "",
     'cliente_otr': "",
@@ -122,9 +143,18 @@ function CrearOrdenes() {
 
   const leerOrdenes = () => {
     async function fetchDataOrdenes() {
-      const res = await crearordenesServices.listCrearOrdenes();
+      const res = await crearordenesServices.listOrdenesServ();
       setListarOrdenes(res.data);
-      console.log("Cargar Ordenes", res.data);
+      //console.log("Cargar Ordenes", res.data);
+    }
+    fetchDataOrdenes();
+  }
+
+  const leerOrdenesActivas = () => {
+    async function fetchDataOrdenes() {
+      const res = await crearordenesServices.listUnaOrden();
+      setListarOrdenes(res.data);
+      //console.log("Cargar Una Orden", res.data);
     }
     fetchDataOrdenes();
   }
@@ -146,12 +176,12 @@ function CrearOrdenes() {
     }
     fetchDataEstados();
   }, [])
-  
+
   useEffect(() => {
     async function fetchDataCiudades() {
       const res = await ciudadesServices.listCiudades();
       setListarCiudades(res.data);
-      console.log(res.data)
+      //console.log(res.data)
     }
     fetchDataCiudades();
   }, [])
@@ -213,8 +243,8 @@ function CrearOrdenes() {
   useEffect(() => {
     async function fetchDataEquipos() {
       const res = await equiposServices.listEquipos();
-      setListarEquipos(res.equipo);
-      console.log(res.equipo)
+      setListarEquipos(res.data);
+      console.log('Datos de Equipos : ', res.data)
     }
     fetchDataEquipos();
   }, [])
@@ -244,7 +274,23 @@ function CrearOrdenes() {
       ...prevState,
       [name]: value
     }));
+
+    if (ordenSeleccionado.operario_otr !== 1) {
+      setEstado(cambio)
+      console.log("En HandleChange Diferente: ", ordenSeleccionado.operario_otr)
+    } else
+    console.log("En HandleChange Igual: ", ordenSeleccionado.operario_otr)
   }
+
+  useEffect(() => {
+    function fetchDataEstado() {
+      if (estado !== 0) { 
+        setEstado(cambio);
+        console.log("Nuevo Estado : ", estado)
+      }
+    }
+    fetchDataEstado();
+  }, [estado])
 
   const seleccionarOrden = (orden, caso) => {
     setOrdenSeleccionado(orden);
@@ -268,11 +314,6 @@ function CrearOrdenes() {
     setFormError({});
     let errors = {};
     let formOk = true;
-
-    if (!ordenSeleccionado.id_otr) {
-      errors.id_otr = true;
-      formOk = false;
-    }
 
     if (!ordenSeleccionado.estado_otr) {
       errors.estado_otr = true;
@@ -318,7 +359,7 @@ function CrearOrdenes() {
       errors.proveedor_otr = true;
       formOk = false;
     }
-    
+
     if (!ordenSeleccionado.cliente_otr) {
       errors.cliente_otr = true;
       formOk = false;
@@ -338,7 +379,7 @@ function CrearOrdenes() {
       errors.subgrupoequipo_otr = true;
       formOk = false;
     }
-    
+
     if (!ordenSeleccionado.ciudad_otr) {
       errors.ciudad_otr = true;
       formOk = false;
@@ -362,8 +403,8 @@ function CrearOrdenes() {
     setFormError(errors);
 
     if (formOk) {
-      console.log(ordenSeleccionado);
-      const res = await ordenServices.save(ordenSeleccionado);
+      //console.log(ordenSeleccionado);
+      const res = await crearordenesServices.save(ordenSeleccionado);
 
       if (res.success) {
         alert("Orden de Servicio Creada de forma Correcta")
@@ -403,30 +444,24 @@ function CrearOrdenes() {
 
   const actualizarOrden = async () => {
 
+    if (ordenSeleccionado.operario_otr !== 1) {
+        setEstado(cambio)
+    }
+
     setFormError({});
     let errors = {};
     let formOk = true;
-
-    if (!ordenSeleccionado.id_otr) {
-      errors.id_otr = true;
-      formOk = false;
-    }
 
     if (!ordenSeleccionado.estado_otr) {
       errors.estado_otr = true;
       formOk = false;
     }
 
-    if (!ordenSeleccionado.tipo_otr) {
-      errors.tipo_otr = true;
+    if (!ordenSeleccionado.prioridad_otr) {
+      errors.prioridad_otr = true;
       formOk = false;
     }
-
-    if (!ordenSeleccionado.concepto_otr) {
-      errors.concepto_otr = true;
-      formOk = false;
-    }
-
+    
     if (!ordenSeleccionado.fechaprogramada_otr) {
       errors.fechaprogramada_otr = true;
       formOk = false;
@@ -442,21 +477,32 @@ function CrearOrdenes() {
       formOk = false;
     }
 
-    if (!ordenSeleccionado.diasoperacion_otr) {
-      errors.diasoperacion_otr = true;
-      formOk = false;
-    }
-
     if (!ordenSeleccionado.equipo_otr) {
       errors.equipo_otr = true;
       formOk = false;
     }
 
+    if (!ordenSeleccionado.tipo_otr) {
+      errors.tipo_otr = true;
+      formOk = false;
+    }
+
+    if (!ordenSeleccionado.concepto_otr) {
+      errors.concepto_otr = true;
+      formOk = false;
+    }
+/*
+    if (!ordenSeleccionado.diasoperacion_otr) {
+      errors.diasoperacion_otr = true;
+      formOk = false;
+    }
+*/
+
     if (!ordenSeleccionado.proveedor_otr) {
       errors.proveedor_otr = true;
       formOk = false;
     }
-    
+
     if (!ordenSeleccionado.cliente_otr) {
       errors.cliente_otr = true;
       formOk = false;
@@ -476,7 +522,7 @@ function CrearOrdenes() {
       errors.subgrupoequipo_otr = true;
       formOk = false;
     }
-    
+
     if (!ordenSeleccionado.ciudad_otr) {
       errors.ciudad_otr = true;
       formOk = false;
@@ -487,11 +533,7 @@ function CrearOrdenes() {
       formOk = false;
     }
 
-    if (!ordenSeleccionado.prioridad_otr) {
-      errors.prioridad_otr = true;
-      formOk = false;
-    }
-
+    
     if (!ordenSeleccionado.empresa_otr) {
       errors.prioridad_otr = true;
       formOk = false;
@@ -500,8 +542,7 @@ function CrearOrdenes() {
     setFormError(errors);
 
     if (formOk) {
-      console.log(ordenSeleccionado.codigo_equ);
-      const res = await equiposServices.update(ordenSeleccionado);
+      const res = await crearordenesServices.update(ordenSeleccionado);
 
       if (res.success) {
         alert("Orden de Servicio actualizada de forma Correcta")
@@ -533,71 +574,56 @@ function CrearOrdenes() {
     }
     else {
       alert("Debe Ingresar Todos los Datos, Error Actualizando la Orden de Servicio");
+      console.log("Validando Datos : ", ordenSeleccionado);
       console.log(res.message);
       abrirCerrarModalEditar();
     }
   }
 
-  const borrarEquipo = async () => {
-
-    const res = await equiposServices.delete(ordenSeleccionado.id_equ);
-
-    if (res.success) {
-      alert("La Orden de Servicio Borrada de forma Correcta")
-      console.log(res.message)
-      abrirCerrarModalEliminar();
-    }
-    else {
-      alert("Error Borrando La Orden de Servicio");
-      console.log(res.message);
-      abrirCerrarModalEliminar();
-    }
-
-  }
-
   // "string","boolean","numeric","date","datetime","time","currency"
-    const columnas = [
+  const columnas = [
     {
       field: 'id_otr',
       title: '# Orden',
       cellStyle: { minWidth: 50 }
     },
     {
-      field: 'estado_otr',
+      field: 'nombre_est',
       title: 'Estado',
       cellStyle: { minWidth: 100 }
     },
     {
-      field: 'tipo_otr',
+      field: 'descripcion_tmt',
       title: 'Tipo de Orden',
       cellStyle: { minWidth: 100 }
     },
     {
       field: 'fechaprogramada_otr',
-      title: 'Fecha de Programación'
+      title: 'Fecha de Programación',
+      type: 'date'
     },
     {
-      field: 'equipo_otr',
+      field: 'descripcion_equ',
       title: 'Equipo',
       cellStyle: { minWidth: 150 }
     },
     {
-      field: 'proveedor_otr',
+      field: 'razonsocial_int',
       title: 'Proveedor'
     },
     {
-      field: 'cliente_otr',
+      field: 'razonsocial_cli',
       title: 'Cliente',
       cellStyle: { width: 100, maxWidth: 100 },
       headerStyle: { width: 100, maxWidth: 100 }
     },
     {
-      field: 'ciudad_otr',
+      field: 'nombre_ciu',
       title: 'Ciudad',
       cellStyle: { minWidth: 100 }
     },
     {
-      field: 'prioridad_otr',
+      field: 'descripcion_abc',
       title: 'Prioridad de la Orden',
       cellStyle: { minWidth: 100 }
     }
@@ -605,12 +631,14 @@ function CrearOrdenes() {
 
   const ordenInsertar = (
     <div className={styles.modal}>
-      <h3 align="center" >Agregar Orden de Servicio</h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block" >
+        Crear Orden de Servicio
+      </Typography>
       <Grid container spacing={2} >
-        <Grid item xs={12} md={6}> <TextField name="id_otr" label="# Orden de Servicio" disabled="true"
+        <Grid item xs={12} md={4}> <TextField name="id_otr" label="# Orden de Servicio" disabled="true"
           fullWidth onChange={handleChange} />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={4}>
           <FormControl className={styles.formControl}>
             <InputLabel id="idselectestado_otr">Estado</InputLabel>
             <Select
@@ -618,6 +646,7 @@ function CrearOrdenes() {
               name="estado_otr"
               id="idselectestado_otr"
               fullWidth
+              defaultValue={estado}
               onChange={handleChange}
             >
               <MenuItem value=""> <em>None</em> </MenuItem>
@@ -631,208 +660,7 @@ function CrearOrdenes() {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
-            <InputLabel id="idselecttipo_otr">Tipo de Mantenimiento</InputLabel>
-            <Select
-              labelId="selecttipo_otr"
-              name="tipo_otr"
-              id="idselecttipo_otr"
-              fullWidth
-              onChange={handleChange}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarTiposMtto.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_tmt}>{itemselect.descripcion_tmt}</MenuItem>
-                  )
-                })
-              }
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
-            <InputLabel id="idselectconcepto_otr">Concepto del Mantenimiento</InputLabel>
-            <Select
-              labelId="selectconcepto_otr"
-              name="concepto_otr"
-              id="idselectconcepto_otr"
-              fullWidth
-              onChange={handleChange}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarConceptososerv.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_con}>{itemselect.descripcion_con}</MenuItem>
-                  )
-                })
-              }
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={6}> <TextField type="date" InputLabelProps={{ shrink: true}} name="fechaprogramada_otr"
-              label="Fecha de Creación de Orden" fullWidth onChange={handleChange} /> 
-        </Grid>
-        <Grid item xs={12} md={6}> <TextField type="date" InputLabelProps={{ shrink: true}} name="fechainicia_otr"
-              label="Fecha en que Inicia" fullWidth onChange={handleChange} /> 
-        </Grid>
-        <Grid item xs={12} md={6}> <TextField type="date" InputLabelProps={{ shrink: true}} name="fechafinal_otr"
-              label="Fecha de Cierre" fullWidth onChange={handleChange} /> 
-        </Grid>
-        <Grid item xs={12} md={12}> <TextField type="number" name="diasoperacion_otr" label="Cuantos Días dura la Actividad"
-          fullWidth onChange={handleChange} />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
-            <InputLabel id="idselectequipo_otr">Equipo</InputLabel>
-            <Select
-              labelId="selectequipo_otr"
-              name="equipo_otr"
-              id="idselectequipo_otr"
-              fullWidth
-              onChange={handleChange}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarEquipos.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_equ}>{itemselect.descripcion_equ}</MenuItem>
-                  )
-                })
-              }
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
-            <InputLabel id="proveedor_otr">Proveedor</InputLabel>
-            <Select
-              labelId="selectproveedor_otr"
-              name="proveedor_otr"
-              id="idselectproveedor_otr"
-              fullWidth
-              onChange={handleChange}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarProveedores.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_int}>{itemselect.razonsocial_int}</MenuItem>
-                  )
-                })
-              }
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
-            <InputLabel id="cliente_otr">Cliente</InputLabel>
-            <Select
-              labelId="selectcliente_otr"
-              name="cliente_otr"
-              id="idselectcliente_otr"
-              fullWidth
-              onChange={handleChange}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarClientes.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_cli}>{itemselect.razonsocial_cli}</MenuItem>
-                  )
-                })
-              }
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
-            <InputLabel id="operario_otr">Operario</InputLabel>
-            <Select
-              labelId="selectoperario_otr_otr"
-              name="operario_otr"
-              id="idselectoperario_otr"
-              fullWidth
-              onChange={handleChange}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarEmpleados.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_emp}>{itemselect.primer_nombre_emp}{ }{itemselect.primer_apellido_emp}</MenuItem>
-                  )
-                })
-              }
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
-            <InputLabel id="idselectgrupoequipo_otr">Grupo del Equipo</InputLabel>
-            <Select
-              labelId="selectgrupoequipo_otr"
-              name="grupoequipo_otr"
-              id="idselectgrupoequipo_otr"
-              fullWidth
-              onChange={handleChange}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarGruposEquipos.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_grp}>{itemselect.descripcion_grp}</MenuItem>
-                  )
-                })
-              }
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
-            <InputLabel id="idselectsubgrupoequipo_otr">Grupo del Equipo</InputLabel>
-            <Select
-              labelId="subgrupoequipo_otr"
-              name="subgrupoequipo_otr"
-              id="idselectsubgrupoequipo_otr"
-              fullWidth
-              onChange={handleChange}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarSubGruposEquipos.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_sgre}>{itemselect.descripcion_sgre}</MenuItem>
-                  )
-                })
-              }
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
-            <InputLabel id="idselectciudad_otr">Ciudad</InputLabel>
-            <Select
-              labelId="ciudad_otr"
-              name="ciudad_otr"
-              id="idselectciudad_otr"
-              fullWidth
-              onChange={handleChange}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarCiudades.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_ciu}>{itemselect.nombre_ciu}</MenuItem>
-                  )
-                })
-              }
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={4}>
           <FormControl className={styles.formControl}>
             <InputLabel id="idselectprioridad_otr">Prioridad</InputLabel>
             <Select
@@ -853,7 +681,82 @@ function CrearOrdenes() {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={4}> <TextField type="date" InputLabelProps={{ shrink: true }} name="fechaprogramada_otr"
+          label="Fecha de Creación de Orden" fullWidth onChange={handleChange} />
+        </Grid>
+        <Grid item xs={12} md={4}> <TextField type="date" InputLabelProps={{ shrink: true }} name="fechainicia_otr"
+          label="Fecha en que Inicia" fullWidth onChange={handleChange} />
+        </Grid>
+        <Grid item xs={12} md={4}> <TextField type="date" InputLabelProps={{ shrink: true }} name="fechafinal_otr"
+          label="Fecha de Cierre" fullWidth onChange={handleChange} />
+        </Grid>
+        <Grid item xs={12} md={8}>
+          <FormControl className={styles.formControl2}>
+            <InputLabel id="idselectequipo_otr">Equipo</InputLabel>
+            <Select
+              labelId="selectequipo_otr"
+              name="equipo_otr"
+              id="idselectequipo_otr"
+              fullWidth
+              onChange={handleChange}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarEquipos.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_equ}>{itemselect.descripcion_equ}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={4}> <TextField type="number" name="diasoperacion_otr" label="Cuantos días duro la Actividad"
+          fullWidth onChange={handleChange} />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselecttipo_otr">Tipo de Mantenimiento</InputLabel>
+            <Select
+              labelId="selecttipo_otr"
+              name="tipo_otr"
+              id="idselecttipo_otr"
+              fullWidth
+              onChange={handleChange}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarTiposMtto.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_tmt}>{itemselect.descripcion_tmt}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectconcepto_otr">Concepto del Mantenimiento</InputLabel>
+            <Select
+              labelId="selectconcepto_otr"
+              name="concepto_otr"
+              id="idselectconcepto_otr"
+              fullWidth
+              onChange={handleChange}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarConceptososerv.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_con}>{itemselect.descripcion_con}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={4}>
           <FormControl className={styles.formControl}>
             <InputLabel id="idselectEmpresa" >Empresa</InputLabel>
             <Select
@@ -874,8 +777,136 @@ function CrearOrdenes() {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={4}> 
-          <TextField name="resumenorden_otr" label="Resumen de la Orden" fullWidth onChange={handleChange} /> 
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="proveedor_otr">Proveedor</InputLabel>
+            <Select
+              labelId="selectproveedor_otr"
+              name="proveedor_otr"
+              id="idselectproveedor_otr"
+              fullWidth
+              onChange={handleChange}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarProveedores.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_int}>{itemselect.razonsocial_int}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="cliente_otr">Cliente</InputLabel>
+            <Select
+              labelId="selectcliente_otr"
+              name="cliente_otr"
+              id="idselectcliente_otr"
+              fullWidth
+              onChange={handleChange}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarClientes.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_cli}>{itemselect.razonsocial_cli}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="operario_otr">Operario</InputLabel>
+            <Select
+              labelId="selectoperario_otr_otr"
+              name="operario_otr"
+              id="idselectoperario_otr"
+              fullWidth
+              onChange={handleChange}
+             
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarEmpleados.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_emp}>{itemselect.primer_nombre_emp}{ }{itemselect.primer_apellido_emp}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectgrupoequipo_otr">Grupo del Equipo</InputLabel>
+            <Select
+              labelId="selectgrupoequipo_otr"
+              name="grupoequipo_otr"
+              id="idselectgrupoequipo_otr"
+              fullWidth
+              onChange={handleChange}
+              onClick={() => setEstado(cambio)}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarGruposEquipos.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_grp}>{itemselect.descripcion_grp}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectsubgrupoequipo_otr">SubGrupo del Equipo</InputLabel>
+            <Select
+              labelId="subgrupoequipo_otr"
+              name="subgrupoequipo_otr"
+              id="idselectsubgrupoequipo_otr"
+              fullWidth
+              onChange={handleChange}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarSubGruposEquipos.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_sgre}>{itemselect.descripcion_sgre}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectciudad_otr">Ciudad</InputLabel>
+            <Select
+              labelId="ciudad_otr"
+              name="ciudad_otr"
+              id="idselectciudad_otr"
+              fullWidth
+              onChange={handleChange}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarCiudades.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_ciu}>{itemselect.nombre_ciu}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={12}>
+          <TextField name="resumenorden_otr" label="Resumen de la Orden" fullWidth onChange={handleChange} />
         </Grid>
       </Grid>
       <br /><br />
@@ -888,8 +919,299 @@ function CrearOrdenes() {
 
   const ordenEditar = (
     <div className={styles.modal}>
-      <h3 align="center" >Actualizar Orden de Servicio</h3>
-     
+      <Typography align="center" className={styles.typography} variant="button" display="block" >
+        Actualizar Orden de Servicio
+      </Typography>
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={4}> <TextField name="id_otr" label="# Orden de Servicio" disabled="true"
+          defaultValue={ordenSeleccionado.id_otr}
+          fullWidth onChange={handleChange} value={ordenSeleccionado && ordenSeleccionado.id_otr} />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectestado_otr">Estado</InputLabel>
+            <Select
+              labelId="selectestado_otr"
+              name="estado_otr"
+              id="idselectestado_otr"
+              fullWidth
+              onChange={handleChange}
+              value={ordenSeleccionado && ordenSeleccionado.estado_otr}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarEstados.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_est}>{itemselect.nombre_est}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectprioridad_otr">Prioridad</InputLabel>
+            <Select
+              labelId="prioridad_otr"
+              name="prioridad_otr"
+              id="idselectprioridad_otr"
+              fullWidth
+              onChange={handleChange}
+              value={ordenSeleccionado && ordenSeleccionado.prioridad_otr}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarClasificacionABC.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_abc}>{itemselect.descripcion_abc}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={4}> <TextField type="date" InputLabelProps={{ shrink: true }} name="fechaprogramada_otr"
+          defaultValue={Moment(ordenSeleccionado.fechaprogramada_otr).format('YYYY-MM-DD')}
+          label="Fecha de Creación de Orden" fullWidth onChange={handleChange} onChange={handleChange} />
+        </Grid>
+        <Grid item xs={12} md={4}> <TextField type="date" InputLabelProps={{ shrink: true }} name="fechainicia_otr"
+          defaultValue={Moment(ordenSeleccionado.fechainicia_otr).format('YYYY-MM-DD')}
+          label="Fecha en que Inicia" fullWidth onChange={handleChange} />
+        </Grid>
+        <Grid item xs={12} md={4}> <TextField type="date" InputLabelProps={{ shrink: true }} name="fechafinal_otr"
+          defaultValue={Moment(ordenSeleccionado.fechafinal_otr).format('YYYY-MM-DD')}
+          label="Fecha de Cierre" fullWidth onChange={handleChange} />
+        </Grid>
+        <Grid item xs={12} md={8}>
+          <FormControl className={styles.formControl2}>
+            <InputLabel id="idselectequipo_otr">Equipo</InputLabel>
+            <Select
+              labelId="selectequipo_otr"
+              name="equipo_otr"
+              id="idselectequipo_otr"
+              fullWidth
+              onChange={handleChange}
+              value={ordenSeleccionado && ordenSeleccionado.equipo_otr}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarEquipos.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_equ}>{itemselect.descripcion_equ}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={4}> <TextField type="number" name="diasoperacion_otr" label="Cuantos días duro la Actividad"
+          defaultValue={estado}
+          fullWidth onChange={handleChange} value={ordenSeleccionado && ordenSeleccionado.diasoperacion_otr} />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselecttipo_otr">Tipo de Mantenimiento</InputLabel>
+            <Select
+              labelId="selecttipo_otr"
+              name="tipo_otr"
+              id="idselecttipo_otr"
+              fullWidth
+              onChange={handleChange}
+              value={ordenSeleccionado && ordenSeleccionado.tipo_otr}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarTiposMtto.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_tmt}>{itemselect.descripcion_tmt}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectconcepto_otr">Concepto del Mantenimiento</InputLabel>
+            <Select
+              labelId="selectconcepto_otr"
+              name="concepto_otr"
+              id="idselectconcepto_otr"
+              fullWidth
+              onChange={handleChange}
+              value={ordenSeleccionado && ordenSeleccionado.concepto_otr}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarConceptososerv.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_con}>{itemselect.descripcion_con}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectEmpresa" >Empresa</InputLabel>
+            <Select
+              labelId="selecEmpresa"
+              name="empresa_otr"
+              id="idselectEmpresa"
+              fullWidth
+              onChange={handleChange}
+              value={ordenSeleccionado && ordenSeleccionado.empresa_otr}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarEmpresas.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_emp}>{itemselect.nombre_emp}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="proveedor_otr">Proveedor</InputLabel>
+            <Select
+              labelId="selectproveedor_otr"
+              name="proveedor_otr"
+              id="idselectproveedor_otr"
+              fullWidth
+              onChange={handleChange}
+              value={ordenSeleccionado && ordenSeleccionado.proveedor_otr}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarProveedores.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_int}>{itemselect.razonsocial_int}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="cliente_otr">Cliente</InputLabel>
+            <Select
+              labelId="selectcliente_otr"
+              name="cliente_otr"
+              id="idselectcliente_otr"
+              fullWidth
+              onChange={handleChange}
+              value={ordenSeleccionado && ordenSeleccionado.cliente_otr}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarClientes.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_cli}>{itemselect.razonsocial_cli}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="operario_otr">Operario</InputLabel>
+            <Select
+              labelId="selectoperario_otr_otr"
+              name="operario_otr"
+              id="idselectoperario_otr"
+              fullWidth
+              onChange={handleChange}
+              value={ordenSeleccionado && ordenSeleccionado.operario_otr}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarEmpleados.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_emp}>{itemselect.primer_nombre_emp}{ }{itemselect.primer_apellido_emp}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectgrupoequipo_otr">Grupo del Equipo</InputLabel>
+            <Select
+              labelId="selectgrupoequipo_otr"
+              name="grupoequipo_otr"
+              id="idselectgrupoequipo_otr"
+              fullWidth
+              onChange={handleChange}
+              value={ordenSeleccionado && ordenSeleccionado.grupoequipo_otr}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarGruposEquipos.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_grp}>{itemselect.descripcion_grp}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectsubgrupoequipo_otr">SubGrupo del Equipo</InputLabel>
+            <Select
+              labelId="subgrupoequipo_otr"
+              name="subgrupoequipo_otr"
+              id="idselectsubgrupoequipo_otr"
+              fullWidth
+              onChange={handleChange}
+              value={ordenSeleccionado && ordenSeleccionado.subgrupoequipo_otr}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarSubGruposEquipos.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_sgre}>{itemselect.descripcion_sgre}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectciudad_otr">Ciudad</InputLabel>
+            <Select
+              labelId="ciudad_otr"
+              name="ciudad_otr"
+              id="idselectciudad_otr"
+              fullWidth
+              onChange={handleChange}
+              value={ordenSeleccionado && ordenSeleccionado.ciudad_otr}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarCiudades.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_ciu}>{itemselect.nombre_ciu}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={12}>
+          <TextField name="resumenorden_otr" label="Resumen de la Orden" fullWidth onChange={handleChange}
+            value={ordenSeleccionado && ordenSeleccionado.resumenorden_otr} />
+        </Grid>
+      </Grid>
       <br /><br />
       <div align="right">
         <Button color="primary" onClick={() => actualizarOrden()} >Editar</Button>
@@ -901,11 +1223,15 @@ function CrearOrdenes() {
   return (
     <div className="App">
       <br />
-      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Insertar</Button>
+      <ButtonGroup  >
+        <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Crear Orden</Button>
+        <Button variant="contained" startIcon={<CachedIcon />} color="primary" onClick={() => leerOrdenes()} >Todas las Ordenes</Button>
+        <Button variant="contained" startIcon={<ReplayIcon />} color="primary" onClick={() => leerOrdenesActivas()}>Ordenes Activas</Button>
+      </ButtonGroup>
       <MaterialTable
         columns={columnas}
         data={listarOrdenes}
-        title="Listado de Ordenes"
+        title="LISTADO DE ORDENES"
         actions={[
           {
             icon: 'edit',
@@ -934,12 +1260,12 @@ function CrearOrdenes() {
                     backgroundColor: '#0277bd',
                   }}
                 >
-                  <Button variant="contained">Estado Contable : </Button> { }
-                  
+                  <Button variant="contained">Estado Contable : </Button> {}
+
                 </div>
               )
             },
-          },  
+          },
         ]}
       />
       {}

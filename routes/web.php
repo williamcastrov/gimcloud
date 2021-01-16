@@ -25,6 +25,8 @@ Route::get('/gim', function () {
 Route::get('/login', 'App\Http\Controllers\GimController@index');
 Route::get('/auth/registrarusuario', 'App\Http\Controllers\GimController@index');
 
+Route::get('/parametros/pruebas', 'App\Http\Controllers\GimController@index');
+
 // Rutas de las Opciones de Maestros del sistema
 Route::get('/parametros/paises', 'App\Http\Controllers\GimController@index');
 Route::get('/parametros/empresa', 'App\Http\Controllers\GimController@index');

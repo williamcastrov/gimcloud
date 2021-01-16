@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
-import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid, ButtonGroup } from "@material-ui/core";
+import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid, ButtonGroup, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
 import CachedIcon from '@material-ui/icons/Cached';
+import swal from 'sweetalert';
+import Moment from 'moment';
 
 // Componentes de Conexion con el Backend
 import garantiasServices from "../../../services/DatosEquipos/Garantias";
@@ -42,6 +44,10 @@ const useStyles = makeStyles((theme) => ({
   formControl2: {
     margin: theme.spacing(0),
     minWidth: 617,
+  },
+  typography: {
+    fontSize: 16,
+    color: "#ff3d00"
   }
 }));
 
@@ -236,7 +242,7 @@ function Garantias(props) {
       const res = await garantiasServices.save(garantiaSeleccionado);
 
       if (res.success) {
-        alert("Garantia Creada de forma Correcta")
+        swal( "Garantias", "Garantia Creada de forma Correcta!", "success", { button: "Aceptar" });
         //console.log(res.message)
         abrirCerrarModalInsertar();
         delete garantiaSeleccionado.equipo_gar;
@@ -250,13 +256,13 @@ function Garantias(props) {
         delete garantiaSeleccionado.estado_gar;
         delete garantiaSeleccionado.observacion_gar;
       } else {
-        alert("Error Creando la Garantia");
+        swal( "Garantias", "Error Creando la Garantia!", "error", { button: "Aceptar" });
         //console.log(res.message);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Creando la Garantia");
+      swal( "Garantias", "Debe Ingresar Todos los Datos, Revisar Información!", "warning", { button: "Aceptar" });
       console.log(garantiaSeleccionado);
       //console.log(res.message);
       abrirCerrarModalInsertar();
@@ -326,7 +332,7 @@ function Garantias(props) {
       const res = await garantiasServices.update(garantiaSeleccionado);
 
       if (res.success) {
-        alert("Garantia actualizada de forma Correcta")
+        swal( "Garantias", "Garantia actualizada de forma Correcta!", "success", { button: "Aceptar" });
         //console.log(res.message)
         abrirCerrarModalEditar();
         delete garantiaSeleccionado.equipo_gar;
@@ -340,13 +346,13 @@ function Garantias(props) {
         delete garantiaSeleccionado.estado_gar;
         delete garantiaSeleccionado.observacion_gar;
       } else {
-        alert("Error Actualizando la Garantia");
+        swal( "Garantias", "Error Actualizando la Garantia!", "error", { button: "Aceptar" });
         //console.log(res.message);
         abrirCerrarModalEditar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Actualizando la Garantia");
+      swal( "Garantias", "Debe Ingresar Todos los Datos, Revisar Información!", "warning", { button: "Aceptar" });
       //console.log(res.message);
       abrirCerrarModalEditar();
     }
@@ -357,12 +363,12 @@ function Garantias(props) {
     const res = await garantiasServices.delete(garantiaSeleccionado.id_gar);
 
     if (res.success) {
-      alert("Garantia Borrada de forma Correcta")
+      swal( "Garantias", "Garantia Borrada de forma Correcta!", "success", { button: "Aceptar" });
       //console.log(res.message)
       abrirCerrarModalEliminar();
     }
     else {
-      alert("Error Borrando la Garantia");
+      swal( "Garantias", "Error Borrando la Garantia!", "error", { button: "Aceptar" });
       //console.log(res.message);
       abrirCerrarModalEliminar();
     }
@@ -413,7 +419,10 @@ function Garantias(props) {
   const garantiaInsertar = (
     <div className={styles.modal}>
       <br />
-      <h3 align="center" >Agregar Garantia del Equipo { }  {equipoCodigo} </h3>
+      <h3 align="center" ></h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block">
+        Agregar Garantia del Equipo { } {equipoCodigo}
+      </Typography>
       <Grid container spacing={2} >
         <Grid item xs={12} md={6}> <TextField name="equipo_gar" label="ID Equipo" defaultValue={equipoID} disabled="true"
           fullWidth onChange={handleChange} />
@@ -541,7 +550,9 @@ function Garantias(props) {
   
   const garantiaEditar = (
     <div className={styles.modal}>
-      <h3>Actualizar Garantia del Equipo</h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block">
+        Actualizar Garantia del Equipo { } {equipoCodigo}
+      </Typography>
       <Grid container spacing={2} >
         <Grid item xs={12} md={6}> <TextField name="equipo_gar" label="ID Equipo" defaultValue={equipoID} disabled="true"
           fullWidth onChange={handleChange} value={garantiaSeleccionado && garantiaSeleccionado.equipo_gar} />
@@ -634,13 +645,13 @@ function Garantias(props) {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}> <TextField type="date"  label="Fecha Inicia la Garantía" fullWidth onChange={handleChange}
-              InputLabelProps={{ shrink: true}} name="fechainicial_gar"
-              value={garantiaSeleccionado && garantiaSeleccionado.fechainicial_gar} /> 
+        <Grid item xs={12} md={6}> <TextField type="date" InputLabelProps={{ shrink: true }} name="fechainicial_gar"
+          defaultValue={Moment(garantiaSeleccionado.fechainicial_gar).format('YYYY-MM-DD')}  
+          label="Fecha Inicia la Garantía" fullWidth onChange={handleChange} /> 
         </Grid>
         <Grid item xs={12} md={6}> <TextField type="date" InputLabelProps={{ shrink: true}} name="fechafinal_gar" 
-              label="Fecha Fin de la Garantía" fullWidth onChange={handleChange}
-              value={garantiaSeleccionado && garantiaSeleccionado.fechafinal_gar} /> 
+          defaultValue={Moment(garantiaSeleccionado.fechafinal_gar).format('YYYY-MM-DD')}  
+          label="Fecha Fin de la Garantía" fullWidth onChange={handleChange} /> 
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl2}>
@@ -700,7 +711,7 @@ function Garantias(props) {
         <MaterialTable
           columns={columnas}
           data={listGarantias}
-          title="Información de la Garantia del Equipo"
+          title="GARANTIA DEL EQUIPO"
           actions={[
             {
               icon: 'edit',

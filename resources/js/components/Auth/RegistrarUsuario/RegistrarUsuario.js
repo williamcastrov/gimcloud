@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Button, Icon, Form, Input } from "semantic-ui-react";
-import { toast } from "react-toastify";
 import firebase from "../../../server/firebase";
 import { validateEmail } from "../../../server/Validations";
 import "firebase/auth";
+import swal from 'sweetalert';
 
 // Cargar estilos
 import "./RegistrarUsuario.scss";
@@ -94,7 +94,12 @@ function RegistrarUsuario(props){
             .auth()
             .createUserWithEmailAndPassword(formData.email, formData.password)
             .then(() => {
-                toast.success("Cuenta creada de forma correcta.");
+                swal({
+                  title: "Registro Usuarios",
+                  text: "Cuenta creada de forma correcta!",
+                  icon: "success",
+                  button: "Aceptar"
+                });
                 changeUserName();
                 //console.log(firebase.auth().currentUser);
                 console.log(firebase.auth().currentUser.uid);
@@ -108,7 +113,13 @@ function RegistrarUsuario(props){
                 grabarUsuario();
             })
             .catch(() => {
-                toast.error("Error al crear la cuenta.");
+                swal({
+                  title : "Registro Usuarios",
+                  text  : "Error al crear la cuenta!",
+                  icon  : "error",
+                  button: "Aceptar"
+                });
+        
             })
             .finally(() => {
                 setIsLoading(false);
@@ -124,7 +135,12 @@ function RegistrarUsuario(props){
             displayName: formData.username
           })
           .catch(() => {
-            toast.error("Error al asignar el nombre del usuario.");
+            swal({
+              title : "Registro Usuarios",
+              text  : "Error al asignar el nombre del usuario!",
+              icon  : "error",
+              button: "Aceptar"
+            });
           });
     };
 
@@ -157,7 +173,12 @@ function RegistrarUsuario(props){
     
           if (res.success) {
             console.log("OK");
-            alert("Usuario Creado de forma Correcta")
+            swal({
+              title: "Registro Usuarios",
+              text: "Usuario Creado de forma Correcta!",
+              icon: "success",
+              button: "Aceptar"
+            });
             console.log(res.message)
             //abrirCerrarModalInsertar();
             //delete pais.id;
@@ -165,13 +186,23 @@ function RegistrarUsuario(props){
           } else
           {
             console.log("FALSO");
-            alert("Error Creando el Usuario");
+            swal({
+              title : "Registro Usuarios",
+              text  : "Error Creando el Usuar!",
+              icon  : "error",
+              button: "Aceptar"
+            });
             console.log(res.message);
             //abrirCerrarModalInsertar();
           }
         }
         else {
-          alert("Debe Ingresar Todos los Datos, Error Creando el Usuario");
+          swal({
+            title : "Registro Usuarios",
+            text  : "Debe Ingresar Todos los Datos, Error Creando el Usuario!",
+            icon  : "warning",
+            button: "Aceptar"
+          });
           console.log(res.message);
           //abrirCerrarModalInsertar();
         }

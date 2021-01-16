@@ -4,6 +4,7 @@ import MaterialTable from "material-table";
 import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
+import swal from 'sweetalert';
 
 // Componentes de Conexion con el Backend
 import regionesServices from "../../../services/Parameters/Regiones";
@@ -97,11 +98,6 @@ function Regiones() {
     let errors = {};
     let formOk = true;
 
-    if (!regionSeleccionado.codigo_reg) {
-      errors.codigo_reg = true;
-      formOk = false;
-    }
-
     if (!regionSeleccionado.nombre_reg) {
       errors.nombre_reg = true;
       formOk = false;
@@ -118,21 +114,22 @@ function Regiones() {
       const res = await regionesServices.save(regionSeleccionado);
 
       if (res.success) {
-        alert("Region Creada de forma Correcta")
+        swal("Región", "Region Creada de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
+        e.target.reset();
         abrirCerrarModalInsertar();
         delete regionSeleccionado.codigo_reg;
         delete regionSeleccionado.nombre_reg;
         delete regionSeleccionado.pais_reg;
       } else
       {
-        alert("Error Creando la Region");
+        swal( "Región", "Error Creando la Region!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Creando la Región");
+      swal( "Región", "Debe Ingresar Todos los Datos, Error Creando la Región!", "warning", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
@@ -143,11 +140,6 @@ function Regiones() {
     setFormError({});
     let errors = {};
     let formOk = true;
-
-    if (!regionSeleccionado.codigo_reg) {
-      errors.codigo_reg = true;
-      formOk = false;
-    }
 
     if (!regionSeleccionado.nombre_reg) {
       errors.nombre_reg = true;
@@ -166,21 +158,21 @@ function Regiones() {
     const res = await regionesServices.update(regionSeleccionado);
 
     if (res.success) {
-        alert("Region Actualizada de forma Correcta")
+        swal( "Región", "Region Actualizada de forma Correcta!", "success", {button: "Aceptar"} );
         console.log(res.message)
         abrirCerrarModalEditar();
         delete regionSeleccionado.codigo_reg;
         delete regionSeleccionado.nombre_reg;
         delete regionSeleccionado.pais_reg;
     } else
-    {
-        alert("Error Actualizando la Región");
-        console.log(res.message);
-        abrirCerrarModalEditar();
+    { 
+      swal( "Región", "Error Actualizando la Región!", "error", {button: "Aceptar"});
+      console.log(res.message);
+      abrirCerrarModalEditar();
     }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Actualizando la Region");
+      swal( "Región", "Debe Ingresar Todos los Datos, Error Actualizando la Región!", "warning", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalEditar();
     } 
@@ -191,14 +183,14 @@ function Regiones() {
     const res = await regionesServices.delete(regionSeleccionado.id_reg);
 
     if (res.success) {
-        alert("Region Borrada de forma Correcta")
+        swal("Región", "Región Borrada de forma Correcta!", "success", {button: "Aceptar"});
         console.log(res.message)
         abrirCerrarModalEliminar();
     }
     else {
-        alert("Error Borrando la Región");
+        swal( "Región", "Error Borrando la Región!", "error", { button: "Aceptar" });
         console.log(res.message);
-        abrirCerrarModalEliminar();
+        abrirCerrarModalEliminar(); 
     }
     
   }
@@ -208,10 +200,6 @@ function Regiones() {
       title: 'Id',
       field: 'id_reg',
       type: 'numeric'
-    },
-    {
-      title: 'Codigo',
-      field: 'codigo_reg'
     },
     {
       title: 'Región',
@@ -230,8 +218,6 @@ function Regiones() {
   const regionInsertar=(
     <div className={styles.modal}>
       <h3 align="center" >Agregar Nueva Región</h3>
-      <TextField className={styles.inputMaterial} label="Código" name="codigo_reg" onChange={handleChange} />
-      <br />
       <TextField className={styles.inputMaterial} label="Región" name="nombre_reg" onChange={handleChange} />          
       <br />
       <FormControl className={styles.formControl}>
@@ -263,8 +249,6 @@ function Regiones() {
   const regionEditar=(
     <div className={styles.modal}>
       <h3 align="center" >Actualizar Regiones</h3>
-      <TextField className={styles.inputMaterial} label="Código" name="codigo_reg" onChange={handleChange} value={regionSeleccionado&&regionSeleccionado.codigo_reg}/>
-      <br />
       <TextField className={styles.inputMaterial} label="Región" name="nombre_reg" onChange={handleChange} value={regionSeleccionado&&regionSeleccionado.nombre_reg}/>
       <br />
       <FormControl className={styles.formControl}>
@@ -341,14 +325,12 @@ function Regiones() {
     >
       {regionInsertar}
     </Modal>
-
     <Modal
       open={modalEditar}
       onClose={abrirCerrarModalEditar}
     >
       {regionEditar}
     </Modal>
-
     <Modal
       open={modalEliminar}
       onClose={abrirCerrarModalEliminar}

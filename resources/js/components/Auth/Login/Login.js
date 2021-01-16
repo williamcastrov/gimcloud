@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Button, Icon, Form, Input } from "semantic-ui-react";
-import { toast } from "react-toastify";
 import { validateEmail } from "../../../server/Validations";
 import firebase from "../../../server/firebase";
 import "firebase/auth";
 //import { useDispatch } from "react-redux";
 //import { BigContext } from "../../../context/BigProvider";
+import swal from 'sweetalert';
 
 import "./Login.scss";
 
@@ -47,7 +47,12 @@ export default function LoginForm(props) {
       .auth()
       .signInWithEmailAndPassword(formData.email, formData.password)
       .then((response) => {
-        toast.warning("Acceso a GIM Cloud OK.")
+        swal({
+          title: "Login",
+          text: "Acceso a GIM Cloud OK!",
+          icon: "success",
+          button: "Aceptar"
+        });
       })
       .catch((err) => {
         handlerErrors(err.code);
@@ -119,15 +124,28 @@ export default function LoginForm(props) {
 function handlerErrors(code) {
   switch (code) {
     case "auth/wrong-password":
-      toast.warning("El usuario o la contraseña son incorrecto.");
+      swal({
+        title : "Registro Usuarios",
+        text  : "El usuario o la contraseña son incorrecto!",
+        icon  : "warning",
+        button: "Aceptar"
+      });
       break;
     case "auth/too-many-requests":
-      toast.warning(
-        "Has enviado demasiadas solicitudes de reenvio de email de confirmacion en muy poco tiempo."
-      );
+      swal({
+        title : "Registro Usuarios",
+        text  : "Has enviado demasiadas solicitudes de reenvio de email de confirmacion en muy poco tiempo!",
+        icon  : "warning",
+        button: "Aceptar"
+      });
       break;
     case "auth/user-not-found":
-      toast.warning("El usuario o la contraseña son incorrecto.");
+      swal({
+        title : "Registro Usuarios",
+        text  : "El usuario o la contraseña son incorrecto",
+        icon  : "warning",
+        button: "Aceptar"
+      });
       break;
     default:
       break;

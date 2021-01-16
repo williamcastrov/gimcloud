@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
-import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
+import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
+import swal from 'sweetalert';
 
 // Componentes de Conexion con el Backend
 import marcasServices from "../../../services/Mantenimiento/Marcas";
@@ -30,6 +31,10 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0),
     minWidth: 315,
+  },
+  typography: {
+    fontSize: 16,
+    color: "#ff3d00"
   }
 }));
 
@@ -129,7 +134,7 @@ function Marcas() {
       const res = await marcasServices.save(marcasSeleccionado);
 
       if (res.success) {
-        alert("Marca Creada de forma Correcta")
+        swal("Marca", "Creada de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalInsertar();
         delete marcasSeleccionado.descripcion_mar;
@@ -137,13 +142,13 @@ function Marcas() {
         delete marcasSeleccionado.estado_mar;
       } else
       {
-        alert("Error Creando la Marca");
+        swal("Marca", "Error Creando la Marca!", "error", { button: "error" });
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Creando la Marca");
+      swal("Marca", "Debe Ingresar Todos los Datos, Revisar Información!", "warning", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
@@ -177,7 +182,7 @@ function Marcas() {
     const res = await marcasServices.update(marcasSeleccionado);
 
     if (res.success) {
-        alert("Marca actualizada de forma Correcta")
+        swal("Marca", "Actualizada de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalEditar();
         delete marcasSeleccionado.nombre_mar;
@@ -185,13 +190,13 @@ function Marcas() {
         delete marcasSeleccionado.estado_mar;
     } else
     {
-        alert("Error Actualizando la Marca");
+        swal("Marca", "Error Actualizando la Marca!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalEditar();
     }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Actualizando la Marca");
+      swal("Marca", "Debe Ingresar Todos los Revisar Información!", "warning", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalEditar();
     } 
@@ -202,12 +207,12 @@ function Marcas() {
     const res = await marcasServices.delete(marcasSeleccionado.id_mar);
 
     if (res.success) {
-        alert("Marca Borrada de forma Correcta")
+        swal("Marca", "Borrada de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalEliminar();
     }
     else {
-        alert("Error Borrando la Marca");
+        swal("Marca", "Error Borrando la Marca!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalEliminar();
     }
@@ -243,7 +248,7 @@ function Marcas() {
 
   const marcaInsertar=(
     <div className={styles.modal}>
-      <h3>Agregar Nueva Marca</h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block">Agregar Marca de Equipo </Typography>
       <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_mar" onChange={handleChange} />          
       <br />
       <FormControl className={styles.formControl}>
@@ -293,7 +298,7 @@ function Marcas() {
 
   const marcaEditar = (
     <div className={styles.modal}>
-      <h3 align="center" >Actualizar Marca del Equipo</h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block">Actualizar Marca de Equipo </Typography>
       <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_mar" onChange={handleChange} value={marcasSeleccionado&&marcasSeleccionado.descripcion_mar}/>
       <br />
       <FormControl className={styles.formControl}>
@@ -360,7 +365,7 @@ function Marcas() {
      <MaterialTable
        columns={columnas}
        data={listMarcas}
-       title="Maestra de Marcas"
+       title="MARCAS DE EQUIPOS"
        actions={[
          {
            icon     : 'edit',

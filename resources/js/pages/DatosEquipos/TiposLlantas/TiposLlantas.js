@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MaterialTable from "material-table";
-import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
+import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
+import swal from 'sweetalert';
 
 // Componentes de Conexion con el Backend
 import tiposllantasServices from "../../../services/DatosEquipos/TiposLlantas"
@@ -31,6 +32,10 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0),
     minWidth: 315,
+  },
+  typography: {
+    fontSize: 16,
+    color: "#ff3d00"
   }
 }));
 
@@ -137,7 +142,7 @@ function TiposLlantas() {
       const res = await tiposllantasServices.save(tiposllantasSeleccionado);
 
       if (res.success) {
-        alert("Tipo de Llantas Creada de forma Correcta")
+        swal( "Tipo Llantas", "Tipo de Llantas Creada de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalInsertar();
         delete tiposllantasSeleccionado.descripcion_llan;
@@ -146,13 +151,13 @@ function TiposLlantas() {
         delete tiposllantasSeleccionado.estado_llan;
       } else
       {
-        alert("Error Creando el Tipo de Llanta");
+        swal( "Tipo Llantas", "Error Creando el Tipo de Llanta!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Creando el Tipo de Llanta");
+      swal( "Tipo Llantas", "Debe Ingresar Todos los Datos, Revisar Información!", "warning", { button: "Aceptar" });
       //console.log(tiposllantasSeleccionado);
       console.log(res.message);
       abrirCerrarModalInsertar();
@@ -191,7 +196,7 @@ function TiposLlantas() {
     const res = await tiposllantasServices.update(tiposllantasSeleccionado);
 
     if (res.success) {
-        alert("Tipos de Llantas actualizada de forma Correcta")
+        swal( "Tipo Llantas", "Actualizada de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalEditar();
         delete tiposllantasSeleccionado.descripcion_llan;
@@ -200,16 +205,16 @@ function TiposLlantas() {
         delete tiposllantasSeleccionado.estado_llan;
     } else
     {
-        alert("Error Actualizando el Tipo de Llanta");
-        console.log(res.message);
-        abrirCerrarModalEditar();
+      swal( "Tipo Llantas", "Error Actualizando el Tipo de Llanta!", "error", { button: "Aceptar" });
+      console.log(res.message);
+      abrirCerrarModalEditar();
     }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Actualizando el Tipo de Llanta");
+      swal( "Tipo Llantas", "Debe Ingresar Todos los Datos, Revisar Información!", "warning", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalEditar();
-    } 
+    }
   }
 
   const borrarTipoLlanta = async()=>{
@@ -217,12 +222,12 @@ function TiposLlantas() {
     const res = await tiposllantasServices.delete(tiposllantasSeleccionado.id_llan);
 
     if (res.success) {
-        alert("El Tipo de Llanta Borrada de forma Correcta")
+        swal( "Tipo Llantas", "Borrada de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalEliminar();
     }
     else {
-        alert("Error Borrando el Tipo de Llanta");
+        swal("Tipo Llantas", "Error Borrando el Tipo de Llanta!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalEliminar();
     }
@@ -260,7 +265,7 @@ function TiposLlantas() {
 
   const tiposllantasInsertar = (
     <div className={styles.modal}>
-      <h3 align="center" >Agregar Nuevo Tipo de Llanta</h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block">Agregar Nuevo Tipo de Llanta</Typography>
       <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_llan" onChange={handleChange} />          
       <br />
       <FormControl className={styles.formControl}>
@@ -311,7 +316,7 @@ function TiposLlantas() {
 
   const tiposllantasEditar=(
     <div className={styles.modal}>
-      <h3 align="center" >Actualizar Especialidades</h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block">Actualizar Tipo de Llantas</Typography>
       <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_llan" onChange={handleChange} value={tiposllantasSeleccionado&&tiposllantasSeleccionado.descripcion_llan}/>
       <br />
       <FormControl className={styles.formControl}>
@@ -380,7 +385,7 @@ function TiposLlantas() {
       <MaterialTable
         columns={columnas}
         data={listarTiposLlantas}
-        title="Maestra de Tipos de Llantas"
+        title="MAESTRA TIPOS DE LLANTAS"
         actions={[
           {
             icon     : 'edit',

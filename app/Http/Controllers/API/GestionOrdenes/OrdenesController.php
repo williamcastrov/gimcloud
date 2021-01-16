@@ -60,8 +60,7 @@ class OrdenesController extends Controller
           $data = DB::select("SELECT t0.*, 
                                            t1.nombre_emp,     t2.nombre_est,     t3.nombre_ciu,       t4.razonsocial_int,
                                            t5.razonsocial_cli, t6.primer_nombre_emp,   t7.descripcion_con, t8.descripcion_sgre,
-                                           t9.descripcion_grp,  t10.descripcion_equ, t11.descripcion_abc, t12.descripcion_tmt,
-                                           t12.descripcion_tmt
+                                           t9.descripcion_grp,  t10.descripcion_equ, t11.descripcion_abc, t12.descripcion_tmt
           FROM  ordenservicio                 as t0 INNER JOIN empresa        as t1  INNER JOIN estados            as t2 
                 INNER JOIN ciudades           as t3 INNER JOIN interlocutores as t4  INNER JOIN interlocutores_cli as t5
                 INNER JOIN interlocutores_emp as t6 INNER JOIN conceptooserv  as t7  INNER JOIN subgruposequipos   as t8
@@ -90,14 +89,14 @@ class OrdenesController extends Controller
           //$data = Frecuencias::find($id_fre);
          
           $data = DB::select("SELECT t0.*, t1.nombre_emp,       t2.nombre_est,        t3.nombre_ciu,       t4.razonsocial_int,
-                                           t5.razonsocial_cli,  t6.razonsocial_emp,   t7.descripcion_con,  t8.descripcion_sgre,
+                                           t5.razonsocial_cli,  t6.primer_nombre_emp, t7.descripcion_con,  t8.descripcion_sgre,
                                            t9.descripcion_grp,  t10.descripcion_equ,  t11.descripcion_abc, t12.descripcion_tmt
           FROM ordenservicio as t0 INNER JOIN empresa            as t1  INNER JOIN estados            as t2 INNER JOIN ciudades as t3
                                    INNER JOIN interlocutores     as t4  INNER JOIN interlocutores_cli as t5 
                                    INNER JOIN interlocutores_emp as t6  INNER JOIN conceptooserv      as t7 
                                    INNER JOIN subgruposequipos   as t8  INNER JOIN gruposequipos      as t9 
                                    INNER JOIN equipos            as t10 INNER JOIN clasificacionABC   as t11 
-                                   INNER JOIN tiposmantenimiento as t12 INNER JOIN ordenservicio      as t13
+                                   INNER JOIN tiposmantenimiento as t12
           WHERE t0.ciudad_otr     = t3.id_ciu and t0.cliente_otr        = t5.id_cli  and t0.concepto_otr  = t7.id_con
             and t0.operario_otr   = t6.id_emp and t0.empresa_otr        = t1.id_emp  and t0.equipo_otr    = t10.id_equ
             and t0.estado_otr     = t2.id_est and t0.grupoequipo_otr    = t9.id_grp  and t0.prioridad_otr = t11.id_abc  
@@ -120,7 +119,7 @@ class OrdenesController extends Controller
           }
           return $response;
       }
-    
+
       public function update(Request $request, $id_otr){
         try {
             $data['estado_otr']             = $request['estado_otr'];
@@ -154,38 +153,39 @@ class OrdenesController extends Controller
       } 
 
       public function updateestadoasignado(Request $request, $id_otr){
+       
         try {
-            $data['estado_otr']             = $request['estado_otr'];
-            $data['tipo_otr']               = $request['tipo_otr'];
-            $data['concepto_otr']           = $request['concepto_otr'];
-            $data['fechaprogramada_otr']    = $request['fechaprogramada_otr'];
-            $data['fechainicia_otr']        = $request['fechainicia_otr'];
-            $data['fechafinal_otr']         = $request['fechafinal_otr'];
-            $data['diasoperacion_otr']      = $request['diasoperacion_otr'];
-            $data['equipo_otr']             = $request['equipo_otr'];
-            $data['proveedor_otr']          = $request['proveedor_otr'];
-            $data['cliente_otr']            = $request['cliente_otr'];
-            $data['operario_otr']           = $request['operario_otr'];
-            $data['grupoequipo_otr']        = $request['grupoequipo_otr'];
-            $data['subgrupoequipo_otr']     = $request['subgrupoequipo_otr'];
-            $data['ciudad_otr']             = $request['ciudad_otr'];
-            $data['resumenorden_otr']       = $request['resumenorden_otr'];
-            $data['prioridad_otr']          = $request['prioridad_otr'];
-            $data['empresa_otr']            = $request['empresa_otr'];
-            
+          $data['estado_otr']             = $request['estado_otr'];
+          $data['tipo_otr']               = $request['tipo_otr'];
+          $data['concepto_otr']           = $request['concepto_otr'];
+          $data['fechaprogramada_otr']    = $request['fechaprogramada_otr'];
+          $data['fechainicia_otr']        = $request['fechainicia_otr'];
+          $data['fechafinal_otr']         = $request['fechafinal_otr'];
+          $data['diasoperacion_otr']      = $request['diasoperacion_otr'];
+          $data['equipo_otr']             = $request['equipo_otr'];
+          $data['proveedor_otr']          = $request['proveedor_otr'];
+          $data['cliente_otr']            = $request['cliente_otr'];
+          $data['operario_otr']           = $request['operario_otr'];
+          $data['grupoequipo_otr']        = $request['grupoequipo_otr'];
+          $data['subgrupoequipo_otr']     = $request['subgrupoequipo_otr'];
+          $data['ciudad_otr']             = $request['ciudad_otr'];
+          $data['resumenorden_otr']       = $request['resumenorden_otr'];
+          $data['prioridad_otr']          = $request['prioridad_otr'];
+          $data['empresa_otr']            = $request['empresa_otr'];
+          
           $res = Ordenes::where("id_otr",$id_otr)->update($data);
-    
+      
           $response['res'] = $res;
           $response['message'] = "Updated successful";
           $response['success'] = true;
-        } catch (\Exception $e) {
+        } catch (\Exception $e) 
+        {
           $response['message'] = $e->getMessage();
           $response['success'] = false;
         }
         return $response;
       }
 
-    
       public function delete($id_otr){ 
         try {
           $res = Ordenes::where("id_otr",$id_otr)->delete($id_otr);

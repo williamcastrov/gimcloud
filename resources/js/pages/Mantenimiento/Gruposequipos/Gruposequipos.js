@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
-import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
+import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
+import swal from 'sweetalert';
 
-// Componentes de Conexion con el Backend
+// Componentes de Conexion con el Backend 
 import gruposequiposServices from "../../../services/Mantenimiento/GruposEquipos";
 import estadosServices from "../../../services/Parameters/Estados";
 import empresasServices from "../../../services/Empresa";
@@ -30,6 +31,10 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0),
     minWidth: 315,
+  },
+  typography: {
+    fontSize: 16,
+    color: "#ff3d00"
   }
 }));
 
@@ -110,7 +115,8 @@ function Gruposequipos() {
     }
 
     if (i !== 3) {
-      alert("El Codigo del Grupo debe tener tres Caracteres")
+      alert("")
+      swal("Grupos Equipos", "El Codigo del Grupo debe tener tres Caracteres!", "warning", { button: "Aceptar" });
     } else {
 
       setFormError({});
@@ -144,7 +150,8 @@ function Gruposequipos() {
         const res = await gruposequiposServices.save(gruposequiposSeleccionado);
 
         if (res.success) {
-          alert("Grupo de Equipo Creado de forma Correcta")
+          swal("Grupos Equipos", "Creado de Forma Correcta!", "success", { button: "Aceptar" });
+        
           console.log(res.message)
           abrirCerrarModalInsertar();
           delete gruposequiposSeleccionado.codigogrupo_grp;
@@ -152,13 +159,13 @@ function Gruposequipos() {
           delete gruposequiposSeleccionado.empresa_grp;
           delete gruposequiposSeleccionado.estado_grp;
         } else {
-          alert("Error Creando el Grupo del Equipo");
+          swal("Grupos Equipos", "Error Creando el Grupo!", "error", { button: "Aceptar" });
           console.log(res.message);
           abrirCerrarModalInsertar();
         }
       }
       else {
-        alert("Debe Ingresar Todos los Datos, Error Creando el Grupo del Equipo");
+        swal("Grupos Equipos", "Debe Ingresar Todos los Datos, Revisar Información", "warning", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
@@ -172,7 +179,7 @@ function Gruposequipos() {
     }
 
     if (i !== 3) {
-      alert("El Codigo del Grupo debe tener tres Caracteres")
+      swal("Grupos Equipos", "El Codigo del Grupo debe tener tres Caracteres!", "warning", { button: "Aceptar" });
     } else {
 
       setFormError({});
@@ -206,7 +213,8 @@ function Gruposequipos() {
         const res = await gruposequiposServices.update(gruposequiposSeleccionado);
 
         if (res.success) {
-          alert("Tipo Equipo actualizado de forma Correcta")
+
+          swal("Grupos Equipos", "Actualizacion Correcta!", "success", { button: "Aceptar" });
           console.log(res.message)
           abrirCerrarModalEditar();
           delete gruposequiposSeleccionado.codigogrupo_grp;
@@ -214,13 +222,13 @@ function Gruposequipos() {
           delete gruposequiposSeleccionado.empresa_grp;
           delete gruposequiposSeleccionado.estado_grp;
         } else {
-          alert("Error Actualizando el Grupo del Equipo");
+          swal("Grupos Equipos", "Error Actualizando el Grupo!", "error", { button: "Aceptar" });
           console.log(res.message);
           abrirCerrarModalEditar();
         }
       }
       else {
-        alert("Debe Ingresar Todos los Datos, Error Actualizando el Grupo del Equipo");
+        swal("Grupos Equipos", "Debe Ingresar Todos los Datos, Revisar Información!", "warning", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalEditar();
       }
@@ -233,12 +241,12 @@ function Gruposequipos() {
     const res = await gruposequiposServices.delete(gruposequiposSeleccionado.id_grp);
 
     if (res.success) {
-      alert("Tipo Equipo Borrado de forma Correcta")
+      swal("Grupos Equipos", "Borrado de forma Correcta!", "success", { button: "Aceptar" });
       console.log(res.message)
       abrirCerrarModalEliminar();
     }
     else {
-      alert("Error Borrando el Tipo de Equipo");
+      swal("Grupos Equipos", "Error Borrando el Grupo!", "error", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalEliminar();
     }
@@ -278,7 +286,7 @@ function Gruposequipos() {
 
   const grupoequipoInsertar = (
     <div className={styles.modal}>
-      <h3>Agregar Nueva Marca</h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block">Agregar Marcas de Equipos</Typography>
       <TextField className={styles.inputMaterial} label="Grupo" name="codigogrupo_grp" onChange={handleChange} />
       <br />
       <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_grp" onChange={handleChange} />
@@ -330,6 +338,7 @@ function Gruposequipos() {
 
   const grupoequipoEditar = (
     <div className={styles.modal}>
+      <Typography align="center" className={styles.typography} variant="button" display="block">Actualizar Marcas de Equipos</Typography>
       <TextField className={styles.inputMaterial} label="Grupo" name="codigogrupo_grp" onChange={handleChange} value={gruposequiposSeleccionado && gruposequiposSeleccionado.codigogrupo_grp} />
       <br />
       <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_grp" onChange={handleChange} value={gruposequiposSeleccionado && gruposequiposSeleccionado.descripcion_grp} />
@@ -398,7 +407,7 @@ function Gruposequipos() {
       <MaterialTable
         columns={columnas}
         data={listGruposequipos}
-        title="Maestra de Grupos de Equipos"
+        title="GRUPOS DE EQUIPOS"
         actions={[
           {
             icon: 'edit',

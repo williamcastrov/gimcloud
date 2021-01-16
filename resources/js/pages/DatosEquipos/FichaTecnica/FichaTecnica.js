@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
-import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid, ButtonGroup } from "@material-ui/core";
+import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid, ButtonGroup, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
 import NumberFormat from 'react-number-format';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import swal from 'sweetalert';
 
 // Componentes de Conexion con el Backend
 import fichatecnicaServices from "../../../services/DatosEquipos/FichaTecnica";
@@ -40,6 +40,10 @@ const useStyles = makeStyles((theme) => ({
   formControl2: {
     margin: theme.spacing(0),
     minWidth: 455,
+  },
+  typography: {
+    fontSize: 16,
+    color: "#ff3d00"
   }
 }));
 
@@ -281,7 +285,7 @@ function FichaTecnica(props) {
       const res = await fichatecnicaServices.save(fichatecnicaSeleccionado);
 
       if (res.success) {
-        alert("Ficha Técnica del Equipo Creado de forma Correcta")
+        swal( "Ficha Técnica", "Creada de forma Correcta!", "success", { button: "Aceptar" });
         //console.log(res.message)
         abrirCerrarModalInsertar();
 
@@ -308,13 +312,13 @@ function FichaTecnica(props) {
         delete fichatecnicaSeleccionado.denominacion_fit;
         delete fichatecnicaSeleccionado.numerofabricante_fit;
       } else {
-        alert("Error Creando Ficha Técnica del Equipo");
+        swal( "Ficha Técnica", "Error Crando la Fecha Técnica!", "error", { button: "Aceptar" });
         console.log(res.success);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Creando Ficha Técnica del Equipo");
+      swal( "Ficha Técnica", "Debe Ingresar todos los Datos!, Revisar Información", "warning", { button: "Aceptar" });
       //console.log(fichatecnicaSeleccionado);
       //console.log(res.message);
       abrirCerrarModalInsertar();
@@ -445,7 +449,7 @@ function FichaTecnica(props) {
       console.log(fichatecnicaSeleccionado);
 
       if (res.success) {
-        alert("Ficha Técnica del Equipo actualizada de forma Correcta")
+        swal( "Ficha Técnica", "Actualizada de forma Correcta!", "success", { button: "Aceptar" });
         //console.log(res.message)
         abrirCerrarModalEditar();
         delete fichatecnicaSeleccionado.id_fit;
@@ -471,13 +475,13 @@ function FichaTecnica(props) {
         delete fichatecnicaSeleccionado.denominacion_fit;
         delete fichatecnicaSeleccionado.numerofabricante_fit;
       } else {
-        alert("Error Actualizando Ficha Técnica del Equipo");
+        swal( "Ficha Técnica", "Error Actualizando Ficha Ténica!", "error", { button: "Aceptar" });
         //console.log(res.message);
         abrirCerrarModalEditar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Actualizando Ficha Técnica del Equipo");
+      swal( "Ficha Técnica", "Debe Ingresar Todos los Datos, Revisar Información!", "warning", { button: "Aceptar" });
       //console.log(res.message);
       abrirCerrarModalEditar();
     }
@@ -488,12 +492,12 @@ function FichaTecnica(props) {
     const res = await fichatecnicaServices.delete(fichatecnicaSeleccionado.id_fit);
 
     if (res.success) {
-      alert("Ficha Tecnica Borrada de forma Correcta")
+      swal( "Ficha Técnica", "Borrada de forma Correcta!", "error", { button: "Aceptar" });
       //console.log(res.message)
       abrirCerrarModalEliminar();
     }
     else {
-      alert("Error Borrando la Ficha Tecnica");
+      swal( "Ficha Técnica", "Error Borrando la Ficha Técnica!", "success", { button: "Aceptar" });
       //console.log(res.message);
       abrirCerrarModalEliminar();
     }
@@ -542,7 +546,9 @@ function FichaTecnica(props) {
 
   const fichatecnicaInsertar = (
     <div className={styles.modal}>
-      <h3 align="center" >Agregar Ficha Técnica del Equipo { } {equipoCodigo} </h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block">
+        Agregar Ficha Técnica del Equipo { } {equipoCodigo} 
+      </Typography>
       <Grid container spacing={2} >
         <Grid item xs={12} md={3}> <TextField name="id_fit" label="ID Ficha Técnica" defaultValue={equipoID} disabled="true"
           fullWidth onChange={handleChange} />
@@ -711,8 +717,9 @@ function FichaTecnica(props) {
 
   const fichatecnicaEditar = (
     <div className={styles.modal}>
-      <h3 align="center" >Modificar Ficha Técnica del Equipo { } {equipoCodigo} </h3>
-
+      <Typography align="center" className={styles.typography} variant="button" display="block">
+        Modificar Ficha Técnica del Equipo { } {equipoCodigo} 
+      </Typography>
       <Grid container spacing={2} >
         <Grid item xs={12} md={3}> <TextField name="id_fit" label="ID Ficha Técnica" defaultValue={equipoID} disabled="true"
           fullWidth onChange={handleChange}  value={fichatecnicaSeleccionado && fichatecnicaSeleccionado.id_fit}  />
@@ -904,7 +911,7 @@ function FichaTecnica(props) {
         <MaterialTable
           columns={columnas}
           data={listFichaTecnica}
-          title="Ficha Técnica del Equipo"
+          title="FICHA TECNICA DEL EQUIPO"
           actions={[
             {
               icon: 'edit',

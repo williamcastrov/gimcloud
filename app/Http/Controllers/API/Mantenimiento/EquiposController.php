@@ -56,7 +56,7 @@ class EquiposController extends Controller
                              INNER JOIN marcas  as t4 INNER JOIN gruposequipos as t5 INNER JOIN estados        as t6
                              INNER JOIN estadoscliente as t7 INNER JOIN estadosmtto as t8
           WHERE t0.empresa_equ        = t1.id_emp and t0.frecuencia_equ     = t2.id_fre    and t0.propietario_equ = t3.id_int     and
-                t3.codigo_tipo_int    = 2         and t0.marca_equ          = t4.id_mar    and t0.grupoequipo_equ = t5.id_grp     and
+                t0.marca_equ          = t4.id_mar    and t0.grupoequipo_equ = t5.id_grp    and
                 t0.estadocontable_equ = t6.id_est and t0.estadocliente_equ  = t7.id_estcli and t0.estadomtto_equ  = t8.id_estmtto");
   
           $response['data'] = $data;
@@ -82,7 +82,7 @@ class EquiposController extends Controller
                              INNER JOIN marcas  as t4 INNER JOIN gruposequipos as t5 INNER JOIN estados        as t6
                              INNER JOIN estadoscliente as t7 INNER JOIN estadosmtto as t8
           WHERE t0.empresa_equ        = t1.id_emp and t0.frecuencia_equ    = t2.id_fre    and t0.propietario_equ = t3.id_int     and
-                t3.codigo_tipo_int    = 2         and t0.marca_equ         = t4.id_mar    and t0.grupoequipo_equ = t5.id_grp     and
+                t0.marca_equ         = t4.id_mar    and t0.grupoequipo_equ = t5.id_grp    and
                 t0.estadocontable_equ = t6.id_est and t0.estadocliente_equ = t7.id_estcli and t0.estadomtto_equ  = t8.id_estmtto and
                 t0.id_equ = $id_equ");
 

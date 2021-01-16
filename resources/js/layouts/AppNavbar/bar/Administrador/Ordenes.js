@@ -8,6 +8,7 @@ import CategoryIcon from '@material-ui/icons/Category';
 import Divider from '@material-ui/core/Divider';
 import SyncIcon from '@material-ui/icons/Sync';
 import PermDataSettingIcon from '@material-ui/icons/PermDataSetting';
+import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 import ReceiptIcon from '@material-ui/icons/Receipt';
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
@@ -77,11 +78,11 @@ function Ordenes() {
           </ListItem>
           <Collapse in={openPO} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItem button className={classes.nested}>
+              <ListItem component={Link} button to="/mantenimiento/tiposmtto" className={classes.nested}>
                 <ListItemIcon>
-                  <CategoryIcon />
+                  <SettingsApplicationsIcon />
                 </ListItemIcon>
-                <ListItemText primary="Tipos de Orden" />
+                <ListItemText primary="Tipos de Ordenes" />
               </ListItem>
               <ListItem button className={classes.nested}>
                 <ListItemIcon>

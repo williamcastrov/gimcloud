@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
 function Paises() {
   const styles = useStyles();
   const [listPaises, setListPaises] = useState([]);
+  const [validar, setValidar] = useState([]);
   const [modalInsertar, setModalInsertar ] = useState(false);
   const [modalEditar, setModalEditar]= useState(false);
   const [modalEliminar, setModalEliminar]= useState(false);
@@ -75,6 +76,7 @@ function Paises() {
     async function fetchDataPais() {
       const res = await paisServices.listPaises();
       setListPaises(res.data);
+      setValidar(res.data);
     }
     fetchDataPais();
   }, [])
@@ -155,24 +157,43 @@ function Paises() {
 
     if (formOk) {
     
+    console.log("ID PAIS : ", paisSeleccionado.id_pai);
+    console.log("VALIDAR PAIS : ", validar);
+    
     const res = await paisServices.update(paisSeleccionado);
     console.log(paisSeleccionado);
 
     if (res.success) {
-        alert("Pais Actualizado de forma Correcta")
+        swal({
+          title: "Gestión Paises",
+          text: "Pais Actualizado de forma Correcta!",
+          icon: "success",
+          button: "Aceptar"
+        });
         console.log(res.message)
         abrirCerrarModalEditar();
         delete paisSeleccionado.codigo_pai;
         delete paisSeleccionado.nombre_pai;
     } else
     {
-        alert("Error Actualizando el Pais");
+        alert("");
+        swal({
+          title : "Gestión Paises",
+          text  : "Error Actualizando el Pais!",
+          icon  : "error",
+          button: "Aceptar"
+        });
         console.log(res.message);
         abrirCerrarModalEditar();
     }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Actualizando el Pais");
+      swal({
+        title : "Gestión Paises",
+        text  : "Debe Ingresar Todos los Datos, Error Actualizando el Pais!",
+        icon  : "warning",
+        button: "Aceptar"
+      });
       console.log(res.message);
       abrirCerrarModalEditar();
     } 

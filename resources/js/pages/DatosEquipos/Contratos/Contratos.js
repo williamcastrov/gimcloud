@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
-import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid, Box, InputAdornment } from "@material-ui/core";
+import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid, Box, InputAdornment, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
 import NumberFormat from 'react-number-format';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import swal from 'sweetalert';
+import Moment from 'moment';
 
 // Componentes de Conexion con el Backend
 import contratosServices from "../../../services/DatosEquipos/Contratos";
@@ -42,6 +44,10 @@ const useStyles = makeStyles((theme) => ({
   formControl2: {
     margin: theme.spacing(0),
     minWidth: 640,
+  },
+  typography: {
+    fontSize: 16,
+    color: "#ff3d00"
   }
 }));
 
@@ -238,7 +244,7 @@ function Contratos(props) {
       const res = await contratosServices.save(contratoSeleccionado);
 
       if (res.success) {
-        alert("Contrato del Equipo Creado de forma Correcta")
+        swal( "Contrato", "Contrat del Equipo Creado de forma Correcta!", "success", { button: "Aceptar" });
         //console.log(res.message)
         abrirCerrarModalInsertar();
         delete contratoSeleccionado.id_ctr;
@@ -253,13 +259,13 @@ function Contratos(props) {
         delete contratoSeleccionado.estado_ctr;
         delete contratoSeleccionado.observacion_ctr;
       } else {
-        alert("Error Creando Contrato del Equipo");
+        swal( "Contrato", "Error Creando el Contrato del Equipo!", "error", { button: "Aceptar" });
         console.log(res.success);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Creando Contrato del Equipo");
+      swal( "Contrato", "Debe Ingresar Todos los Datos, Revisar Información!", "warning", { button: "Aceptar" });
       //console.log(contratoSeleccionado);
       //console.log(res.message);
       abrirCerrarModalInsertar();
@@ -335,7 +341,7 @@ function Contratos(props) {
       console.log(contratoSeleccionado);
 
       if (res.success) {
-        alert("Contrato del Equipo actualizado de forma Correcta")
+        swal( "Contrato", "Contrato del Equipo Actualizado de forma Correcta!", "success", { button: "Aceptar" });
         //console.log(res.message)
         abrirCerrarModalEditar();
         delete contratoSeleccionado.id_ctr;
@@ -350,13 +356,13 @@ function Contratos(props) {
         delete contratoSeleccionado.estado_ctr;
         delete contratoSeleccionado.observacion_ctr;
       } else {
-        alert("Error Actualizando Contrato del Equipo");
+        swal( "Contrato", "Error Actualizando Contrato del Equipo!", "error", { button: "Aceptar" });
         //console.log(res.message);
         abrirCerrarModalEditar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Actualizando Contrato del Equipo");
+      swal( "Contrato", "Debe Ingresar Todos los Datos del Contrato, Revisar Información!", "warning", { button: "Aceptar" });
       //console.log(res.message);
       abrirCerrarModalEditar();
     }
@@ -367,12 +373,12 @@ function Contratos(props) {
     const res = await contratosServices.delete(contratoSeleccionado.id_ctr);
 
     if (res.success) {
-      alert("Contrato Borrada de forma Correcta")
+      swal( "Contrato", "Contrato Brorrando de forma Correcta!", "success", { button: "Aceptar" });
       //console.log(res.message)
       abrirCerrarModalEliminar();
     }
     else {
-      alert("Error Borrando el Contrato");
+      swal( "Contrato", "Error Borrando Contrato del Equipo!", "error", { button: "Aceptar" });
       //console.log(res.message);
       abrirCerrarModalEliminar();
     }
@@ -426,7 +432,9 @@ function Contratos(props) {
 
   const contratoInsertar = (
     <div className={styles.modal}>
-      <h3 align="center" >Agregar Contrato del Equipo { } {equipoCodigo} </h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block">
+        Agregar Contrato del Equipo { } {equipoCodigo}
+      </Typography>
       <Grid container spacing={2} >
         <Grid item xs={12} md={6}> <TextField name="id_ctr" label="ID del Contrato" defaultValue={equipoID} disabled="true"
           fullWidth onChange={handleChange} />
@@ -555,7 +563,9 @@ function Contratos(props) {
 
   const contratoEditar = (
     <div className={styles.modal}>
-      <h3 align="center" >Agregar Contrato del Equipo { } {equipoCodigo} </h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block">
+        Modificar Contrato del Equipo { } {equipoCodigo}
+      </Typography>
       <Grid container spacing={2} >
         <Grid item xs={12} md={6}> <TextField name="id_ctr" label="ID del Contrato" defaultValue={equipoID} disabled="true"
           fullWidth onChange={handleChange} value={contratoSeleccionado && contratoSeleccionado.id_ctr} />
@@ -632,13 +642,13 @@ function Contratos(props) {
         <Grid item xs={12} md={4}> <TextField name="duracion_ctr" label="Duración del Contrato"
           fullWidth onChange={handleChange} value={contratoSeleccionado && contratoSeleccionado.duracion_ctr} />
         </Grid>
-        <Grid item xs={12} md={4}> <TextField InputLabelProps={{ shrink: true }} name="fechainicio_ctr"
-          label="Fecha de inicio del Contrato" fullWidth onChange={handleChange}
-          value={contratoSeleccionado && contratoSeleccionado.fechainicio_ctr} />
+        <Grid item xs={12} md={4}> <TextField type="date" InputLabelProps={{ shrink: true }} name="fechainicio_ctr"
+          defaultValue={Moment(contratoSeleccionado.fechainicio_ctr).format('YYYY-MM-DD')}
+          label="Fecha de inicio del Contrato" fullWidth onChange={handleChange} />
         </Grid>
-        <Grid item xs={12} md={4}> <TextField InputLabelProps={{ shrink: true }} name="fechafinal_ctr"
-          label="Fecha Final del Contrato" fullWidth onChange={handleChange}
-          value={contratoSeleccionado && contratoSeleccionado.fechafinal_ctr} />
+        <Grid item xs={12} md={4}> <TextField type="date" InputLabelProps={{ shrink: true }} name="fechafinal_ctr"
+          defaultValue={Moment(contratoSeleccionado.fechafinal_ctr).format('YYYY-MM-DD')}
+          label="Fecha Final del Contrato" fullWidth onChange={handleChange} />
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl}>
@@ -700,7 +710,7 @@ function Contratos(props) {
         <MaterialTable
           columns={columnas}
           data={listContratos}
-          title="Datos del Contrato"
+          title="DATOS DEL CONTRATO"
           actions={[
             {
               icon: 'edit',

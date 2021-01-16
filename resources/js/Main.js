@@ -28,7 +28,6 @@ import Monedas from './pages/Parameters/Monedas';
 
 // Componentes Modulo Gestión Mantenimiento
 import Frecuencias from './pages/Mantenimiento/Frecuencias';
-import Tiposmtto from './pages/Mantenimiento/Tiposmtto';
 import Equipos from './pages/Mantenimiento/Equipos';
 import Gruposequipos from './pages/Mantenimiento/Gruposequipos';
 import SubGruposequipos from './pages/Mantenimiento/SubGruposequipos';
@@ -39,6 +38,7 @@ import EstadosClientes from './pages/Mantenimiento/EstadosClientes';
 import EstadosMtto from './pages/Mantenimiento/EstadosMtto';
 
 // Componentes Modulo Gestión Ordenes de Trabajo
+import Tiposmtto from './pages/GestionOrdenes/Parameters/Tiposmtto';
 import Ordenes from './pages/GestionOrdenes/Ordenes';
 import CrearOrdenes from './pages/GestionOrdenes/CrearOrdenes';
 
@@ -162,3 +162,4 @@ function Main() {
 
 export default Main;
 
+//  <Route path="/parametros/paises" component={Paises}/>

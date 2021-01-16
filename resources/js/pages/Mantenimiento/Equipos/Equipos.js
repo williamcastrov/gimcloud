@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import MaterialTable from "material-table";
-import { Modal, Button, TextField, Select, MenuItem, FormControl, InputLabel, Grid, InputAdornment  } from "@material-ui/core";
+import { Modal, Button, TextField, Select, MenuItem, FormControl, InputLabel, Grid, InputAdornment, Typography} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import NumberFormat from 'react-number-format';
+import swal from 'sweetalert';
 
 // Componentes de Conexion con el Backend
 import empresasServices from "../../../services/Empresa";
@@ -61,6 +62,10 @@ const useStyles = makeStyles((theme) => ({
     right: 'auto',
     position: 'fixed',
   },
+  typography: {
+    fontSize: 16,
+    color: "#ff3d00"
+  }
 }));
 
 function NumberFormatCustom(props) {
@@ -310,7 +315,7 @@ function Equipos() {
       const res = await equiposServices.save(equiposSeleccionado);
 
       if (res.success) {
-        alert("Equipo Creado de forma Correcta")
+        swal( "Equipo", "Equipo Creado de forma Correcta!", "success", { button: "Aceptar" });
         //console.log(res.message)
         abrirCerrarModalInsertar();
         delete equiposSeleccionado.codigo_equ;
@@ -327,13 +332,13 @@ function Equipos() {
         delete equiposSeleccionado.estadomtto_equ;
         delete equiposSeleccionado.ctacontable_equ;
       } else {
-        alert("Error Creando el Equipo");
+        swal( "Equipo", "Error Creando el Equipo!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Creando el Equipo");
+      swal( "Equipo", "Debe Ingresar Todos los Datos, Error Creando el Equipo!", "warning", { button: "Aceptar" });
       console.log(equiposSeleccionado);
       console.log(res.message);
       abrirCerrarModalInsertar();
@@ -418,7 +423,7 @@ function Equipos() {
       const res = await equiposServices.update(equiposSeleccionado);
 
       if (res.success) {
-        alert("Maquina actualizada de forma Correcta")
+        swal( "Equipo", "Equipo Actualizado de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalEditar();
         delete equiposSeleccionado.codigo_equ;
@@ -435,13 +440,13 @@ function Equipos() {
         delete equiposSeleccionado.estadomtto_equ;
         delete equiposSeleccionado.ctacontable_equ;
       } else {
-        alert("Error Actualizando el Equipo");
+        swal( "Equipo", "Error Actualizando el Equipo!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalEditar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Actualizando el Equipo");
+      swal( "Equipo", "Debe Ingresar Todos los Datos, Error Actualizando el Equipo!", "warning", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalEditar();
     }
@@ -452,12 +457,12 @@ function Equipos() {
     const res = await equiposServices.delete(equiposSeleccionado.id_equ);
 
     if (res.success) {
-      alert("Equipo Borrado de forma Correcta")
+      swal( "Equipo", "Equipo Borrado de forma Correcta!", "success", { button: "Aceptar" });
       console.log(res.message)
       abrirCerrarModalEliminar();
     }
     else {
-      alert("Error Borrando el Equipo");
+      swal( "Equipo", "Error Borrando el Equipo!", "error", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalEliminar();
     }
@@ -519,7 +524,7 @@ function Equipos() {
 
   const equipoInsertar = (
     <div className={styles.modal}>
-      <h3 align="center" >Agregar Nuevo Equipo</h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block"> Agregar Nuevo Equipo </Typography>
       <Grid container spacing={2} >
         <Grid item xs={12} md={6}> <TextField name="codigo_equ" label="Codigo Equipo"
           fullWidth onChange={handleChange} />
@@ -720,7 +725,7 @@ function Equipos() {
 
   const equipoEditar = (
     <div className={styles.modal}>
-      <h3 align="center" >Actualizar Equipos</h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block" > Actualizar Equipo </Typography>
       <Grid container spacing={2} >
         <Grid item xs={12} md={6}> <TextField name="codigo_equ" label="Codigo Equipo" disabled="true"
           fullWidth onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.codigo_equ} />
@@ -949,7 +954,7 @@ function Equipos() {
       <MaterialTable
         columns={columnas}
         data={listarEquipos}
-        title="Maestra de Equipos"
+        title=" MAESTRA DE EQUIPOS"
         actions={[
           {
             icon: 'edit',

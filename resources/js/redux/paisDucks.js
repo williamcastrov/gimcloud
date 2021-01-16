@@ -35,7 +35,7 @@ export const obtenerPaisesAccion = () => async (dispatch, getState) => {
         */
 
         //const res = await axios.get(`https://pokeapi.co/api/v2/pokemon?offset=0&limit=10`)
-        const res = await axios.get(`http://127.0.0.1:8000/api/pais/listar_pais`)
+        const res = await axios.get(`http://127.0.0.1:8000/api/paises/listar_paises`)
         console.log(res.data)
        
         dispatch({

@@ -4,6 +4,7 @@ import MaterialTable from "material-table";
 import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
+import swal from 'sweetalert';
 
 // Componentes de Conexion con el Backend
 import ciudadesServices from "../../../services/Parameters/Ciudades";
@@ -120,7 +121,7 @@ function Ciudades() {
       const res = await ciudadesServices.save(ciudadSeleccionado);
 
       if (res.success) {
-        alert("Ciudad Creada de forma Correcta")
+        swal("Ciudad", "Ciudad Creada de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalInsertar();
         delete ciudadSeleccionado.codigo_ciu;
@@ -128,13 +129,13 @@ function Ciudades() {
         delete ciudadSeleccionado.departamento_ciu;
       } else
       {
-        alert("Error Creando la Ciudad");
+        swal("Ciudad", "Error Creando la Ciudad!", "error", { button: "Aceptar" }); 
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Creando la Ciudad");
+      swal("Ciudad", "Debe Ingresar Todos los Datos, Error Creando la Ciudad!", "warning", { button: "Aceptar" }); 
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
@@ -168,7 +169,7 @@ function Ciudades() {
     const res = await ciudadesServices.update(ciudadSeleccionado);
 
     if (res.success) {
-        alert("Ciudad actualizada de forma Correcta")
+        swal("Ciudad", "Ciudad actualizada de forma Correcta!", "success", { button: "Aceptar" }); 
         console.log(res.message)
         abrirCerrarModalEditar();
         delete ciudadSeleccionado.codigo_ciu;
@@ -176,13 +177,13 @@ function Ciudades() {
         delete ciudadSeleccionado.departamento_ciu;
     } else
     {
-        alert("Error Actualizando la Ciudad");
+        swal("Ciudad", "Error Actualizando la Ciudad!", "error", { button: "Aceptar" }); 
         console.log(res.message);
         abrirCerrarModalEditar();
     }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Actualizando la Ciudad");
+      swal("Ciudad", "Debe Ingresar Todos los Datos, Error Actualizando la Ciudad!", "warning", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalEditar();
     } 
@@ -193,12 +194,12 @@ function Ciudades() {
     const res = await ciudadesServices.delete(ciudadSeleccionado.id_ciu);
 
     if (res.success) {
-        alert("Ciudad Borrada de forma Correcta")
+        swal("Ciudad", "Ciudad Borrada de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalEliminar();
     }
     else {
-        alert("Error Borrando la Ciudad");
+        swal("Ciudad", "Error Borrando la Ciudad!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalEliminar();
     }

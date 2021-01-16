@@ -104,12 +104,6 @@ function Mantenimiento() {
                 </ListItemIcon>
                 <ListItemText primary="Tipos de Garantias" />
               </ListItem>
-              <ListItem component={Link} button to="/mantenimiento/tiposmtto" className={classes.nested}>
-                <ListItemIcon>
-                  <SettingsApplicationsIcon />
-                </ListItemIcon>
-                <ListItemText primary="Tipos de Mantenimiento" />
-              </ListItem>
               <ListItem component={Link} button to="/mantenimiento/tiposllantas" className={classes.nested}>
                 <ListItemIcon>
                   <DonutSmallIcon />

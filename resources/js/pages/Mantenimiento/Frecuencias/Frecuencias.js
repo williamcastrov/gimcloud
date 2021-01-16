@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MaterialTable from "material-table";
-import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid } from "@material-ui/core";
+import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
+import swal from 'sweetalert';
 
 // Componentes de Conexion con el Backend
 import frecuenciasServices from "../../../services/Mantenimiento/Frecuencias";
@@ -32,6 +33,10 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0),
     minWidth: 315,
+  },
+  typography: {
+    fontSize: 16,
+    color: "#ff3d00"
   }
 }));
 
@@ -154,7 +159,7 @@ function Frecuencias() {
       const res = await frecuenciasServices.save(frecuenciasSeleccionado);
 
       if (res.success) {
-        alert("Frecuencia Creada de forma Correcta")
+        swal("Frecuencia de Mantenimiento", "Creada de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalInsertar();
         delete frecuenciasSeleccionado.descripcion_fre;
@@ -163,13 +168,13 @@ function Frecuencias() {
         delete frecuenciasSeleccionado.empresa_fre;
         delete frecuenciasSeleccionado.estado_fre;
       } else {
-        alert("Error Creando la Frecuencia");
+        swal("Frecuencia de Mantenimiento", "Error Creando Frecuencia!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Creando la Frecuencia");
+      swal("Frecuencia de Mantenimiento", "Debe Ingresar Todos los Datos, Revisar Información!", "warning", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
@@ -213,7 +218,7 @@ function Frecuencias() {
       const res = await frecuenciasServices.update(frecuenciasSeleccionado);
 
       if (res.success) {
-        alert("Frecuencia actualizada de forma Correcta")
+        swal("Frecuencia de Mantenimiento", "Actualizada de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalEditar();
         delete frecuenciasSeleccionado.descripcion_fre;
@@ -222,13 +227,13 @@ function Frecuencias() {
         delete frecuenciasSeleccionado.empresa_fre;
         delete frecuenciasSeleccionado.estado_fre;
       } else {
-        alert("Error Actualizando la Frecuencia");
+        swal("Frecuencia de Mantenimiento", "Error Actualizando Frecuencia de Mantenimiento!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalEditar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Actualizando la Frecuencia");
+      swal("Frecuencia de Mantenimiento", "Debe Ingresar Todos los Datos, Fevisar Información!", "warning", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalEditar();
     }
@@ -239,12 +244,12 @@ function Frecuencias() {
     const res = await frecuenciasServices.delete(frecuenciasSeleccionado.id_fre);
 
     if (res.success) {
-      alert("Frecuencia Borrada de forma Correcta")
+      swal("Frecuencia de Mantenimiento", "Frecuencia Borrada de forma Correcta!", "success", { button: "Aceptar" });
       console.log(res.message)
       abrirCerrarModalEliminar();
     }
     else {
-      alert("Error Borrando la Frecuencia");
+      swal("Frecuencia de Mantenimiento", "Error Borrando Frecuencia!", "success", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalEliminar();
     }
@@ -289,8 +294,9 @@ function Frecuencias() {
   const frecuenciaInsertar = (
     <div className={styles.modal}>
       <br />
-      <h3>Frecuencias para Mantenimiento</h3>
-
+      <Typography align="center" className={styles.typography} variant="button" display="block">
+        Agregar Frecuencia de Mantenimiento
+      </Typography>
       <Grid container spacing={2} >
         <Grid item xs={12} md={12}>
           <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_fre" fullWidth onChange={handleChange} />
@@ -369,7 +375,9 @@ function Frecuencias() {
 
   const frecuenciaEditar = (
     <div className={styles.modal}>
-      <h3 align="center" >Actualizar Frecuencia de Mantenimiento</h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block">
+        Actualizar Frecuencia de Mantenimiento
+      </Typography>
       <TextField className={styles.inputMaterial} label="Frecuencia" name="descripcion_fre" onChange={handleChange} value={frecuenciasSeleccionado && frecuenciasSeleccionado.descripcion_fre} />
       <br />
       <TextField className={styles.inputMaterial} label="Periodicidad" name="periodicidad_fre" onChange={handleChange} value={frecuenciasSeleccionado && frecuenciasSeleccionado.periodicidad_fre} />
@@ -458,7 +466,7 @@ function Frecuencias() {
       <MaterialTable
         columns={columnas}
         data={listFrecuencias}
-        title="Maestra de Frecuencias para Mantenimiento"
+        title="FRECUENCIAS DE MANTENIMIENTO"
         actions={[
           {
             icon: 'edit',

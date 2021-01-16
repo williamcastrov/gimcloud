@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
-import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
+import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
+import swal from 'sweetalert';
 
 // Componentes de Conexion con el Backend
 import subgruposequiposServices from "../../../services/Mantenimiento/SubGruposEquipos";
@@ -31,6 +32,10 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0),
     minWidth: 315,
+  },
+  typography: {
+    fontSize: 16,
+    color: "#ff3d00"
   }
 }));
 
@@ -122,7 +127,7 @@ function SubGruposequipos() {
     }
 
     if (i !== 3) {
-      alert("El Codigo del SubGrupo debe tener tres Caracteres")
+      swal("SubGrupos", "El Codigo del SubGrupo debe tener tres Caracteres!", "warning", { button: "Aceptar" });
     } 
     else 
     {
@@ -162,7 +167,7 @@ function SubGruposequipos() {
         const res = await subgruposequiposServices.save(subgruposequiposSeleccionado);
 
         if (res.success) {
-          alert("SubGrupo de Equipo Creado de forma Correcta")
+          swal("SubGrupos", "Creado de forma Correcta!", "success", { button: "Aceptar" });
           console.log(res.message)
           abrirCerrarModalInsertar();
           delete subgruposequiposSeleccionado.codigo_sgre;
@@ -171,13 +176,13 @@ function SubGruposequipos() {
           delete subgruposequiposSeleccionado.empresa_sgre;
           delete subgruposequiposSeleccionado.estado_sgre;
         } else {
-          alert("Error Creando el SubGrupo del Equipo");
+          swal("SubGrupos", "Error Creando el SubGrupo del Equipo!", "error", { button: "Aceptar" });
           console.log(res.message);
           abrirCerrarModalInsertar();
         }
       }
       else {
-        alert("Debe Ingresar Todos los Datos, Error Creando el SubGrupo del Equipo");
+        swal("SubGrupos", "Debe Ingresar Todos los Datos, Revisar Información!", "warning", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
@@ -191,7 +196,7 @@ function SubGruposequipos() {
     }
 
     if (i !== 3) {
-      alert("El Codigo del SubGrupo debe tener tres Caracteres")
+      swal("SubGrupos", "El Codigo del SubGrupo debe tener tres Caracteres!", "warning", { button: "Aceptar" });
     } 
     else 
     {
@@ -231,7 +236,7 @@ function SubGruposequipos() {
         const res = await subgruposequiposServices.update(subgruposequiposSeleccionado);
 
         if (res.success) {
-          alert("SubGrupo del Equipo actualizado de forma Correcta")
+          swal("SubGrupos", "Actualizado de forma Correcta!", "success", { button: "Aceptar" });
           console.log(res.message)
           abrirCerrarModalEditar();
           delete subgruposequiposSeleccionado.codigo_sgre;
@@ -240,13 +245,13 @@ function SubGruposequipos() {
           delete subgruposequiposSeleccionado.empresa_sgre;
           delete subgruposequiposSeleccionado.estado_sgre;
         } else {
-          alert("Error Actualizando SubGrupo del Equipo");
+          swal("SubGrupos", "Error Actualizando SubGrupo del Equipo!", "error", { button: "Aceptar" });
           console.log(res.message);
           abrirCerrarModalEditar();
         }
       }
       else {
-        alert("Debe Ingresar Todos los Datos, Error Actualizando el SubGrupo del Equipo");
+        swal("SubGrupos", "Debe Ingresar Todos los Datos, Revisar Información!", "warning", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalEditar();
       }
@@ -258,12 +263,12 @@ function SubGruposequipos() {
     const res = await subgruposequiposServices.delete(subgruposequiposSeleccionado.id_sgre);
 
     if (res.success) {
-      alert("SubGrupo del Equipo Borrado de forma Correcta")
+      swal("SubGrupos", "Borrado de forma Correcta!", "success", { button: "Aceptar" });
       console.log(res.message)
       abrirCerrarModalEliminar();
     }
     else {
-      alert("Error Borrando el SubGrupo del Equipo");
+      swal("SubGrupos", "Error Borrando el SubGrupo del Equipo!", "error", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalEliminar();
     }
@@ -307,7 +312,7 @@ function SubGruposequipos() {
 
   const subgrupoequipoInsertar = (
     <div className={styles.modal}>
-      <h3>Agregar Nuevo Sub Grupo</h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block">Agregar SubGrupo Equipos </Typography>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_sgre" onChange={handleChange} />
       <br />
       <FormControl className={styles.formControl}>
@@ -378,6 +383,7 @@ function SubGruposequipos() {
 
   const subgrupoequipoEditar = (
     <div className={styles.modal}>
+      <Typography align="center" className={styles.typography} variant="button" display="block">Actualizar SubGrupo Equipos </Typography>
       <TextField className={styles.inputMaterial} label="Codigo" name="codigo_sgre" onChange={handleChange} value={subgruposequiposSeleccionado && subgruposequiposSeleccionado.codigo_sgre} />
       <br />
       <FormControl className={styles.formControl}>
@@ -463,7 +469,7 @@ function SubGruposequipos() {
       <MaterialTable
         columns={columnas}
         data={listSubGruposequipos}
-        title="Maestra de Sub Grupos de Equipos"
+        title="SUBGRUPOS EQUIPOS"
         actions={[
           {
             icon: 'edit',

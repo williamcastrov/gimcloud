@@ -20,6 +20,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/employee/listar_empleados', 'App\Http\Controllers\API\EmployeeController@list');
 
+
+Route::get('/pruebas/listar_pruebas', 'App\Http\Controllers\API\Parameters\PruebaController@listar_pruebas');
+Route::post('/pruebas/create', 'App\Http\Controllers\API\Parameters\PruebaController@create');
+Route::get('/pruebas/get/{id}', 'App\Http\Controllers\API\Parameters\PruebaController@get');
+Route::delete('/pruebas/delete/{id}', 'App\Http\Controllers\API\Parameters\PruebaController@delete');
+Route::put('/pruebas/update/{id}', 'App\Http\Controllers\API\Parameters\PruebaController@update');
+
 // Rutas definidas para los Parametros del Sistema
 Route::get('/paises/listar_paises', 'App\Http\Controllers\API\Parameters\PaisesController@listar_paises');
 Route::post('/paises/create', 'App\Http\Controllers\API\Parameters\PaisesController@create');
@@ -146,12 +153,6 @@ Route::get('/frecuencias/get/{id}', 'App\Http\Controllers\API\Mantenimiento\Frec
 Route::delete('/frecuencias/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\FrecuenciasController@delete');
 Route::put('/frecuencias/update/{id}', 'App\Http\Controllers\API\Mantenimiento\FrecuenciasController@update');
 
-Route::get('/tiposmtto/listar_tiposmtto', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@listar_tiposmtto');
-Route::post('/tiposmtto/create', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@create');
-Route::get('/tiposmtto/get/{id}', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@get');
-Route::delete('/tiposmtto/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@delete');
-Route::put('/tiposmtto/update/{id}', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@update');
-
 Route::get('/clasificacionabc/listar_clasificacionabc', 'App\Http\Controllers\API\Mantenimiento\ClasificacionABCController@listar_clasificacionabc');
 Route::post('/clasificacionabc/create', 'App\Http\Controllers\API\Mantenimiento\ClasificacionABCController@create');
 Route::get('/clasificacionabc/get/{id}', 'App\Http\Controllers\API\Mantenimiento\ClasificacionABCController@get');
@@ -220,6 +221,13 @@ Route::delete('/ubicaciones/delete/{id}', 'App\Http\Controllers\API\DatosEquipos
 Route::put('/ubicaciones/update/{id}', 'App\Http\Controllers\API\DatosEquipos\UbicacionesController@update');
 
 // Rutas Gestión Ordenes de Servicio
+
+Route::get('/tiposmtto/listar_tiposmtto', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@listar_tiposmtto');
+Route::post('/tiposmtto/create', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@create');
+Route::get('/tiposmtto/get/{id}', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@get');
+Route::delete('/tiposmtto/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@delete');
+Route::put('/tiposmtto/update/{id}', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@update');
+
 Route::get('/conceptooserv/listar_conceptooserv', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@listar_conceptooserv');
 Route::post('/conceptooserv/create', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@create');
 Route::get('/conceptooserv/get/{id}', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@get');
@@ -231,6 +239,7 @@ Route::post('/ordenesserv/create', 'App\Http\Controllers\API\GestionOrdenes\Orde
 Route::get('/ordenesserv/get/{id}', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@get');
 Route::delete('/ordenesserv/delete/{id}', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@delete');
 Route::put('/ordenesserv/update/{id}', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@update');
+Route::put('/ordenesserv/updateestadoasignado/{id}', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@updateestadoasignado');
 
 // Rutas Administración Activos
 Route::get('/areas/listar_areas', 'App\Http\Controllers\API\Activos\AreasController@listar_areas');

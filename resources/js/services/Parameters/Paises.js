@@ -20,6 +20,7 @@ pais.listPaises = async () => {
 }
 
 pais.update = async (data) => {
+    console.log("DATA : ", data.id_pai)
     const urlUpdate = baseUrl+"/update/"+data.id_pai
     const res = await axios.put(urlUpdate, data)
     .then(response=>{ return response.data; })
