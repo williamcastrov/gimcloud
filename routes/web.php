@@ -44,21 +44,26 @@ Route::get('/interlocutores/proveedores', 'App\Http\Controllers\GimController@in
 Route::get('/interlocutores/clientes', 'App\Http\Controllers\GimController@index');
 Route::get('/interlocutores/empleados', 'App\Http\Controllers\GimController@index');
 
+// Rutas Gestion de Almacenes
+Route::get('/almacenes/tiposalmacenes', 'App\Http\Controllers\GimController@index');
+Route::get('/almacenes/crearalmacenes', 'App\Http\Controllers\GimController@index');
+
 // Rutas del Modulo de Mantenimiento
 Route::get('/mantenimiento/marcas', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/estadosclientes', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/estadosmtto', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/frecuencias', 'App\Http\Controllers\GimController@index');
-Route::get('/mantenimiento/tiposmtto', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/gruposequipos', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/subgruposequipos', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/clasificacionABC', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/referencias', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/equipos', 'App\Http\Controllers\GimController@index');
 
-// Rutas del Modulo de Mantenimiento
+// Rutas del Modulo Gestion de Ordenes de Servicio
 Route::get('/gestionordenes/ordenes', 'App\Http\Controllers\GimController@index');
 Route::get('/gestionordenes/crearordenes', 'App\Http\Controllers\GimController@index');
+Route::get('/mantenimiento/tiposmtto', 'App\Http\Controllers\GimController@index');
+Route::get('/mantenimiento/conceptososerv', 'App\Http\Controllers\GimController@index');
 
 // Rutas de Datos Adicionales de los Equipos
 Route::get('/mantenimiento/tipogarantia', 'App\Http\Controllers\GimController@index');

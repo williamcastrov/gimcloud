@@ -20,7 +20,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/employee/listar_empleados', 'App\Http\Controllers\API\EmployeeController@list');
 
-
 Route::get('/pruebas/listar_pruebas', 'App\Http\Controllers\API\Parameters\PruebaController@listar_pruebas');
 Route::post('/pruebas/create', 'App\Http\Controllers\API\Parameters\PruebaController@create');
 Route::get('/pruebas/get/{id}', 'App\Http\Controllers\API\Parameters\PruebaController@get');
@@ -115,6 +114,19 @@ Route::put('/usuarios/update/{id}', 'App\Http\Controllers\API\Parameters\Usuario
 Route::delete('/usuarios/delete/{id}', 'App\Http\Controllers\API\Parameters\UsuariosController@delete');
 
 Route::get('/dashboard/listar_dashboard', 'App\Http\Controllers\API\DashboardController@listar_dashboard');
+
+// Rutas Gestión Almacenes
+Route::get('/tiposalmacenes/listar_tiposalmacenes', 'App\Http\Controllers\API\Almacenes\TipoAlmacenController@listar_tiposalmacenes');
+Route::post('/tiposalmacenes/create', 'App\Http\Controllers\API\Almacenes\TipoAlmacenController@create');
+Route::get('/tiposalmacenes/get/{id}', 'App\Http\Controllers\API\Almacenes\TipoAlmacenController@get');
+Route::delete('/tiposalmacenes/delete/{id}', 'App\Http\Controllers\API\Almacenes\TipoAlmacenController@delete');
+Route::put('/tiposalmacenes/update/{id}', 'App\Http\Controllers\API\Almacenes\TipoAlmacenController@update');
+
+Route::get('/almacenes/listar_almacenes', 'App\Http\Controllers\API\Almacenes\AlmacenesController@listar_almacenes');
+Route::post('/almacenes/create', 'App\Http\Controllers\API\Almacenes\AlmacenesController@create');
+Route::get('/almacenes/get/{id}', 'App\Http\Controllers\API\Almacenes\AlmacenesController@get');
+Route::delete('/almacenes/delete/{id}', 'App\Http\Controllers\API\Almacenes\AlmacenesController@delete');
+Route::put('/almacenes/update/{id}', 'App\Http\Controllers\API\Almacenes\AlmacenesController@update');
 
 // Rutas Gestión Mantenimiento
 Route::get('/marcas/listar_marcas', 'App\Http\Controllers\API\Mantenimiento\MarcasController@listar_marcas');
@@ -221,18 +233,17 @@ Route::delete('/ubicaciones/delete/{id}', 'App\Http\Controllers\API\DatosEquipos
 Route::put('/ubicaciones/update/{id}', 'App\Http\Controllers\API\DatosEquipos\UbicacionesController@update');
 
 // Rutas Gestión Ordenes de Servicio
-
 Route::get('/tiposmtto/listar_tiposmtto', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@listar_tiposmtto');
 Route::post('/tiposmtto/create', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@create');
 Route::get('/tiposmtto/get/{id}', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@get');
 Route::delete('/tiposmtto/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@delete');
 Route::put('/tiposmtto/update/{id}', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@update');
 
-Route::get('/conceptooserv/listar_conceptooserv', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@listar_conceptooserv');
-Route::post('/conceptooserv/create', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@create');
-Route::get('/conceptooserv/get/{id}', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@get');
-Route::delete('/conceptooserv/delete/{id}', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@delete');
-Route::put('/conceptooserv/update/{id}', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@update');
+Route::get('/conceptososerv/listar_conceptososerv', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@listar_conceptososerv');
+Route::post('/conceptososerv/create', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@create');
+Route::get('/conceptososerv/get/{id}', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@get');
+Route::delete('/conceptososerv/delete/{id}', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@delete');
+Route::put('/conceptososerv/update/{id}', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@update');
 
 Route::get('/ordenesserv/listar_ordenesserv', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@listar_ordenesserv');
 Route::post('/ordenesserv/create', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@create');

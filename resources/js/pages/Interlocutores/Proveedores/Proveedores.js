@@ -6,6 +6,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import swal from 'sweetalert';
 
 // Componentes de Conexion con el Backend
 import proveedoresServices from "../../../services/Interlocutores/Proveedores";
@@ -46,6 +47,10 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
     width: 200,
   },
+  typography: {
+    fontSize: 16,
+    color: "#ff3d00"
+  }
 }));
 
 function Proveedores() {
@@ -225,7 +230,7 @@ function Proveedores() {
       const res = await proveedoresServices.save(proveedoresSeleccionado);
 
       if (res.success) {
-        alert("Proveedeor Creado de forma Correcta")
+        swal("Proveedor", "Creado de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalInsertar();
         delete proveedoresSeleccionado.codigo_tipo_int;
@@ -242,13 +247,14 @@ function Proveedores() {
         delete proveedoresSeleccionado.especialidad_int;
       } else
       {
-        alert("Error Creando el Proveedor");
+        swal("Proveedor", "Error Creando el Proveedor!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Creando el Proveedor");
+      alert("");
+      swal("Proveedor", "Debe Ingresar Todos los Datos, Error!", "warning", { button: "Aceptar" });
       console.log(proveedoresSeleccionado);
       console.log(res.message);
       abrirCerrarModalInsertar();
@@ -328,7 +334,8 @@ function Proveedores() {
     const res = await proveedoresServices.update(proveedoresSeleccionado);
 
     if (res.success) {
-        alert("Proveedor actualizado de forma Correcta")
+        alert("")
+        swal("Proveedor", "Creado forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalEditar();
         delete proveedoresSeleccionado.codigo_tipo_int;
@@ -345,13 +352,13 @@ function Proveedores() {
         delete proveedoresSeleccionado.especialidad_int;
     } else
     {
-        alert("Error Actualizando el Proveedor");
+        swal("Proveedor", "Error Actualizando el Proveedor!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalEditar();
     }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Actualizando el Proveedor");
+      swal("Proveedor", "Debe Ingresar Todos los Datos, Error!", "warning", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalEditar();
     } 
@@ -362,12 +369,12 @@ function Proveedores() {
     const res = await proveedoresServices.delete(proveedoresSeleccionado.id_int);
 
     if (res.success) {
-        alert("Proveedor Borrado de forma Correcta")
+        swal("Proveedor", "Borrado de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalEliminar();
     }
     else {
-        alert("Error Borrando el Proveedor");
+        swal("Proveedor", "Error Borrando el Proveedor!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalEliminar();
     }
@@ -431,7 +438,8 @@ function Proveedores() {
   
   const proveedorInsertar=(
     <div className={styles.modal}>
-      <h3>Agregar Nuevo Proveedor</h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block">Agregar Nuevo Proveedor</Typography>
+      <br />
       <Grid container spacing={2} > 
         <Grid item xs={12} md={6}> <TextField  name="codigo_tipo_int" label="Tipo Interlocutor" defaultValue="1" disabled="true"
          fullWidth onChange={handleChange} /> </Grid>
@@ -556,7 +564,8 @@ function Proveedores() {
 
   const proveedorEditar=(
     <div className={styles.modal}>
-      <h3  align="center" >Actualizar Proveedor</h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block">Actualizar Proveedor</Typography>
+      <br/>
       <Grid container spacing={2} > 
         <Grid item xs={12} md={6}> <TextField  name="codigo_tipo_int" label="Tipo Interlocutor" fullWidth disabled="true"
           onChange={handleChange} value={proveedoresSeleccionado&&proveedoresSeleccionado.codigo_tipo_int} /> </Grid>
@@ -702,7 +711,7 @@ function Proveedores() {
       <MaterialTable
         columns={columnas}
         data={listarProveedores}
-        title="Maestra de Proveedores"
+        title="MAESTRA DE PROVEEDORES"
         actions={[
           {
             icon     : 'edit',

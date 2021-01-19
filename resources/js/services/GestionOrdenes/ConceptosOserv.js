@@ -1,8 +1,8 @@
-const baseUrl = "http://127.0.0.1:8000/api/conceptooserv";
+const baseUrl = "http://127.0.0.1:8000/api/conceptososerv";
 import axios from "axios";
-const conceptooserv = {};
+const conceptososerv = {};
 
-conceptooserv.save = async (data) => {
+conceptososerv.save = async (data) => {
     const urlSave = baseUrl + "/create"
     const res = await axios.post(urlSave, data)
         .then(response => { return response.data })
@@ -10,8 +10,8 @@ conceptooserv.save = async (data) => {
     return res;
 }
 
-conceptooserv.listConceptoOserv = async () => {
-    const urlList = baseUrl+"/listar_conceptooserv"
+conceptososerv.listConceptosOserv = async () => {
+    const urlList = baseUrl+"/listar_conceptososerv"
     const res = await axios.get(urlList)
     .then(response=>{ return response.data; })
     .catch(error=>{ return error; })
@@ -19,7 +19,7 @@ conceptooserv.listConceptoOserv = async () => {
     return res;
 }
 
-conceptooserv.update = async (data) => {
+conceptososerv.update = async (data) => {
     console.log(data);
     const urlUpdate = baseUrl+"/update/"+data.id_con
     const res = await axios.put(urlUpdate, data)
@@ -29,7 +29,7 @@ conceptooserv.update = async (data) => {
     return res;
 }
 
-conceptooserv.delete = async (id_con) => {
+conceptososerv.delete = async (id_con) => {
     const urlDelete = baseUrl+"/delete/"+id_con
     const res = await axios.delete(urlDelete)
     .then(response=> { return response.data })
@@ -38,4 +38,4 @@ conceptooserv.delete = async (id_con) => {
     return res;
 }
   
-export default conceptooserv;
+export default conceptososerv;

@@ -1,11 +1,13 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import {Link} from 'react-router-dom';
 import {ListSubheader, List, ListItem, ListItemIcon, ListItemText, Collapse } from "@material-ui/core";
 import {ExpandLess, ExpandMore} from "@material-ui/icons";
 import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak';
 import StoreIcon from '@material-ui/icons/Store';
 import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
 import Divider from '@material-ui/core/Divider';
+import BusinessIcon from '@material-ui/icons/Business';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,7 +45,6 @@ function Almacenes() {
    
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          
           <ListItem button className={classes.nested} button onClick={handleClickGA} >
             <ListItemIcon>
               <ViewHeadlineIcon />
@@ -53,17 +54,17 @@ function Almacenes() {
           </ListItem>
           <Collapse in={openGA} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItem button className={classes.nested}>
+              <ListItem component={Link} button to="/almacenes/tiposalmacenes" className={classes.nested}>
                 <ListItemIcon>
                   <StoreIcon />
                 </ListItemIcon>
                 <ListItemText primary="Tipos de Almacenes" />
               </ListItem>
-              <ListItem button className={classes.nested}>
+              <ListItem component={Link} button to="/almacenes/crearalmacenes" className={classes.nested}>
                 <ListItemIcon>
-                  <CenterFocusWeakIcon />
+                  <BusinessIcon  />
                 </ListItemIcon>
-                <ListItemText primary="Sin Asignar" />
+                <ListItemText primary="Crear Almacenes" />
               </ListItem>
             </List>
           </Collapse>

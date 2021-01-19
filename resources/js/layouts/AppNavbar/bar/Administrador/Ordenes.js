@@ -84,11 +84,11 @@ function Ordenes() {
                 </ListItemIcon>
                 <ListItemText primary="Tipos de Ordenes" />
               </ListItem>
-              <ListItem button className={classes.nested}>
+              <ListItem component={Link} button to="/mantenimiento/conceptososerv" className={classes.nested}>
                 <ListItemIcon>
                   <SyncIcon />
                 </ListItemIcon>
-                <ListItemText primary="Por Asignar" />
+                <ListItemText primary="Conceptos de las Ordenes" />
               </ListItem>
             </List>
           </Collapse>

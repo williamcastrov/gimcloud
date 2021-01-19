@@ -33,7 +33,7 @@ class ConceptososervController extends Controller
           return $response;
     }
   
-    public function listar_conceptooserv(){
+    public function listar_conceptososerv(){
   
         try {
             //$data = Especialidades::with("empresa")->get();
@@ -82,7 +82,7 @@ class ConceptososervController extends Controller
   
           try {
             $data['id_con']          = $request['id_con'];
-            $data['observacion_con'] = $request['observacion_con'];
+            $data['descripcion_con'] = $request['descripcion_con'];
             $data['empresa_con']     = $request['empresa_con'];
             $data['estado_con']      = $request['estado_con'];
   

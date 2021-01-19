@@ -37,8 +37,9 @@ import ClasificacionABC from './pages/Mantenimiento/ClasificacionABC';
 import EstadosClientes from './pages/Mantenimiento/EstadosClientes';
 import EstadosMtto from './pages/Mantenimiento/EstadosMtto';
 
-// Componentes Modulo Gestión Ordenes de Trabajo
+// Componentes Modulo Gestión Ordenes de Servicios
 import Tiposmtto from './pages/GestionOrdenes/Parameters/Tiposmtto';
+import ConceptosOserv from './pages/GestionOrdenes/Parameters/ConceptosOserv/ConceptosOserv';
 import Ordenes from './pages/GestionOrdenes/Ordenes';
 import CrearOrdenes from './pages/GestionOrdenes/CrearOrdenes';
 
@@ -50,6 +51,10 @@ import FichaTecnica from './pages/DatosEquipos/FichaTecnica';
 import TiposLlantas from './pages/DatosEquipos/TiposLlantas';
 import TiposEquipos from './pages/DatosEquipos/TiposEquipos';
 import Ubicaciones from './pages/DatosEquipos/Ubicaciones';
+
+// Componentes Modulo Gestión de Almacenes
+import TiposAlmacenes from './pages/Almacenes/TiposAlmacenes';
+import CrearAlmacenes from './pages/Almacenes/CrearAlmacenes';
 
 //Componentes Modulo Interlocutores
 import TipoInterlocutores from './pages/Interlocutores/Parameters/TipoInterlocutores';
@@ -116,12 +121,15 @@ function Main() {
               <Route path="/interlocutores/clientes" component={Clientes} />
               <Route path="/interlocutores/empleados" component={Empleados} />
 
+              <Route path="/almacenes/tiposalmacenes" component={TiposAlmacenes} />
+              <Route path="/almacenes/crearalmacenes" component={CrearAlmacenes} />
+
               <Route path="/mantenimiento/marcas" component={Marcas} />
               <Route path="/mantenimiento/tiposllantas" component={TiposLlantas} />
               <Route path="/mantenimiento/tiposequipos" component={TiposEquipos} />
               <Route path="/mantenimiento/estadosclientes" component={EstadosClientes} />
               <Route path="/mantenimiento/estadosmtto" component={EstadosMtto} />
-              <Route path="/mantenimiento/tiposmtto" component={Tiposmtto} />
+       
               <Route path="/mantenimiento/gruposequipos" component={Gruposequipos} />
               <Route path="/mantenimiento/subgruposequipos" component={SubGruposequipos} />
               <Route path="/mantenimiento/clasificacionABC" component={ClasificacionABC} />
@@ -136,6 +144,8 @@ function Main() {
 
               <Route path="/gestionordenes/ordenes" component={Ordenes} />
               <Route path="/gestionordenes/crearordenes" component={CrearOrdenes} />
+              <Route path="/mantenimiento/tiposmtto" component={Tiposmtto} />
+              <Route path="/mantenimiento/conceptososerv" component={ConceptosOserv} />
 
               <Route path="/activos/areas" component={Areas} />
               <Route path="/activos/cencostos" component={Cencostos} />
