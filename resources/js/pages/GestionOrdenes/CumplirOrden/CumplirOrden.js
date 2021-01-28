@@ -1,27 +1,17 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
-import { Modal, Button, TextField, Select, MenuItem, FormControl, InputLabel, Grid, ButtonGroup, Typography } from "@material-ui/core";
+import { Modal, Button, ButtonGroup, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import NumberFormat from 'react-number-format';
 import CachedIcon from '@material-ui/icons/Cached';
+import ReplayIcon from '@material-ui/icons/Replay';
 import { green, purple } from '@material-ui/core/colors';
-import swal from 'sweetalert';
-import Moment from 'moment';
 
 // Componentes de Conexion con el Backend
-import empresasServices from "../../../services/Empresa";
-import estadosServices from "../../../services/Parameters/Estados";
-import ciudadesServices from "../../../services/Parameters/Ciudades";
-import proveedoresServices from "../../../services/Interlocutores/Proveedores";
-import clientesServices from "../../../services/Interlocutores/Clientes";
-import empleadosServices from "../../../services/Interlocutores/Empleados";
-import conceptososervServices from "../../../services/GestionOrdenes/ConceptosOserv";
 import crearordenesServices from "../../../services/GestionOrdenes/CrearOrdenes";
-import gruposequiposServices from "../../../services/Mantenimiento/GruposEquipos";
-import subgruposequiposServices from "../../../services/Mantenimiento/SubGruposEquipos";
-import equiposServices from "../../../services/Mantenimiento/Equipos";
-import clasificacionabcServices from "../../../services/Mantenimiento/ClasificacionABC";
-import tiposmttoServices from "../../../services/Mantenimiento/Tiposmtto";
+
+// Componentes Adicionales al proceso de Ordenes de Servicio
+import ActividadesOserv from "../ActividadesOserv";
 
 // hooks react redux
 import {useDispatch, useSelector} from 'react-redux';
@@ -36,7 +26,7 @@ import MenuCrearOrden from "../MenuCrearOrden";
 const useStyles = makeStyles((theme) => ({
   modal: {
     position: 'absolute',
-    width: 1000,
+    width: 1200,
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
@@ -95,8 +85,8 @@ function NumberFormatCustom(props) {
     <NumberFormat
       {...other}
       getInputRef={inputRef}
-      thousandSeparator={','}
-      decimalSeparator={'.'}
+      thousandSeparator={'.'}
+      decimalSeparator={','}
 
     />
   );
@@ -108,28 +98,14 @@ function CumplirOrden() {
   const listOrdenes = useSelector(store => store.ordenesservicio.arrayOrdenes);
 
   const [listarOrdenes, setListarOrdenes] = useState([]);
+  const [ordenServicio, setOrdenServicio] = useState([]);
   const [modalInsertar, setModalInsertar] = useState(false);
   const [modalEditar, setModalEditar] = useState(false);
   const [modalEliminar, setModalEliminar] = useState(false);
   const [modalAsignar, setModalAsignar] = useState(false);
   const [formError, setFormError] = useState(false);
-
-  const [listarEmpresas, setListarEmpresas] = useState([]);
-  const [listarEstados, setListarEstados] = useState([]);
-  const [listarCiudades, setListarCiudades] = useState([]);
-  const [listarProveedores, setListarProveedores] = useState([]);
-  const [listarClientes, setListarClientes] = useState([]);
-  const [listarEmpleados, setListarEmpleados] = useState([]);
-  const [listarGruposEquipos, setListarGruposEquipos] = useState([]);
-  const [listarSubGruposEquipos, setListarSubGruposEquipos] = useState([]);
-  const [listarEquipos, setListarEquipos] = useState([]);
-  const [listarConceptososerv, setListarConceptosOserv] = useState([]);
-  const [listarClasificacionABC, setListarClasificacionABC] = useState([]);
-  const [listarTiposMtto, setListarTiposMtto] = useState([]);
-  const [listarEstadoModificado, setListarEstadoModificado] =  useState([]);
    
-  const [estado, setEstado] = useState(0);
-  let cambio = 12;
+  const [cambio, setCambio] = useState(false);
 
   const [ordenSeleccionado, setOrdenSeleccionado] = useState({
     'id_otr': "",
@@ -152,7 +128,6 @@ function CumplirOrden() {
     'empresa_otr': ""
   })
 
-  /*
   const leerOrdenes = () => {
     async function fetchDataOrdenes() {
       const res = await crearordenesServices.listOrdenesServ();
@@ -161,131 +136,23 @@ function CumplirOrden() {
     }
     fetchDataOrdenes();
   }
-*/
+
   const leerOrdenesActivas = () => {
     async function fetchDataOrdenes() {
-      const res = await crearordenesServices.listUnaOrden();
+      const res = await crearordenesServices.listOrdenesServActivas();
       setListarOrdenes(res.data);
       //console.log("Cargar Una Orden", res.data);
     }
     fetchDataOrdenes();
   }
 
-  /*
   useEffect(() => {
     async function fetchDataOrdenes() {
-      const res = await crearordenesServices.listOrdenesServ();
+      const res = await crearordenesServices.listOrdenesServActivas();
       setListarOrdenes(res.data);
       //console.log("Lee Ordenes Automaticas", res.data);
     }
     fetchDataOrdenes();
-  }, [])
-*/
-  useEffect(() => {
-    async function fetchDataEmpresas() {
-      const res = await empresasServices.listEmpresas();
-      setListarEmpresas(res.data)
-      //console.log(res.data);
-    }
-    fetchDataEmpresas();
-  }, [])
-
-  useEffect(() => {
-    async function fetchDataEstados() {
-      const res = await estadosServices.listEstados();
-      setListarEstados(res.data)
-      //console.log(res.data);
-    }
-    fetchDataEstados();
-  }, [])
-
-  useEffect(() => {
-    async function fetchDataCiudades() {
-      const res = await ciudadesServices.listCiudades();
-      setListarCiudades(res.data);
-      //console.log(res.data)
-    }
-    fetchDataCiudades();
-  }, [])
-
-  useEffect(() => {
-    async function fetchDataProveedores() {
-      const res = await proveedoresServices.listProveedores();
-      setListarProveedores(res.data)
-      //console.log(res.data);
-    }
-    fetchDataProveedores();
-  }, [])
-
-  useEffect(() => {
-    async function fetchDataClientes() {
-      const res = await clientesServices.listClientes();
-      setListarClientes(res.data)
-      //console.log(res.data);
-    }
-    fetchDataClientes();
-  }, [])
-
-  useEffect(() => {
-    async function fetchDataEmpleados() {
-      const res = await empleadosServices.listEmpleados();
-      setListarEmpleados(res.data)
-      //console.log(res.data);
-    }
-    fetchDataEmpleados();
-  }, [])
-
-  useEffect(() => {
-    async function fetchDataConceptosOserv() {
-      const res = await conceptososervServices.listConceptoOserv();
-      setListarConceptosOserv(res.data)
-      //console.log(res.data);
-    }
-    fetchDataConceptosOserv();
-  }, [])
-
-  useEffect(() => {
-    async function fetchDataGruposEquipos() {
-      const res = await gruposequiposServices.listGruposequipos();
-      setListarGruposEquipos(res.data)
-      //console.log(res.data);
-    }
-    fetchDataGruposEquipos();
-  }, [])
-
-  useEffect(() => {
-    async function fetchDataSubGruposEquipos() {
-      const res = await subgruposequiposServices.listSubGruposequipos();
-      setListarSubGruposEquipos(res.data)
-      //console.log(res.data);
-    }
-    fetchDataSubGruposEquipos();
-  }, [])
-
-  useEffect(() => {
-    async function fetchDataEquipos() {
-      const res = await equiposServices.listEquipos();
-      setListarEquipos(res.data);
-    }
-    fetchDataEquipos();
-  }, [])
-
-  useEffect(() => {
-    async function fetchDataClasificacionABC() {
-      const res = await clasificacionabcServices.listClasificacionabc();
-      setListarClasificacionABC(res.data)
-      //console.log(res.data);
-    }
-    fetchDataClasificacionABC();
-  }, [])
-
-  useEffect(() => {
-    async function fetchDataTiposMtto() {
-      const res = await tiposmttoServices.listTiposmtto();
-      setListarTiposMtto(res.data)
-      //console.log(res.data);
-    }
-    fetchDataTiposMtto();
   }, [])
 
   const handleChange = e => {
@@ -297,17 +164,12 @@ function CumplirOrden() {
     }));
   }
 
-  useEffect(() => {
-    function fetchDataEstado() {
-      if (estado !== 0) {
-        setEstado(cambio);
-      }
-    }
-    fetchDataEstado();
-  }, [estado])
-
   const seleccionarOrden = (orden, caso) => {
+    //console.log("DATOS ORDEN : ", orden)
+    setOrdenServicio(orden);
     setOrdenSeleccionado(orden);
+    setCambio(true);
+    //console.log("CLIENTE SELECCIONADO : ", listarClientes);
     (caso === "Editar") ? abrirCerrarModalEditar() : abrirCerrarModalEliminar()
   }
 
@@ -358,9 +220,9 @@ function CumplirOrden() {
       type: 'date'
     },
     {
-      field: 'descripcion_equ',
+      field: 'codigo_equ',
       title: 'Equipo',
-      cellStyle: { minWidth: 300 }
+      cellStyle: { minWidth: 100 }
     },
     {
       field: 'razonsocial_int',
@@ -390,25 +252,28 @@ function CumplirOrden() {
       </Typography>
     </div>
   )
-
+ 
   const ordenEditar = (
     <div className="App" >
       <div className={styles.modal}>
-        <Typography align="center" className={styles.typography} variant="button" display="block" >Actualizar Orden de Servicio</Typography>
-        
+        <ActividadesOserv ordenSeleccionado={ordenSeleccionado}          
+        />
       </div>
     </div>
   )
 
+//<Button variant="contained" startIcon={<CachedIcon />} color="primary" onClick={() => dispatch(obtenerOrdenesAccion())} >Todas las Ordenes</Button>
+ 
   return (
     <div className="App">
       <br />
       <ButtonGroup  >
-        <Button variant="contained" startIcon={<CachedIcon />} color="primary" onClick={() => dispatch(obtenerOrdenesAccion())} >Todas las Ordenes</Button>
+        <Button variant="contained" startIcon={<CachedIcon />} color="primary" onClick={() => leerOrdenes()} >Todas las Ordenes</Button>
+        <Button variant="contained" startIcon={<ReplayIcon />} color="primary" onClick={() => leerOrdenesActivas()}>Ordenes Activas</Button>
       </ButtonGroup>
       <MaterialTable
         columns={columnas}
-        data={listOrdenes}
+        data={listarOrdenes}
         title="CUMPLIMIENTO ORDENES DE SERVICIO"
         actions={[
           {
@@ -464,11 +329,3 @@ function CumplirOrden() {
 }
 
 export default CumplirOrden;
-
-/*
-  <Fab variant="extended">
-        <NavigationIcon className={styles.extendedIcon} />
-        Datos Adicionales Equipos
-        onClick
-      </Fab>
-*/

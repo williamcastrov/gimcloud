@@ -1,13 +1,14 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import {Link} from 'react-router-dom';
-import {ListSubheader, List, ListItem, ListItemIcon, ListItemText, Collapse } from "@material-ui/core";
-import {ExpandLess, ExpandMore} from "@material-ui/icons";
-import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak';
+import { Link } from 'react-router-dom';
+import { ListSubheader, List, ListItem, ListItemIcon, ListItemText, Collapse } from "@material-ui/core";
+import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import StoreIcon from '@material-ui/icons/Store';
 import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
+import CategoryIcon from '@material-ui/icons/Category';
 import Divider from '@material-ui/core/Divider';
 import BusinessIcon from '@material-ui/icons/Business';
+import ReorderIcon from '@material-ui/icons/Reorder';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,18 +24,23 @@ const useStyles = makeStyles((theme) => ({
 function Almacenes() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+  const [openPA, setOpenPA] = React.useState(false);
   const [openGA, setOpenGA] = React.useState(false);
 
   const handleClick = () => {
     setOpen(!open);
   };
 
+  const handleClickPA = () => {
+    setOpenPA(!openPA);
+  };
+
   const handleClickGA = () => {
     setOpenGA(!openGA);
   };
 
-  return (     
-      <div>
+  return (
+    <div>
       <ListItem button onClick={handleClick}>
         <ListItemIcon>
           <StoreIcon />
@@ -42,17 +48,16 @@ function Almacenes() {
         <ListItemText primary="Almacenes" />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
-   
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItem button className={classes.nested} button onClick={handleClickGA} >
+          <ListItem button className={classes.nested} button onClick={handleClickPA} >
             <ListItemIcon>
               <ViewHeadlineIcon />
             </ListItemIcon>
             <ListItemText primary="Parametros Almacenes" />
-            {openGA ? <ExpandLess /> : <ExpandMore />}  
+            {openPA ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
-          <Collapse in={openGA} timeout="auto" unmountOnExit>
+          <Collapse in={openPA} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               <ListItem component={Link} button to="/almacenes/tiposalmacenes" className={classes.nested}>
                 <ListItemIcon>
@@ -60,24 +65,47 @@ function Almacenes() {
                 </ListItemIcon>
                 <ListItemText primary="Tipos de Almacenes" />
               </ListItem>
+              <ListItem component={Link} button to="/almacenes/lineasproductos" className={classes.nested}>
+                <ListItemIcon>
+                  <CategoryIcon />
+                </ListItemIcon>
+                <ListItemText primary="Lineas de Productos" />
+              </ListItem>
               <ListItem component={Link} button to="/almacenes/crearalmacenes" className={classes.nested}>
                 <ListItemIcon>
-                  <BusinessIcon  />
+                  <ReorderIcon />
                 </ListItemIcon>
-                <ListItemText primary="Crear Almacenes" />
+                <ListItemText primary="Gestión Almacenes" />
               </ListItem>
             </List>
           </Collapse>
           <Divider />
-          <ListItem button className={classes.nested}>
+          <ListItem button className={classes.nested} button onClick={handleClickGA} >
             <ListItemIcon>
-              <StoreIcon />
+              <ViewHeadlineIcon />
             </ListItemIcon>
-            <ListItemText primary="Gestión de Almacenes" />
+            <ListItemText primary="Gestión de Almaceness" />
+            {openGA ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
+          <Collapse in={openGA} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem component={Link} button to="/almacenes/inventarios" className={classes.nested}>
+                <ListItemIcon>
+                  <BusinessIcon />
+                </ListItemIcon>
+                <ListItemText primary="Inventarios" />
+              </ListItem>
+              <ListItem button className={classes.nested}>
+                <ListItemIcon>
+                  <CategoryIcon />
+                </ListItemIcon>
+                <ListItemText primary="Sin Asignar" />
+              </ListItem>
+            </List>
+          </Collapse>
         </List>
       </Collapse>
-      </div>
+    </div>
   );
 }
 

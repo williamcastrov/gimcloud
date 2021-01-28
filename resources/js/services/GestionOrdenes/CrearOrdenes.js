@@ -10,8 +10,35 @@ crearordenes.save = async (data) => {
     return res;
 }
 
-crearordenes.listOrdenesServ = async () => {
+crearordenes.listOrdenesServActivas = async () => {    
+    const urlList = baseUrl+"/listar_ordenesservactivas"
+    const res = await axios.get(urlList)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
+crearordenes.listOrdenesServ = async () => {    
     const urlList = baseUrl+"/listar_ordenesserv"
+    const res = await axios.get(urlList)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
+crearordenes.listOrdenesChequeo = async () => {    
+    const urlList = baseUrl+"/listar_ordeneschequeo"
+    const res = await axios.get(urlList)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
+crearordenes.listOrdenesChequeoActivas = async () => {    
+    const urlList = baseUrl+"/listar_ordeneschequeoactivas"
     const res = await axios.get(urlList)
     .then(response=>{ return response.data; })
     .catch(error=>{ return error; })

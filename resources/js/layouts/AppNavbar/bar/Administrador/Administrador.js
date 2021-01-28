@@ -9,6 +9,7 @@ import Almacenes from "./Almacenes";
 import Mantenimiento from "./Mantenimiento";
 import Ordenes from "./Ordenes";
 import Planeacion from "./Planeacion";
+import ListaChequeo from "./ListaChequeo";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -47,8 +48,8 @@ function Administrador() {
             <Almacenes />
             <Mantenimiento />
             <Ordenes />
+            <ListaChequeo />
             <Planeacion />
-      
         </List>
     );
 }

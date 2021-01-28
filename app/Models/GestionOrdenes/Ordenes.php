@@ -16,7 +16,9 @@ class Ordenes extends Model
     protected $fillable = [
         'estado_otr',
         'tipo_otr',
+        'tipooperacion_otr',
         'concepto_otr',
+        'tiposervicio_otr',
         'fechaprogramada_otr',
         'fechainicia_otr',
         'fechafinal_otr',

@@ -122,11 +122,24 @@ Route::get('/tiposalmacenes/get/{id}', 'App\Http\Controllers\API\Almacenes\TipoA
 Route::delete('/tiposalmacenes/delete/{id}', 'App\Http\Controllers\API\Almacenes\TipoAlmacenController@delete');
 Route::put('/tiposalmacenes/update/{id}', 'App\Http\Controllers\API\Almacenes\TipoAlmacenController@update');
 
+Route::get('/tiposproductos/listar_tiposproductos', 'App\Http\Controllers\API\Almacenes\TiposProductosController@listar_tiposproductos');
+Route::post('/tiposproductos/create', 'App\Http\Controllers\API\Almacenes\TiposProductosController@create');
+Route::get('/tiposproductos/get/{id}', 'App\Http\Controllers\API\Almacenes\TiposProductosController@get');
+Route::delete('/tiposproductos/delete/{id}', 'App\Http\Controllers\API\Almacenes\TiposProductosController@delete');
+Route::put('/tiposproductos/update/{id}', 'App\Http\Controllers\API\Almacenes\TiposProductosController@update');
+
 Route::get('/almacenes/listar_almacenes', 'App\Http\Controllers\API\Almacenes\AlmacenesController@listar_almacenes');
 Route::post('/almacenes/create', 'App\Http\Controllers\API\Almacenes\AlmacenesController@create');
 Route::get('/almacenes/get/{id}', 'App\Http\Controllers\API\Almacenes\AlmacenesController@get');
 Route::delete('/almacenes/delete/{id}', 'App\Http\Controllers\API\Almacenes\AlmacenesController@delete');
 Route::put('/almacenes/update/{id}', 'App\Http\Controllers\API\Almacenes\AlmacenesController@update');
+
+Route::get('/inventarios/listar_saldosalmacen', 'App\Http\Controllers\API\Almacenes\InventariosController@listar_saldosalmacen');
+Route::get('/inventarios/listar_inventarios', 'App\Http\Controllers\API\Almacenes\InventariosController@listar_inventarios');
+Route::post('/inventarios/create', 'App\Http\Controllers\API\Almacenes\InventariosController@create');
+Route::get('/inventarios/get/{id}', 'App\Http\Controllers\API\Almacenes\InventariosController@get');
+Route::delete('/inventarios/delete/{id}', 'App\Http\Controllers\API\Almacenes\InventariosController@delete');
+Route::put('/inventarios/update/{id}', 'App\Http\Controllers\API\Almacenes\InventariosController@update');
 
 // Rutas Gestión Mantenimiento
 Route::get('/marcas/listar_marcas', 'App\Http\Controllers\API\Mantenimiento\MarcasController@listar_marcas');
@@ -245,12 +258,38 @@ Route::get('/conceptososerv/get/{id}', 'App\Http\Controllers\API\GestionOrdenes\
 Route::delete('/conceptososerv/delete/{id}', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@delete');
 Route::put('/conceptososerv/update/{id}', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@update');
 
+Route::get('/tipooperacion/listar_tipooperacion', 'App\Http\Controllers\API\GestionOrdenes\TipoOperacionController@listar_tipooperacion');
+Route::post('/tipooperacion/create', 'App\Http\Controllers\API\GestionOrdenes\TipoOperacionController@create');
+Route::get('/tipooperacion/get/{id}', 'App\Http\Controllers\API\GestionOrdenes\TipoOperacionController@get');
+Route::delete('/tipooperacion/delete/{id}', 'App\Http\Controllers\API\GestionOrdenes\TipoOperacionController@delete');
+Route::put('/tipooperacion/update/{id}', 'App\Http\Controllers\API\GestionOrdenes\TipoOperacionController@update');
+
+Route::get('/tiposservicio/listar_tiposservicio', 'App\Http\Controllers\API\GestionOrdenes\TiposServicioController@listar_tiposservicio');
+Route::post('/tiposservicio/create', 'App\Http\Controllers\API\GestionOrdenes\TiposServicioController@create');
+Route::get('/tiposservicio/get/{id}', 'App\Http\Controllers\API\GestionOrdenes\TiposServicioController@get');
+Route::delete('/tiposservicio/delete/{id}', 'App\Http\Controllers\API\GestionOrdenes\TiposServicioController@delete');
+Route::put('/tiposservicio/update/{id}', 'App\Http\Controllers\API\GestionOrdenes\TiposServicioController@update');
+
 Route::get('/ordenesserv/listar_ordenesserv', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@listar_ordenesserv');
+Route::get('/ordenesserv/listar_ordenesservactivas', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@listar_ordenesservactivas');
+Route::get('/ordenesserv/listar_ordeneschequeo', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@listar_ordeneschequeo');
+Route::get('/ordenesserv/listar_ordeneschequeoactivas', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@listar_ordeneschequeoactivas');
 Route::post('/ordenesserv/create', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@create');
 Route::get('/ordenesserv/get/{id}', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@get');
 Route::delete('/ordenesserv/delete/{id}', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@delete');
 Route::put('/ordenesserv/update/{id}', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@update');
 Route::put('/ordenesserv/updateestadoasignado/{id}', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@updateestadoasignado');
+
+Route::get('/cumplimiento/listar_cumplimiento', 'App\Http\Controllers\API\GestionOrdenes\CumplimientoOServController@listar_cumplimiento');
+Route::post('/cumplimiento/create', 'App\Http\Controllers\API\GestionOrdenes\CumplimientoOServController@create');
+Route::get('/cumplimiento/get/{id}', 'App\Http\Controllers\API\GestionOrdenes\CumplimientoOServController@get');
+Route::get('/cumplimiento/getoser/{id}', 'App\Http\Controllers\API\GestionOrdenes\CumplimientoOServController@getoser');
+Route::delete('/cumplimiento/delete/{id}', 'App\Http\Controllers\API\GestionOrdenes\CumplimientoOServController@delete');
+Route::put('/cumplimiento/update/{id}', 'App\Http\Controllers\API\GestionOrdenes\CumplimientoOServController@update');
+
+// Rutas Administración Lista de Chequeo
+Route::get('/inventarios/listar_chequeorecepcion', 'App\Http\Controllers\API\Almacenes\InventariosController@listar_chequeorecepcion');
+Route::get('/inventarios/listar_chequeoentrega', 'App\Http\Controllers\API\Almacenes\InventariosController@listar_chequeoentrega');
 
 // Rutas Administración Activos
 Route::get('/areas/listar_areas', 'App\Http\Controllers\API\Activos\AreasController@listar_areas');

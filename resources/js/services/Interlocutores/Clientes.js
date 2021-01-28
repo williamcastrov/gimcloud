@@ -20,6 +20,15 @@ clientes.listClientes = async () => {
     return res;
 }
 
+clientes.listUnCliente = async (id_cli) => {
+    const urlList = baseUrl+"/get/"+id_cli
+    const res = await axios.get(urlList)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
 clientes.update = async (data) => {
     console.log(data);
     const urlUpdate = baseUrl+"/update/"+data.id_cli

@@ -4,7 +4,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { ListSubheader, List, ListItem, ListItemIcon, ListItemText, Collapse } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
-import CategoryIcon from '@material-ui/icons/Category';
 import Divider from '@material-ui/core/Divider';
 import SyncIcon from '@material-ui/icons/Sync';
 import PermDataSettingIcon from '@material-ui/icons/PermDataSetting';
@@ -15,6 +14,7 @@ import BorderColorIcon from '@material-ui/icons/BorderColor';
 import FindInPageIcon from '@material-ui/icons/FindInPage';
 import ReportIcon from '@material-ui/icons/Report';
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
+import CategoryIcon from '@material-ui/icons/Category';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -82,7 +82,7 @@ function Ordenes() {
                 <ListItemIcon>
                   <SettingsApplicationsIcon />
                 </ListItemIcon>
-                <ListItemText primary="Tipos de Ordenes" />
+                <ListItemText primary="Tipos de Mantenimiento" />
               </ListItem>
               <ListItem component={Link} button to="/mantenimiento/conceptososerv" className={classes.nested}>
                 <ListItemIcon>
@@ -90,8 +90,21 @@ function Ordenes() {
                 </ListItemIcon>
                 <ListItemText primary="Conceptos de las Ordenes" />
               </ListItem>
+              <ListItem component={Link} button to="/mantenimiento/tipooperacion" className={classes.nested}>
+                <ListItemIcon>
+                  <CategoryIcon/>
+                </ListItemIcon>
+                <ListItemText primary="Tipos de Operaciones" />
+              </ListItem>
+              <ListItem component={Link} button to="/mantenimiento/tiposservicio" className={classes.nested}>
+                <ListItemIcon>
+                  <CategoryIcon/>
+                </ListItemIcon>
+                <ListItemText primary="Tipos de Servicios" />
+              </ListItem>
             </List>
           </Collapse>
+
           <Divider />
 
           <ListItem button className={classes.nested} button onClick={handleClickGO} >
@@ -109,18 +122,6 @@ function Ordenes() {
                   <AddBoxOutlinedIcon />
                 </ListItemIcon>
                 <ListItemText primary="Crear/Listar/Modificar" />
-              </ListItem>
-              <ListItem button className={classes.nested}>
-                <ListItemIcon>
-                  <ReceiptIcon />
-                </ListItemIcon>
-                <ListItemText primary="Reasignar" />
-              </ListItem>
-              <ListItem button className={classes.nested}>
-                <ListItemIcon>
-                  <ReceiptIcon />
-                </ListItemIcon>
-                <ListItemText primary="Aprobar/Cancelar" />
               </ListItem>
               <ListItem button className={classes.nested}>
                 <ListItemIcon>

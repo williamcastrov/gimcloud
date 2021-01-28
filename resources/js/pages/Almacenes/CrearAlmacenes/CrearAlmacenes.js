@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0),
     minWidth: 250,
+    maxWidth: 250,
   },
   typography: {
     fontSize: 16,
@@ -308,7 +309,8 @@ function CrearAlmacenes() {
     },
     {
       title: 'Fecha Creación',
-      field: 'fechacreacion_alm'
+      field: 'fechacreacion_alm',
+      type: 'date'
     },
     {
       title: 'Estado',
@@ -377,7 +379,7 @@ function CrearAlmacenes() {
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl}>
-            <InputLabel id="idselectconsignacion_alm">Tipo de Almacen</InputLabel>
+            <InputLabel id="idselectconsignacion_alm">Almacen de Consignación</InputLabel>
             <Select
               labelId="selectconsignacion_alm"
               name="consignacion_alm"

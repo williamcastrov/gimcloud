@@ -47,6 +47,8 @@ Route::get('/interlocutores/empleados', 'App\Http\Controllers\GimController@inde
 // Rutas Gestion de Almacenes
 Route::get('/almacenes/tiposalmacenes', 'App\Http\Controllers\GimController@index');
 Route::get('/almacenes/crearalmacenes', 'App\Http\Controllers\GimController@index');
+Route::get('/almacenes/lineasproductos', 'App\Http\Controllers\GimController@index');
+Route::get('/almacenes/inventarios', 'App\Http\Controllers\GimController@index');
 
 // Rutas del Modulo de Mantenimiento
 Route::get('/mantenimiento/marcas', 'App\Http\Controllers\GimController@index');
@@ -64,6 +66,8 @@ Route::get('/gestionordenes/ordenes', 'App\Http\Controllers\GimController@index'
 Route::get('/gestionordenes/crearordenes', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/tiposmtto', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/conceptososerv', 'App\Http\Controllers\GimController@index');
+Route::get('/mantenimiento/tipooperacion', 'App\Http\Controllers\GimController@index');
+Route::get('/mantenimiento/tiposservicio', 'App\Http\Controllers\GimController@index');
 
 // Rutas de Datos Adicionales de los Equipos
 Route::get('/mantenimiento/tipogarantia', 'App\Http\Controllers\GimController@index');
@@ -73,6 +77,11 @@ Route::get('/mantenimiento/fichatecnica', 'App\Http\Controllers\GimController@in
 Route::get('/mantenimiento/tiposllantas', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/tiposequipos', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/ubicaciones', 'App\Http\Controllers\GimController@index');
+
+// Rutas del Modulo de Lista de Chequeo Equipos
+Route::get('/listachequeo/entregaequipos', 'App\Http\Controllers\GimController@index');
+Route::get('/listachequeo/recepcionequipos', 'App\Http\Controllers\GimController@index');
+Route::get('/listachequeo/panellistachequeo', 'App\Http\Controllers\GimController@index');
 
 // Rutas del Modulo de Activos
 Route::get('/activos/areas', 'App\Http\Controllers\GimController@index');

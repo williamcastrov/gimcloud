@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Component } from "react";
-import { Button, TextField, Select, MenuItem, FormControl, InputLabel, Grid, ButtonGroup, Typography } from "@material-ui/core";
+import { Button, TextField, Select, MenuItem, FormControl, InputLabel, Grid, ButtonGroup, Typography, Container, Table } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { green, purple } from '@material-ui/core/colors';
+import { green, purple, blueGrey } from '@material-ui/core/colors';
 import swal from 'sweetalert';
 import Moment from 'moment';
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -41,10 +41,10 @@ const useStyles = makeStyles((theme) => ({
         color: "#ff3d00"
     },
     button: {
-        color: theme.palette.getContrastText(green[500]),
+        color: theme.palette.getContrastText(blueGrey[500]),
         backgroundColor: green[500],
         margin: theme.spacing(1),
-        fontSize: 10,
+        fontSize: 12,
         '&:hover': {
             backgroundColor: green[700],
         },
@@ -129,7 +129,7 @@ function AsignarOrden(props) {
         setOperario(item.operario_otr);
  
         console.log("ESTADO ORDEN : ",item.estado_otr);
-        if(item.estado_otr !== 1 || item.estado_otr !== 12 ){
+        if(item.estado_otr !== 1 && item.estado_otr !== 12 ){
             swal("Asignar Orden de Servicio", "Estado de la Orden no Permite Cambios!", "warning", { button: "Aceptar" });
             return;
         }
@@ -186,9 +186,7 @@ function AsignarOrden(props) {
 
     useEffect(() => {
         async function asignarEstado() {
-
             console.log("ASIGNAR NUEVO VALOR A BASE DE DATOS : ", ordenSeleccionado[0])
-
             const res = await crearordenesServices.updateestadoasignado(ordenSeleccionado[0]);
 
             if (res.success) {
@@ -269,7 +267,9 @@ function AsignarOrden(props) {
                             </Select>
                         </FormControl>
                         <div >
-                            <Button className={styles.button}  variant="contained" type="submit" size="small" color="secondary" > Actualizar </Button>
+                            <Button className={styles.button}  variant="contained" type="submit" size="small" color="secondary" >
+                                Actualizar
+                            </Button>
                         </div>
                        
                     </form>

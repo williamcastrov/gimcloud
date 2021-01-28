@@ -78,9 +78,8 @@ function Ordenes() {
           <Tabs variant="fullWidth" value={value} onChange={handleChange} aria-label="wrapped label tabs example">
             <Tab value="1" label="Crear Orden" {...selectTab('1')} icon={<AddBoxOutlinedIcon />} />
             <Tab value="2" label="Cumplimiento" {...selectTab('2')} icon={<ExitToAppIcon />} />
-            <Tab value="3" label="Insumos" {...selectTab('3')} icon={ <PanToolIcon />}  />
-            <Tab value="4" label="Mano de Obra" {...selectTab('4')} icon={ <PeopleIcon  />} />
-            <Tab value="5" label="Costos y Gastos" {...selectTab('5')} icon={< MonetizationOnIcon />}  />
+            <Tab value="3" label="Mano de Obra" {...selectTab('3')} icon={ <PeopleIcon  />} />
+            <Tab value="4" label="Costos y Gastos" {...selectTab('4')} icon={< MonetizationOnIcon />}  />
           </Tabs>
           </div>
             <TabPanel value={value} index="1">  
@@ -90,12 +89,9 @@ function Ordenes() {
               <CumplirOrden />
             </TabPanel>
             <TabPanel value={value} index="3">
-              <OrdenesPorAprobar />
-            </TabPanel>
-            <TabPanel value={value} index="4">
               <OrdenesVencidas />
             </TabPanel>
-            <TabPanel value={value} index="5">
+            <TabPanel value={value} index="4">
               <OrdenesVencenHoy />
             </TabPanel>
           </div>

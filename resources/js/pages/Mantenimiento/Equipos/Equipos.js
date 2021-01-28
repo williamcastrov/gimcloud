@@ -75,8 +75,8 @@ function NumberFormatCustom(props) {
     <NumberFormat
       {...other}
       getInputRef={inputRef}
-      thousandSeparator={','}
-      decimalSeparator={'.'}
+      thousandSeparator={'.'}
+      decimalSeparator={','}
 
     />
   );

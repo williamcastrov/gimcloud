@@ -7,7 +7,6 @@ import SaveIcon from '@material-ui/icons/Save';
 import NumberFormat from 'react-number-format';
 import CachedIcon from '@material-ui/icons/Cached';
 import ReplayIcon from '@material-ui/icons/Replay';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import { green, purple } from '@material-ui/core/colors';
 import swal from 'sweetalert';
 import Moment from 'moment';
@@ -21,6 +20,7 @@ import clientesServices from "../../../services/Interlocutores/Clientes";
 import empleadosServices from "../../../services/Interlocutores/Empleados";
 import conceptososervServices from "../../../services/GestionOrdenes/ConceptosOserv";
 import crearordenesServices from "../../../services/GestionOrdenes/CrearOrdenes";
+import tiposservicioServices from "../../../services/GestionOrdenes/TiposServicio";
 import gruposequiposServices from "../../../services/Mantenimiento/GruposEquipos";
 import subgruposequiposServices from "../../../services/Mantenimiento/SubGruposEquipos";
 import equiposServices from "../../../services/Mantenimiento/Equipos";
@@ -94,8 +94,8 @@ function NumberFormatCustom(props) {
     <NumberFormat
       {...other}
       getInputRef={inputRef}
-      thousandSeparator={','}
-      decimalSeparator={'.'}
+      thousandSeparator={'.'}
+      decimalSeparator={','}
 
     />
   );
@@ -113,6 +113,7 @@ function CrearOrdenes() {
 
   const [listarEmpresas, setListarEmpresas] = useState([]);
   const [listarEstados, setListarEstados] = useState([]);
+  const [listarTipoServicio, setListarTipoServicio] = useState([]);
   const [listarCiudades, setListarCiudades] = useState([]);
   const [listarProveedores, setListarProveedores] = useState([]);
   const [listarClientes, setListarClientes] = useState([]);
@@ -126,7 +127,9 @@ function CrearOrdenes() {
   const [listarEstadoModificado, setListarEstadoModificado] =  useState([]);
    
   const [estado, setEstado] = useState(0);
-  let cambio = 12;
+  let cambio  = 12;
+  let empresa = 1;
+  let diasoperacion = 0;
 
   /*
     const [dateDMY, setDateDMY] = useState(Moment(new Date()).format('DD-MM-YYYY'));
@@ -143,6 +146,7 @@ function CrearOrdenes() {
   const [ordenSeleccionado, setOrdenSeleccionado] = useState({
     'id_otr': "",
     'estado_otr': "",
+    'tipooperacion_otr': 2,
     'tipo_otr': "",
     'concepto_otr': "",
     'fechaprogramada_otr': "",
@@ -158,7 +162,7 @@ function CrearOrdenes() {
     'ciudad_otr': "",
     'resumenorden_otr': "",
     'prioridad_otr': "",
-    'empresa_otr': ""
+    'empresa_otr': 1
   })
 
   const actualizaEstado = async (e, id) => {
@@ -175,23 +179,9 @@ function CrearOrdenes() {
           :
           item
       );
-      //const arrayFiltrado = arrayEditado.filter((item) => item.id_otr === id);
       setListarEstadoModificado( arrayEditado.filter((item) => item.id_otr === id) )
       console.log("ARRAY EDITADO : ", arrayEditado);
-      //console.log("ARRAY FILTRADO : ", arrayFiltrado);
-      //setOrdenSeleccionado(arrayFiltrado);
-      //setListarEstadoModificado(arrayEditado);
       console.log("ARRAY ACTUALIZADO : ", listarEstadoModificado);
-
-      /*
-         const res = await crearordenesServices.update(arrayFiltrado);
-     
-         if (res.success) {
-           swal("Orden de Servicio", "Orden de Servicio Actualizada de forma Correcta!", "success", { button: "Aceptar" });
-           console.log(res.message)
-           abrirCerrarModalEditar();
-         }
-       */
     }                                                                                                                                     
   }
 
@@ -206,7 +196,7 @@ function CrearOrdenes() {
 
   const leerOrdenesActivas = () => {
     async function fetchDataOrdenes() {
-      const res = await crearordenesServices.listUnaOrden();
+      const res = await crearordenesServices.listOrdenesServActivas();
       setListarOrdenes(res.data);
       //console.log("Cargar Una Orden", res.data);
     }
@@ -278,11 +268,20 @@ function CrearOrdenes() {
 
   useEffect(() => {
     async function fetchDataConceptosOserv() {
-      const res = await conceptososervServices.listConceptoOserv();
+      const res = await conceptososervServices.listConceptosOserv();
       setListarConceptosOserv(res.data)
-      //console.log(res.data);
+      console.log("CONCEPTOS ORDEN : ",res.data);
     }
     fetchDataConceptosOserv();
+  }, [])
+  
+  useEffect(() => {
+    async function fetchDataTiposServicio() {
+      const res = await tiposservicioServices.listTiposservicio();
+      setListarTipoServicio(res.data)
+      //console.log("TIPOS SERVICIOS ORDEN : ",res.data);
+    }
+    fetchDataTiposServicio();
   }, [])
 
   useEffect(() => {
@@ -404,12 +403,12 @@ function CrearOrdenes() {
       errors.fechafinal_otr = true;
       formOk = false;
     }
-
+/*
     if (!ordenSeleccionado.diasoperacion_otr) {
       errors.diasoperacion_otr = true;
       formOk = false;
     }
-
+*/
     if (!ordenSeleccionado.equipo_otr) {
       errors.equipo_otr = true;
       formOk = false;
@@ -455,8 +454,8 @@ function CrearOrdenes() {
       formOk = false;
     }
 
-    if (!ordenSeleccionado.empresa_otr) {
-      errors.prioridad_otr = true;
+    if (!ordenSeleccionado.tiposervicio_otr) {
+      errors.tiposervicio_otr = true;
       formOk = false;
     }
 
@@ -487,7 +486,7 @@ function CrearOrdenes() {
         delete ordenSeleccionado.ciudad_otr;
         delete ordenSeleccionado.resumenorden_otr;
         delete ordenSeleccionado.prioridad_otr;
-        delete ordenSeleccionado.empresa_otr;
+        delete ordenSeleccionado.tiposervicio_otr;
       } else {
         swal("Orden de Servicio", "Error Creando la Orden de Servicio!", "error", { button: "Aceptar" });
         console.log(res.message);
@@ -589,8 +588,8 @@ function CrearOrdenes() {
     }
 
 
-    if (!ordenSeleccionado.empresa_otr) {
-      errors.prioridad_otr = true;
+    if (!ordenSeleccionado.tiposervicio_otr) {
+      errors.tiposervicio_otr = true;
       formOk = false;
     }
 
@@ -620,7 +619,7 @@ function CrearOrdenes() {
         delete ordenSeleccionado.ciudad_otr;
         delete ordenSeleccionado.resumenorden_otr;
         delete ordenSeleccionado.prioridad_otr;
-        delete ordenSeleccionado.empresa_otr;
+        delete ordenSeleccionado.tiposervicio_otr;
       } else {
         swal("Orden de Servicio", "Error Actualizando la Orden de Servicio!", "error", { button: "Aceptar" });
         console.log(res.message);
@@ -673,7 +672,7 @@ function CrearOrdenes() {
       type: 'date'
     },
     {
-      field: 'descripcion_equ',
+      field: 'codigo_equ',
       title: 'Equipo',
       cellStyle: { minWidth: 150 }
     },
@@ -760,8 +759,8 @@ function CrearOrdenes() {
         <Grid item xs={12} md={4}> <TextField type="date" InputLabelProps={{ shrink: true }} name="fechafinal_otr"
           label="Fecha de Cierre" fullWidth onChange={handleChange} />
         </Grid>
-        <Grid item xs={12} md={8}>
-          <FormControl className={styles.formControl2}>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControl}>
             <InputLabel id="idselectequipo_otr">Equipo</InputLabel>
             <Select
               labelId="selectequipo_otr"
@@ -774,7 +773,7 @@ function CrearOrdenes() {
               {
                 listarEquipos.map((itemselect) => {
                   return (
-                    <MenuItem value={itemselect.id_equ}>{itemselect.descripcion_equ}</MenuItem>
+                    <MenuItem value={itemselect.id_equ}>{itemselect.codigo_equ}</MenuItem>
                   )
                 })
               }
@@ -782,7 +781,7 @@ function CrearOrdenes() {
           </FormControl>
         </Grid>
         <Grid item xs={12} md={4}> <TextField type="number" name="diasoperacion_otr" label="Cuantos días duro la Actividad"
-          fullWidth onChange={handleChange} />
+          fullWidth onChange={handleChange} disabled="true" defaultValue={diasoperacion} />
         </Grid>
         <Grid item xs={12} md={4}>
           <FormControl className={styles.formControl}>
@@ -828,19 +827,19 @@ function CrearOrdenes() {
         </Grid>
         <Grid item xs={12} md={4}>
           <FormControl className={styles.formControl}>
-            <InputLabel id="idselectEmpresa" >Empresa</InputLabel>
+            <InputLabel id="idselecttiposervicio_otr" >Tipo de Servicio de la Orden</InputLabel>
             <Select
-              labelId="selecEmpresa"
-              name="empresa_otr"
-              id="idselectEmpresa"
+              labelId="selectiposervicio_otr"
+              name="tiposervicio_otr"
+              id="idselecttiposervicio_otr"
               fullWidth
               onChange={handleChange}
             >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
-                listarEmpresas.map((itemselect) => {
+                listarTipoServicio.map((itemselect) => {
                   return (
-                    <MenuItem value={itemselect.id_emp}>{itemselect.nombre_emp}</MenuItem>
+                    <MenuItem value={itemselect.id_tser}>{itemselect.descripcion_tser}</MenuItem>
                   )
                 })
               }
@@ -974,6 +973,29 @@ function CrearOrdenes() {
             </Select>
           </FormControl>
         </Grid>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectempresa_otr" >Empresa</InputLabel>
+            <Select
+              labelId="selectempresa_otr"
+              name="empresa_otr"
+              id="idselectempresa_otr"
+              fullWidth
+              onChange={handleChange}
+              disabled="true" 
+              defaultValue={empresa}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarEmpresas.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_emp}>{itemselect.nombre_emp}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
         <Grid item xs={12} md={12}>
           <TextField name="resumenorden_otr" label="Resumen de la Orden" fullWidth onChange={handleChange} />
         </Grid>
@@ -1066,7 +1088,7 @@ function CrearOrdenes() {
                 {
                   listarEquipos.map((itemselect) => {
                     return (
-                      <MenuItem value={itemselect.id_equ}>{itemselect.descripcion_equ}</MenuItem>
+                      <MenuItem value={itemselect.id_equ}>{itemselect.codigo_equ}</MenuItem>
                     )
                   })
                 }
@@ -1074,7 +1096,7 @@ function CrearOrdenes() {
             </FormControl>
           </Grid>
           <Grid item xs={12} md={4}> <TextField type="number" name="diasoperacion_otr" label="Cuantos días duro la Actividad"
-            defaultValue={estado}
+            disabled="true" defaultValue={diasoperacion}
             fullWidth onChange={handleChange} value={ordenSeleccionado && ordenSeleccionado.diasoperacion_otr} />
           </Grid>
           <Grid item xs={12} md={4}>
@@ -1123,20 +1145,20 @@ function CrearOrdenes() {
           </Grid>
           <Grid item xs={12} md={4}>
             <FormControl className={styles.formControl}>
-              <InputLabel id="idselectEmpresa" >Empresa</InputLabel>
+              <InputLabel id="idselecttiposervicio_otr" >Tipo de Servicio de la Orden</InputLabel>
               <Select
-                labelId="selecEmpresa"
-                name="empresa_otr"
-                id="idselectEmpresa"
+                labelId="selectiposervicio_otr"
+                name="tiposervicio_otr"
+                id="idselecttiposervicio_otr"
                 fullWidth
                 onChange={handleChange}
-                value={ordenSeleccionado && ordenSeleccionado.empresa_otr}
+                value={ordenSeleccionado && ordenSeleccionado.tiposervicio_otr}
               >
                 <MenuItem value=""> <em>None</em> </MenuItem>
                 {
-                  listarEmpresas.map((itemselect) => {
+                  listarTipoServicio.map((itemselect) => {
                     return (
-                      <MenuItem value={itemselect.id_emp}>{itemselect.nombre_emp}</MenuItem>
+                      <MenuItem value={itemselect.id_tser}>{itemselect.descripcion_tser}</MenuItem>
                     )
                   })
                 }
