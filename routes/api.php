@@ -106,6 +106,12 @@ Route::get('/empleados/get/{id}', 'App\Http\Controllers\API\Interlocutores\Emple
 Route::delete('/empleados/delete/{id}', 'App\Http\Controllers\API\Interlocutores\EmpleadosController@delete');
 Route::put('/empleados/update/{id}', 'App\Http\Controllers\API\Interlocutores\EmpleadosController@update');
 
+Route::get('/contactos/listar_contactos', 'App\Http\Controllers\API\Interlocutores\ContactosController@listar_contactos');
+Route::post('/contactos/create', 'App\Http\Controllers\API\Interlocutores\ContactosController@create');
+Route::get('/contactos/get/{id}', 'App\Http\Controllers\API\Interlocutores\ContactosController@get');
+Route::delete('/contactos/delete/{id}', 'App\Http\Controllers\API\Interlocutores\ContactosController@delete');
+Route::put('/contactos/update/{id}', 'App\Http\Controllers\API\Interlocutores\ContactosController@update');
+
 // Rutas Gestión Usuarios
 Route::get('/usuarios/listar_usuarios', 'App\Http\Controllers\API\Parameters\UsuariosController@listar_usuarios');
 Route::post('/usuarios/create', 'App\Http\Controllers\API\Parameters\UsuariosController@create');

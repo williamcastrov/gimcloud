@@ -5,6 +5,7 @@ import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Gri
 import {makeStyles} from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
 import DatePicker from "react-datepicker";
+import CachedIcon from '@material-ui/icons/Cached';
 import "react-datepicker/dist/react-datepicker.css";
 import swal from 'sweetalert';
 
@@ -14,6 +15,9 @@ import ciudadesServices from "../../../services/Parameters/Ciudades";
 import estadosServices from "../../../services/Parameters/Estados";
 import empresasServices from "../../../services/Empresa";
 import especialidadesServices from "../../../services/Interlocutores/Especialidades";
+
+//Componentes Gestion de Contactos
+import MenuContactos from "../MenuContactos";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -91,6 +95,7 @@ function Proveedores() {
       const res = await proveedoresServices.listProveedores();
       setListarProveedores(res.data);
       console.log(res.data)
+
     }
     fetchDataProveedores();
   }, [])
@@ -691,6 +696,7 @@ function Proveedores() {
         <Button color="primary"  onClick={()=>actualizarProveedor()} >Editar</Button>
         <Button onClick={()=>abrirCerrarModalEditar()}>Cancelar</Button>
       </div>
+      <MenuContactos interlocutor={proveedoresSeleccionado.id_int} />
     </div>
   )
 
@@ -708,6 +714,7 @@ function Proveedores() {
     <div className="App">
       <br />
       <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Proveedor</Button>
+      <Button variant="contained" startIcon={<CachedIcon />} color="primary" onClick={() => longitud()} >Longitud Array</Button>
       <MaterialTable
         columns={columnas}
         data={listarProveedores}

@@ -55,6 +55,7 @@
         "semantic-ui-css": "^2.4.1",
         "semantic-ui-react": "^2.0.1",
         "shortid": "^2.2.16",
-        "sweetalert": "^2.1.2"
+        "sweetalert": "^2.1.2",
+        "yarn": "^1.22.10"
     }
 }

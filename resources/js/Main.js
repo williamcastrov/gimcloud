@@ -61,9 +61,9 @@ import Inventarios from './pages/Almacenes/Inventarios';
 import CrearAlmacenes from './pages/Almacenes/CrearAlmacenes';
 
 // Componentes Modulo Lista de Chequeo de Equipos
-import EntregaEquipos from './pages/ListaChuequeo/EntregaEquipos';
-import RecepcionEquipos from './pages/ListaChuequeo/RecepcionEquipos';
-import PanelListaChequeo from './pages/ListaChuequeo/PanelListaChequeo';
+import EntregaEquipos from './pages/ListaChequeo/EntregaEquipos';
+import RecepcionEquipos from './pages/ListaChequeo/RecepcionEquipos';
+import PanelListaChequeo from './pages/ListaChequeo/PanelListaChequeo';
 
 //Componentes Modulo Interlocutores
 import TipoInterlocutores from './pages/Interlocutores/Parameters/TipoInterlocutores';
@@ -71,6 +71,7 @@ import Especialidades from './pages/Interlocutores/Parameters/Especialidades';
 import Proveedores from './pages/Interlocutores/Proveedores';
 import Clientes from './pages/Interlocutores/Clientes';
 import Empleados from './pages/Interlocutores/Empleados';
+import Contactos from './pages/Interlocutores/Contactos';
 
 //Componentes Modulo Activos
 import Areas from './pages/Activos/Areas';
@@ -129,6 +130,7 @@ function Main() {
               <Route path="/interlocutores/proveedores" component={Proveedores} />
               <Route path="/interlocutores/clientes" component={Clientes} />
               <Route path="/interlocutores/empleados" component={Empleados} />
+              <Route path="/interlocutores/contactos" component={Contactos} />
 
               <Route path="/almacenes/tiposalmacenes" component={TiposAlmacenes} />
               <Route path="/almacenes/lineasproductos" component={LineasProductos} />

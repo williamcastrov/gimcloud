@@ -14,6 +14,7 @@ class CumplimientoOServ extends Model
     protected $primaryKey = "id";
 
     protected $fillable = [
+		'id',
         'id_cosv',
 		'descripcion_cosv',
 		'tipooperacion_cosv',

@@ -12,6 +12,9 @@ import estadosServices from "../../../services/Parameters/Estados";
 import empresasServices from "../../../services/Empresa";
 import especialidadesServices from "../../../services/Interlocutores/Especialidades";
 
+//Componentes Gestion de Contactos
+import MenuContactos from "../MenuContactos";
+
 const useStyles = makeStyles((theme) => ({
   modal: {
     position: 'absolute',
@@ -713,6 +716,7 @@ function Empleados() {
         <Button color="primary"  onClick={()=>actualizarEmpleado()} >Editar</Button>
         <Button onClick={()=>abrirCerrarModalEditar()}>Cancelar</Button>
       </div>
+      <MenuContactos interlocutor={empleadosSeleccionado.id_emp} />
     </div>
   )
 

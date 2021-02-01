@@ -274,7 +274,7 @@ function CumplirOrden() {
       <MaterialTable
         columns={columnas}
         data={listarOrdenes}
-        title="CUMPLIMIENTO ORDENES DE SERVICIO"
+        title="GESTIONAR ORDENES DE SERVICIO"
         actions={[
           {
             icon: 'edit',

@@ -92,6 +92,12 @@ function Interlocutores() {
             </ListItemIcon>
             <ListItemText primary="Empleados" />
           </ListItem>  
+          <ListItem component={Link} button to="/interlocutores/contactos" className={classes.nested}>
+            <ListItemIcon>
+              <ContactsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Contactos" />
+          </ListItem>  
         </List>
       </Collapse>
       </div>

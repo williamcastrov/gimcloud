@@ -43,6 +43,7 @@ Route::get('/interlocutores/especialidades', 'App\Http\Controllers\GimController
 Route::get('/interlocutores/proveedores', 'App\Http\Controllers\GimController@index');
 Route::get('/interlocutores/clientes', 'App\Http\Controllers\GimController@index');
 Route::get('/interlocutores/empleados', 'App\Http\Controllers\GimController@index');
+Route::get('/interlocutores/contactos', 'App\Http\Controllers\GimController@index');
 
 // Rutas Gestion de Almacenes
 Route::get('/almacenes/tiposalmacenes', 'App\Http\Controllers\GimController@index');

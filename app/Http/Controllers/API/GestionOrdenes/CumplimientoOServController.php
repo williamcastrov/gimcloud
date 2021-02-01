@@ -14,6 +14,7 @@ class CumplimientoOServController extends Controller
     //
     public function create(Request $request){
         try { 
+          $insert['id']                 = $request['id'];
           $insert['id_cosv']            = $request['id_cosv'];
           $insert['descripcion_cosv']   = $request['descripcion_cosv'];
           $insert['tipooperacion_cosv'] = $request['tipooperacion_cosv'];
@@ -47,7 +48,7 @@ class CumplimientoOServController extends Controller
           
             $data = DB::select("SELECT t0.*
             FROM  ordenservicio as t0
-            WHERE t0.id_otr = $id_cosv");
+            WHERE t0.id_cosv = $id_cosv");
   
             $response['data'] = $data;
             // $response['data'] = $data1;
@@ -103,8 +104,9 @@ class CumplimientoOServController extends Controller
           return $response;
       }
     
-      public function update(Request $request, $id_cosv){
+      public function update(Request $request, $id){
         try {
+          $data['id']                 = $request['id'];
           $data['id_cosv']            = $request['id_cosv'];
           $data['descripcion_cosv']   = $request['descripcion_cosv'];
           $data['tipooperacion_cosv'] = $request['tipooperacion_cosv'];
@@ -119,7 +121,7 @@ class CumplimientoOServController extends Controller
           $data['servicio_cosv']      = $request['servicio_cosv'];
           $data['observacion_cosv']   = $request['observacion_cosv'];
     
-          $res = CumplimientoOServ::where("id_cosv",$id_cosv)->update($data);
+          $res = CumplimientoOServ::where("id",$id)->update($data);
     
           $response['res'] = $res;
           $response['message'] = "Updated successful";
@@ -131,9 +133,9 @@ class CumplimientoOServController extends Controller
         return $response;
       }
     
-      public function delete($id_cosv){ 
+      public function delete($id){ 
         try {
-          $res = CumplimientoOServ::where("id_cosv",$id_cosv)->delete($id_cosv);
+          $res = CumplimientoOServ::where("id",$id)->delete($id);
           $response['res'] = $res;
     
           $response['message'] = "Deleted successful";

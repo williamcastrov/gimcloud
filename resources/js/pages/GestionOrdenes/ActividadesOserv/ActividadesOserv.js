@@ -18,6 +18,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete';
+import shortid from "shortid";
 
 // Componentes de Conexion con el Backend
 import inventariosServices from "../../../services/Almacenes/Inventarios";
@@ -67,6 +68,10 @@ const useStyles = makeStyles((theme) => ({
   typography: {
     fontSize: 13,
     color: "#ff3d00"
+  },
+  typography2: {
+    fontSize: 16,
+    color: "#f44336"
   },
   button: {
     color: theme.palette.getContrastText(blueGrey[200]),
@@ -119,16 +124,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const encabezado = [
-  { id: 'descripcion_inv', numeric: false, disablePadding: false, label: 'Descripción' },
-  { id: 'referencia_inv', numeric: false, disablePadding: false, label: 'Referencia' },
-  { id: 'descripcion_tprd', numeric: false, disablePadding: false, label: 'Tipo Producto' },
-  { id: 'fechaactualizacion_inv', numeric: true, disablePadding: false, label: 'Fecha Actualizacion' },
-  { id: 'horaactualizacion_inv', numeric: false, disablePadding: false, label: 'Hora Actualización' },
-  { id: 'existencia_inv', numeric: true, disablePadding: false, label: 'Existencias' },
-  { id: 'nombre_est', numeric: true, disablePadding: false, label: 'Estado' },
-];
-
 function NumberFormatCustom(props) {
   const { inputRef, ...other } = props;
   //console.log(inputRef);
@@ -142,100 +137,6 @@ function NumberFormatCustom(props) {
   );
 }
 
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
-
-function EnhancedTableHead(props) {
-  const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
-
-  return (
-    <TableHead>
-      <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{ 'aria-label': 'select all desserts' }}
-          />
-        </TableCell>
-        {encabezado.map((nombrecolumna) => (
-          <TableCell
-            key={nombrecolumna.id}
-            align={nombrecolumna.numeric ? 'right' : 'left'}
-            padding={nombrecolumna.disablePadding ? 'none' : 'default'}
-            sortDirection={orderBy === nombrecolumna.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === nombrecolumna.id}
-              direction={orderBy === nombrecolumna.id ? order : 'asc'}
-              onClick={createSortHandler(nombrecolumna.id)}
-            >
-              {nombrecolumna.label}
-              {orderBy === nombrecolumna.id ? (
-                <span className={classes.visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </span>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-}
-
-const useToolbarStyles = makeStyles((theme) => ({
-  root: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-    fixedHeader: true
-  },
-  highlight:
-    theme.palette.type === 'light'
-      ? {
-        color: theme.palette.secondary.main,
-        backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-      }
-      : {
-        color: theme.palette.text.primary,
-        backgroundColor: theme.palette.secondary.dark,
-      },
-  title: {
-    flex: '1 1 100%',
-  },
-}));
-
-//EnhancedTableToolbar.propTypes = {
-//  numSelected: PropTypes.number.isRequired,
-//};
-
 function ActividadesOserv(props) {
   const { id_otr, nombre_emp, razonsocial_cli, telefono_cli, nombre_ciu, email_cli, descripcion_mar, modelo_dequ,
     fechainicia_otr, descripcion_tser, descripcion_tmt, serie_dequ, codigo_equ, descripcion_con } = props.ordenSeleccionado;
@@ -244,28 +145,27 @@ function ActividadesOserv(props) {
   const [listInventarios, setListInventarios] = useState([]);
   const [listUnCumplimiento, setListUnCumplimiento] = useState([]);
   const [modalInsertar, setModalInsertar] = useState(false);
+  const [modalEliminarActividad, setModalEliminarActividad] = useState(false);
   const [modalCumplimiento, setModalCumplimiento] = useState(false);
+  const [modalActualizarCumplimiento, setModalActualizarCumplimiento] = useState(false);
   const [modalCerrarOrden, setModalCerrarOrden] = useState(false);
   const [modalRevisarCumplimiento, setModalRevisarCumplimiento] = useState(false);
   const [formError, setFormError] = useState(false);
   const [listarTipoOperacion, setListarTipoOperacion] = useState([]);
-  const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('descripcion_inv');
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [selected, setSelected] = React.useState([]);
-  const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
   const [grabar, setGrabar] = React.useState(false);
+  const [grabarCambios, setGrabarCambios] = React.useState(false);
   const fechaactual = Moment(new Date()).format('YYYY-MM-DD');
   const horaactual = Moment(new Date()).format('HH:mm:ss');
+  const [activo, setActivo] = useState(false);
 
+  const [idCumplimiento, setIdCumplimiento] = useState(0);
   const [tipooperacion, setTipoOperacion] = useState(0);
   const [referencia, setReferencia] = useState(0);
   const [actividadrealizada, setActividadrealizada] = useState(0);
-  const [fechainicial, setFechainicial] = useState(0);
-  const [fechafinal, setFechafinal] = useState(0);
-  const [horainicial, setHorainicial] = useState(0);
-  const [horafinal, setHorafinal] = useState(0);
+  const [fechainicial, setFechainicial] = useState(fechaactual);
+  const [fechafinal, setFechafinal] = useState(fechaactual);
+  const [horainicial, setHorainicial] = useState(horaactual);
+  const [horafinal, setHorafinal] = useState(horaactual);
   const [cantidad, setCantidad] = useState(0);
   const [valorunitario, setValorunitario] = useState(0);
   const [valortotal, setValortotal] = useState(0);
@@ -275,6 +175,7 @@ function ActividadesOserv(props) {
   const [inventariosSeleccionado, setInventariosSeleccionado] = useState([]);
 
   const [cumplimientoSeleccionado, setCumplimientoSeleccionado] = useState({
+    id: "",
     id_cosv: "",
     descripcion_cosv: "",
     tipooperacion_cosv: "",
@@ -306,6 +207,17 @@ function ActividadesOserv(props) {
     fetchDataTipoOperacion();
   }, [])
 
+  useEffect(() => {
+    async function fetchDataUnCumplimiento() {
+      const res = await cumplimientooservServices.listUnCumplimiento(id_otr);
+      setListUnCumplimiento(res.data);
+      if (res.data) {
+        setActivo(true)
+      } else { setActivo(false) }
+    }
+    fetchDataUnCumplimiento();
+  }, [])
+
   /*
   const calculoValorTotal = (resultado) => {
     console.log("CANTIDAD : ", cantidad, valorunitario)
@@ -321,24 +233,35 @@ function ActividadesOserv(props) {
     }));
   }
 
-  const seleccionarInventarios = (inventarios, caso) => {
-    setInventariosSeleccionado(inventarios);
-    (caso === "Editar") ? abrirCerrarModalCumplimiento() : abrirCerrarModalInsertar()
+  const seleccionarCumplimiento = (cumplimiento, caso) => {
+    console.log(cumplimiento)
+    setCumplimientoSeleccionado(cumplimiento);
+    (caso === "Editar") ? abrirCerrarModalActualizarCumplimiento() : abrirCerrarModalEliminarActividad()
   }
 
   const abrirCerrarModalInsertar = () => {
     setModalInsertar(!modalInsertar);
   }
 
+  const abrirCerrarModalEliminarActividad = () => {
+    setModalEliminarActividad(!modalEliminarActividad);
+  }
+
   const abrirCerrarModalCumplimiento = () => {
     setModalCumplimiento(!modalCumplimiento);
   }
 
+  const abrirCerrarModalActualizarCumplimiento = () => {
+    setModalActualizarCumplimiento(!modalActualizarCumplimiento);
+  }
+
   const consultarCumplimiento = () => {
     async function fetchDataUnCumplimiento() {
-      const res = await cumplimientooservServices.listUnCumplimiento(props.ordenSeleccionado.id_otr);
+      const res = await cumplimientooservServices.listUnCumplimiento(id_otr);
       setListUnCumplimiento(res.data);
-      console.log("LEE DATOS CUMPLIMIENTO ORDEN : ", res.data)
+      if (res.data) {
+        setActivo(true)
+      } else { setActivo(false) }
       abrirCerrarModalRevisarCumplimiento();
     }
     fetchDataUnCumplimiento();
@@ -352,7 +275,7 @@ function ActividadesOserv(props) {
     setModalCerrarOrden(!modalCerrarOrden);
   }
 
-  const actualizarCumplimiento = async () => {
+  const grabarCumplimiento = async () => {
 
     setFormError({});
     let errors = {};
@@ -360,9 +283,9 @@ function ActividadesOserv(props) {
 
     {
       let resultado = (cantidad * valorunitario)
-      console.log("RESULTADO : ", resultado)
       //Asignar Valores al Estado Cumplimiento
       setCumplimientoSeleccionado([{
+        id: idCumplimiento,
         id_cosv: props.ordenSeleccionado.id_otr,
         descripcion_cosv: actividadrealizada,
         tipooperacion_cosv: tipooperacion,
@@ -381,6 +304,71 @@ function ActividadesOserv(props) {
     }
     setGrabar(true);
   }
+
+  const guardarCambiosCumplimiento = async () => {
+
+    {
+      let resultado = (cantidad * valorunitario)
+      //Asignar Valores al Estado Cumplimiento
+      setCumplimientoSeleccionado([{
+        id: cumplimientoSeleccionado.id,
+        id_cosv: props.ordenSeleccionado.id_otr,
+        descripcion_cosv: cumplimientoSeleccionado.descripcion_cosv,
+        tipooperacion_cosv: cumplimientoSeleccionado.tipooperacion_cosv,
+        referencia_cosv: cumplimientoSeleccionado.referencia_cosv,
+        fechainicia_cosv: fechaactual,
+        fechafinal_cosv: fechaactual,
+        horainiciacosv: horainicial,
+        horafinal_cosv: horafinal,
+        cantidad_cosv: cantidad,
+        valorunitario_cosv: valorunitario,
+        valortotal_cosv: resultado,
+        servicio_cosv: cumplimientoSeleccionado.servicio_cosv,
+        observacion_cosv: observacion
+        //cumplimientoSeleccionado
+      }]);
+    }
+    setGrabarCambios(true);
+  }
+
+  const borraActividadOrden = async()=>{
+
+    const res = await cumplimientooservServices.delete(cumplimientoSeleccionado.id);
+
+    if (res.success) {
+        swal( "Actividad de la Orden", "Borrada de forma Correcta!", "success", { button: "Aceptar" });
+        console.log(res.message)
+        abrirCerrarModalEliminar();
+    }
+    else {
+        swal( "Actividad de la Orden", "Error Borrando Actividad de la Orden!", "error", { button: "Aceptar" });
+        console.log(res.message);
+        abrirCerrarModalEliminar();
+    }
+    
+  }
+
+  useEffect(() => {
+    async function guardarCambiosCumplimiento() {
+      if (grabarCambios) {
+
+        const res = await cumplimientooservServices.update(cumplimientoSeleccionado[0]);
+
+        if (res.success) {
+          swal("Orden de Servicio", "Orden de Servicio Actualizada de forma Correcta!", "success", { button: "Aceptar" });
+          console.log(res.message)
+          abrirCerrarModalActualizarCumplimiento();
+        } else {
+          swal("Orden de Servicio", "Error Actualizando la Orden de Servicio!", "error", { button: "Aceptar" });
+          console.log(res.message);
+          abrirCerrarModalActualizarCumplimiento();
+        }
+        setGrabarCambios(false);
+        abrirCerrarModalCumplimiento();
+      }
+    }
+    guardarCambiosCumplimiento();
+  }, [grabarCambios])
 
   const handleOnSearch = (string, results) => {
     // onSearch will have as the first callback parameter
@@ -408,49 +396,10 @@ function ActividadesOserv(props) {
     grabarCumplimiento();
   }, [grabar])
 
-  const EnhancedTableToolbar = (props) => {
-    const classes = useToolbarStyles();
-    const { numSelected } = props;
-
-    return (
-      <Toolbar
-        className={clsx(classes.root, {
-          [classes.highlight]: numSelected > 0,
-        })}
-      >
-        {numSelected > 0 ? (
-          <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
-            {numSelected} registro(s) seleccionados
-          </Typography>
-        ) : (
-            <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-              Seleccionar Actividades de Mantenimiento
-            </Typography>
-          )
-        }
-
-
-        {numSelected > 0 ? (
-          <Tooltip title="Delete">
-            <IconButton aria-label="delete">
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        ) : (
-            <Tooltip title="Filter list">
-              <IconButton aria-label="filter list">
-                <FilterListIcon />
-              </IconButton>
-            </Tooltip>
-          )}
-      </Toolbar>
-    );
-  };
-
-
   const handleOnSelect = (item) => {
     // the item selected
     {
+      setIdCumplimiento(shortid());
       setTipoOperacion(item.tipooperacion_inv);
       setReferencia(item.referencia_inv);
       setActividadrealizada(item.descripcion_inv);
@@ -464,7 +413,8 @@ function ActividadesOserv(props) {
 
       //item.map((asignar) => (
       setCumplimientoSeleccionado([{
-        id_cosv: item.id_inv,
+        id: idCumplimiento,
+        id_cosv: id_otr,
         descripcion_cosv: item.descripcion_inv,
         tipooperacion_cosv: item.tipooperacion_inv,
         referencia_cosv: item.referencia_inv,
@@ -476,12 +426,10 @@ function ActividadesOserv(props) {
         valorunitario_cosv: item.costounitponderado_inv,
         valortotal_cosv: 0,
         servicio_cosv: 1,
-        observacion_cosv: ""
+        observacion_cosv: observacion
         //cumplimientoSeleccionado
       }]);
     }
-    //setGrabar(true)
-    //leerUnaOrden();
     abrirCerrarModalCumplimiento();
   };
 
@@ -537,6 +485,11 @@ function ActividadesOserv(props) {
         </Typography>
         <br />
         <Grid container spacing={2} >
+          <Grid item xs={12} md={2}>
+            <TextField name="id" label="Id Cumplimiento" disabled="true"
+              defaultValue={idCumplimiento}
+              fullWidth onChange={handleChange} value={cumplimientoSeleccionado && cumplimientoSeleccionado.id} />
+          </Grid>
           <Grid item xs={12} md={2}> <TextField name="id_cosv" label="# Orden de Servicio" disabled="true"
             defaultValue={id_otr}
             fullWidth onChange={handleChange} value={cumplimientoSeleccionado && cumplimientoSeleccionado.id_cosv} />
@@ -564,7 +517,7 @@ function ActividadesOserv(props) {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={4}>
             <TextField name="referencia_cosv" label="Referencia Producto"
               value={referencia}
               onChange={(e) => setReferencia(e.target.value)}
@@ -637,8 +590,121 @@ function ActividadesOserv(props) {
         </Grid>
         <br />
         <div align="right">
-          <Button color="primary" onClick={() => actualizarCumplimiento()} >Guardar</Button>
+          <Button color="primary" onClick={() => grabarCumplimiento()} >Guardar</Button>
           <Button onClick={() => abrirCerrarModalCumplimiento()}>Cancelar</Button>
+        </div>
+      </div>
+    </div>
+  )
+
+  const actualizarCumplimiento = (
+    <div className="App" >
+      <div className={styles.modal}>
+        <Typography align="center" className={styles.typography} variant="button" display="block" >
+          Actualizar Cumplimiento
+      </Typography>
+        <br />
+        <Grid container spacing={2} >
+          <Grid item xs={12} md={2}>
+            <TextField name="id" label="Id Cumplimiento" disabled="true"
+              defaultValue={idCumplimiento}
+              fullWidth onChange={handleChange} value={cumplimientoSeleccionado && cumplimientoSeleccionado.id} />
+          </Grid>
+          <Grid item xs={12} md={2}> <TextField name="id_cosv" label="# Orden de Servicio" disabled="true"
+            defaultValue={id_otr}
+            fullWidth onChange={handleChange} value={cumplimientoSeleccionado && cumplimientoSeleccionado.id_cosv} />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <FormControl className={styles.formControl2}>
+              <InputLabel id="idselecttipooperacion_cosv">Tipo</InputLabel>
+              <Select
+                disabled="true"
+                labelId="selecttipooperacion_cosv"
+                name="tipooperacion_cosv"
+                id="idselecttipooperacion_cosv"
+                value={tipooperacion}
+                onChange={(e) => setOperario(e.target.value)}
+                fullWidth onChange={handleChange}
+                value={cumplimientoSeleccionado && cumplimientoSeleccionado.tipooperacion_cosv}
+              >
+                <MenuItem value=""> <em>None</em> </MenuItem>
+                {
+                  listarTipoOperacion.map((itemselect) => {
+                    return (
+                      <MenuItem value={itemselect.id_tope}>{itemselect.descripcion_tope}</MenuItem>
+                    )
+                  })
+                }
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <TextField name="referencia_cosv" label="Referencia Producto"
+              value={referencia}
+              onChange={(e) => setReferencia(e.target.value)}
+              fullWidth
+              disabled="true"
+              value={cumplimientoSeleccionado && cumplimientoSeleccionado.referencia_cosv}
+            />
+          </Grid>
+          <Grid item xs={12} md={8}>
+            <TextField className={styles.inputMaterial} label="Actividad Realizada" name="descripcion_cosv"
+              value={actividadrealizada}
+              onChange={(e) => setActividadrealizada(e.target.value)} />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <FormControl className={styles.formControl2}>
+              <InputLabel id="servicio_cosv">Servicio Realizado</InputLabel>
+              <Select
+                labelId="selectservicio_cosv"
+                name="servicio_cosv"
+                id="idselectservicio_cosv"
+                value={1}
+                onChange={(e) => setServicioRealizado(e.target.value)}
+              >
+                <MenuItem value="1"> Cambiado </MenuItem>
+                <MenuItem value="2"> Revisado </MenuItem>
+                <MenuItem value="3"> Limpiar </MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} md={3}> <TextField type="date" InputLabelProps={{ shrink: true }} name="fechainicia_cosv"
+            defaultValue={Moment(inventariosSeleccionado.fechaactual).format('YYYY-MM-DD')}
+            label="Fecha Inicia Actividad" fullWidth value={fechaactual} onChange={(e) => setFechainicial(e.target.value)} />
+          </Grid>
+          <Grid item xs={12} md={3}> <TextField type="date" InputLabelProps={{ shrink: true }} name="fechafinal_cosv"
+            defaultValue={Moment(inventariosSeleccionado.fechaactual).format('YYYY-MM-DD')}
+            label="Fecha Finaliza Actividad" fullWidth value={fechaactual} onChange={(e) => setFechafinal(e.target.value)}  />
+          </Grid>
+          <Grid item xs={12} md={3}> <TextField type="time" InputLabelProps={{ shrink: true }} name="horainiciacosv"
+            label="Hora Inicia Actividad" fullWidth defaultValue={Moment(inventariosSeleccionado.horaactual).format('HH:mm:ss')}
+            value={horaactual} onChange={(e) => ssetHorainicial(e.target.value)}  />
+          </Grid>
+          <Grid item xs={12} md={3}> <TextField type="time" InputLabelProps={{ shrink: true }} name="horafinal_cosv"
+            label="Hora Final Actividad" fullWidth defaultValue={Moment(inventariosSeleccionado.horaactual).format('HH:mm:ss')}
+            value={horaactual} onChange={(e) => setHorafinal(e.target.value)}  />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <TextField className={styles.inputMaterial} name="cantidad_cosv" InputLabelProps={{ shrink: true }}
+              value={cantidad} onChange={(e) => setCantidad(e.target.value)} label="Cantidad" fullWidth />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <TextField className={styles.inputMaterial} type="numeric" name="valorunitario_cosv" label="Valor Unitario" fullWidth
+              InputLabelProps={{ shrink: true }} value={valorunitario}  onChange={(e) => setValorunitario(e.target.value)} />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <TextField className={styles.inputMaterial} type="numeric" name="valortotal_cosv" label="Valor Total"
+              InputLabelProps={{ shrink: true }} fullWidt />
+          </Grid>
+          <Grid item xs={12} md={12}>
+            <TextField className={styles.inputMaterial} label="Observaciones o Comentarios" name="observacion_cosv"
+              value={observacion} onChange={(e) => setObservacion(e.target.value)} />
+          </Grid>
+        </Grid>
+        <br />
+        <div align="right">
+          <Button color="primary" onClick={() => guardarCambiosCumplimiento()} >Guardar</Button>
+          <Button onClick={() => abrirCerrarModalActualizarCumplimiento()}>Cancelar</Button>
         </div>
       </div>
     </div>
@@ -655,8 +721,13 @@ function ActividadesOserv(props) {
           {
             icon: 'edit',
             tooltip: 'Editar Item',
-            onClick: (event, rowData) => seleccionarInventarios(rowData, "Editar")
-          }
+            onClick: (event, rowData) => seleccionarCumplimiento(rowData, "Editar")
+          },
+          {
+            icon     : 'delete',
+            tooltip  : 'Eliminar Item',
+            onClick  : (event, rowData) =>   seleccionarCumplimiento(rowData, "Eliminar")
+          } 
         ]}
         options={{
           actionsColumnIndex: -1
@@ -679,6 +750,17 @@ function ActividadesOserv(props) {
       </div>
     </div>
   )
+
+  const ActividadEliminar = (
+    <div className={styles.modal}>
+      <p>Estás seguro que deseas eliminar el Cumplimiento de la Orden <b>{cumplimientoSeleccionado && cumplimientoSeleccionado.id}</b>? </p>
+      <div align="right">
+        <Button color="secondary" onClick = {() => borraActividadOrden() }> Confirmar </Button>
+        <Button onClick={()=>abrirCerrarModalEliminarActividad()}> Cancelar </Button>
+      </div>
+    </div>
+  )
+
   // onClick={() => borrarLineaProducto()}
 
   // <Button variant="contained" startIcon={<CachedIcon />} color="primary" onClick={() => leerOrdenes()} >Todas las Ordenes</Button>
@@ -730,8 +812,23 @@ function ActividadesOserv(props) {
         />
       </div>
       <div>
-        <Button className={styles.button2} onClick={() => consultarCumplimiento()} >Revisar Cumplimiento </Button>
-        <Button className={styles.button3} onClick={() => abrirCerrarModalCerrarOrden()} >Cerrar Orden </Button>
+        {
+          activo ? (
+            <div>
+              <Button className={styles.button2} onClick={() => consultarCumplimiento()} >Revisar Cumplimiento </Button>
+              <Button className={styles.button3} onClick={() => abrirCerrarModalCerrarOrden()} >Cerrar Orden </Button>
+            </div>
+
+          )
+            :
+            (
+              <div>
+                <Typography align="center" className={styles.typography2} variant="button" display="block" >
+                  No hay Registros de Actividades a la Orden # {props.ordenSeleccionado.id_otr}
+                </Typography>
+              </div>
+            )
+        }
       </div>
 
       <Modal
@@ -753,6 +850,20 @@ function ActividadesOserv(props) {
         onClose={abrirCerrarModalCerrarOrden}
       >
         {CerrarOrden}
+      </Modal>
+
+      <Modal
+        open={modalActualizarCumplimiento}
+        onClose={abrirCerrarModalActualizarCumplimiento}
+      >
+        {actualizarCumplimiento}
+      </Modal>
+
+      <Modal
+        open={modalEliminarActividad}
+        onClose={abrirCerrarModalEliminarActividad}
+      >
+        {ActividadEliminar}
       </Modal>
 
     </div>

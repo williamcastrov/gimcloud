@@ -3,6 +3,7 @@ import axios from "axios";
 const cumplimientooserv = {};
 
 cumplimientooserv.save = async (data) => {
+    console.log("DATA : ", data.id_cosv)
     const urlSave = baseUrl + "/create"
     const res = await axios.post(urlSave, data)
         .then(response => { return response.data })
@@ -38,9 +39,9 @@ cumplimientooserv.listOserv = async (id_cosv) => {
 }
 
 cumplimientooserv.update = async (data) => {
-    //console.log(data);
-    console.log("DATA : ", data.id_cosv);
-    const urlUpdate = baseUrl+"/update/"+data.id_cosv
+    console.log(data);
+    console.log("DATA : ", data.id);
+    const urlUpdate = baseUrl+"/update/"+data.id
     const res = await axios.put(urlUpdate, data)
     .then(response=>{ return response.data; })
     .catch(error=>{ return error; })
@@ -48,8 +49,8 @@ cumplimientooserv.update = async (data) => {
     return res;
 }
 
-cumplimientooserv.delete = async (id_cosv) => {
-    const urlDelete = baseUrl+"/delete/"+id_cosv
+cumplimientooserv.delete = async (id) => {
+    const urlDelete = baseUrl+"/delete/"+id
     const res = await axios.delete(urlDelete)
     .then(response=> { return response.data })
     .catch(error =>{ return error })
