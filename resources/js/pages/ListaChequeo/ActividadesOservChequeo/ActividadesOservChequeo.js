@@ -354,7 +354,7 @@ function ActividadesOservChequeo(props) {
         valorunitario_cosv: valorunitario,
         valortotal_cosv: resultado,
         servicio_cosv: cumplimientoSeleccionado.servicio_cosv,
-        observacion_cosv: observacion
+        observacion_cosv: cumplimientoSeleccionado.observacion_cosv
         //cumplimientoSeleccionado
       }]);
     }
@@ -577,7 +577,7 @@ function ActividadesOservChequeo(props) {
           </Grid>
           <Grid item xs={12} md={8}>
             <TextField className={styles.inputMaterial} label="Observación" name="observacion_cosv"
-              onChange={(e) => setObservacion(e.target.value)} />
+              onChange={(e) => setObservacion(e.target.value)}  />
           </Grid>
         </Grid>
         <br />
@@ -678,7 +678,7 @@ function ActividadesOservChequeo(props) {
           </Grid>
           <Grid item xs={12} md={12}>
             <TextField className={styles.inputMaterial} label="Observaciones o Comentarios" name="observacion_cosv"
-              value={observacion} onChange={(e) => setObservacion(e.target.value)} />
+              value={observacion} onChange={handleChange} value={cumplimientoSeleccionado && cumplimientoSeleccionado.observacion_cosv} />
           </Grid>
         </Grid>
         <br />

@@ -125,17 +125,32 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function NumberFormatCustom(props) {
-  const { inputRef, ...other } = props;
-  //console.log(inputRef);
+  const { inputRef, onChange, ...other } = props;
+
   return (
     <NumberFormat
       {...other}
       getInputRef={inputRef}
-      thousandSeparator={'.'}
-      decimalSeparator={','}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.value,
+          },
+        });
+      }}
+      thousandSeparator
+      isNumericString
+      prefix="$"
     />
   );
 }
+
+NumberFormatCustom.propTypes = {
+  inputRef: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 
 function ActividadesOserv(props) {
   const { id_otr, nombre_emp, razonsocial_cli, telefono_cli, nombre_ciu, email_cli, descripcion_mar, modelo_dequ,
@@ -308,7 +323,7 @@ function ActividadesOserv(props) {
   const guardarCambiosCumplimiento = async () => {
 
     {
-      let resultado = (cantidad * valorunitario)
+      let resultado = (cumplimientoSeleccionado.cantidad_cosv * cumplimientoSeleccionado.valorunitario_cosv)
       //Asignar Valores al Estado Cumplimiento
       setCumplimientoSeleccionado([{
         id: cumplimientoSeleccionado.id,
@@ -320,11 +335,11 @@ function ActividadesOserv(props) {
         fechafinal_cosv: fechaactual,
         horainiciacosv: horainicial,
         horafinal_cosv: horafinal,
-        cantidad_cosv: cantidad,
-        valorunitario_cosv: valorunitario,
+        cantidad_cosv: cumplimientoSeleccionado.cantidad_cosv,
+        valorunitario_cosv: cumplimientoSeleccionado.valorunitario_cosv,
         valortotal_cosv: resultado,
         servicio_cosv: cumplimientoSeleccionado.servicio_cosv,
-        observacion_cosv: observacion
+        observacion_cosv: cumplimientoSeleccionado.observacion_cosv
         //cumplimientoSeleccionado
       }]);
     }
@@ -575,8 +590,9 @@ function ActividadesOserv(props) {
               value={cantidad} onChange={(e) => setCantidad(e.target.value)} label="Cantidad" fullWidth />
           </Grid>
           <Grid item xs={12} md={4}>
-            <TextField className={styles.inputMaterial} type="numeric" name="valorunitario_cosv" label="Valor Unitario" fullWidth
-              InputLabelProps={{ shrink: true }} value={valorunitario} onChange={(e) => setValorunitario(e.target.value)}
+            <TextField className={styles.inputMaterial} name="valorunitario_cosv" label="Valor Unitario" fullWidth
+              InputLabelProps={{ shrink: true }}  InputProps={{ inputComponent: NumberFormatCustom, }}
+              value={valorunitario} onChange={(e) => setValorunitario(e.target.value)}
             />
           </Grid>
           <Grid item xs={12} md={4}>
@@ -596,6 +612,15 @@ function ActividadesOserv(props) {
       </div>
     </div>
   )
+
+  /*
+ <Grid item xs={12} md={4}>
+            <TextField className={styles.inputMaterial} type="numeric" name="valorunitario_cosv" label="Valor Unitario" fullWidth
+              InputLabelProps={{ shrink: true }} value={valorunitario} onChange={(e) => setValorunitario(e.target.value)}
+            />
+          </Grid>
+         
+  */
 
   const actualizarCumplimiento = (
     <div className="App" >
@@ -649,8 +674,8 @@ function ActividadesOserv(props) {
           </Grid>
           <Grid item xs={12} md={8}>
             <TextField className={styles.inputMaterial} label="Actividad Realizada" name="descripcion_cosv"
-              value={actividadrealizada}
-              onChange={(e) => setActividadrealizada(e.target.value)} />
+              value={actividadrealizada} onChange={handleChange}
+              value={cumplimientoSeleccionado && cumplimientoSeleccionado.descripcion_cosv} />
           </Grid>
           <Grid item xs={12} md={4}>
             <FormControl className={styles.formControl2}>
@@ -685,20 +710,24 @@ function ActividadesOserv(props) {
             value={horaactual} onChange={(e) => setHorafinal(e.target.value)}  />
           </Grid>
           <Grid item xs={12} md={4}>
-            <TextField className={styles.inputMaterial} name="cantidad_cosv" InputLabelProps={{ shrink: true }}
-              value={cantidad} onChange={(e) => setCantidad(e.target.value)} label="Cantidad" fullWidth />
+            <TextField className={styles.inputMaterial} name="cantidad_cosv" InputLabelProps={{ shrink: true }}  
+              value={cantidad} onChange={handleChange} label="Cantidad" fullWidth
+              value={cumplimientoSeleccionado && cumplimientoSeleccionado.cantidad_cosv} />
           </Grid>
           <Grid item xs={12} md={4}>
-            <TextField className={styles.inputMaterial} type="numeric" name="valorunitario_cosv" label="Valor Unitario" fullWidth
-              InputLabelProps={{ shrink: true }} value={valorunitario}  onChange={(e) => setValorunitario(e.target.value)} />
+            <TextField className={styles.inputMaterial} name="valorunitario_cosv" label="Valor Unitario" fullWidth
+              InputLabelProps={{ shrink: true }} value={valorunitario} InputProps={{ inputComponent: NumberFormatCustom, }}
+              onChange={handleChange} value={cumplimientoSeleccionado && cumplimientoSeleccionado.valorunitario_cosv} />
           </Grid>
           <Grid item xs={12} md={4}>
             <TextField className={styles.inputMaterial} type="numeric" name="valortotal_cosv" label="Valor Total"
-              InputLabelProps={{ shrink: true }} fullWidt />
+              InputLabelProps={{ shrink: true }} fullWidt InputProps={{ inputComponent: NumberFormatCustom, }}
+              value={cumplimientoSeleccionado && cumplimientoSeleccionado.valortotal_cosv} />
           </Grid>
           <Grid item xs={12} md={12}>
             <TextField className={styles.inputMaterial} label="Observaciones o Comentarios" name="observacion_cosv"
-              value={observacion} onChange={(e) => setObservacion(e.target.value)} />
+              value={observacion} onChange={handleChange} 
+              value={cumplimientoSeleccionado && cumplimientoSeleccionado.observacion_cosv} />
           </Grid>
         </Grid>
         <br />
