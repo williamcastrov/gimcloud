@@ -60,13 +60,37 @@ class ContactosController extends Controller
         }
           return $response;
       }
-    
-      public function get($idinterlocutor_con){
+
+      public function contactosinterlocutor($idinterlocutor_con){
         try { 
           //$data = Frecuencias::find($id_fre);
           $data = DB::select("SELECT t0.*, t1.nombre_est, t2.nombre_ciu
           FROM contactos as t0 INNER JOIN estados as t1 INNER JOIN ciudades as t2
           WHERE t0.estado_con = t1.id_est and t0.ciudad_con = t2.id_ciu and t0.idinterlocutor_con = $idinterlocutor_con");
+  
+          if ($data) {
+              $response['data'] = $data;
+              $response['message'] = "Load successful";
+              $response['success'] = true;
+          }
+          else {
+              $response['data'] = null;
+              $response['message'] = "Not found data id_con => $id_con";
+              $response['success'] = false;
+          }
+          } catch (\Exception $e) {
+              $response['message'] = $e->getMessage();
+              $response['success'] = false;
+          }
+          return $response;
+      }
+    
+      public function get($id_con){
+        try { 
+          //$data = Frecuencias::find($id_fre);
+          $data = DB::select("SELECT t0.*, t1.nombre_est, t2.nombre_ciu
+          FROM contactos as t0 INNER JOIN estados as t1 INNER JOIN ciudades as t2
+          WHERE t0.estado_con = t1.id_est and t0.ciudad_con = t2.id_ciu and t0.id_con = $id_con");
   
           if ($data) {
               $response['data'] = $data;

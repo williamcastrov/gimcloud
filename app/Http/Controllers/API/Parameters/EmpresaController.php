@@ -31,7 +31,7 @@ class EmpresaController extends Controller
             $insert['fecha_creacion_emp'] = $request['fecha_creacion_emp'];
             $insert['fecha_modificacion_emp'] = $request['fecha_modificacion_emp'];
             $insert['ciudad_emp'] = $request['ciudad_emp'];
-            $insert['pais_emp'] = $request['pais_emp'];
+           // $insert['pais_emp'] = $request['pais_emp'];
   
             Empresa::insert($insert);
     
@@ -103,7 +103,7 @@ class EmpresaController extends Controller
             $data['fecha_creacion_emp'] = $request['fecha_creacion_emp'];
             $data['fecha_modificacion_emp'] = $request['fecha_modificacion_emp'];
             $data['ciudad_emp'] = $request['ciudad_emp'];
-            $data['pais_emp'] = $request['pais_emp'];
+           // $data['pais_emp'] = $request['pais_emp'];
   
             //Console::info('mymessage');
   

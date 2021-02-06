@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
-import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
+import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
+import swal from 'sweetalert';
+
 
 // Componentes de Conexion con el Backend
 import areasServices from "../../../services/Activos/Areas";
@@ -30,6 +32,10 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0),
     minWidth: 315,
+  },
+  typography: {
+    fontSize: 16,
+    color   : "#ff3d00"
   }
 }));
 
@@ -135,7 +141,12 @@ function Areas() {
       const res = await areasServices.save(areasSeleccionado);
 
       if (res.success) {
-        alert("Area Creada de forma Correcta")
+        swal({
+          title: "Gestión Areas",
+          text: "Area Creada de forma Correcta!",
+          icon: "success",
+          button: "Aceptar"
+        });
         console.log(res.message)
         abrirCerrarModalInsertar();
         delete areasSeleccionado.codigo_are;
@@ -144,13 +155,23 @@ function Areas() {
         delete areasSeleccionado.estado_are;
       } else
       {
-        alert("Error Creando la Area");
+        swal({
+          title : "Gestión Areas",
+          text  : "Error Creando el Area!",
+          icon  : "error",
+          button: "Aceptar"
+        });
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Creando la Area");
+      swal({
+        title : "Gestión Areas",
+        text  : "Debe ingresar todos los datos, Error creando el Area!",
+        icon  : "warning",
+        button: "Aceptar"
+      });
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
@@ -189,7 +210,12 @@ function Areas() {
     const res = await areasServices.update(areasSeleccionado);
 
     if (res.success) {
-        alert("Area actualizada de forma Correcta")
+        swal({
+          title: "Gestión Areas",
+          text: "Actualizada de forma Correcta!",
+          icon: "success",
+          button: "Aceptar"
+        });
         console.log(res.message)
         abrirCerrarModalEditar();
         delete areasSeleccionado.codigo_are;
@@ -198,13 +224,23 @@ function Areas() {
         delete areasSeleccionado.estado_are;
     } else
     {
-        alert("Error Actualizando el Area");
+        swal({
+          title : "Gestión Areas",
+          text  : "Error Actualizando el Area!",
+          icon  : "error",
+          button: "Aceptar"
+        });
         console.log(res.message);
         abrirCerrarModalEditar();
     }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Actualizando el Area");
+      swal({
+        title : "Gestión Areas",
+        text  : "Debe Ingresar Todos los Datos, Error Actualizando el Area!",
+        icon  : "warning",
+        button: "Aceptar"
+      });
       console.log(res.message);
       abrirCerrarModalEditar();
     } 
@@ -215,12 +251,23 @@ function Areas() {
     const res = await areasServices.delete(areasSeleccionado.id_are);
 
     if (res.success) {
-        alert("Area Borrada de forma Correcta")
+        swal({
+          title : "Gestión Areas",
+          text  : "Borrada de forma Correcta!",
+          icon  : "success",
+          button: "Aceptar"
+        });
+
         console.log(res.message)
         abrirCerrarModalEliminar();
     }
     else {
-        alert("Error Borrando el Area");
+          swal({
+          title : "Gestión Areas",
+          text  : "Error brorrando el Area!",
+          icon  : "error",
+          button: "Aceptar"
+        });
         console.log(res.message);
         abrirCerrarModalEliminar();
     }
@@ -261,7 +308,9 @@ function Areas() {
 
   const areaInsertar = (
     <div className={styles.modal}>
-      <h3>Agregar Nueva Area</h3>
+      <Typography  align="center" className={ styles.typography } variant="button" display="block" >
+        Agregar Nuevo Area
+      </Typography>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_are" onChange={handleChange} />
       <br />
       <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_are" onChange={handleChange} />          
@@ -313,7 +362,9 @@ function Areas() {
 
   const areaEditar = (
     <div className={styles.modal}>
-      <h3 align="center" >Actualizar Area</h3>
+      <Typography  align="center" className={ styles.typography } variant="button" display="block" >
+        Actualizar Area
+      </Typography>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_are" onChange={handleChange} value={areasSeleccionado&&areasSeleccionado.codigo_are}/>
       <br />
       <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_are" onChange={handleChange} value={areasSeleccionado&&areasSeleccionado.descripcion_are}/>
@@ -382,7 +433,7 @@ function Areas() {
       <MaterialTable
        columns={columnas}
        data={listAreas}
-       title="Maestra de Areas"
+       title="MAESTRA DE AREAS"
        actions={[
          {
            icon     : 'edit',

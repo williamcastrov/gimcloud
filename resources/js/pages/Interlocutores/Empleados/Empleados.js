@@ -4,6 +4,8 @@ import MaterialTable from "material-table";
 import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid, Typography  } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
+import swal from 'sweetalert';
+import Moment from 'moment';
 
 // Componentes de Conexion con el Backend
 import empleadosServices from "../../../services/Interlocutores/Empleados";
@@ -41,6 +43,10 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0),
     minWidth: 250,
+  },
+  typography: {
+    fontSize: 16,
+    color: "#ff3d00"
   }
 }));
 
@@ -55,11 +61,14 @@ function Empleados() {
   const [listarCiudades, setListarCiudades] = useState([]);
   const [listarEmpresas, setListarEmpresas] = useState([]);
   const [listarEspecialidades, setListarEspecialidades] = useState([]);
-  const [fechaHoy, setFechaHoy] = useState(new Date());
+  const fechaactual = Moment(new Date()).format('YYYY-MM-DD');
+  const horaactual = Moment(new Date()).format('HH:mm:ss');
+  const [actualiza, setActualiza] = useState(false);
   const [empleadosSeleccionado, setEmpleadosSeleccionado] = useState({
     id_emp: "",
     codigo_tipo_emp: 3,
     nit_emp: "",
+    digitochequeo_emp: 0,
     estado_emp: "",
     primer_nombre_emp: "", 
     segundo_nombre_emp: "",
@@ -71,8 +80,8 @@ function Empleados() {
     telefono_emp: "",
     email_emp: "",
     empresa_emp: "",
-    fecha_creacion_emp: fechaHoy,
-    fecha_modificacion_emp: fechaHoy, 
+    fecha_creacion_emp: fechaactual,
+    fecha_modificacion_emp: fechaactual, 
     especialidad_emp: ""
   })
 
@@ -81,9 +90,10 @@ function Empleados() {
       const res = await empleadosServices.listEmpleados();
       setListarEmpleados(res.data);
       console.log(res.data)
+      setActualiza(false);
     }
     fetchDataEmpleados();
-  }, [])
+  }, [actualiza])
 
   useEffect (() => {
       async function fetchDataEmpresas() {
@@ -235,7 +245,7 @@ function Empleados() {
       const res = await empleadosServices.save(empleadosSeleccionado);
 
       if (res.success) {
-        alert("Empleado Creado de forma Correcta")
+        swal("Empleado", "Creado de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalInsertar();
         delete empleadosSeleccionado.codigo_tipo_emp;
@@ -255,17 +265,18 @@ function Empleados() {
         delete empleadosSeleccionado.especialidad_emp;
       } else
       {
-        alert("Error Creando el Empleado");
+        swal("Empleado", "Error Creando el Empleado!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Creando el Empleado");
+      swal("Empleado", "Debe Ingresar Todos los Datos, Error!", "warning", { button: "Aceptar" });
       console.log(empleadosSeleccionado);
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
+    setActualiza(true);
   }
 
   const actualizarEmpleado = async () => {
@@ -356,7 +367,7 @@ function Empleados() {
     const res = await empleadosServices.update(empleadosSeleccionado);
 
     if (res.success) {
-        alert("Empleado actualizado de forma Correcta")
+        swal("Empleado", "Creado forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalEditar();
         delete empleadosSeleccionado.codigo_tipo_emp;
@@ -376,16 +387,16 @@ function Empleados() {
         delete empleadosSeleccionado.especialidad_emp;
     } else
     {
-        alert("Error Actualizando el Empleado");
+        swal("Empleado", "Error Actualizando el Empleado!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalEditar();
     }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Actualizando el Empleado");
-      console.log(res.message);
+      swal("Empleado", "Debe Ingresar Todos los Datos, Error!", "warning", { button: "Aceptar" });
       abrirCerrarModalEditar();
     } 
+    setActualiza(true);
   }
 
   const borrarEmpleado = async()=>{
@@ -393,16 +404,16 @@ function Empleados() {
     const res = await empleadosServices.delete(empleadosSeleccionado.id_emp);
 
     if (res.success) {
-        alert("Empleado Borrado de forma Correcta")
+        swal("Empleado", "Borrado de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalEliminar();
     }
     else {
-        alert("Error Borrando el Empleado");
+        swal("Empleado", "Error Borrando el Empleado!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalEliminar();
     }
-    
+    setActualiza(true);
   }
  
   // "string","boolean","numeric","date","datetime","time","currency"
@@ -411,6 +422,10 @@ function Empleados() {
     field: 'nit_emp',
     title: 'Nit',
     cellStyle : { minWidth: 100}
+  },
+  {
+    field: 'digitochequeo_emp',
+    title: 'DC'
   },
   {
     field: 'nombre_est',
@@ -459,7 +474,7 @@ function Empleados() {
   
   const empleadoInsertar=(
     <div className={styles.modal}>
-      <h3  align="center" >Agregar Nuevo Empleado</h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block">Agregar Nuevo Empleado</Typography>
       <Grid container spacing={2} > 
         <Grid item xs={12} md={6}> <TextField  name="codigo_tipo_emp" label="Tipo Interlocutor" defaultValue="3" disabled="true"
          fullWidth onChange={handleChange} /> </Grid>
@@ -547,13 +562,16 @@ function Empleados() {
           </FormControl>
         </Grid>
         <Grid item xs={12} md={6}>
-          <TextField type="date" defaultValue="2020-12-03" name="fecha_creacion_emp" label="Fecha Creación" fullWidth onChange={handleChange} />
+          <TextField type="date" InputLabelProps={{ shrink: true }} name="fecha_creacion_emp"
+          defaultValue={Moment(empleadosSeleccionado.fechaactual).format('YYYY-MM-DD')} label="Fecha de Creación"
+          fullWidth onChange={handleChange} />
         </Grid>
       </Grid>
-      
       <Grid container spacing={2} > 
         <Grid item xs={12} md={6}> 
-          <TextField type="date" defaultValue="2020-12-03"name="fecha_modificacion_emp" label="Fecha Modificación" fullWidth onChange={handleChange} />
+          <TextField type="date" InputLabelProps={{ shrink: true }} name="fecha_modificacion_emp"
+          defaultValue={Moment(empleadosSeleccionado.fechaactual).format('YYYY-MM-DD')} label="Fecha Modificación"
+          fullWidth onChange={handleChange} />
         </Grid>
         <Grid item xs={12} md={6}> 
           <FormControl className={styles.formControl}>
@@ -587,7 +605,7 @@ function Empleados() {
 
   const empleadoEditar=(
     <div className={styles.modal}>
-      <h3 align="center" >Actualizar Empleado</h3>
+      <Typography align="center" className={styles.typography} variant="button" display="block">Actualizar Empleado</Typography>
       <Grid container spacing={2} > 
         <Grid item xs={12} md={6}> <TextField  name="codigo_tipo_emp" label="Tipo Interlocutor" fullWidth disabled="true"
           onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.codigo_tipo_emp} /> </Grid>
@@ -682,12 +700,17 @@ function Empleados() {
               </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}> <TextField  name="fecha_creacion_emp" label="Fecha Creacion" fullWidth 
-          onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.fecha_creacion_emp} /> </Grid>
+        <Grid item xs={12} md={6}> 
+          <TextField type="date" type="date" InputLabelProps={{ shrink: true }} name="fecha_creacion_emp" label="Fecha de Creación"
+          defaultValue={Moment(empleadosSeleccionado.fechaactual).format('YYYY-MM-DD')}
+          InputLabelProps={{ shrink: true}} fullWidth onChange={handleChange} />
+        </Grid>  
       </Grid>
       <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> <TextField  name="fecha_modificacion_emp" label="Fecha Modificación" fullWidth 
-          onChange={handleChange} value={empleadosSeleccionado&&empleadosSeleccionado.fecha_modificacion_emp} />
+        <Grid item xs={12} md={6}>
+          <TextField type="date" type="date" InputLabelProps={{ shrink: true }} name="fecha_modificacion_emp" label="Fecha de Modificación"
+          defaultValue={Moment(empleadosSeleccionado.fechaactual).format('YYYY-MM-DD')}
+          InputLabelProps={{ shrink: true}} fullWidth onChange={handleChange} />
         </Grid>
         <Grid item xs={12} md={6}> 
           <FormControl className={styles.formControl}>
@@ -716,7 +739,6 @@ function Empleados() {
         <Button color="primary"  onClick={()=>actualizarEmpleado()} >Editar</Button>
         <Button onClick={()=>abrirCerrarModalEditar()}>Cancelar</Button>
       </div>
-      <MenuContactos interlocutor={empleadosSeleccionado.id_emp} />
     </div>
   )
 
@@ -737,7 +759,7 @@ function Empleados() {
       <MaterialTable
         columns={columnas}
         data={listarEmpleados}
-        title="Maestra de Empleados"
+        title="MAESTRA DE EMPLEADOS"
         actions={[
           {
             icon     : 'edit',

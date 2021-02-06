@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
-import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
+import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
+import swal from 'sweetalert';
 
 // Componentes de Conexion con el Backend
 import monedasServices from "../../../services/Parameters/Monedas";
@@ -30,6 +31,10 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0),
     minWidth: 315,
+  },
+  typography: {
+    fontSize: 16,
+    color   : "#ff3d00"
   }
 }));
 
@@ -109,7 +114,7 @@ function Monedas() {
     let formOk = true;
 
     if (!monedasSeleccionado.descripcion_mon) {
-      errors.nombre_mon = true;
+      errors.descripcion_mon = true;
       formOk = false;
     }
 
@@ -130,7 +135,12 @@ function Monedas() {
       const res = await monedasServices.save(monedasSeleccionado);
 
       if (res.success) {
-        alert("Tipo de Moneda Creada de forma Correcta")
+        swal({
+          title : "Moneda",
+          text  : "Creada de forma Correcta!",
+          icon  : "success",
+          button: "Aceptar"
+        });
         console.log(res.message)
         abrirCerrarModalInsertar();
         delete monedasSeleccionado.descripcion_mon;
@@ -138,13 +148,23 @@ function Monedas() {
         delete monedasSeleccionado.estado_mon;
       } else
       {
-        alert("Error Creando la Moneda");
+        swal({
+          title : "Moneda",
+          text  : "Error Creando la Moneda!",
+          icon  : "error",
+          button: "Aceptar"
+        });
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Creando la Moneda");
+      swal({
+        title : "Moneda",
+        text  : "Debe Ingresar Todos los Datos, Error Creando la Moneda!",
+        icon  : "error",
+        button: "Aceptar"
+      });
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
@@ -156,8 +176,8 @@ function Monedas() {
     let errors = {};
     let formOk = true;
 
-    if (!monedasSeleccionado.nombre_mon) {
-      errors.nombre_mon = true;
+    if (!monedasSeleccionado.descripcion_mon) {
+      errors.descripcion_mon = true;
       formOk = false;
     }
 
@@ -178,7 +198,12 @@ function Monedas() {
     const res = await monedasServices.update(monedasSeleccionado);
 
     if (res.success) {
-        alert("Tipo de Moneda actualizada de forma Correcta")
+        swal({
+          title : "Moneda",
+          text  : "Actualizada de forma Correcta!",
+          icon  : "success",
+          button: "Aceptar"
+        });
         console.log(res.message)
         abrirCerrarModalEditar();
         delete monedasSeleccionado.descripcion_mon;
@@ -186,13 +211,23 @@ function Monedas() {
         delete monedasSeleccionado.estado_mon;
     } else
     {
-        alert("Error Actualizando el tipo de Moneda");
+        swal({
+          title : "Moneda",
+          text  : "Error Actualizando el tipo de Moneda!",
+          icon  : "error",
+          button: "Aceptar"
+        });
         console.log(res.message);
         abrirCerrarModalEditar();
     }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Actualizando el tipo de Moneda");
+      swal({
+        title : "Moneda",
+        text  : "Debe Ingresar Todos los Datos, Error Actualizando el tipo de Moneda!",
+        icon  : "warning",
+        button: "Aceptar"
+      });
       console.log(res.message);
       abrirCerrarModalEditar();
     } 
@@ -203,12 +238,22 @@ function Monedas() {
     const res = await monedasServices.delete(monedasSeleccionado.id_mon);
 
     if (res.success) {
-        alert("Unidad de Medida Borrada de forma Correcta")
+        swal({
+          title : "Moneda",
+          text  : "Borrada de forma Correcta!",
+          icon  : "error",
+          button: "Aceptar"
+        });
         console.log(res.message)
         abrirCerrarModalEliminar();
     }
     else {
-        alert("Error Borrando la Unidad de Medida");
+        swal({
+          title : "Moneda",
+          text  : "Error Borrando el Tipo de Moneda!",
+          icon  : "error",
+          button: "Aceptar"
+        });
         console.log(res.message);
         abrirCerrarModalEliminar();
     }
@@ -244,7 +289,9 @@ function Monedas() {
 
   const monedaInsertar=(
     <div className={styles.modal}>
-      <h3 align="center" >Agregar Nuevo Tipo de Moneda</h3>
+      <Typography  align="center" className={ styles.typography } variant="button" display="block" >
+        Agregar Nuevo Tipo de Moneda
+      </Typography>
       <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_mon" onChange={handleChange} />          
       <br />
       <FormControl className={styles.formControl}>
@@ -294,8 +341,11 @@ function Monedas() {
 
   const monedaEditar = (
     <div className={styles.modal}>
-      <h3 align="center" >Actualizar Tipos de Monedas</h3>
-      <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_mon" onChange={handleChange} value={monedasSeleccionado&&monedasSeleccionado.nombre_mon}/>
+      <Typography  align="center" className={ styles.typography } variant="button" display="block" >
+        Actualizar Tipo de Moneda
+      </Typography>
+      <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_mon" onChange={handleChange}
+        value={monedasSeleccionado&&monedasSeleccionado.descripcion_mon}/>
       <br />
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectEmpresa">Empresa</InputLabel>
@@ -361,7 +411,7 @@ function Monedas() {
      <MaterialTable
        columns={columnas}
        data={listMonedas}
-       title="Maestra de Tipos de Moneda"
+       title="MAESTRA TIPOS DE MONEDA"
        actions={[
          {
            icon     : 'edit',

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MaterialTable from "material-table";
-import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
+import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
+import swal from 'sweetalert';
 
 // Componentes de Conexion con el Backend
 import estadosServices from "../../../services/Parameters/Estados";
@@ -30,6 +31,10 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0),
     minWidth: 315,
+  },
+  typography: {
+    fontSize: 16,
+    color   : "#ff3d00"
   }
 }));
 
@@ -41,6 +46,7 @@ function Estados() {
   const [modalEliminar, setModalEliminar]= useState(false);
   const [formError, setFormError] = useState(false);
   const [listarEmpresas, setListarEmpresas] = useState([]);
+  const [actualiza, setActualiza] = useState(false);
   const [estadoSeleccionado, setEstadoSeleccionado] = useState({
     id_est: "",
     nombre_est: "",
@@ -52,8 +58,9 @@ function Estados() {
       const res = await estadosServices.listEstados();
       setListEstados(res.data);
     }
+    setActualiza(false);
     fetchDataEstados();
-  }, [])
+  }, [actualiza])
 
   useEffect(() => {
     async function fetchDataEmpresas() {
@@ -113,23 +120,39 @@ function Estados() {
       const res = await estadosServices.save(estadoSeleccionado);
 
       if (res.success) {
-        alert("Estado Creado de forma Correcta")
+        swal({
+          title: "Estado",
+          text: "Creado de forma Correcta!",
+          icon: "success",
+          button: "Aceptar"
+        });
         console.log(res.message)
         abrirCerrarModalInsertar();
         delete estadoSeleccionado.nombre_est;
         delete estadoSeleccionado.empresa_est;
       } else
       {
-        alert("Error Creando el Estado");
+        swal({
+          title: "Estado",
+          text: "Error Creando el Estado!",
+          icon: "error",
+          button: "Aceptar"
+        });
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Creando el Estado");
+      swal({
+        title: "Estado",
+        text: "Debe Ingresar Todos los Datos, Error Creando el Estado!",
+        icon: "warning",
+        button: "Aceptar"
+      });
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
+    setActualiza(true);
   }
 
   const actualizarEstado = async () => {
@@ -155,23 +178,39 @@ function Estados() {
     const res = await estadosServices.update(estadoSeleccionado);
 
     if (res.success) {
-        alert("Estado actualizado de forma Correcta")
+        swal({
+          title: "Estado",
+          text: "Actualizado de forma Correcta!",
+          icon: "success",
+          button: "Aceptar"
+        });
         console.log(res.message)
         abrirCerrarModalEditar();
         delete estadoSeleccionado.nombre_est;
         delete estadoSeleccionado.empresa_est;
     } else
     {
-        alert("Error Actualizando el Estado");
+        swal({
+          title: "Estado",
+          text: "Error Actualizando el Estado!",
+          icon: "error",
+          button: "Aceptar"
+        });
         console.log(res.message);
         abrirCerrarModalEditar();
     }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Actualizando el Estado");
+      swal({
+        title: "Estado",
+        text: "Debe Ingresar Todos los Datos, Error Actualizando el Estado!",
+        icon: "warning",
+        button: "Aceptar"
+      });
       console.log(res.message);
       abrirCerrarModalEditar();
     } 
+    setActualiza(true);
   }
 
   const borrarEstado = async()=>{
@@ -179,16 +218,26 @@ function Estados() {
     const res = await estadosServices.delete(estadoSeleccionado.id_est);
 
     if (res.success) {
-        alert("Estado Borrada de forma Correcta")
+        swal({
+          title: "Estado",
+          text: "Borrado de forma Correcta!",
+          icon: "success",
+          button: "Aceptar"
+        });
         console.log(res.message)
         abrirCerrarModalEliminar();
     }
     else {
-        alert("Error Borrando Estado");
+        swal({
+          title: "Estado",
+          text: "Error Brorrando el Estado!",
+          icon: "error",
+          button: "Aceptar"
+        });
         console.log(res.message);
         abrirCerrarModalEliminar();
     }
-    
+    setActualiza(true);
   }
  // "string","boolean","numeric","date","datetime","time","currency"
   const columnas = [
@@ -212,7 +261,9 @@ function Estados() {
 
   const estadoInsertar = (
     <div className={styles.modal}>
-      <h3  align="center" >Agregar Nuevo Estado</h3>
+      <Typography  align="center" className={ styles.typography } variant="button" display="block" >
+        Agregar Nuevo Estado
+      </Typography>
       <TextField className={styles.inputMaterial} label="Descripción" name="nombre_est" onChange={handleChange} />          
       <br />
       <FormControl className={styles.formControl}>
@@ -243,7 +294,9 @@ function Estados() {
 
   const estadoEditar=(
     <div className={styles.modal}>
-      <h3 align="center" >Actualizar Estados</h3>
+      <Typography  align="center" className={ styles.typography } variant="button" display="block" >
+        Actualizar Estado
+      </Typography>
       <TextField className={styles.inputMaterial} label="Descripción" name="nombre_est" onChange={handleChange} value={estadoSeleccionado&&estadoSeleccionado.nombre_est}/>
       <br />
       <FormControl className={styles.formControl} >
@@ -292,7 +345,7 @@ function Estados() {
      <MaterialTable
        columns={columnas}
        data={listEstados}
-       title="Maestra de Estados"
+       title="MAESTRA DE ESTADOS"
        actions={[
          {
            icon     : 'edit',

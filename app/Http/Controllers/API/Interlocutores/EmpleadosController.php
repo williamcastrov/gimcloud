@@ -20,6 +20,7 @@ class EmpleadosController extends Controller
         try { 
           $insert['codigo_tipo_emp']        = $request['codigo_tipo_emp'];
           $insert['nit_emp']                = $request['nit_emp'];
+          $insert['digitochequeo_emp']      = $request['digitochequeo_emp'];
           $insert['estado_emp']             = $request['estado_emp'];
           $insert['primer_nombre_emp']      = $request['primer_nombre_emp'];
           $insert['segundo_nombre_emp']     = $request['segundo_nombre_emp'];
@@ -99,6 +100,7 @@ class EmpleadosController extends Controller
         try {
           $data['codigo_tipo_emp']        = $request['codigo_tipo_emp'];
           $data['nit_emp']                = $request['nit_emp'];
+          $data['digitochequeo_emp']      = $request['digitochequeo_emp'];
           $data['estado_emp']             = $request['estado_emp'];
           $data['primer_nombre_emp']      = $request['primer_nombre_emp'];
           $data['segundo_nombre_emp']     = $request['segundo_nombre_emp'];

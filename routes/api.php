@@ -109,6 +109,7 @@ Route::put('/empleados/update/{id}', 'App\Http\Controllers\API\Interlocutores\Em
 Route::get('/contactos/listar_contactos', 'App\Http\Controllers\API\Interlocutores\ContactosController@listar_contactos');
 Route::post('/contactos/create', 'App\Http\Controllers\API\Interlocutores\ContactosController@create');
 Route::get('/contactos/get/{id}', 'App\Http\Controllers\API\Interlocutores\ContactosController@get');
+Route::get('/contactos/contactosinterlocutor/{id}', 'App\Http\Controllers\API\Interlocutores\ContactosController@contactosinterlocutor');
 Route::delete('/contactos/delete/{id}', 'App\Http\Controllers\API\Interlocutores\ContactosController@delete');
 Route::put('/contactos/update/{id}', 'App\Http\Controllers\API\Interlocutores\ContactosController@update');
 
@@ -284,6 +285,7 @@ Route::post('/ordenesserv/create', 'App\Http\Controllers\API\GestionOrdenes\Orde
 Route::get('/ordenesserv/get/{id}', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@get');
 Route::delete('/ordenesserv/delete/{id}', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@delete');
 Route::put('/ordenesserv/update/{id}', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@update');
+Route::put('/ordenesserv/cancelar/{id}', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@cancelar');
 Route::put('/ordenesserv/updateestadoasignado/{id}', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@updateestadoasignado');
 
 Route::get('/cumplimiento/listar_cumplimiento', 'App\Http\Controllers\API\GestionOrdenes\CumplimientoOServController@listar_cumplimiento');

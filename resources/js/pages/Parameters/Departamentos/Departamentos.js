@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MaterialTable from "material-table";
-import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
+import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
+import swal from 'sweetalert';
 
 // Componentes de Conexion con el Backend
 import departamentosServices from "../../../services/Parameters/Departamentos";
@@ -30,6 +31,10 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0),
     minWidth: 315,
+  },
+  typography: {
+    fontSize: 16,
+    color   : "#ff3d00"
   }
 }));
 
@@ -118,7 +123,12 @@ function Departamentos() {
       const res = await departamentosServices.save(departamentoSeleccionado);
 
       if (res.success) {
-        alert("Departamento Creado de forma Correcta")
+        swal({
+          title: "Departamento",
+          text: "Departamento Creado de forma Correcta!",
+          icon: "success",
+          button: "Aceptar"
+        });
         console.log(res.message)
         abrirCerrarModalInsertar();
         delete departamentoSeleccionado.codigo_dep;
@@ -126,13 +136,23 @@ function Departamentos() {
         delete departamentoSeleccionado.region_dep;
       } else
       {
-        alert("Error Creando el Departamento");
+        swal({
+          title: "Departamento",
+          text: "Error Creando el Departamento!",
+          icon: "error",
+          button: "Aceptar"
+        });
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Creando el Departamento");
+        swal({
+        title: "Departamento",
+        text: "Debe Ingresar Todos los Datos, Error Creando el Departamento!",
+        icon: "warning",
+        button: "Aceptar"
+      });
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
@@ -166,7 +186,12 @@ function Departamentos() {
     const res = await departamentosServices.update(departamentoSeleccionado);
 
     if (res.success) {
-        alert("Departamento actualizado de forma Correcta")
+        swal({
+          title: "Departamento",
+          text: "Departamento Actualizado de forma Correcta!",
+          icon: "success",
+          button: "Aceptar"
+        });
         console.log(res.message)
         abrirCerrarModalEditar();
         delete departamentoSeleccionado.codigo_dep;
@@ -174,13 +199,23 @@ function Departamentos() {
         delete departamentoSeleccionado.region_dep;
     } else
     {
-        alert("Error Actualizando el Departamento");
+        swal({
+          title: "Departamento",
+          text: "Error Actualizando el Departamento!",
+          icon: "error",
+          button: "Aceptar"
+        });
         console.log(res.message);
         abrirCerrarModalEditar();
     }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Actualizando del Departamento");
+      swal({
+        title: "Departamento",
+        text: "Debe Ingresar Todos los Datos, Error Actualizando el Departamento!",
+        icon: "warning",
+        button: "Aceptar"
+      });
       console.log(res.message);
       abrirCerrarModalEditar();
     } 
@@ -191,12 +226,22 @@ function Departamentos() {
     const res = await departamentosServices.delete(departamentoSeleccionado.id_dep);
 
     if (res.success) {
-        alert("Departamento Borrado de forma Correcta")
+        swal({
+          title: "Departamento",
+          text: "Departamento Borrado de forma Correcta!",
+          icon: "success",
+          button: "Aceptar"
+        });
         console.log(res.message)
         abrirCerrarModalEliminar();
     }
     else {
-        alert("Error Borrando el Departamento");
+        swal({
+          title: "Departamento",
+          text: "Error Borrando el Departamento!",
+          icon: "error",
+          button: "Aceptar"
+        });
         console.log(res.message);
         abrirCerrarModalEliminar();
     }
@@ -229,7 +274,9 @@ function Departamentos() {
 
   const departamentoInsertar=(
     <div className={styles.modal}>
-      <h3>Agregar Nuevo Departamento</h3>
+      <Typography  align="center" className={ styles.typography } variant="button" display="block" >
+        Agregar Nuevo Departamento
+      </Typography>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_dep" onChange={handleChange} />
       <br />
       <TextField className={styles.inputMaterial} label="Departamento" name="nombre_dep" onChange={handleChange} />          
@@ -262,7 +309,9 @@ function Departamentos() {
 
   const departamentoEditar=(
     <div className={styles.modal}>
-      <h3 align="center" >Actualizar Departamentos</h3>
+      <Typography  align="center" className={ styles.typography } variant="button" display="block" >
+        Actualizar Departamentos
+      </Typography>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_dep" onChange={handleChange} value={departamentoSeleccionado&&departamentoSeleccionado.codigo_dep}/>
       <br />
       <TextField className={styles.inputMaterial} label="Departamento" name="nombre_dep" onChange={handleChange} value={departamentoSeleccionado&&departamentoSeleccionado.nombre_dep}/>
@@ -313,7 +362,7 @@ function Departamentos() {
      <MaterialTable
        columns={columnas}
        data={listDepartamentos}
-       title="Maestra de Departamento"
+       title="MAESTRA DE DEPARTAMENTOS"
        actions={[
          {
            icon     : 'edit',

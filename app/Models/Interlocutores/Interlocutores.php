@@ -14,7 +14,8 @@ class Interlocutores extends Model
     protected $primaryKey = "id_int";
 
     protected $fillable = [
-	    'codigo_tipo_int',
+		'codigo_tipo_int',
+		'digitochequeo_int',
 	    'nit_int',
 	    'estado_int',
 	    'primer_nombre_int', 

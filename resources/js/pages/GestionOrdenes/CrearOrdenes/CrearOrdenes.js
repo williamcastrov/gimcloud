@@ -26,6 +26,7 @@ import subgruposequiposServices from "../../../services/Mantenimiento/SubGruposE
 import equiposServices from "../../../services/Mantenimiento/Equipos";
 import clasificacionabcServices from "../../../services/Mantenimiento/ClasificacionABC";
 import tiposmttoServices from "../../../services/Mantenimiento/Tiposmtto";
+import contactosServices from "../../../services/Interlocutores/Contactos";
 
 //Componentes Gestion de Ordenes
 import MenuCrearOrden from "../MenuCrearOrden";
@@ -96,7 +97,6 @@ function NumberFormatCustom(props) {
       getInputRef={inputRef}
       thousandSeparator={'.'}
       decimalSeparator={','}
-
     />
   );
 }
@@ -107,7 +107,6 @@ function CrearOrdenes() {
   const [listarOrdenes, setListarOrdenes] = useState([]);
   const [modalInsertar, setModalInsertar] = useState(false);
   const [modalEditar, setModalEditar] = useState(false);
-  const [modalEliminar, setModalEliminar] = useState(false);
   const [modalAsignar, setModalAsignar] = useState(false);
   const [formError, setFormError] = useState(false);
 
@@ -119,15 +118,18 @@ function CrearOrdenes() {
   const [listarClientes, setListarClientes] = useState([]);
   const [listarEmpleados, setListarEmpleados] = useState([]);
   const [listarGruposEquipos, setListarGruposEquipos] = useState([]);
+  const [listarContactos, setListarContactos] = useState([]);
   const [listarSubGruposEquipos, setListarSubGruposEquipos] = useState([]);
   const [listarEquipos, setListarEquipos] = useState([]);
   const [listarConceptososerv, setListarConceptosOserv] = useState([]);
   const [listarClasificacionABC, setListarClasificacionABC] = useState([]);
   const [listarTiposMtto, setListarTiposMtto] = useState([]);
-  const [listarEstadoModificado, setListarEstadoModificado] =  useState([]);
-   
-  const [estado, setEstado] = useState(0);
-  let cambio  = 12;
+  const [listarEstadoModificado, setListarEstadoModificado] = useState([]);
+  const fechaactual = Moment(new Date()).format('YYYY-MM-DD');
+  const horaactual = Moment(new Date()).format('HH:mm:ss');
+
+  const [estado, setEstado] = useState(1);
+  let cambio = 12;
   let empresa = 1;
   let diasoperacion = 0;
 
@@ -145,44 +147,44 @@ function CrearOrdenes() {
 
   const [ordenSeleccionado, setOrdenSeleccionado] = useState({
     'id_otr': "",
-    'estado_otr': "",
+    'estado_otr': estado,
     'tipooperacion_otr': 2,
     'tipo_otr': "",
     'concepto_otr': "",
-    'fechaprogramada_otr': "",
-    'fechainicia_otr': "",
-    'fechafinal_otr': "",
+    'fechaprogramada_otr': fechaactual,
+    'fechainicia_otr': fechaactual,
+    'fechafinal_otr': fechaactual,
     'diasoperacion_otr': 0,
     'equipo_otr': "",
     'proveedor_otr': "",
     'cliente_otr': "",
     'operario_otr': "",
-    'grupoequipo_otr': "",
+    'contactocliente_otr': "",
     'subgrupoequipo_otr': "",
     'ciudad_otr': "",
     'resumenorden_otr': "",
-    'prioridad_otr': "",
+    'prioridad_otr': 1,
     'empresa_otr': 1
   })
 
   const actualizaEstado = async (e, id) => {
     e.preventDefault();
 
-    setListarEstadoModificado([{ id:12121212, nombreTarea: "Prueba", gastoValor: 100000 }]);
+    setListarEstadoModificado([{ id: 12121212, nombreTarea: "Prueba", gastoValor: 100000 }]);
 
     if (ordenSeleccionado.operario_otr !== 1) {
       const arrayEditado = listarOrdenes.map((item) =>
         item.id_otr === id ?
           {
-           item
+            item
           }
           :
           item
       );
-      setListarEstadoModificado( arrayEditado.filter((item) => item.id_otr === id) )
-      console.log("ARRAY EDITADO : ", arrayEditado);
-      console.log("ARRAY ACTUALIZADO : ", listarEstadoModificado);
-    }                                                                                                                                     
+      setListarEstadoModificado(arrayEditado.filter((item) => item.id_otr === id))
+      //console.log("ARRAY EDITADO : ", arrayEditado);
+      //console.log("ARRAY ACTUALIZADO : ", listarEstadoModificado);
+    }
   }
 
   const leerOrdenes = () => {
@@ -270,11 +272,11 @@ function CrearOrdenes() {
     async function fetchDataConceptosOserv() {
       const res = await conceptososervServices.listConceptosOserv();
       setListarConceptosOserv(res.data)
-      console.log("CONCEPTOS ORDEN : ",res.data);
+      //console.log("CONCEPTOS ORDEN : ",res.data);
     }
     fetchDataConceptosOserv();
   }, [])
-  
+
   useEffect(() => {
     async function fetchDataTiposServicio() {
       const res = await tiposservicioServices.listTiposservicio();
@@ -337,18 +339,39 @@ function CrearOrdenes() {
     }));
   }
 
-  useEffect(() => {
-    function fetchDataEstado() {
-      if (estado !== 0) {
-        setEstado(cambio);
+  const contactosInterlocutor = (cliente) => {
+    //console.log("CODIGO CLIENTE : ", cliente)
+
+    async function fetchDataContactos() {
+      const res = await contactosServices.contactosInterlocutor(cliente);
+      setListarContactos(res.data);
+      //console.log("CONTACTOS : ", res.data)
+      if (!res.success) {
+        swal("Contactos", "Cliente Seleccionado no tiene Contactos!", "warning", { button: "Aceptar" });
       }
     }
-    fetchDataEstado();
-  }, [estado])
+    fetchDataContactos();
+  }
+
+  const leerContactos = (cliente) => {
+    //console.log("CODIGO CLIENTE : ", cliente)
+
+    async function fetchDataContactos() {
+      const res = await contactosServices.listContactosInterlocutor(cliente);
+      setListarContactos(res.data);
+      //console.log("CONTACTOS : ", res.data)
+      if (!res.success) {
+        swal("Contactos", "Cliente Seleccionado no tiene Contactos!", "warning", { button: "Aceptar" });
+      }
+    }
+    fetchDataContactos();
+  }
 
   const seleccionarOrden = (orden, caso) => {
+    //console.log("REGISTRO SELECCIONADO : ", orden.contactocliente_otr);
+    leerContactos(orden.contactocliente_otr);
     setOrdenSeleccionado(orden);
-    (caso === "Editar") ? abrirCerrarModalEditar() : abrirCerrarModalEliminar()
+    (caso === "Editar") ? abrirCerrarModalEditar() : abrirCerrarModalCancelar()
   }
 
   const abrirCerrarModalInsertar = () => {
@@ -359,8 +382,8 @@ function CrearOrdenes() {
     setModalEditar(!modalEditar);
   }
 
-  const abrirCerrarModalEliminar = () => {
-    setModalEliminar(!modalEliminar);
+  const abrirCerrarModalCancelar = () => {
+    setModalCancelar(!modalCancelar);
   }
 
   const abrirCerrarModalAsignar = () => {
@@ -403,12 +426,12 @@ function CrearOrdenes() {
       errors.fechafinal_otr = true;
       formOk = false;
     }
-/*
-    if (!ordenSeleccionado.diasoperacion_otr) {
-      errors.diasoperacion_otr = true;
-      formOk = false;
-    }
-*/
+    /*
+        if (!ordenSeleccionado.diasoperacion_otr) {
+          errors.diasoperacion_otr = true;
+          formOk = false;
+        }
+    */
     if (!ordenSeleccionado.equipo_otr) {
       errors.equipo_otr = true;
       formOk = false;
@@ -429,8 +452,8 @@ function CrearOrdenes() {
       formOk = false;
     }
 
-    if (!ordenSeleccionado.grupoequipo_otr) {
-      errors.grupoequipo_otr = true;
+    if (!ordenSeleccionado.contactocliente_otr) {
+      errors.contactocliente_otr = true;
       formOk = false;
     }
 
@@ -481,7 +504,7 @@ function CrearOrdenes() {
         delete ordenSeleccionado.proveedor_otr;
         delete ordenSeleccionado.cliente_otr;
         delete ordenSeleccionado.operario_otr;
-        delete ordenSeleccionado.grupoequipo_otr;
+        delete ordenSeleccionado.contactocliente_otr;
         delete ordenSeleccionado.subgrupoequipo_otr;
         delete ordenSeleccionado.ciudad_otr;
         delete ordenSeleccionado.resumenorden_otr;
@@ -495,6 +518,7 @@ function CrearOrdenes() {
     }
     else {
       swal("Orden de Servicio", "Debe Ingresar Todos los Datos, Error Creando la Orden de Servicio!", "warning", { button: "Aceptar" });
+      console.log(ordenSeleccionado);
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
@@ -567,8 +591,8 @@ function CrearOrdenes() {
       formOk = false;
     }
 
-    if (!ordenSeleccionado.grupoequipo_otr) {
-      errors.grupoequipo_otr = true;
+    if (!ordenSeleccionado.contactocliente_otr) {
+      errors.contactocliente_otr = true;
       formOk = false;
     }
 
@@ -614,7 +638,7 @@ function CrearOrdenes() {
         delete ordenSeleccionado.proveedor_otr;
         delete ordenSeleccionado.cliente_otr;
         delete ordenSeleccionado.operario_otr;
-        delete ordenSeleccionado.grupoequipo_otr;
+        delete ordenSeleccionado.contactocliente_otr;
         delete ordenSeleccionado.subgrupoequipo_otr;
         delete ordenSeleccionado.ciudad_otr;
         delete ordenSeleccionado.resumenorden_otr;
@@ -632,6 +656,7 @@ function CrearOrdenes() {
       abrirCerrarModalEditar();
     }
   }
+
 
   const asignarEstado = async () => {
     console.log("EN ASIGNAR  ESTADO : ", listarEstadoModificado)
@@ -751,13 +776,18 @@ function CrearOrdenes() {
           </FormControl>
         </Grid>
         <Grid item xs={12} md={4}> <TextField type="date" InputLabelProps={{ shrink: true }} name="fechaprogramada_otr"
-          label="Fecha de Creación de Orden" fullWidth onChange={handleChange} />
+          defaultValue={Moment(ordenSeleccionado.fechaactual).format('YYYY-MM-DD')} label="Fecha de Creación de Orden"
+          fullWidth onChange={handleChange} />
         </Grid>
         <Grid item xs={12} md={4}> <TextField type="date" InputLabelProps={{ shrink: true }} name="fechainicia_otr"
+          defaultValue={Moment(ordenSeleccionado.fechaactual).format('YYYY-MM-DD')}
           label="Fecha en que Inicia" fullWidth onChange={handleChange} />
         </Grid>
-        <Grid item xs={12} md={4}> <TextField type="date" InputLabelProps={{ shrink: true }} name="fechafinal_otr"
-          label="Fecha de Cierre" fullWidth onChange={handleChange} />
+        <Grid item xs={12} md={4}>
+          <TextField type="date" InputLabelProps={{ shrink: true }} name="fechafinal_otr"
+            defaultValue={Moment(ordenSeleccionado.fechaactual).format('YYYY-MM-DD')}
+            label="Fecha de Cierre" fullWidth onChange={handleChange}
+          />
         </Grid>
         <Grid item xs={12} md={4}>
           <FormControl className={styles.formControl}>
@@ -876,6 +906,7 @@ function CrearOrdenes() {
               id="idselectcliente_otr"
               fullWidth
               onChange={handleChange}
+              onClick={(e) => contactosInterlocutor(e.target.value)}
             >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
@@ -912,30 +943,33 @@ function CrearOrdenes() {
         </Grid>
         <Grid item xs={12} md={4}>
           <FormControl className={styles.formControl}>
-            <InputLabel id="idselectgrupoequipo_otr">Grupo del Equipo</InputLabel>
+            <InputLabel id="idselectcontactocliente_otr">Contacto</InputLabel>
             <Select
-              labelId="selectgrupoequipo_otr"
-              name="grupoequipo_otr"
-              id="idselectgrupoequipo_otr"
+              labelId="selectcontactocliente_otr"
+              name="contactocliente_otr"
+              id="idselectcontactocliente_otr"
               fullWidth
               onChange={handleChange}
             >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
-                listarGruposEquipos.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_grp}>{itemselect.descripcion_grp}</MenuItem>
-                  )
-                })
+                listarContactos ?
+                  listarContactos.map((itemselect) => {
+                    return (
+                      <MenuItem value={itemselect.id_con}>{itemselect.primer_nombre_con}{" "}{itemselect.primer_apellido_con}</MenuItem>
+                    )
+                  })
+                  :
+                  console.log("Sin Datos")
               }
             </Select>
           </FormControl>
         </Grid>
         <Grid item xs={12} md={4}>
           <FormControl className={styles.formControl}>
-            <InputLabel id="idselectsubgrupoequipo_otr">SubGrupo del Equipo</InputLabel>
+            <InputLabel id="idselectsubgrupoequipo_otr_otr">SubGrupo del Equipo</InputLabel>
             <Select
-              labelId="subgrupoequipo_otr"
+              labelId="subgrupoequipo_otr_otr"
               name="subgrupoequipo_otr"
               id="idselectsubgrupoequipo_otr"
               fullWidth
@@ -982,7 +1016,7 @@ function CrearOrdenes() {
               id="idselectempresa_otr"
               fullWidth
               onChange={handleChange}
-              disabled="true" 
+              disabled="true"
               defaultValue={empresa}
             >
               <MenuItem value=""> <em>None</em> </MenuItem>
@@ -1026,6 +1060,7 @@ function CrearOrdenes() {
                 id="idselectestado_otr"
                 fullWidth
                 onChange={handleChange}
+                disabled="true"
                 value={ordenSeleccionado && ordenSeleccionado.estado_otr}
               >
                 <MenuItem value=""> <em>None</em> </MenuItem>
@@ -1062,7 +1097,7 @@ function CrearOrdenes() {
             </FormControl>
           </Grid>
           <Grid item xs={12} md={4}> <TextField type="date" InputLabelProps={{ shrink: true }} name="fechaprogramada_otr"
-            defaultValue={Moment(ordenSeleccionado.fechaprogramada_otr).format('YYYY-MM-DD')}
+            defaultValue={Moment(ordenSeleccionado.fechaprogramada_otr).format('YYYY-MM-DD')} disabled="true"
             label="Fecha de Creación de Orden" fullWidth onChange={handleChange} />
           </Grid>
           <Grid item xs={12} md={4}> <TextField type="date" InputLabelProps={{ shrink: true }} name="fechainicia_otr"
@@ -1197,6 +1232,7 @@ function CrearOrdenes() {
                 fullWidth
                 onChange={handleChange}
                 value={ordenSeleccionado && ordenSeleccionado.cliente_otr}
+                onClick={(e) => leerContactos(e.target.value)}
               >
                 <MenuItem value=""> <em>None</em> </MenuItem>
                 {
@@ -1225,7 +1261,7 @@ function CrearOrdenes() {
                 {
                   listarEmpleados.map((itemselect) => {
                     return (
-                      <MenuItem value={itemselect.id_emp}>{itemselect.primer_nombre_emp}{ }{itemselect.primer_apellido_emp}</MenuItem>
+                      <MenuItem value={itemselect.id_emp}>{itemselect.primer_nombre_emp}{" "}{itemselect.primer_apellido_emp}</MenuItem>
                     )
                   })
                 }
@@ -1234,22 +1270,25 @@ function CrearOrdenes() {
           </Grid>
           <Grid item xs={12} md={4}>
             <FormControl className={styles.formControl}>
-              <InputLabel id="idselectgrupoequipo_otr">Grupo del Equipo</InputLabel>
+              <InputLabel id="idselectcontactocliente_otr">Contacto</InputLabel>
               <Select
-                labelId="selectgrupoequipo_otr"
-                name="grupoequipo_otr"
-                id="idselectgrupoequipo_otr"
+                labelId="selectcontactocliente_otr"
+                name="contactocliente_otr"
+                id="idselectcontactocliente_otr"
                 fullWidth
                 onChange={handleChange}
-                value={ordenSeleccionado && ordenSeleccionado.grupoequipo_otr}
+                value={ordenSeleccionado && ordenSeleccionado.contactocliente_otr}
               >
                 <MenuItem value=""> <em>None</em> </MenuItem>
                 {
-                  listarGruposEquipos.map((itemselect) => {
-                    return (
-                      <MenuItem value={itemselect.id_grp}>{itemselect.descripcion_grp}</MenuItem>
-                    )
-                  })
+                  listarContactos ?
+                    listarContactos.map((itemselect) => {
+                      return (
+                        <MenuItem value={itemselect.id_con}>{itemselect.primer_nombre_con}{" " }{itemselect.primer_apellido_con}</MenuItem>
+                      )
+                    })
+                    :
+                    console.log("Sin Datos")
                 }
               </Select>
             </FormControl>
@@ -1353,7 +1392,9 @@ function CrearOrdenes() {
                     backgroundColor: '#0277bd',
                   }}
                 >
-                  <Button variant="contained">Estado Contable : </Button> {}
+                  <Button variant="contained">Datos Contacto: {rowData.primer_nombre_con} { } {rowData.primer_apellido_con} { }
+                          Telefono: {rowData.telefono_con} { } email: {rowData.email_con}{ }
+                  </Button>
 
                 </div>
               )
@@ -1368,12 +1409,14 @@ function CrearOrdenes() {
       >
         {ordenInsertar}
       </Modal>
+      
       <Modal
         open={modalEditar}
         onClose={abrirCerrarModalEditar}
       >
         {ordenEditar}
       </Modal>
+      
     </div>
   );
 }

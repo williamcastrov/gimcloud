@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MaterialTable from "material-table";
-import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
+import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel,Typography } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
+import swal from 'sweetalert';
 
 // Componentes de Conexion con el Backend
 import especialidadesServices from "../../../../services/Interlocutores/Especialidades";
@@ -31,6 +32,10 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0),
     minWidth: 315,
+  },
+  typography: {
+    fontSize: 16,
+    color   : "#ff3d00"
   }
 }));
 
@@ -139,7 +144,12 @@ function Especialidades() {
       const res = await especialidadesServices.save(especialidadesSeleccionado);
 
       if (res.success) {
-        alert("Especialidad del Interlocutor Creada de forma Correcta")
+        swal({
+          title: "Especialidad",
+          text: "Creada de forma Correcta!",
+          icon: "success",
+          button: "Aceptar"
+        });
         console.log(res.message)
         abrirCerrarModalInsertar();
         delete especialidadesSeleccionado.descripcion_esp;
@@ -147,13 +157,23 @@ function Especialidades() {
         delete especialidadesSeleccionado.estado_esp;
       } else
       {
-        alert("Error Creando la Especialidad del Interlocutor");
+        swal({
+          title: "Especialidad",
+          text: "Error Creando la Especialidad del Interlocutor!",
+          icon: "error",
+          button: "Aceptar"
+        });
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Creando el Especialidad del Interlocutor");
+      swal({
+        title: "Especialidad",
+        text: "Debe Ingresar Todos los Datos, Error Creando el Especialidad del Interlocutor!",
+        icon: "warning",
+        button: "Aceptar"
+      });
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
@@ -187,7 +207,12 @@ function Especialidades() {
     const res = await especialidadesServices.update(especialidadesSeleccionado);
 
     if (res.success) {
-        alert("Especialidades del Interlocutor actualizada de forma Correcta")
+          swal({
+          title:  "Especialidad",
+          text:   "Actualizada de forma Correcta!",
+          icon:   "success",
+          button: "Aceptar"
+        });
         console.log(res.message)
         abrirCerrarModalEditar();
         delete especialidadesSeleccionado.descripcion_esp;
@@ -195,13 +220,23 @@ function Especialidades() {
         delete especialidadesSeleccionado.estado_esp;
     } else
     {
-        alert("Error Actualizando la Especialidad del Interlocutor");
+          swal({
+          title:  "Especialidad",
+          text:   "Error Actualizando la Especialidad del Interlocutor!",
+          icon:   "error",
+          button: "Aceptar"
+        });
         console.log(res.message);
         abrirCerrarModalEditar();
     }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Actualizando la Especialidad del Interlocutor");
+      swal({
+        title:  "Especialidad",
+        text:   "Debe Ingresar Todos los Datos, Error Actualizando la Especialidad del Interlocutor!",
+        icon:   "warning",
+        button: "Aceptar"
+      });
       console.log(res.message);
       abrirCerrarModalEditar();
     } 
@@ -212,12 +247,22 @@ function Especialidades() {
     const res = await especialidadesServices.delete(especialidadesSeleccionado.id_esp);
 
     if (res.success) {
-        alert("Especialidad del Interlocutor Borrada de forma Correcta")
+        swal({
+          title: "Especialidad",
+          text: "Especialidad del Interlocutor Borrada de forma Correcta!",
+          icon: "success",
+          button: "Aceptar"
+        });
         console.log(res.message)
         abrirCerrarModalEliminar();
     }
     else {
-        alert("Error Borrando la Especiliada del Interlocutor");
+        swal({
+          title: "Especialidad",
+          text: "Error Borrando la Especiliada del Interlocutor!",
+          icon: "error",
+          button: "Aceptar"
+        });
         console.log(res.message);
         abrirCerrarModalEliminar();
     }
@@ -249,7 +294,9 @@ function Especialidades() {
 
   const especialidadesInsertar = (
     <div className={styles.modal}>
-      <h3>Agregar Nueva Especialidad</h3>
+      <Typography  align="center" className={ styles.typography } variant="button" display="block" >
+        Agregar Nueva Especialidad del Interlocutor
+      </Typography>
       <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_esp" onChange={handleChange} />          
       <br />
       <FormControl className={styles.formControl}>
@@ -299,7 +346,9 @@ function Especialidades() {
 
   const especialidadesEditar=(
     <div className={styles.modal}>
-      <h3 align="center" >Actualizar Especialidades</h3>
+      <Typography  align="center" className={ styles.typography } variant="button" display="block" >
+        Actualizar Especialidad del Interlocutor
+      </Typography>
       <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_esp" onChange={handleChange} value={especialidadesSeleccionado&&especialidadesSeleccionado.descripcion_esp}/>
       <br />
       <FormControl className={styles.formControl}>
@@ -368,7 +417,7 @@ function Especialidades() {
       <MaterialTable
         columns={columnas}
         data={listEspecialidades}
-        title="Maestra de Especialidades"
+        title="MAESTRA DE ESPECIALIDADES DEL INTERLOCUTOR"
         actions={[
           {
             icon     : 'edit',

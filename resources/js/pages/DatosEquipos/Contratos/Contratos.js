@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
+import PropTypes from 'prop-types';
 import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid, Box, InputAdornment, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
 import NumberFormat from 'react-number-format';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import swal from 'sweetalert';
 import Moment from 'moment';
 
@@ -52,18 +52,32 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function NumberFormatCustom(props) {
-  const { inputRef, ...other } = props;
-  //console.log(inputRef);
+  const { inputRef, onChange, ...other } = props;
+
   return (
     <NumberFormat
       {...other}
       getInputRef={inputRef}
-      thousandSeparator={'.'}
-      decimalSeparator={','}
-      prefix={'$'}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.value,
+          },
+        });
+      }}
+      thousandSeparator
+      isNumericString
+      prefix="$"
     />
   );
 }
+
+NumberFormatCustom.propTypes = {
+  inputRef: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 
 function Contratos(props) {
   const { equipoID, equipoCodigo } = props;
@@ -82,7 +96,7 @@ function Contratos(props) {
   const [listarEquipos, setListarEquipos] = useState([]);
   const [listarClientes, setListarClientes] = useState([]);
   const [listarEmpleados, setListarEmpleados] = useState([]);
-
+  const [actualiza, setActualiza] = useState(false);
   const [contratoSeleccionado, setContratoSeleccionado] = useState({
     'id_ctr': equipoID,
     'codigocontrato_ctr': "",
@@ -101,9 +115,10 @@ function Contratos(props) {
     async function fetchDataContratos() {
       const res = await contratosServices.listUnContrato(equipoID);
       setListContratos(res.data);
+      setActualiza(false);
     }
     fetchDataContratos();
-  }, [])
+  }, [actualiza])
 
   useEffect(() => {
     async function fetchDataCiudades() {
@@ -244,7 +259,7 @@ function Contratos(props) {
       const res = await contratosServices.save(contratoSeleccionado);
 
       if (res.success) {
-        swal( "Contrato", "Contrat del Equipo Creado de forma Correcta!", "success", { button: "Aceptar" });
+        swal("Contrato", "Contrat del Equipo Creado de forma Correcta!", "success", { button: "Aceptar" });
         //console.log(res.message)
         abrirCerrarModalInsertar();
         delete contratoSeleccionado.id_ctr;
@@ -259,17 +274,18 @@ function Contratos(props) {
         delete contratoSeleccionado.estado_ctr;
         delete contratoSeleccionado.observacion_ctr;
       } else {
-        swal( "Contrato", "Error Creando el Contrato del Equipo!", "error", { button: "Aceptar" });
+        swal("Contrato", "Error Creando el Contrato del Equipo!", "error", { button: "Aceptar" });
         console.log(res.success);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      swal( "Contrato", "Debe Ingresar Todos los Datos, Revisar Información!", "warning", { button: "Aceptar" });
+      swal("Contrato", "Debe Ingresar Todos los Datos, Revisar Información!", "warning", { button: "Aceptar" });
       //console.log(contratoSeleccionado);
       //console.log(res.message);
       abrirCerrarModalInsertar();
     }
+    setActualiza(true);
   }
 
   const actualizarContrato = async () => {
@@ -341,7 +357,7 @@ function Contratos(props) {
       console.log(contratoSeleccionado);
 
       if (res.success) {
-        swal( "Contrato", "Contrato del Equipo Actualizado de forma Correcta!", "success", { button: "Aceptar" });
+        swal("Contrato", "Contrato del Equipo Actualizado de forma Correcta!", "success", { button: "Aceptar" });
         //console.log(res.message)
         abrirCerrarModalEditar();
         delete contratoSeleccionado.id_ctr;
@@ -356,16 +372,17 @@ function Contratos(props) {
         delete contratoSeleccionado.estado_ctr;
         delete contratoSeleccionado.observacion_ctr;
       } else {
-        swal( "Contrato", "Error Actualizando Contrato del Equipo!", "error", { button: "Aceptar" });
+        swal("Contrato", "Error Actualizando Contrato del Equipo!", "error", { button: "Aceptar" });
         //console.log(res.message);
         abrirCerrarModalEditar();
       }
     }
     else {
-      swal( "Contrato", "Debe Ingresar Todos los Datos del Contrato, Revisar Información!", "warning", { button: "Aceptar" });
+      swal("Contrato", "Debe Ingresar Todos los Datos del Contrato, Revisar Información!", "warning", { button: "Aceptar" });
       //console.log(res.message);
       abrirCerrarModalEditar();
     }
+    setActualiza(true);
   }
 
   const borrarContrato = async () => {
@@ -373,16 +390,16 @@ function Contratos(props) {
     const res = await contratosServices.delete(contratoSeleccionado.id_ctr);
 
     if (res.success) {
-      swal( "Contrato", "Contrato Brorrando de forma Correcta!", "success", { button: "Aceptar" });
+      swal("Contrato", "Contrato Brorrando de forma Correcta!", "success", { button: "Aceptar" });
       //console.log(res.message)
       abrirCerrarModalEliminar();
     }
     else {
-      swal( "Contrato", "Error Borrando Contrato del Equipo!", "error", { button: "Aceptar" });
+      swal("Contrato", "Error Borrando Contrato del Equipo!", "error", { button: "Aceptar" });
       //console.log(res.message);
       abrirCerrarModalEliminar();
     }
-
+    setActualiza(true);
   }
   // "string","boolean","numeric","date","datetime","time","currency"
   const columnas = [
@@ -535,20 +552,12 @@ function Contratos(props) {
             </Select>
           </FormControl>
         </Grid>
-
         <Grid item xs={12} md={6}>
-          <TextField type="number" name="valorcontrato_ctr" label="Valor del Contrato" InputLabelProps={{ shrink: true }}
-            id="valorcontrato_ctr" 
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  < AttachMoneyIcon />
-                </InputAdornment>
-              ),
-            }}
-            fullWidth onChange={handleChange} />
+          <TextField className={styles.inputMaterial} name="valorcontrato_ctr" label="Valor del Contrato" fullWidth
+            InputLabelProps={{ shrink: true }} InputProps={{ inputComponent: NumberFormatCustom, }}
+            onChange={handleChange}
+          />
         </Grid>
-
         <Grid item xs={12} md={12}> <TextField name="observacion_ctr" label="Observaciones sobre el Contrato"
           fullWidth onChange={handleChange} />
         </Grid>
@@ -673,11 +682,10 @@ function Contratos(props) {
           </FormControl>
         </Grid>
         <Grid item xs={12} md={6}>
-          <TextField name="valorcontrato_ctr" label="Valor del Contrato" InputLabelProps={{ shrink: true }}
-            value={contratoSeleccionado.valorcontrato_ctr} id="valorcontrato_ctr"
-            fullWidth onChange={handleChange} InputProps={{ inputComponent: NumberFormatCustom, }} />
+          <TextField className={styles.inputMaterial} name="valorcontrato_ctr" label="Valor del Contrato" fullWidth
+            InputLabelProps={{ shrink: true }} InputProps={{ inputComponent: NumberFormatCustom, }}
+            onChange={handleChange} value={contratoSeleccionado && contratoSeleccionado.valorcontrato_ctr} />
         </Grid>
-        
         <Grid item xs={12} md={12}> <TextField name="observacion_ctr" label="Observaciones sobre el Contrato"
           fullWidth onChange={handleChange} value={contratoSeleccionado && contratoSeleccionado.observacion_ctr} />
         </Grid>
@@ -705,7 +713,7 @@ function Contratos(props) {
   return (
     <div className="App">
       <br />
-      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Insertar</Button>
+      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Contrato</Button>
       <div className="datosequipos">
         <MaterialTable
           columns={columnas}

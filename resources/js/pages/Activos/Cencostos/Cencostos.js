@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
-import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
+import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel,Typography } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
+import swal from 'sweetalert';
 
 // Componentes de Conexion con el Backend
 import cencostosServices from "../../../services/Activos/Cencostos";
@@ -31,6 +32,10 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0),
     minWidth: 315,
+  },
+  typography: {
+    fontSize: 16,
+    color   : "#ff3d00"
   }
 }));
 
@@ -151,7 +156,12 @@ function Cencostos() {
       const res = await cencostosServices.save(cencostosSeleccionado);
 
       if (res.success) {
-        alert("Centro de Costo Creado de forma Correcta")
+        swal({
+          title: "Centro de Costo",
+          text: "Creado de forma Correcta!",
+          icon: "success",
+          button: "Aceptar"
+        });
         console.log(res.message)
         abrirCerrarModalInsertar();
         delete cencostosSeleccionado.codigo_cco;
@@ -161,13 +171,23 @@ function Cencostos() {
         delete cencostosSeleccionado.estado_cco;
       } else
       {
-        alert("Error Creando el Centro de Costo");
+        swal({
+          title : "Centro de Costo",
+          text  : "Error Creando el Centro de Costo!",
+          icon  : "error",
+          button: "Aceptar"
+        });
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Creando el Centro de Costo");
+      swal({
+        title : "Centro de Costo",
+        text  : "Debe ingresar todos los datos, Error creando el Centro de costo!",
+        icon  : "warning",
+        button: "Aceptar"
+      });
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
@@ -211,7 +231,12 @@ function Cencostos() {
     const res = await cencostosServices.update(cencostosSeleccionado);
 
     if (res.success) {
-        alert("Centro de costos actualizado de forma Correcta")
+        swal({
+          title: "Centro de Costo",
+          text: "Actualizado de forma Correcta!",
+          icon: "success",
+          button: "Aceptar"
+        });
         console.log(res.message)
         abrirCerrarModalEditar();
         delete cencostosSeleccionado.codigo_cco;
@@ -220,14 +245,24 @@ function Cencostos() {
         delete cencostosSeleccionado.empresa_cco;
         delete cencostosSeleccionado.estado_cco;
     } else
-    {
-        alert("Error Actualizando el Centro de costo");
+    {     
+          swal({
+          title : "Centro de Costo",
+          text  : "Error Actualizando el Centro de Costo!",
+          icon  : "error",
+          button: "Aceptar"
+        });
         console.log(res.message);
         abrirCerrarModalEditar();
     }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Actualizando el Centro de costo");
+      swal({
+        title : "Centro de Costo",
+        text  : "Debe Ingresar Todos los Datos, Error Actualizando el Centro de cost!",
+        icon  : "success",
+        button: "Aceptar"
+      });
       console.log(res.message);
       abrirCerrarModalEditar();
     } 
@@ -238,12 +273,22 @@ function Cencostos() {
     const res = await cencostosServices.delete(cencostosSeleccionado.id_cco);
 
     if (res.success) {
-        alert("Centro de costo Borrado de forma Correcta")
+        swal({
+          title : "Centro de Costo",
+          text  : "Centro de costo Borrado de forma Correctaa!",
+          icon  : "success",
+          button: "Aceptar"
+        });
         console.log(res.message)
         abrirCerrarModalEliminar();
     }
     else {
-        alert("Error Borrando el Centro de costo");
+        swal({
+          title : "Centro de Costo",
+          text  : "Error Borrando el Centro de costo!",
+          icon  : "success",
+          button: "Aceptar"
+        });
         console.log(res.message);
         abrirCerrarModalEliminar();
     }
@@ -291,7 +336,9 @@ function Cencostos() {
 
   const cencostoInsertar = (
     <div className={styles.modal}>
-      <h3 align="center" >Agregar Nuevo Centro de Costo</h3>
+      <Typography  align="center" className={ styles.typography } variant="button" display="block" >
+        Agregar Nuevo Centro de Cost
+      </Typography>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_cco" onChange={handleChange} />
       <br />
       <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_cco" onChange={handleChange} />          
@@ -362,7 +409,9 @@ function Cencostos() {
 
   const cencostoEditar = (
     <div className={styles.modal}>
-      <h3 align="center" >Actualizar Centro de Costo</h3>
+      <Typography  align="center" className={ styles.typography } variant="button" display="block" >
+        Actualizar Centro de Costo
+      </Typography>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_cco" onChange={handleChange} value={cencostosSeleccionado&&cencostosSeleccionado.codigo_cco}/>
       <br />
       <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_cco" onChange={handleChange} value={cencostosSeleccionado&&cencostosSeleccionado.descripcion_cco}/>
@@ -451,7 +500,7 @@ function Cencostos() {
      <MaterialTable
        columns={columnas}
        data={listCencostos}
-       title="Maestra Centros de costo"
+       title="MAESTRA CENTROS DE COSTO"
        actions={[
          {
            icon     : 'edit',

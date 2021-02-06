@@ -19,6 +19,7 @@ class ProveedoresController extends Controller
         try { 
           $insert['codigo_tipo_int']        = $request['codigo_tipo_int'];
           $insert['nit_int']                = $request['nit_int'];
+          $insert['digitochequeo_int']      = $request['digitochequeo_int'];
           $insert['estado_int']             = $request['estado_int'];
           $insert['primer_nombre_int']      = $request['primer_nombre_int'];
           $insert['segundo_nombre_int']     = $request['segundo_nombre_int'];
@@ -98,6 +99,7 @@ class ProveedoresController extends Controller
         try {
           $data['codigo_tipo_int']        = $request['codigo_tipo_int'];
           $data['nit_int']                = $request['nit_int'];
+          $data['digitochequeo_int']      = $request['digitochequeo_int'];
           $data['estado_int']             = $request['estado_int'];
           $data['primer_nombre_int']      = $request['primer_nombre_int'];
           $data['segundo_nombre_int']     = $request['segundo_nombre_int'];

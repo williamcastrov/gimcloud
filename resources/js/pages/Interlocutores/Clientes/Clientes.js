@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MaterialTable from "material-table";
-import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid, Typography  } from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
+import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
+import swal from 'sweetalert';
 
 // Componentes de Conexion con el Backend
 import clientesServices from "../../../services/Interlocutores/Clientes";
@@ -32,36 +33,42 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
     },
   },
-  iconos:{
+  iconos: {
     cursor: 'pointer'
-  }, 
-  inputMaterial:{
+  },
+  inputMaterial: {
     width: '100%'
   },
   formControl: {
     margin: theme.spacing(0),
     minWidth: 250,
+  },
+  typography: {
+    fontSize: 16,
+    color: "#ff3d00"
   }
 }));
 
 function Clientes() {
   const styles = useStyles();
   const [listarClientes, setListarClientes] = useState([]);
-  const [modalInsertar, setModalInsertar ] = useState(false);
-  const [modalEditar, setModalEditar]= useState(false);
-  const [modalEliminar, setModalEliminar]= useState(false);
+  const [modalInsertar, setModalInsertar] = useState(false);
+  const [modalEditar, setModalEditar] = useState(false);
+  const [modalEliminar, setModalEliminar] = useState(false);
   const [formError, setFormError] = useState(false);
   const [listarEstados, setListarEstados] = useState([]);
   const [listarCiudades, setListarCiudades] = useState([]);
   const [listarEmpresas, setListarEmpresas] = useState([]);
   const [listarEspecialidades, setListarEspecialidades] = useState([]);
   const [fechaHoy, setFechaHoy] = useState(new Date());
+  const [actualiza, setActualiza] = useState(false);
   const [clientesSeleccionado, setClientesSeleccionado] = useState({
     id_cli: "",
     codigo_tipo_cli: 2,
     nit_cli: "",
+    digitochequeo_cli: "",
     estado_cli: "",
-    primer_nombre_cli: "", 
+    primer_nombre_cli: "",
     segundo_nombre_cli: "",
     primer_apellido_cli: "",
     segundo_apellido_cli: "",
@@ -72,7 +79,7 @@ function Clientes() {
     email_cli: "",
     empresa_cli: "",
     fecha_creacion_cli: fechaHoy,
-    fecha_modificacion_cli: fechaHoy, 
+    fecha_modificacion_cli: fechaHoy,
     especialidad_cli: ""
   })
 
@@ -80,59 +87,60 @@ function Clientes() {
     async function fetchDataClientes() {
       const res = await clientesServices.listClientes();
       setListarClientes(res.data);
+      setActualiza(false);
       //console.log(res.data)
     }
     fetchDataClientes();
-  }, [])
+  }, [actualiza])
 
-  useEffect (() => {
-      async function fetchDataEmpresas() {
+  useEffect(() => {
+    async function fetchDataEmpresas() {
       const res = await empresasServices.listEmpresas();
-      setListarEmpresas(res.data) 
+      setListarEmpresas(res.data)
       //console.log(res.data);
     }
     fetchDataEmpresas();
   }, [])
 
-  useEffect (() => {
+  useEffect(() => {
     async function fetchDataEstados() {
-    const res = await estadosServices.listEstados();
-    setListarEstados(res.data) 
-    //console.log(res.data);
-  }
-  fetchDataEstados();
+      const res = await estadosServices.listEstados();
+      setListarEstados(res.data)
+      //console.log(res.data);
+    }
+    fetchDataEstados();
   }, [])
-  
-  useEffect (() => {
+
+  useEffect(() => {
     async function fetchDataCiudades() {
-    const res = await ciudadesServices.listCiudades();
-    setListarCiudades(res.data) 
-    //console.log(res.data);
-  }
-  fetchDataCiudades();
+      const res = await ciudadesServices.listCiudades();
+      setListarCiudades(res.data)
+      //console.log(res.data);
+    }
+    fetchDataCiudades();
   }, [])
-  
-  useEffect (() => {
+
+  useEffect(() => {
     async function fetchDataEspecialidades() {
-    const res = await especialidadesServices.listEspecialidades();
-    setListarEspecialidades(res.data) 
-    //console.log(res.data);
-  }
-  fetchDataEspecialidades();
+      const res = await especialidadesServices.listEspecialidades();
+      setListarEspecialidades(res.data)
+      //console.log(res.data);
+    }
+    fetchDataEspecialidades();
   }, [])
 
   const handleChange = e => {
-    const {name, value} = e.target;
+    const { name, value } = e.target;
 
-    setClientesSeleccionado( prevState => ({
+    setClientesSeleccionado(prevState => ({
       ...prevState,
       [name]: value
     }));
   }
 
-  const seleccionarCliente=(cliente, caso)=>{
+  const seleccionarCliente = (cliente, caso) => {
     setClientesSeleccionado(cliente);
-    (caso==="Editar") ? abrirCerrarModalEditar() : abrirCerrarModalEliminar()
+    (caso === "Editar") ? abrirCerrarModalEditar() : abrirCerrarModalEliminar()
   }
 
   const abrirCerrarModalInsertar = () => {
@@ -152,14 +160,19 @@ function Clientes() {
     setFormError({});
     let errors = {};
     let formOk = true;
-
+/*
     if (!clientesSeleccionado.codigo_tipo_cli) {
       errors.codigo_tipo_cli = true;
       formOk = false;
     }
-
+*/
     if (!clientesSeleccionado.nit_cli) {
       errors.nit_cli = true;
+      formOk = false;
+    }
+
+    if (!clientesSeleccionado.digitochequeo_cli) {
+      errors.digitochequeo_cli = true;
       formOk = false;
     }
 
@@ -172,7 +185,7 @@ function Clientes() {
       errors.razonsocial_cli = true;
       formOk = false;
     }
-    
+
     if (!clientesSeleccionado.ciudad_cli) {
       errors.ciudad_cli = true;
       formOk = false;
@@ -192,7 +205,7 @@ function Clientes() {
       errors.email_cli = true;
       formOk = false;
     }
-    
+
     if (!clientesSeleccionado.empresa_cli) {
       errors.empresa_cli = true;
       formOk = false;
@@ -220,11 +233,12 @@ function Clientes() {
       const res = await clientesServices.save(clientesSeleccionado);
 
       if (res.success) {
-        alert("Cliente Creado de forma Correcta")
+        swal("Cliente", "Creado de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalInsertar();
         delete clientesSeleccionado.codigo_tipo_cli;
         delete clientesSeleccionado.nit_cli;
+        delete clientesSeleccionado.digitochequeo_cli;
         delete clientesSeleccionado.estado_cli;
         delete clientesSeleccionado.razonsocial_cli;
         delete clientesSeleccionado.ciudad_cli;
@@ -233,25 +247,25 @@ function Clientes() {
         delete clientesSeleccionado.email_cli;
         delete clientesSeleccionado.empresa_cli;
         delete clientesSeleccionado.fecha_creacion_cli;
-        delete clientesSeleccionado.fecha_modificacion_cli; 
+        delete clientesSeleccionado.fecha_modificacion_cli;
         delete clientesSeleccionado.especialidad_cli;
-      } else
-      {
-        alert("Error Creando el Cliente");
+      } else {
+        swal("Cliente", "Error Creando el Cliente!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Creando el Cliente");
+      swal("Cliente", "Debe Ingresar Todos los Datos, Error!", "warning", { button: "Aceptar" });
       console.log(clientesSeleccionado);
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
+    setActualiza(true);
   }
 
   const actualizarCliente = async () => {
-  
+
     setFormError({});
     let errors = {};
     let formOk = true;
@@ -266,6 +280,11 @@ function Clientes() {
       formOk = false;
     }
 
+    if (!clientesSeleccionado.digitochequeo_cli) {
+      errors.digitochequeo_cli = true;
+      formOk = false;
+    }
+
     if (!clientesSeleccionado.estado_cli) {
       errors.estado_cli = true;
       formOk = false;
@@ -275,7 +294,7 @@ function Clientes() {
       errors.razonsocial_cli = true;
       formOk = false;
     }
-    
+
     if (!clientesSeleccionado.ciudad_cli) {
       errors.ciudad_cli = true;
       formOk = false;
@@ -295,7 +314,7 @@ function Clientes() {
       errors.email_cli = true;
       formOk = false;
     }
-    
+
     if (!clientesSeleccionado.empresa_cli) {
       errors.empresa_cli = true;
       formOk = false;
@@ -319,15 +338,16 @@ function Clientes() {
     setFormError(errors);
 
     if (formOk) {
-    
-    const res = await clientesServices.update(clientesSeleccionado);
 
-    if (res.success) {
-        alert("Cliente actualizado de forma Correcta")
+      const res = await clientesServices.update(clientesSeleccionado);
+
+      if (res.success) {
+        swal("Cliente", "Creado forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalEditar();
         delete clientesSeleccionado.codigo_tipo_cli;
         delete clientesSeleccionado.nit_cli;
+        delete clientesSeleccionado.digitochequeo_cli;
         delete clientesSeleccionado.estado_cli;
         delete clientesSeleccionado.razonsocial_cli;
         delete clientesSeleccionado.ciudad_cli;
@@ -336,339 +356,347 @@ function Clientes() {
         delete clientesSeleccionado.email_cli;
         delete clientesSeleccionado.empresa_cli;
         delete clientesSeleccionado.fecha_creacion_cli;
-        delete clientesSeleccionado.fecha_modificacion_cli; 
+        delete clientesSeleccionado.fecha_modificacion_cli;
         delete clientesSeleccionado.especialidad_cli;
-    } else
-    {
-        alert("Error Actualizando el Cliente");
+      } else {
+        swal("Cliente", "Error Actualizando el Cliente!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalEditar();
-    }
+      }
     }
     else {
       alert("Debe Ingresar Todos los Datos, Error Actualizando el Cliente");
+      swal("Cliente", "Debe Ingresar Todos los Datos, Error!", "warning", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalEditar();
-    } 
+    }
+    setActualiza(true);
   }
 
-  const borrarCliente= async()=>{
-   
+  const borrarCliente = async () => {
+
     const res = await clientesServices.delete(clientesSeleccionado.id_cli);
 
     if (res.success) {
-        alert("Cliente Borrado de forma Correcta")
-        console.log(res.message)
-        abrirCerrarModalEliminar();
+      swal("Cliente", "Borrado de forma Correcta!", "success", { button: "Aceptar" });
+      console.log(res.message)
+      abrirCerrarModalEliminar();
     }
     else {
-        alert("Error Borrando el Cliente");
-        console.log(res.message);
-        abrirCerrarModalEliminar();
+      swal("Cliente", "Error Borrando el Cliente!", "error", { button: "Aceptar" });
+      console.log(res.message);
+      abrirCerrarModalEliminar();
     }
-    
+    setActualiza(true);
   }
- 
+
   // "string","boolean","numeric","date","datetime","time","currency"
   const columnas = [
-  {
-    field: 'nit_cli',
-    title: 'Nit'
-  },
-  {
-    field: 'nombre_est',
-    title: 'Estado'
-  },
-  {
-    field: 'razonsocial_cli',
-    title: 'Razón Social',
-    cellStyle : { minWidth: 200}
-  },
-  {
-    field: 'nombre_ciu',
-    title: 'Ciudad'
-  },
-  {
-    field: 'direccion_cli',
-    title: 'Dirección',
-    cellStyle : { minWidth: 150}
-  },
-  {
-    field: 'telefono_cli',
-    title: 'Teléfono'
-  },
-  {
-    field: 'email_cli',
-    title: 'Email',
-    width: '400'
-  },
-  {
-    field: 'fecha_creacion_cli',
-    title: 'Fecha de Creación',
-    type:  "date",
-    cellStyle : { minWidth: 100}
-  },
-  {
-    field: 'fecha_modificacion_cli',
-    title: 'Fecha de Modificación',
-    type:  "date",
-    cellStyle : { minWidth: 100}
-  },
-  {
-    field: 'descripcion_esp',
-    title: 'Especialidad'
-  }
+    {
+      field: 'nit_cli',
+      title: 'Nit'
+    },
+    {
+      field: 'digitochequeo_cli',
+      title: 'DC'
+    },
+    {
+      field: 'nombre_est',
+      title: 'Estado'
+    },
+    {
+      field: 'razonsocial_cli',
+      title: 'Razón Social',
+      cellStyle: { minWidth: 180 }
+    },
+    {
+      field: 'nombre_ciu',
+      title: 'Ciudad'
+    },
+    {
+      field: 'direccion_cli',
+      title: 'Dirección',
+      cellStyle: { minWidth: 130 }
+    },
+    {
+      field: 'telefono_cli',
+      title: 'Teléfono'
+    },
+    {
+      field: 'email_cli',
+      title: 'Email',
+      width: '400'
+    },
+    {
+      field: 'fecha_creacion_cli',
+      title: 'Fecha de Creación',
+      type: "date",
+      cellStyle: { minWidth: 100 }
+    },
+    {
+      field: 'fecha_modificacion_cli',
+      title: 'Fecha de Modificación',
+      type: "date",
+      cellStyle: { minWidth: 100 }
+    },
+    {
+      field: 'descripcion_esp',
+      title: 'Especialidad'
+    }
   ]
-  
-  const clienteInsertar=(
-    <div className={styles.modal}>
-      <h3 align="center" >Agregar Nuevo Cliente</h3>
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> <TextField  name="codigo_tipo_cli" label="Tipo Interlocutor" defaultValue="2" disabled="true"
-         fullWidth onChange={handleChange} /> </Grid>
-        <Grid item xs={12} md={6}> <TextField  name="nit_cli" label="Nit del Interlocutor" fullWidth onChange={handleChange} /> </Grid>
-      </Grid>
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={12}> <TextField  name="razonsocial_cli" label="Razon Social" fullWidth  onChange={handleChange} /> </Grid>
-      </Grid>
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={12}> <TextField  name="direccion_cli" label="Direccion" onChange={handleChange} fullWidth /> </Grid>
-      </Grid>
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
-            <InputLabel id="idselectCiudad"  >Ciudad</InputLabel>
-              <Select
-                labelId="selecCiudad"
-                name="ciudad_cli"
-                id="idselectCiudad"
-                fullWidth 
-                onChange={handleChange}
-              >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarCiudades.map((itemselect) => {
-                return (
-                  <MenuItem value={itemselect.id_ciu }>{itemselect.nombre_ciu}</MenuItem>
-                )
-                })
-              }
-              </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={6}> 
-        <FormControl className={styles.formControl}>
-        <InputLabel id="idselectEstado"  >Estado</InputLabel>
-          <Select
-            labelId="selectEstado"
-            name="estado_cli"
-            id="idselectEstado"
-            fullWidth 
-            onChange={handleChange}
-          >
-          <MenuItem value=""> <em>None</em> </MenuItem>
-          {
-            listarEstados.map((itemselect) => {
-              return (
-                <MenuItem value={itemselect.id_est }>{itemselect.nombre_est}</MenuItem>
-              )
-            })
-          }
-          </Select>
-        </FormControl>
-        </Grid>
-      </Grid>
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> <TextField  name="telefono_cli" label="Telefono" fullWidth onChange={handleChange} /> </Grid>
-        <Grid item xs={12} md={6}> <TextField  name="email_cli" label="Email" fullWidth onChange={handleChange} /> </Grid>
-      </Grid>     
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
-            <InputLabel id="idselectCiudad" >Empresa</InputLabel>
-              <Select
-                labelId="selecEmpresa"
-                name="empresa_cli"
-                id="idselectEmpresa"
-                fullWidth 
-                onChange={handleChange}
-              >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarEmpresas.map((itemselect) => {
-                return (
-                  <MenuItem value={itemselect.id_emp }>{itemselect.nombre_emp}</MenuItem>
-                )
-                })
-              }
-              </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <TextField type="date" InputLabelProps={{ shrink: true}} name="fecha_creacion_cli" label="Fecha Creación"
-           fullWidth onChange={handleChange} />
-        </Grid>
-      </Grid>
-      
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> 
-          <TextField type="date" InputLabelProps={{ shrink: true}} name="fecha_modificacion_cli" label="Fecha Modificación"
-           fullWidth onChange={handleChange} />
-        </Grid>
-        <Grid item xs={12} md={6}> 
-          <FormControl className={styles.formControl}>
-            <InputLabel id="idselectEspecialidad" >Especialidad</InputLabel>
-              <Select
-                labelId="selecEspecialidad"
-                name="especialidad_cli"
-                id="idselectEspecialidad"
-                fullWidth 
-                onChange={handleChange}
-              >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarEspecialidades.map((itemselect) => {
-                return (
-                  <MenuItem value={itemselect.id_esp }>{itemselect.descripcion_esp}</MenuItem>
-                )
-                })
-              }
-              </Select>
-          </FormControl>
-        </Grid>
-      </Grid>      
-      <br /><br />
-      <div align="right">    
-        <Button color="primary" onClick = { () => grabarCliente() } >Insertar</Button>
-        <Button onClick={()=> abrirCerrarModalInsertar()} >Cancelar</Button>
-      </div>
-    </div>
-  )
 
-  const clienteEditar=(
+  const clienteInsertar = (
     <div className={styles.modal}>
-      <h3 align="center" >Actualizar Clientes</h3>
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> <TextField  name="codigo_tipo_cli" label="Tipo Interlocutor" fullWidth disabled="true"
-          onChange={handleChange} value={clientesSeleccionado&&clientesSeleccionado.codigo_tipo_cli} /> </Grid>
-        <Grid item xs={12} md={6}> <TextField  name="nit_cli" label="Nit del Interlocutor" fullWidth 
-          onChange={handleChange} value={clientesSeleccionado&&clientesSeleccionado.nit_cli} /> </Grid>
+      <Typography align="center" className={styles.typography} variant="button" display="block">Agregar Nuevo Cliente</Typography>
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={4}> <TextField name="codigo_tipo_cli" label="Tipo Interlocutor" defaultValue="2" disabled="true"
+          fullWidth onChange={handleChange} /> </Grid>
+        <Grid item xs={12} md={6}> <TextField name="nit_cli" label="Nit del Interlocutor" fullWidth onChange={handleChange} /> </Grid>
+        <Grid item xs={12} md={2}> <TextField name="digitochequeo_cli" label="Digito Chequeo" fullWidth onChange={handleChange} /> </Grid>
       </Grid>
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={12}> <TextField  name="razonsocial_cli" label="Razon Social" fullWidth 
-          onChange={handleChange} value={clientesSeleccionado&&clientesSeleccionado.razonsocial_cli} />
-        </Grid>
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={12}> <TextField name="razonsocial_cli" label="Razon Social" fullWidth onChange={handleChange} /> </Grid>
       </Grid>
-      <Grid container spacing={2} > 
-         <Grid item xs={12} md={12}> <TextField  name="direccion_cli" label="Direccion" fullWidth 
-          onChange={handleChange} value={clientesSeleccionado&&clientesSeleccionado.direccion_cli} /> 
-        </Grid>
-       </Grid>
-      <Grid container spacing={2} > 
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={12}> <TextField name="direccion_cli" label="Direccion" onChange={handleChange} fullWidth /> </Grid>
+      </Grid>
+      <Grid container spacing={2} >
         <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl}>
             <InputLabel id="idselectCiudad"  >Ciudad</InputLabel>
-              <Select
-                labelId="selecCiudad"
-                name="ciudad_cli"
-                id="idselectCiudad"
-                fullWidth 
-                onChange={handleChange} value={clientesSeleccionado&&clientesSeleccionado.ciudad_cli}
-              >
+            <Select
+              labelId="selecCiudad"
+              name="ciudad_cli"
+              id="idselectCiudad"
+              fullWidth
+              onChange={handleChange}
+            >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
                 listarCiudades.map((itemselect) => {
-                return (
-                  <MenuItem value={itemselect.id_ciu }>{itemselect.nombre_ciu}</MenuItem>
-                )
+                  return (
+                    <MenuItem value={itemselect.id_ciu}>{itemselect.nombre_ciu}</MenuItem>
+                  )
                 })
               }
-              </Select>
+            </Select>
           </FormControl>
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl}>
             <InputLabel id="idselectEstado"  >Estado</InputLabel>
-              <Select
-                labelId="selectEstado"
-                name="estado_cli"
-                id="idselectEstado"
-                fullWidth 
-                onChange={handleChange} value={clientesSeleccionado&&clientesSeleccionado.estado_cli}
-              >
+            <Select
+              labelId="selectEstado"
+              name="estado_cli"
+              id="idselectEstado"
+              fullWidth
+              onChange={handleChange}
+            >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
                 listarEstados.map((itemselect) => {
                   return (
-                    <MenuItem value={itemselect.id_est }>{itemselect.nombre_est}</MenuItem>
+                    <MenuItem value={itemselect.id_est}>{itemselect.nombre_est}</MenuItem>
                   )
                 })
               }
-          </Select>
+            </Select>
           </FormControl>
         </Grid>
       </Grid>
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> <TextField  name="telefono_cli" label="Telefono" fullWidth 
-          onChange={handleChange} value={clientesSeleccionado&&clientesSeleccionado.telefono_cli} /> </Grid>
-        <Grid item xs={12} md={6}> <TextField  name="email_cli" label="Email" fullWidth 
-          onChange={handleChange} value={clientesSeleccionado&&clientesSeleccionado.email_cli} /> </Grid>
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={6}> <TextField name="telefono_cli" label="Telefono" fullWidth onChange={handleChange} /> </Grid>
+        <Grid item xs={12} md={6}> <TextField name="email_cli" label="Email" fullWidth onChange={handleChange} /> </Grid>
       </Grid>
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> 
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl}>
             <InputLabel id="idselectCiudad" >Empresa</InputLabel>
-              <Select
-                labelId="selecEmpresa"
-                name="empresa_cli"
-                id="idselectEmpresa"
-                fullWidth 
-                onChange={handleChange} value={clientesSeleccionado&&clientesSeleccionado.empresa_cli}
-              >
+            <Select
+              labelId="selecEmpresa"
+              name="empresa_cli"
+              id="idselectEmpresa"
+              fullWidth
+              onChange={handleChange}
+            >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
                 listarEmpresas.map((itemselect) => {
-                return (
-                  <MenuItem value={itemselect.id_emp }>{itemselect.nombre_emp}</MenuItem>
-                )
+                  return (
+                    <MenuItem value={itemselect.id_emp}>{itemselect.nombre_emp}</MenuItem>
+                  )
                 })
               }
-              </Select>
+            </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}> <TextField  name="fecha_creacion_cli" label="Fecha Creacion" fullWidth 
-          onChange={handleChange} value={clientesSeleccionado&&clientesSeleccionado.fecha_creacion_cli} /> </Grid>
-      </Grid>
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> <TextField  name="fecha_modificacion_cli" label="Fecha Modificación" fullWidth 
-          onChange={handleChange} value={clientesSeleccionado&&clientesSeleccionado.fecha_modificacion_cli} />
+        <Grid item xs={12} md={6}>
+          <TextField type="date" InputLabelProps={{ shrink: true }} name="fecha_creacion_cli" label="Fecha Creación"
+            fullWidth onChange={handleChange} />
         </Grid>
-        <Grid item xs={12} md={6}> 
+      </Grid>
+
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={6}>
+          <TextField type="date" InputLabelProps={{ shrink: true }} name="fecha_modificacion_cli" label="Fecha Modificación"
+            fullWidth onChange={handleChange} />
+        </Grid>
+        <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl}>
             <InputLabel id="idselectEspecialidad" >Especialidad</InputLabel>
-              <Select
-                labelId="selecEspecialidad"
-                name="especialidad_cli"
-                id="idselectEspecialidad"
-                fullWidth 
-                onChange={handleChange} value={clientesSeleccionado&&clientesSeleccionado.especialidad_cli}
-              >
+            <Select
+              labelId="selecEspecialidad"
+              name="especialidad_cli"
+              id="idselectEspecialidad"
+              fullWidth
+              onChange={handleChange}
+            >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
                 listarEspecialidades.map((itemselect) => {
-                return (
-                  <MenuItem value={itemselect.id_esp }>{itemselect.descripcion_esp}</MenuItem>
-                )
+                  return (
+                    <MenuItem value={itemselect.id_esp}>{itemselect.descripcion_esp}</MenuItem>
+                  )
                 })
               }
-              </Select>
+            </Select>
           </FormControl>
         </Grid>
-      </Grid>           
+      </Grid>
       <br /><br />
       <div align="right">
-        <Button color="primary"  onClick={()=>actualizarCliente()} >Editar</Button>
-        <Button onClick={()=>abrirCerrarModalEditar()}>Cancelar</Button>
+        <Button color="primary" onClick={() => grabarCliente()} >Insertar</Button>
+        <Button onClick={() => abrirCerrarModalInsertar()} >Cancelar</Button>
+      </div>
+    </div>
+  )
+
+  const clienteEditar = (
+    <div className={styles.modal}>
+      <Typography align="center" className={styles.typography} variant="button" display="block">Actualizar Clientes</Typography>
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={4}> <TextField name="codigo_tipo_cli" label="Tipo Interlocutor" fullWidth disabled="true"
+          onChange={handleChange} value={clientesSeleccionado && clientesSeleccionado.codigo_tipo_cli} /> </Grid>
+        <Grid item xs={12} md={6}> <TextField name="nit_cli" label="Nit del Interlocutor" fullWidth
+          onChange={handleChange} value={clientesSeleccionado && clientesSeleccionado.nit_cli} /> </Grid>
+        <Grid item xs={12} md={2}> <TextField name="digitochequeo_cli" label="Digito Chequeo" fullWidth onChange={handleChange}
+          value={clientesSeleccionado && clientesSeleccionado.digitochequeo_cli} /> </Grid>
+      </Grid>
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={12}> <TextField name="razonsocial_cli" label="Razon Social" fullWidth
+          onChange={handleChange} value={clientesSeleccionado && clientesSeleccionado.razonsocial_cli} />
+        </Grid>
+      </Grid>
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={12}> <TextField name="direccion_cli" label="Direccion" fullWidth
+          onChange={handleChange} value={clientesSeleccionado && clientesSeleccionado.direccion_cli} />
+        </Grid>
+      </Grid>
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={6}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectCiudad"  >Ciudad</InputLabel>
+            <Select
+              labelId="selecCiudad"
+              name="ciudad_cli"
+              id="idselectCiudad"
+              fullWidth
+              onChange={handleChange} value={clientesSeleccionado && clientesSeleccionado.ciudad_cli}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarCiudades.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_ciu}>{itemselect.nombre_ciu}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectEstado"  >Estado</InputLabel>
+            <Select
+              labelId="selectEstado"
+              name="estado_cli"
+              id="idselectEstado"
+              fullWidth
+              onChange={handleChange} value={clientesSeleccionado && clientesSeleccionado.estado_cli}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarEstados.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_est}>{itemselect.nombre_est}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+      </Grid>
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={6}> <TextField name="telefono_cli" label="Telefono" fullWidth
+          onChange={handleChange} value={clientesSeleccionado && clientesSeleccionado.telefono_cli} /> </Grid>
+        <Grid item xs={12} md={6}> <TextField name="email_cli" label="Email" fullWidth
+          onChange={handleChange} value={clientesSeleccionado && clientesSeleccionado.email_cli} /> </Grid>
+      </Grid>
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={6}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectCiudad" >Empresa</InputLabel>
+            <Select
+              labelId="selecEmpresa"
+              name="empresa_cli"
+              id="idselectEmpresa"
+              fullWidth
+              onChange={handleChange} value={clientesSeleccionado && clientesSeleccionado.empresa_cli}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarEmpresas.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_emp}>{itemselect.nombre_emp}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={6}> <TextField name="fecha_creacion_cli" label="Fecha Creacion" fullWidth
+          onChange={handleChange} value={clientesSeleccionado && clientesSeleccionado.fecha_creacion_cli} /> </Grid>
+      </Grid>
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={6}> <TextField name="fecha_modificacion_cli" label="Fecha Modificación" fullWidth
+          onChange={handleChange} value={clientesSeleccionado && clientesSeleccionado.fecha_modificacion_cli} />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectEspecialidad" >Especialidad</InputLabel>
+            <Select
+              labelId="selecEspecialidad"
+              name="especialidad_cli"
+              id="idselectEspecialidad"
+              fullWidth
+              onChange={handleChange} value={clientesSeleccionado && clientesSeleccionado.especialidad_cli}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarEspecialidades.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_esp}>{itemselect.descripcion_esp}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+      </Grid>
+      <br /><br />
+      <div align="right">
+        <Button color="primary" onClick={() => actualizarCliente()} >Editar</Button>
+        <Button onClick={() => abrirCerrarModalEditar()}>Cancelar</Button>
       </div>
       <MenuContactos interlocutor={clientesSeleccionado.id_cli} />
     </div>
@@ -678,8 +706,8 @@ function Clientes() {
     <div className={styles.modal}>
       <p>Estás seguro que deseas eliminar el Cliente <b>{clientesSeleccionado && clientesSeleccionado.razonsocial_cli}</b>? </p>
       <div align="right">
-        <Button color="secondary" onClick = {() => borrarCliente() }> Confirmar </Button>
-        <Button onClick={()=>abrirCerrarModalEliminar()}> Cancelar </Button>
+        <Button color="secondary" onClick={() => borrarCliente()}> Confirmar </Button>
+        <Button onClick={() => abrirCerrarModalEliminar()}> Cancelar </Button>
       </div>
     </div>
   )
@@ -691,21 +719,21 @@ function Clientes() {
       <MaterialTable
         columns={columnas}
         data={listarClientes}
-        title="Maestra de Clientes"
+        title="MAESTRA DE CLIENTES"
         actions={[
           {
-            icon     : 'edit',
-            tooltip  : 'Editar Cliente',
-            onClick  : (event, rowData) => seleccionarCliente(rowData, "Editar")
+            icon: 'edit',
+            tooltip: 'Editar Cliente',
+            onClick: (event, rowData) => seleccionarCliente(rowData, "Editar")
           },
           {
-            icon     : 'delete',
-            tooltip  : 'Borrar Cliente',
-            onClick  : (event, rowData) =>   seleccionarCliente(rowData, "Eliminar")
-          } 
+            icon: 'delete',
+            tooltip: 'Borrar Cliente',
+            onClick: (event, rowData) => seleccionarCliente(rowData, "Eliminar")
+          }
         ]}
         options={{
-         actionsColumnIndex: 11
+          actionsColumnIndex: 11
         }}
         localization={{
           header: {

@@ -20,8 +20,7 @@ class Empresa extends Model
         'direccion_emp',
         'fecha_creacion_emp',
         'fecha_modificación_emp',
-        'ciudad_emp',
-        'pais_emp'
+        'ciudad_emp'
     ];
   
     public function pais(){

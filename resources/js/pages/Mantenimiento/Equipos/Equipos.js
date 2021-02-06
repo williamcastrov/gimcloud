@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import MaterialTable from "material-table";
-import { Modal, Button, TextField, Select, MenuItem, FormControl, InputLabel, Grid, InputAdornment, Typography} from "@material-ui/core";
+import { Modal, Button, TextField, Select, MenuItem, FormControl, InputLabel, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import NumberFormat from 'react-number-format';
 import swal from 'sweetalert';
 
@@ -13,7 +12,7 @@ import empresasServices from "../../../services/Empresa";
 import estadosServices from "../../../services/Parameters/Estados";
 import marcasServices from "../../../services/Mantenimiento/Marcas";
 import frecuenciasServices from "../../../services/Mantenimiento/Frecuencias";
-import propietariosServices from "../../../services/Interlocutores/Clientes";
+import propietariosServices from "../../../services/Interlocutores/Proveedores";
 import gruposequiposServices from "../../../services/Mantenimiento/GruposEquipos";
 import equiposServices from "../../../services/Mantenimiento/Equipos";
 import estadosclientesServices from "../../../services/Mantenimiento/EstadosClientes";
@@ -69,18 +68,33 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function NumberFormatCustom(props) {
-  const { inputRef, ...other } = props;
-  //console.log(inputRef);
+  const { inputRef, onChange, ...other } = props;
+
   return (
     <NumberFormat
       {...other}
       getInputRef={inputRef}
-      thousandSeparator={'.'}
-      decimalSeparator={','}
-
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.value,
+          },
+        });
+      }}
+      thousandSeparator
+      isNumericString
+      prefix="$"
     />
   );
 }
+
+NumberFormatCustom.propTypes = {
+  inputRef: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
+
 
 function Equipos() {
   const styles = useStyles();
@@ -100,6 +114,7 @@ function Equipos() {
   const [listarMarcas, setListarMarcas] = useState([]);
   const [listarGruposEquipos, setListarGruposEquipos] = useState([]);
   const [fechaHoy, setFechaHoy] = useState(new Date());
+  const [actualiza, setActualiza] = useState(false);
   const [equiposSeleccionado, setEquiposSeleccionado] = useState({
     'id_equ': "",
     'codigo_equ': "",
@@ -121,11 +136,12 @@ function Equipos() {
     async function fetchDataEquipos() {
       const res = await equiposServices.listEquipos();
       setListarEquipos(res.data);
-      console.log(res.data)
+      setActualiza(false);
+      //console.log(res.data)
     }
     fetchDataEquipos();
-  }, [])
-
+  }, [actualiza])
+/*
   useEffect(() => {
     async function fetchDataEquipos() {
       const res = await equiposServices.listEquipos();
@@ -134,11 +150,7 @@ function Equipos() {
     }
     fetchDataEquipos();
   }, [])
-
-  const imprimirDatos = () => {
-   console.log('Imprimir Datos de los SubGrupos : ', listarSubEquipos);
-  }
-
+*/
   useEffect(() => {
     async function fetchDataEmpresas() {
       const res = await empresasServices.listEmpresas();
@@ -156,7 +168,7 @@ function Equipos() {
     }
     fetchDataEstados();
   }, [])
-  
+
   useEffect(() => {
     async function fetchDataEstadosClientes() {
       const res = await estadosclientesServices.listEstadosClientes();
@@ -165,7 +177,7 @@ function Equipos() {
     }
     fetchDataEstadosClientes();
   }, [])
-  
+
   useEffect(() => {
     async function fetchDataEstadosMtto() {
       const res = await estadosmttoServices.listEstadosMtto();
@@ -186,7 +198,7 @@ function Equipos() {
 
   useEffect(() => {
     async function fetchDataPropietarios() {
-      const res = await propietariosServices.listClientes();
+      const res = await propietariosServices.listProveedores();
       setListarPropietarios(res.data)
       //console.log(res.data);
     }
@@ -292,12 +304,12 @@ function Equipos() {
       errors.estadocontable_equ = true;
       formOk = false;
     }
-    
+
     if (!equiposSeleccionado.estadocliente_equ) {
       errors.estadocliente_equ = true;
       formOk = false;
     }
-    
+
     if (!equiposSeleccionado.estadomtto_equ) {
       errors.estadomtto_equ = true;
       formOk = false;
@@ -315,7 +327,7 @@ function Equipos() {
       const res = await equiposServices.save(equiposSeleccionado);
 
       if (res.success) {
-        swal( "Equipo", "Equipo Creado de forma Correcta!", "success", { button: "Aceptar" });
+        swal("Equipo", "Equipo Creado de forma Correcta!", "success", { button: "Aceptar" });
         //console.log(res.message)
         abrirCerrarModalInsertar();
         delete equiposSeleccionado.codigo_equ;
@@ -332,17 +344,18 @@ function Equipos() {
         delete equiposSeleccionado.estadomtto_equ;
         delete equiposSeleccionado.ctacontable_equ;
       } else {
-        swal( "Equipo", "Error Creando el Equipo!", "error", { button: "Aceptar" });
+        swal("Equipo", "Error Creando el Equipo!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      swal( "Equipo", "Debe Ingresar Todos los Datos, Error Creando el Equipo!", "warning", { button: "Aceptar" });
+      swal("Equipo", "Debe Ingresar Todos los Datos, Error Creando el Equipo!", "warning", { button: "Aceptar" });
       console.log(equiposSeleccionado);
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
+    setActualiza(true);
   }
 
   const actualizarEquipo = async () => {
@@ -400,12 +413,12 @@ function Equipos() {
       errors.estadocontable_equ = true;
       formOk = false;
     }
-    
+
     if (!equiposSeleccionado.estadocliente_equ) {
       errors.estadocliente_equ = true;
       formOk = false;
     }
-    
+
     if (!equiposSeleccionado.estadomtto_equ) {
       errors.estadomtto_equ = true;
       formOk = false;
@@ -423,7 +436,7 @@ function Equipos() {
       const res = await equiposServices.update(equiposSeleccionado);
 
       if (res.success) {
-        swal( "Equipo", "Equipo Actualizado de forma Correcta!", "success", { button: "Aceptar" });
+        swal("Equipo", "Equipo Actualizado de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalEditar();
         delete equiposSeleccionado.codigo_equ;
@@ -440,16 +453,17 @@ function Equipos() {
         delete equiposSeleccionado.estadomtto_equ;
         delete equiposSeleccionado.ctacontable_equ;
       } else {
-        swal( "Equipo", "Error Actualizando el Equipo!", "error", { button: "Aceptar" });
+        swal("Equipo", "Error Actualizando el Equipo!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalEditar();
       }
     }
     else {
-      swal( "Equipo", "Debe Ingresar Todos los Datos, Error Actualizando el Equipo!", "warning", { button: "Aceptar" });
+      swal("Equipo", "Debe Ingresar Todos los Datos, Error Actualizando el Equipo!", "warning", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalEditar();
     }
+    setActualiza(true);
   }
 
   const borrarEquipo = async () => {
@@ -457,16 +471,16 @@ function Equipos() {
     const res = await equiposServices.delete(equiposSeleccionado.id_equ);
 
     if (res.success) {
-      swal( "Equipo", "Equipo Borrado de forma Correcta!", "success", { button: "Aceptar" });
+      swal("Equipo", "Equipo Borrado de forma Correcta!", "success", { button: "Aceptar" });
       console.log(res.message)
       abrirCerrarModalEliminar();
     }
     else {
-      swal( "Equipo", "Error Borrando el Equipo!", "error", { button: "Aceptar" });
+      swal("Equipo", "Error Borrando el Equipo!", "error", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalEliminar();
     }
-
+    setActualiza(true);
   }
 
   // "string","boolean","numeric","date","datetime","time","currency"
@@ -589,7 +603,7 @@ function Equipos() {
               {
                 listarPropietarios.map((itemselect) => {
                   return (
-                    <MenuItem value={itemselect.id_cli}>{itemselect.razonsocial_cli}</MenuItem>
+                    <MenuItem value={itemselect.id_int}>{itemselect.razonsocial_int}</MenuItem>
                   )
                 })
               }
@@ -640,16 +654,11 @@ function Equipos() {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}> 
-          <TextField type="number" name="valoradquisicion_equ" label="Valor de compra" InputLabelProps={{ shrink: true }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                < AttachMoneyIcon />
-              </InputAdornment>
-            ),
-          }}
-          fullWidth onChange={handleChange} />
+        <Grid item xs={12} md={6}>
+          <TextField className={styles.inputMaterial} name="valoradquisicion_equ" label="Valor de Compra" fullWidth
+            InputLabelProps={{ shrink: true }} InputProps={{ inputComponent: NumberFormatCustom, }}
+            onChange={handleChange}
+          />
         </Grid>
         <Grid item xs={12} md={4}>
           <FormControl className={styles.formControlEstados}>
@@ -792,7 +801,7 @@ function Equipos() {
               {
                 listarPropietarios.map((itemselect) => {
                   return (
-                    <MenuItem value={itemselect.id_cli}>{itemselect.razonsocial_cli}</MenuItem>
+                    <MenuItem value={itemselect.id_int}>{itemselect.razonsocial_int}</MenuItem>
                   )
                 })
               }
@@ -825,7 +834,7 @@ function Equipos() {
           fullWidth onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.antiguedad_equ} />
         </Grid>
         <Grid item xs={12} md={4}> <TextField name="ctacontable_equ" label="Cuenta Contable"
-          fullWidth onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.ctacontable_equ}  />
+          fullWidth onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.ctacontable_equ} />
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl}>
@@ -849,17 +858,10 @@ function Equipos() {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}> 
-          <TextField type="number" name="valoradquisicion_equ" label="Valor de compra" InputLabelProps={{ shrink: true }} 
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                < AttachMoneyIcon />
-              </InputAdornment>
-            ),
-          }}
-          fullWidth onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.valoradquisicion_equ} 
-          />
+        <Grid item xs={12} md={6}>
+          <TextField className={styles.inputMaterial} name="valoradquisicion_equ" label="Valor de Compra" fullWidth
+            InputLabelProps={{ shrink: true }} InputProps={{ inputComponent: NumberFormatCustom, }}
+            onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.valoradquisicion_equ} />
         </Grid>
         <Grid item xs={12} md={4}>
           <FormControl className={styles.formControlEstados}>
@@ -950,7 +952,7 @@ function Equipos() {
   return (
     <div className="App">
       <br />
-      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Insertar</Button>
+      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Equipo</Button>
       <MaterialTable
         columns={columnas}
         data={listarEquipos}
@@ -988,13 +990,13 @@ function Equipos() {
                     backgroundColor: '#0277bd',
                   }}
                 >
-                  <Button variant="contained">Estado Contable : {rowData.nombre_est}</Button> { }
-                  <Button variant="contained">Estado Cliente  : {rowData.nombre_estcli}</Button> { }
+                  <Button variant="contained">Estado Contable : {rowData.nombre_est}</Button> {}
+                  <Button variant="contained">Estado Cliente  : {rowData.nombre_estcli}</Button> {}
                   <Button variant="contained">Estado Mantenimiento :{rowData.nombre_estmtto}</Button>
                 </div>
               )
             },
-          },  
+          },
         ]}
       />
       {}

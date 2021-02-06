@@ -19,6 +19,7 @@ class ClientesController extends Controller
         try { 
           $insert['codigo_tipo_cli']        = $request['codigo_tipo_cli'];
           $insert['nit_cli']                = $request['nit_cli'];
+          $insert['digitochequeo_cli']      = $request['digitochequeo_cli'];
           $insert['estado_cli']             = $request['estado_cli'];
           $insert['primer_nombre_cli']      = $request['primer_nombre_cli'];
           $insert['segundo_nombre_cli']     = $request['segundo_nombre_cli'];
@@ -98,6 +99,7 @@ class ClientesController extends Controller
         try {
           $data['codigo_tipo_cli']        = $request['codigo_tipo_cli'];
           $data['nit_cli']                = $request['nit_cli'];
+          $data['digitochequeo_cli']      = $request['digitochequeo_cli'];
           $data['estado_cli']             = $request['estado_cli'];
           $data['primer_nombre_cli']      = $request['primer_nombre_cli'];
           $data['segundo_nombre_cli']     = $request['segundo_nombre_cli'];

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import MaterialTable from "material-table";
 import {Modal, TextField, Button, Typography } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
@@ -157,8 +156,8 @@ function Paises() {
 
     if (formOk) {
     
-    console.log("ID PAIS : ", paisSeleccionado.id_pai);
-    console.log("VALIDAR PAIS : ", validar);
+    //console.log("ID PAIS : ", paisSeleccionado.id_pai);
+    //console.log("VALIDAR PAIS : ", validar);
     
     const res = await paisServices.update(paisSeleccionado);
     console.log(paisSeleccionado);
@@ -188,12 +187,7 @@ function Paises() {
     }
     }
     else {
-      swal({
-        title : "Gestión Paises",
-        text  : "Debe Ingresar Todos los Datos, Error Actualizando el Pais!",
-        icon  : "warning",
-        button: "Aceptar"
-      });
+    c
       console.log(res.message);
       abrirCerrarModalEditar();
     } 
@@ -204,16 +198,25 @@ function Paises() {
     const res = await paisServices.delete(paisSeleccionado.id_pai);
 
     if (res.success) {
-        alert("Pais Borrada de forma Correcta")
+        swal({
+          title : "Gestión Paises",
+          text  : "Pais Borrada de forma Correcta!",
+          icon  : "success",
+          button: "Aceptar"
+        });
         console.log(res.message)
         abrirCerrarModalEliminar();
     }
     else {
-        alert("Error brorrando el Pais");
+        swal({
+          title : "Gestión Paises",
+          text  : "Error brorrando el Pais!",
+          icon  : "error",
+          button: "Aceptar"
+        });
         console.log(res.message);
         abrirCerrarModalEliminar();
     }
-    
   }
 
   const columnas = [

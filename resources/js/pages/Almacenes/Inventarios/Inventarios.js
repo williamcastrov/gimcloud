@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import PropTypes from 'prop-types';
 import MaterialTable from "material-table";
 import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography, Grid, InputAdornment} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -51,17 +51,32 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function NumberFormatCustom(props) {
-  const { inputRef, ...other } = props;
-  //console.log(inputRef);
+  const { inputRef, onChange, ...other } = props;
+
   return (
     <NumberFormat
       {...other}
       getInputRef={inputRef}
-      thousandSeparator={'.'}
-      decimalSeparator={','}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.value,
+          },
+        });
+      }}
+      thousandSeparator
+      isNumericString
+      prefix="$"
     />
   );
 }
+
+NumberFormatCustom.propTypes = {
+  inputRef: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 
 function Inventarios() {
   const styles = useStyles();
@@ -73,6 +88,7 @@ function Inventarios() {
   const [listarAlmacenes, setListarAlmacenes] = useState([]);
   const [listarTiposAlmacenes, setListarTiposAlmacenes] = useState([]);
   const [listarTiposProductos, setListarTiposProductos] = useState([]);
+  const [actualiza, setActualiza] = useState(false);
   const [listarEstados, setListarEstados] = useState([]);
   let tipoinventario = 1
 
@@ -95,9 +111,10 @@ function Inventarios() {
     async function fetchDataInventarios() {
       const res = await inventariosServices.listSaldosalmacen();
       setListInventarios(res.data);
+      setActualiza(false);
     }
     fetchDataInventarios();
-  }, [])
+  }, [actualiza])
 
   useEffect(() => {
     async function fetchDataAlmacenes() {
@@ -246,6 +263,7 @@ function Inventarios() {
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
+    setActualiza(true);
   }
 
   const actualizarInventario = async () => {
@@ -336,6 +354,7 @@ function Inventarios() {
       console.log(res.message);
       abrirCerrarModalEditar();
     }
+    setActualiza(true);
   }
 
   const borrarInventario = async () => {
@@ -351,6 +370,7 @@ function Inventarios() {
       console.log(res.message);
       abrirCerrarModalEliminar();
     }
+    setActualiza(true);
   }
   
   // "string","boolean","numeric","date","datetime","time","currency"
@@ -608,40 +628,20 @@ function Inventarios() {
           value={inventariosSeleccionado && inventariosSeleccionado.horaactualizacion_inv} />
         </Grid>
         <Grid item xs={12} md={6}> 
-          <TextField type="number" name="existencia_inv" label="Existencias" InputLabelProps={{ shrink: true }}
-          InputProps={{
-            inputComponent: NumberFormatCustom,
-            startAdornment: (
-              <InputAdornment position="start">
-              </InputAdornment>
-            ),
-          }}
-          fullWidth onChange={handleChange}
+          <TextField className={styles.inputMaterial}  tname="existencia_inv" label="Existencias"
+           InputLabelProps={{ shrink: true }} fullWidth onChange={handleChange}
           value={inventariosSeleccionado && inventariosSeleccionado.existencia_inv} />
         </Grid>
         <Grid item xs={12} md={6}> 
-          <TextField name="costounitponderado_inv" label="Costo Unitario" InputLabelProps={{ shrink: true }}
-          InputProps={{
-            inputComponent: NumberFormatCustom,
-            startAdornment: (
-              <InputAdornment position="start">
-                < AttachMoneyIcon />
-              </InputAdornment>
-            ),
-          }}
+          <TextField  className={styles.inputMaterial} name="costounitponderado_inv" label="Costo Unitario"
+           InputLabelProps={{ shrink: true }}
+           InputProps={{ inputComponent: NumberFormatCustom, }}
           fullWidth onChange={handleChange}
           value={inventariosSeleccionado && inventariosSeleccionado.costounitponderado_inv } />
         </Grid>
         <Grid item xs={12} md={6}> 
           <TextField name="costototalponderado_inv" label="Costo Total" InputLabelProps={{ shrink: true }}
-          InputProps={{
-            inputComponent: NumberFormatCustom,
-            startAdornment: (
-              <InputAdornment position="start">
-                < AttachMoneyIcon />
-              </InputAdornment>
-            ),
-          }}
+          InputProps={{ inputComponent: NumberFormatCustom, }}
           fullWidth onChange={handleChange} 
           value={inventariosSeleccionado && inventariosSeleccionado.costototalponderado_inv }/>
         </Grid>

@@ -66,7 +66,7 @@ function Garantias(props) {
   const [listarTipoGarantia, setListarTipoGarantia] = useState([]);
   const [listarClientes, setListarClientes] = useState([]);
   const [listarProveedores, setListarProveedores] = useState([]);
-
+  const [actualiza, setActualiza] = useState(false);
   let itemsToRender;
 
   const [garantiaSeleccionado, setGarantiaSeleccionado] = useState({
@@ -86,9 +86,10 @@ function Garantias(props) {
     async function fetchDataGarantias() {
       const res = await garantiasServices.listUnaGarantia(equipoID);
       setListGarantias(res.data);
+      setActualiza(false);
     }
     fetchDataGarantias();
-  }, [])
+  }, [actualiza])
 
   useEffect(() => {
     async function fetchDataEmpresas() {
@@ -151,15 +152,6 @@ function Garantias(props) {
       ...prevState,
       [name]: value
     }));
-  }
-
-  const recargarDatosGarantia = () => {
-    async function fetchDataGarantias() {
-      const res = await garantiasServices.listUnaGarantia(equipoID);
-      setListGarantias(res.data);
-      console.log("Carga de Datos", res.data);
-    }
-    fetchDataGarantias();
   }
 
   const seleccionarGarantia = (garantia, caso) => {
@@ -263,10 +255,11 @@ function Garantias(props) {
     }
     else {
       swal( "Garantias", "Debe Ingresar Todos los Datos, Revisar Información!", "warning", { button: "Aceptar" });
-      console.log(garantiaSeleccionado);
-      //console.log(res.message);
+      //console.log(garantiaSeleccionado);
+      console.log(res.message);
       abrirCerrarModalInsertar();
     }
+    setActualiza(true);
   }
 
   const actualizarGarantia = async () => {
@@ -356,6 +349,7 @@ function Garantias(props) {
       //console.log(res.message);
       abrirCerrarModalEditar();
     }
+    setActualiza(true);
   }
 
   const borrarGarantia = async () => {
@@ -372,7 +366,7 @@ function Garantias(props) {
       //console.log(res.message);
       abrirCerrarModalEliminar();
     }
-
+    setActualiza(true);
   }
   // "string","boolean","numeric","date","datetime","time","currency"
   const columnas = [
@@ -703,8 +697,7 @@ function Garantias(props) {
     <div className="App" >
       <br />
         <ButtonGroup  >
-          <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Insertar</Button>
-          <Button variant="contained" startIcon={<CachedIcon />} color="primary" onClick={() => recargarDatosGarantia()} >Recargar Datos</Button>
+          <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Garantía</Button>
         </ButtonGroup>
   
       <div className="datosequipos">

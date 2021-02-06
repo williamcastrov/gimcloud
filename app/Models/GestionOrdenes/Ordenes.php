@@ -27,7 +27,7 @@ class Ordenes extends Model
         'proveedor_otr',
         'cliente_otr',
         'operario_otr',
-        'grupoequipo_otr',
+        'contactocliente_otr',
         'subgrupoequipo_otr',
         'ciudad_otr',
         'resumenorden_otr',

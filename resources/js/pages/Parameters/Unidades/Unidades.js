@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
-import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
+import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
+import swal from 'sweetalert';
 
 // Componentes de Conexion con el Backend
 import unidadesServices from "../../../services/Parameters/Unidades";
@@ -30,6 +31,10 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0),
     minWidth: 315,
+  },
+  typography: {
+    fontSize: 16,
+    color   : "#ff3d00"
   }
 }));
 
@@ -129,7 +134,12 @@ function Unidades() {
       const res = await unidadesServices.save(unidadesSeleccionado);
 
       if (res.success) {
-        alert("Unidad de Medida Creada de forma Correcta")
+        swal({
+          title: "Unidad de Medida",
+          text: "Creada de forma Correcta!",
+          icon: "success",
+          button: "Aceptar"
+        });
         console.log(res.message)
         abrirCerrarModalInsertar();
         delete unidadesSeleccionado.descripcion_und;
@@ -137,13 +147,23 @@ function Unidades() {
         delete unidadesSeleccionado.estado_und;
       } else
       {
-        alert("Error Creando el la Unidad de Medida");
+        swal({
+          title: "Unidad de Medida",
+          text: "Error Creando la Unidad de Medida!",
+          icon: "error",
+          button: "Aceptar"
+        });
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Creando la Unidad de Medida");
+      swal({
+        title: "Unidad de Medida",
+        text: "Debe Ingresar Todos los Datos, Error Creando la Unidad de Medida!",
+        icon: "warning",
+        button: "Aceptar"
+      });
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
@@ -177,7 +197,12 @@ function Unidades() {
     const res = await unidadesServices.update(unidadesSeleccionado);
 
     if (res.success) {
-        alert("unidad de Medida actualizads de forma Correcta")
+        swal({
+          title: "Unidad de Medida",
+          text: "Actualizada de forma Correcta!",
+          icon: "success",
+          button: "Aceptar"
+        });
         console.log(res.message)
         abrirCerrarModalEditar();
         delete unidadesSeleccionado.descripcion_und;
@@ -185,13 +210,23 @@ function Unidades() {
         delete unidadesSeleccionado.estado_und;
     } else
     {
-        alert("Error Actualizando el tipo la Uniada de Medida");
+        swal({
+          title: "Unidad de Medida",
+          text: "Error Actualizando el tipo la Unidad de Medida!",
+          icon: "error",
+          button: "Aceptar"
+        });
         console.log(res.message);
         abrirCerrarModalEditar();
     }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Actualizando la Uniada de Medida");
+      swal({
+        title: "Unidad de Medida",
+        text: "Debe Ingresar Todos los Datos, Error Actualizando la Uniada de Medida!",
+        icon: "warning",
+        button: "Aceptar"
+      });
       console.log(res.message);
       abrirCerrarModalEditar();
     } 
@@ -202,12 +237,22 @@ function Unidades() {
     const res = await unidadesServices.delete(unidadesSeleccionado.id_und);
 
     if (res.success) {
-        alert("Unidad de Medida Borrada de forma Correcta")
+        swal({
+          title: "Unidad de Medida",
+          text: "Borrada de forma Correcta!",
+          icon: "success",
+          button: "Aceptar"
+        });
         console.log(res.message)
         abrirCerrarModalEliminar();
     }
     else {
-        alert("Error Borrando la Unidad de Medida");
+        swal({
+          title: "Unidad de Medida",
+          text: "Error Borrando la Unidad de Medida!",
+          icon: "success",
+          button: "Aceptar"
+        });
         console.log(res.message);
         abrirCerrarModalEliminar();
     }
@@ -244,7 +289,9 @@ function Unidades() {
 
   const unidadInsertar=(
     <div className={styles.modal}>
-      <h3 align="center" >Agregar Nuevo Tipo de Unidad</h3>
+      <Typography  align="center" className={ styles.typography } variant="button" display="block" >
+        Agregar Nuevo Tipo de Unidad
+      </Typography>
       <br />
       <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_und" onChange={handleChange} />          
       <br />
@@ -295,7 +342,9 @@ function Unidades() {
 
   const unidadEditar = (
     <div className={styles.modal}>
-      <h3 align="center" >Actualizar Unidades</h3>
+      <Typography  align="center" className={ styles.typography } variant="button" display="block" >
+        Actualizar Tipo de Unidad
+      </Typography>
       <br />
       <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_und" onChange={handleChange} value={unidadesSeleccionado&&unidadesSeleccionado.descripcion_und}/>
       <br />
@@ -363,7 +412,7 @@ function Unidades() {
      <MaterialTable
        columns={columnas}
        data={listUnidades}
-       title="Maestra Unidades de Medida"
+       title="MAESTRA DE UNIDADES DE MEDIDA"
        actions={[
          {
            icon     : 'edit',

@@ -152,6 +152,7 @@ function ActividadesOservChequeo(props) {
   const fechaactual = Moment(new Date()).format('YYYY-MM-DD');
   const horaactual = Moment(new Date()).format('HH:mm:ss');
   const [activo, setActivo] = useState(false);
+  const [actualiza, setActualiza] = useState(false);
 
   const [listChequeoEntrega, setListChequeoEntrega] = useState([]);
   const [listChequeoRecepcion, setListChequeoRecepcion] = useState([]);
@@ -192,19 +193,21 @@ function ActividadesOservChequeo(props) {
     async function fetchDataListaChequeoEntrega() {
       const res = await inventariosServices.listEntregaEquipos();
       setListChequeoEntrega(res.data);
-      console.log("LISTA CHEQUEO ENTREGA : ", res.data);
+      setActualiza(false);
+      //console.log("LISTA CHEQUEO ENTREGA : ", res.data);
     }
     fetchDataListaChequeoEntrega();
-  }, [])
+  }, [actualiza])
 
   useEffect(() => {
     async function fetchDataListaChequeoRecepcion() {
       const res = await inventariosServices.listRecepcionEquipos();
       setListChequeoRecepcion(res.data);
-      console.log("LISTA CHEQUEO RECEPCION : ", res.data);
+      setActualiza(false);
+      //console.log("LISTA CHEQUEO RECEPCION : ", res.data);
     }
     fetchDataListaChequeoRecepcion();
-  }, [])
+  }, [actualiza])
 
   useEffect(() => {
     async function fetchDataInventarios() {
@@ -229,7 +232,7 @@ function ActividadesOservChequeo(props) {
       if (res.data) {
         setActivo(true)
       } else { setActivo(false) }
-      console.log("UN CUMPLIMIENTO : ", listUnCumplimiento);
+      //console.log("UN CUMPLIMIENTO : ", listUnCumplimiento);
     }
     fetchDataUnCumplimiento();
   }, [])
@@ -255,12 +258,12 @@ function ActividadesOservChequeo(props) {
     let nuevoid = id_otr + inventarios.referencia_inv;
     setReferencia(inventarios.referencia_inv);
     setIdCumplimiento(nuevoid);
-    console.log("NUEVO ID DE INVENTARIO : ", nuevoid);
+    //console.log("NUEVO ID DE INVENTARIO : ", nuevoid);
     (caso === "Editar") ? abrirCerrarModalCumplimiento() : abrirCerrarModalInsertar()
   }
 
   const seleccionarCumplimiento = (cumplimiento, caso) => {
-    console.log(cumplimiento)
+    //console.log(cumplimiento)
     setCumplimientoSeleccionado(cumplimiento);
     setActividadrealizada(cumplimiento.descripcion_cosv);
     setObservacion(cumplimiento.observacion_cosv);
@@ -283,7 +286,7 @@ function ActividadesOservChequeo(props) {
     async function fetchDataUnCumplimiento() {
       const res = await cumplimientooservServices.listUnCumplimiento(props.ordenSeleccionado.id_otr);
       setListUnCumplimiento(res.data);
-      console.log("LEE DATOS CUMPLIMIENTO ORDEN : ", res.data)
+      //console.log("LEE DATOS CUMPLIMIENTO ORDEN : ", res.data)
       if (res.data) {
         setActivo(true)
       } else { setActivo(false) }
@@ -308,9 +311,9 @@ function ActividadesOservChequeo(props) {
 
     {
       let resultado = (cantidad * valorunitario)
-      console.log("RESULTADO : ", resultado)
-      console.log("REFERENCIA : ", referencia)
-      console.log("ACTIVIDAD : ", actividadrealizada)
+      //console.log("RESULTADO : ", resultado)
+      //console.log("REFERENCIA : ", referencia)
+      //console.log("ACTIVIDAD : ", actividadrealizada)
       //Asignar Valores al Estado Cumplimiento
       setCumplimientoSeleccionado([{
         id: idCumplimiento,
@@ -336,7 +339,7 @@ function ActividadesOservChequeo(props) {
   const guardarCambiosCumplimiento = async () => {
 
     {
-     console.log("DATOS A GRABAR EN CUMPLIMIENTO : ",cumplimientoSeleccionado)
+     //console.log("DATOS A GRABAR EN CUMPLIMIENTO : ",cumplimientoSeleccionado)
       
       let resultado = (cantidad * valorunitario)
       //Asignar Valores al Estado Cumplimiento
@@ -388,7 +391,7 @@ function ActividadesOservChequeo(props) {
     async function grabarCumplimiento() {
 
       if (grabar) {
-        console.log("VALIDAR DATOS A GRABAR : ",cumplimientoSeleccionado[0])
+        //console.log("VALIDAR DATOS A GRABAR : ",cumplimientoSeleccionado[0])
         
         const res = await cumplimientooservServices.save(cumplimientoSeleccionado[0]);
 

@@ -76,7 +76,7 @@ function FichaTecnica(props) {
   const [listarProveedores, setListarProveedores] = useState([]);
   const [listarTiposLlantas, setListarTiposLlantas] = useState([]);
   const [listarTiposEquipos, setListarTiposEquipos] = useState([]);
-
+  const [actualiza, setActualiza] = useState(false);
   const [fichatecnicaSeleccionado, setFichaTecnicaSeleccionado] = useState({
     'id_fit': equipoID,
     'peso_fit': "",
@@ -106,9 +106,10 @@ function FichaTecnica(props) {
     async function fetchDataFichaTecnica() {
       const res = await fichatecnicaServices.listUnaFichaTecnica(equipoID);
       setListFichaTecnica(res.data);
+      setActualiza(false);
     }
     fetchDataFichaTecnica();
-  }, [])
+  }, [actualiza])
 
   useEffect(() => {
     async function fetchDataProveedores() {
@@ -323,6 +324,7 @@ function FichaTecnica(props) {
       //console.log(res.message);
       abrirCerrarModalInsertar();
     }
+    setActualiza(true);
   }
 
   const actualizarFichaTecnica = async () => {
@@ -485,6 +487,7 @@ function FichaTecnica(props) {
       //console.log(res.message);
       abrirCerrarModalEditar();
     }
+    setActualiza(true);
   }
 
   const borrarFichaTecnica = async () => {
@@ -501,7 +504,7 @@ function FichaTecnica(props) {
       //console.log(res.message);
       abrirCerrarModalEliminar();
     }
-
+    setActualiza(true);
   }
   // "string","boolean","numeric","date","datetime","time","currency"
 
@@ -906,7 +909,7 @@ function FichaTecnica(props) {
   return (
     <div className="App">
       <br />
-      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Insertar</Button>
+      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Ficha Técnica</Button>
       <div className="datosequipos">
         <MaterialTable
           columns={columnas}

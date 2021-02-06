@@ -77,6 +77,16 @@ crearordenes.updateestadoasignado = async (data) => {
     return res;
 }
 
+crearordenes.cancelar = async (data) => {
+    console.log("DATA : ", data.id_otr);
+    const urlUpdate = baseUrl+"/cancelar/"+data.id_otr
+    const res = await axios.put(urlUpdate, data)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
 crearordenes.delete = async (id_equ) => {
     const urlDelete = baseUrl+"/delete/"+id_otr
     const res = await axios.delete(urlDelete)

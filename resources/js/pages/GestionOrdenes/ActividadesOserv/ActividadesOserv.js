@@ -3,26 +3,17 @@ import MaterialTable from "material-table";
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {
-  Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography, Grid, InputAdornment, Container, Table,
-  TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel, Toolbar, FormControlLabel, Switch,
-  Paper, Checkbox, ButtonGroup
-} from "@material-ui/core";
+  Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography, Grid, ButtonGroup } from "@material-ui/core";
 import { makeStyles, lighten } from "@material-ui/core/styles";
 import { blue, blueGrey, red } from '@material-ui/core/colors';
 import NumberFormat from 'react-number-format';
 import swal from 'sweetalert';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import Moment from 'moment';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 import shortid from "shortid";
 
 // Componentes de Conexion con el Backend
 import inventariosServices from "../../../services/Almacenes/Inventarios";
-import crearordenesServices from "../../../services/GestionOrdenes/CrearOrdenes";
 import cumplimientooservServices from "../../../services/GestionOrdenes/CumplimientoOserv";
 import tipooperacionServices from "../../../services/GestionOrdenes/TipoOperacion";
 
@@ -759,13 +750,15 @@ function ActividadesOserv(props) {
           } 
         ]}
         options={{
-          actionsColumnIndex: -1
+          actionsColumnIndex: -1,
+          exportButton: true
         }}
         localization={{
           header: {
             actions: "Acciones"
           }
         }}
+
       />
     </div>
   )

@@ -66,6 +66,7 @@ function DatosEquipos(props) {
   const [modalEditar, setModalEditar] = useState(false);
   const [modalEliminar, setModalEliminar] = useState(false);
   const [formError, setFormError] = useState(false);
+  const [actualiza, setActualiza] = useState(false);
 
   const [listarClasificacionabc, setListarClasificacionabc] = useState([]);
   const [listarCencostos, setListarCencostos] = useState([]);
@@ -88,12 +89,12 @@ function DatosEquipos(props) {
   useEffect(() => {
     async function fetchDataDatosEquipos() {
       const res = await datosequiposServices.listUnDatoEquipo(equipoID);
-      console.log("Datos Retornados : ",res.data)
       setListarDatosEquipos(res.data);
-      
+      setActualiza(false);
+      //console.log("Datos Retornados : ",res.data)
     }
     fetchDataDatosEquipos();
-  }, [])
+  }, [actualiza])
 
   useEffect (() => {
     async function fetchDataClasificacionabc() {
@@ -239,6 +240,7 @@ function DatosEquipos(props) {
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
+    setActualiza(true);
   }
 
   const actualizarDatosEquipo = async () => {
@@ -329,7 +331,8 @@ function DatosEquipos(props) {
       swal( "Datos Adicionales Equipos", "Debe Ingresar Todos los Datos, Revisar Información!", "warning", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalEditar();
-    } 
+    }
+    setActualiza(true); 
   }
 
   const borrarDatosEquipo = async()=>{
@@ -346,7 +349,7 @@ function DatosEquipos(props) {
         console.log(res.message);
         abrirCerrarModalEliminar();
     }
-    
+    setActualiza(true);
   }
  
   // "string","boolean","numeric","date","datetime","time","currency"

@@ -15,7 +15,8 @@ class Interlocutores_emp extends Model
 
     protected $fillable = [
 	    'codigo_tipo_emp',
-	    'nit_emp',
+		'nit_emp',
+		'digitochequeo_emp',
 	    'estado_emp',
 	    'primer_nombre_emp', 
 	    'segundo_nombre_emp',

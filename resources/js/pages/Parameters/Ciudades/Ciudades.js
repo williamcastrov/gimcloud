@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MaterialTable from "material-table";
-import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid } from "@material-ui/core";
+import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid, Typography } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
 import swal from 'sweetalert';
@@ -32,6 +32,10 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0),
     minWidth: 315,
+  },
+  typography: {
+    fontSize: 16,
+    color   : "#ff3d00"
   }
 }));
 
@@ -236,7 +240,9 @@ function Ciudades() {
 
   const ciudadInsertar=(
     <div className={styles.modal}>
-      <h3>Agregar Nueva Ciudad</h3>
+      <Typography  align="center" className={ styles.typography } variant="button" display="block" >
+        Agregar Nueva Ciudad
+      </Typography>
       <TextField className={styles.inputMaterial} label="Código" name="codigo_ciu" onChange={handleChange} />
       <br />
       <TextField className={styles.inputMaterial} label="CódigoInterno" name="codigointerno_ciu" onChange={handleChange} />
@@ -271,7 +277,9 @@ function Ciudades() {
 
   const ciudadEditar=(
     <div className={styles.modal}>
-      <h3 align="center" >Actualizar Ciudades</h3>
+      <Typography  align="center" className={ styles.typography } variant="button" display="block" >
+        Actualizar Ciudad
+      </Typography>
       <Grid container spacing={2} > 
         <Grid item xs={12} md={12}>
           <TextField className={styles.inputMaterial} label="Código" name="codigo_ciu" fullWidth
@@ -335,7 +343,7 @@ function Ciudades() {
     <MaterialTable
        columns={columnas}
        data={listCiudades}
-       title="Maestra de Ciudades"
+       title="MAESTRA DE CIUDADES"
        actions={[
          {
            icon     : 'edit',

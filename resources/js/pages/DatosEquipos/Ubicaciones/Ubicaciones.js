@@ -4,7 +4,6 @@ import MaterialTable from "material-table";
 import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid, ButtonGroup } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
-import CachedIcon from '@material-ui/icons/Cached';
 
 //Estilos 
 import "./Ubicaciones.css";
@@ -54,6 +53,7 @@ function Ubicaciones(props) {
   const [listarCiudades, setListarCiudades] = useState([]);
   const [listarEquipos, setListarEquipos] = useState([]);
   const [listarClientes, setListarClientes] = useState([]);
+  const [actualiza, setActualiza] = useState(false);
   const [ubicacionesSeleccionado, setUbicacionesSeleccionado] = useState({
     'equipo_ubi': equipoID,
     'cliente_ubi': "",
@@ -67,10 +67,10 @@ function Ubicaciones(props) {
       const res = await ubicacionesServices.listUnaUbicacion(equipoID);
       console.log("Datos Retornados : ", res.data)
       setListarUbicaciones(res.data);
-
+      setActualiza(false);
     }
     fetchDataUbicaciones();
-  }, [])
+  }, [actualiza])
 
   useEffect(() => {
     async function fetchDataClientes() {
@@ -111,15 +111,6 @@ function Ubicaciones(props) {
   const seleccionarUbicacion = (ubicaciones, caso) => {
     setUbicacionesSeleccionado(ubicaciones);
     (caso === "Editar") ? abrirCerrarModalEditar() : abrirCerrarModalEliminar()
-  }
-
-  const recargarDatosUbicaciones = () => {
-    async function fetchDataUbicaciones() {
-      const res = await ubicacionesServices.listUnaUbicacion(equipoID);
-      setListarUbicaciones(res.data);
-      console.log("Carga de Datos", res.data);
-    }
-    fetchDataUbicaciones();
   }
 
   const abrirCerrarModalInsertar = () => {
@@ -172,7 +163,7 @@ function Ubicaciones(props) {
       const res = await ubicacionesServices.save(ubicacionesSeleccionado);
 
       if (res.success) {
-        alert("Tipo de Ubicación del Equipo Creada de forma Correcta")
+        swal( "Ubicación", "Creada de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalInsertar();
         delete ubicacionesSeleccionado.equipo_ubi;
@@ -181,17 +172,18 @@ function Ubicaciones(props) {
         delete ubicacionesSeleccionado.ciudad_ubi;
         delete ubicacionesSeleccionado.empresa_ubi;
       } else {
-        alert("Error Creando la Ubicación del Equipo");
+        swal( "Ubicación", "Error Creando la Ubicación del Equipo!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Creando la Ubicación del  Equipo");
+      swal( "Ubicación", "Debe Ingresar Todos los Datos, Error Creando la Ubicación del  Equipo!", "warning", { button: "Aceptar" });
       //console.log(ubicacionesSeleccionado);
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
+    setActualiza(true);
   }
 
   const actualizarUbicacion = async () => {
@@ -233,7 +225,7 @@ function Ubicaciones(props) {
       const res = await ubicacionesServices.update(ubicacionesSeleccionado);
 
       if (res.success) {
-        alert("Tipo de Ubicación del Equipo actualizado de forma Correcta")
+        swal( "Ubicación", "Tipo de Ubicación del Equipo actualizado de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalEditar();
         delete ubicacionesSeleccionado.equipo_ubi;
@@ -242,16 +234,17 @@ function Ubicaciones(props) {
         delete ubicacionesSeleccionado.ciudad_ubi;
         delete ubicacionesSeleccionado.empresa_ubi;
       } else {
-        alert("Error Actualizando el Tipo de Ubicación del  Equipo");
+        swal( "Ubicación", "Error Actualizando el Tipo de Ubicación del  Equipo!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalEditar();
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Actualizando el Tipo de Ubicación del Equipo");
+      swal( "Ubicación", "Debe Ingresar Todos los Datos, Error Actualizando el Tipo de Ubicación del Equipo!", "warning", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalEditar();
     }
+    setActualiza(true);
   }
 
   const borrarUbicacion = async () => {
@@ -259,16 +252,16 @@ function Ubicaciones(props) {
     const res = await ubicacionServices.delete(ubicacionesSeleccionado.equipo_ubi);
 
     if (res.success) {
-      alert("El Tipo de Ubicación del Equipo Borrada de forma Correcta")
+      swal( "Ubicación", "El Tipo de Ubicación del Equipo Borrada de forma Correcta!", "success", { button: "Aceptar" });
       console.log(res.message)
       abrirCerrarModalEliminar();
     }
     else {
-      alert("Error Borrando el Tipo de Ubicación del Equipo");
+      swal( "Ubicación", "Error Borrando el Tipo de Ubicación del Equipo!", "error", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalEliminar();
     }
-
+    setActualiza(true);
   }
   // "string","boolean","numeric","date","datetime","time","currency"
   const columnas = [
@@ -484,7 +477,6 @@ function Ubicaciones(props) {
       <br />
       <ButtonGroup>
         <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Ubicación del Equipo</Button>
-        <Button variant="contained" startIcon={<CachedIcon />} color="primary" onClick={() => recargarDatosUbicaciones()} >Recargar Datos</Button>
       </ButtonGroup>
       <div className="datosequipos">
         <MaterialTable

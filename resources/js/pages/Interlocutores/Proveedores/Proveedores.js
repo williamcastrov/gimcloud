@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MaterialTable from "material-table";
-import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid, Typography  } from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
+import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
 import DatePicker from "react-datepicker";
-import CachedIcon from '@material-ui/icons/Cached';
+import Moment from 'moment';
 import "react-datepicker/dist/react-datepicker.css";
 import swal from 'sweetalert';
 
@@ -36,10 +36,10 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
     },
   },
-  iconos:{
+  iconos: {
     cursor: 'pointer'
-  }, 
-  inputMaterial:{
+  },
+  inputMaterial: {
     width: '100%'
   },
   formControl: {
@@ -61,21 +61,23 @@ function Proveedores() {
   const styles = useStyles();
   const [startDate, setStartDate] = useState(new Date());
   const [listarProveedores, setListarProveedores] = useState([]);
-  const [modalInsertar, setModalInsertar ] = useState(false);
-  const [modalEditar, setModalEditar]= useState(false);
-  const [modalEliminar, setModalEliminar]= useState(false);
+  const [modalInsertar, setModalInsertar] = useState(false);
+  const [modalEditar, setModalEditar] = useState(false);
+  const [modalEliminar, setModalEliminar] = useState(false);
   const [formError, setFormError] = useState(false);
   const [listarEstados, setListarEstados] = useState([]);
   const [listarCiudades, setListarCiudades] = useState([]);
   const [listarEmpresas, setListarEmpresas] = useState([]);
   const [listarEspecialidades, setListarEspecialidades] = useState([]);
   const [fechaHoy, setFechaHoy] = useState(new Date());
+  const [actualiza, setActualiza] = useState(false);
   const [proveedoresSeleccionado, setProveedoresSeleccionado] = useState({
     id_int: "",
     codigo_tipo_int: 1,
     nit_int: "",
+    digitochequeo_int: "",
     estado_int: "",
-    primer_nombre_int: "", 
+    primer_nombre_int: "",
     segundo_nombre_int: "",
     primer_apellido_int: "",
     segundo_apellido_int: "",
@@ -86,7 +88,7 @@ function Proveedores() {
     email_int: "",
     empresa_int: "",
     fecha_creacion_int: fechaHoy,
-    fecha_modificacion_int: fechaHoy, 
+    fecha_modificacion_int: fechaHoy,
     especialidad_int: ""
   })
 
@@ -95,59 +97,59 @@ function Proveedores() {
       const res = await proveedoresServices.listProveedores();
       setListarProveedores(res.data);
       console.log(res.data)
-
+      setActualiza(false);
     }
     fetchDataProveedores();
-  }, [])
+  }, [actualiza])
 
-  useEffect (() => {
-      async function fetchDataEmpresas() {
+  useEffect(() => {
+    async function fetchDataEmpresas() {
       const res = await empresasServices.listEmpresas();
-      setListarEmpresas(res.data) 
+      setListarEmpresas(res.data)
       //console.log(res.data);
     }
     fetchDataEmpresas();
   }, [])
 
-  useEffect (() => {
+  useEffect(() => {
     async function fetchDataEstados() {
-    const res = await estadosServices.listEstados();
-    setListarEstados(res.data) 
-    //console.log(res.data);
-  }
-  fetchDataEstados();
+      const res = await estadosServices.listEstados();
+      setListarEstados(res.data)
+      //console.log(res.data);
+    }
+    fetchDataEstados();
   }, [])
-  
-  useEffect (() => {
+
+  useEffect(() => {
     async function fetchDataCiudades() {
-    const res = await ciudadesServices.listCiudades();
-    setListarCiudades(res.data) 
-    //console.log(res.data);
-  }
-  fetchDataCiudades();
+      const res = await ciudadesServices.listCiudades();
+      setListarCiudades(res.data)
+      //console.log(res.data);
+    }
+    fetchDataCiudades();
   }, [])
-  
-  useEffect (() => {
+
+  useEffect(() => {
     async function fetchDataEspecialidades() {
-    const res = await especialidadesServices.listEspecialidades();
-    setListarEspecialidades(res.data) 
-    //console.log(res.data);
-  }
-  fetchDataEspecialidades();
+      const res = await especialidadesServices.listEspecialidades();
+      setListarEspecialidades(res.data)
+      //console.log(res.data);
+    }
+    fetchDataEspecialidades();
   }, [])
 
   const handleChange = e => {
-    const {name, value} = e.target;
+    const { name, value } = e.target;
 
-    setProveedoresSeleccionado( prevState => ({
+    setProveedoresSeleccionado(prevState => ({
       ...prevState,
       [name]: value
     }));
   }
 
-  const seleccionarProveedor=(proveedor, caso)=>{
+  const seleccionarProveedor = (proveedor, caso) => {
     setProveedoresSeleccionado(proveedor);
-    (caso==="Editar") ? abrirCerrarModalEditar() : abrirCerrarModalEliminar()
+    (caso === "Editar") ? abrirCerrarModalEditar() : abrirCerrarModalEliminar()
   }
 
   const abrirCerrarModalInsertar = () => {
@@ -178,6 +180,11 @@ function Proveedores() {
       formOk = false;
     }
 
+    if (!proveedoresSeleccionado.digitochequeo_int) {
+      errors.digitochequeo_int = true;
+      formOk = false;
+    }
+
     if (!proveedoresSeleccionado.estado_int) {
       errors.estado_int = true;
       formOk = false;
@@ -187,7 +194,7 @@ function Proveedores() {
       errors.razonsocial_int = true;
       formOk = false;
     }
-    
+
     if (!proveedoresSeleccionado.ciudad_int) {
       errors.ciudad_int = true;
       formOk = false;
@@ -207,7 +214,7 @@ function Proveedores() {
       errors.email_int = true;
       formOk = false;
     }
-    
+
     if (!proveedoresSeleccionado.empresa_int) {
       errors.empresa_int = true;
       formOk = false;
@@ -240,6 +247,7 @@ function Proveedores() {
         abrirCerrarModalInsertar();
         delete proveedoresSeleccionado.codigo_tipo_int;
         delete proveedoresSeleccionado.nit_int;
+        delete proveedoresSeleccionado.digitochequeo_int;
         delete proveedoresSeleccionado.estado_int;
         delete proveedoresSeleccionado.razonsocial_int;
         delete proveedoresSeleccionado.ciudad_int;
@@ -248,26 +256,25 @@ function Proveedores() {
         delete proveedoresSeleccionado.email_int;
         delete proveedoresSeleccionado.empresa_int;
         delete proveedoresSeleccionado.fecha_creacion_int;
-        delete proveedoresSeleccionado.fecha_modificacion_int; 
+        delete proveedoresSeleccionado.fecha_modificacion_int;
         delete proveedoresSeleccionado.especialidad_int;
-      } else
-      {
+      } else {
         swal("Proveedor", "Error Creando el Proveedor!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
     }
     else {
-      alert("");
       swal("Proveedor", "Debe Ingresar Todos los Datos, Error!", "warning", { button: "Aceptar" });
       console.log(proveedoresSeleccionado);
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
+    setActualiza(true);
   }
 
   const actualizarProveedor = async () => {
-  
+
     setFormError({});
     let errors = {};
     let formOk = true;
@@ -282,6 +289,11 @@ function Proveedores() {
       formOk = false;
     }
 
+    if (!proveedoresSeleccionado.digitochequeo_int) {
+      errors.digitochequeo_int = true;
+      formOk = false;
+    }
+
     if (!proveedoresSeleccionado.estado_int) {
       errors.estado_int = true;
       formOk = false;
@@ -291,7 +303,7 @@ function Proveedores() {
       errors.razonsocial_int = true;
       formOk = false;
     }
-    
+
     if (!proveedoresSeleccionado.ciudad_int) {
       errors.ciudad_int = true;
       formOk = false;
@@ -311,7 +323,7 @@ function Proveedores() {
       errors.email_int = true;
       formOk = false;
     }
-    
+
     if (!proveedoresSeleccionado.empresa_int) {
       errors.empresa_int = true;
       formOk = false;
@@ -335,16 +347,16 @@ function Proveedores() {
     setFormError(errors);
 
     if (formOk) {
-    
-    const res = await proveedoresServices.update(proveedoresSeleccionado);
 
-    if (res.success) {
-        alert("")
+      const res = await proveedoresServices.update(proveedoresSeleccionado);
+
+      if (res.success) {
         swal("Proveedor", "Creado forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalEditar();
         delete proveedoresSeleccionado.codigo_tipo_int;
         delete proveedoresSeleccionado.nit_int;
+        delete proveedoresSeleccionado.digitochequeo_int;
         delete proveedoresSeleccionado.estado_int;
         delete proveedoresSeleccionado.razonsocial_int;
         delete proveedoresSeleccionado.ciudad_int;
@@ -353,348 +365,356 @@ function Proveedores() {
         delete proveedoresSeleccionado.email_int;
         delete proveedoresSeleccionado.empresa_int;
         delete proveedoresSeleccionado.fecha_creacion_int;
-        delete proveedoresSeleccionado.fecha_modificacion_int; 
+        delete proveedoresSeleccionado.fecha_modificacion_int;
         delete proveedoresSeleccionado.especialidad_int;
-    } else
-    {
+      } else {
         swal("Proveedor", "Error Actualizando el Proveedor!", "error", { button: "Aceptar" });
         console.log(res.message);
         abrirCerrarModalEditar();
-    }
+      }
     }
     else {
       swal("Proveedor", "Debe Ingresar Todos los Datos, Error!", "warning", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalEditar();
-    } 
+    }
+    setActualiza(true);
   }
 
-  const borrarProveedor = async()=>{
-   
+  const borrarProveedor = async () => {
+
     const res = await proveedoresServices.delete(proveedoresSeleccionado.id_int);
 
     if (res.success) {
-        swal("Proveedor", "Borrado de forma Correcta!", "success", { button: "Aceptar" });
-        console.log(res.message)
-        abrirCerrarModalEliminar();
+      swal("Proveedor", "Borrado de forma Correcta!", "success", { button: "Aceptar" });
+      console.log(res.message)
+      abrirCerrarModalEliminar();
     }
     else {
-        swal("Proveedor", "Error Borrando el Proveedor!", "error", { button: "Aceptar" });
-        console.log(res.message);
-        abrirCerrarModalEliminar();
+      swal("Proveedor", "Error Borrando el Proveedor!", "error", { button: "Aceptar" });
+      console.log(res.message);
+      abrirCerrarModalEliminar();
     }
-    
+    setActualiza(true);
   }
- 
+
   // "string","boolean","numeric","date","datetime","time","currency"
   const columnas = [
-  {
-    field: 'id_int',
-    title: 'Id'
-  },
-  {
-    field: 'nit_int',
-    title: 'Nit'
-  },
-  {
-    field: 'nombre_est',
-    title: 'Estado'
-  },
-  {
-    field: 'razonsocial_int',
-    title: 'Razón Social',
-    cellStyle : { minWidth: 200}
-  },
-  {
-    field: 'nombre_ciu',
-    title: 'Ciudad'
-  },
-  {
-    field: 'direccion_int',
-    title: 'Dirección',
-    cellStyle : { minWidth: 150}
-  },
-  {
-    field: 'telefono_int',
-    title: 'Teléfono'
-  },
-  {
-    field: 'email_int',
-    title: 'Email',
-    width: '400'
-  },
-  {
-    field: 'fecha_creacion_int',
-    title: 'Fecha de Creación',
-    type: 'date',
-    cellStyle : { minWidth: 120}
-  },
-  {
-    field: 'fecha_modificacion_int',
-    title: 'Fecha de Modificación',
-    type: 'date',
-    cellStyle : { minWidth: 120}
-  },
-  {
-    field: 'descripcion_esp',
-    title: 'Especialidad'
-  }
+    {
+      field: 'id_int',
+      title: 'Id'
+    },
+    {
+      field: 'nit_int',
+      title: 'Nit'
+    },
+    {
+      field: 'digitochequeo_int',
+      title: 'DC'
+    },
+    {
+      field: 'nombre_est',
+      title: 'Estado'
+    },
+    {
+      field: 'razonsocial_int',
+      title: 'Razón Social',
+      cellStyle: { minWidth: 180 }
+    },
+    {
+      field: 'nombre_ciu',
+      title: 'Ciudad'
+    },
+    {
+      field: 'direccion_int',
+      title: 'Dirección',
+      cellStyle: { minWidth: 140 }
+    },
+    {
+      field: 'telefono_int',
+      title: 'Teléfono'
+    },
+    {
+      field: 'email_int',
+      title: 'Email',
+      width: '400'
+    },
+    {
+      field: 'fecha_creacion_int',
+      title: 'Fecha de Creación',
+      type: 'date',
+      cellStyle: { minWidth: 100 }
+    },
+    {
+      field: 'fecha_modificacion_int',
+      title: 'Fecha de Modificación',
+      type: 'date',
+      cellStyle: { minWidth: 100 }
+    },
+    {
+      field: 'descripcion_esp',
+      title: 'Especialidad'
+    }
   ]
-  
-  const proveedorInsertar=(
+
+  const proveedorInsertar = (
     <div className={styles.modal}>
       <Typography align="center" className={styles.typography} variant="button" display="block">Agregar Nuevo Proveedor</Typography>
       <br />
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> <TextField  name="codigo_tipo_int" label="Tipo Interlocutor" defaultValue="1" disabled="true"
-         fullWidth onChange={handleChange} /> </Grid>
-        <Grid item xs={12} md={6}> <TextField  name="nit_int" label="Nit del Interlocutor" fullWidth onChange={handleChange} /> </Grid>
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={4}> <TextField name="codigo_tipo_int" label="Tipo Interlocutor" defaultValue="1" disabled="true"
+          fullWidth onChange={handleChange} /> </Grid>
+        <Grid item xs={12} md={6}> <TextField name="nit_int" label="Nit del Interlocutor" fullWidth onChange={handleChange} /> </Grid>
+        <Grid item xs={12} md={2}> <TextField name="digitochequeo_int" label="Digito Chequeo" fullWidth onChange={handleChange} /> </Grid>
       </Grid>
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={12}> <TextField  name="razonsocial_int" label="Razon Social" fullWidth  onChange={handleChange} /> </Grid>
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={12}> <TextField name="razonsocial_int" label="Razon Social" fullWidth onChange={handleChange} /> </Grid>
       </Grid>
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={12}> <TextField  name="direccion_int" label="Direccion" onChange={handleChange} fullWidth /> </Grid>
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={12}> <TextField name="direccion_int" label="Direccion" onChange={handleChange} fullWidth /> </Grid>
       </Grid>
-      <Grid container spacing={2} > 
+      <Grid container spacing={2} >
         <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl}>
             <InputLabel id="idselectCiudad"  >Ciudad</InputLabel>
-              <Select
-                labelId="selecCiudad"
-                name="ciudad_int"
-                id="idselectCiudad"
-                fullWidth 
-                onChange={handleChange}
-              >
+            <Select
+              labelId="selecCiudad"
+              name="ciudad_int"
+              id="idselectCiudad"
+              fullWidth
+              onChange={handleChange}
+            >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
                 listarCiudades.map((itemselect) => {
-                return (
-                  <MenuItem value={itemselect.id_ciu }>{itemselect.nombre_ciu}</MenuItem>
-                )
+                  return (
+                    <MenuItem value={itemselect.id_ciu}>{itemselect.nombre_ciu}</MenuItem>
+                  )
                 })
               }
-              </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={6}> 
-        <FormControl className={styles.formControl}>
-        <InputLabel id="idselectEstado"  >Estado</InputLabel>
-          <Select
-            labelId="selectEstado"
-            name="estado_int"
-            id="idselectEstado"
-            fullWidth 
-            onChange={handleChange}
-          >
-          <MenuItem value=""> <em>None</em> </MenuItem>
-          {
-            listarEstados.map((itemselect) => {
-              return (
-                <MenuItem value={itemselect.id_est }>{itemselect.nombre_est}</MenuItem>
-              )
-            })
-          }
-          </Select>
-        </FormControl>
-        </Grid>
-      </Grid>
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> <TextField  name="telefono_int" label="Telefono" fullWidth onChange={handleChange} /> </Grid>
-        <Grid item xs={12} md={6}> <TextField  name="email_int" label="Email" fullWidth onChange={handleChange} /> </Grid>
-      </Grid>     
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
-            <InputLabel id="idselectCiudad" >Empresa</InputLabel>
-              <Select
-                labelId="selecEmpresa"
-                name="empresa_int"
-                id="idselectEmpresa"
-                fullWidth 
-                onChange={handleChange}
-              >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarEmpresas.map((itemselect) => {
-                return (
-                  <MenuItem value={itemselect.id_emp }>{itemselect.nombre_emp}</MenuItem>
-                )
-                })
-              }
-              </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={6} >
-          <TextField type="date" name="fecha_creacion_int" label="Fecha de Creación"
-           InputLabelProps={{ shrink: true}} fullWidth onChange={handleChange} />
-        </Grid>
-      </Grid>
-      
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> 
-          <TextField type="date" name="fecha_modificacion_int" label="Fecha Modificación"
-           InputLabelProps={{ shrink: true}} fullWidth onChange={handleChange} />
-        </Grid>
-        <Grid item xs={12} md={6}> 
-          <FormControl className={styles.formControl}>
-            <InputLabel id="idselectEspecialidad" >Especialidad</InputLabel>
-              <Select
-                labelId="selecEspecialidad"
-                name="especialidad_int"
-                id="idselectEspecialidad"
-                fullWidth 
-                onChange={handleChange}
-              >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarEspecialidades.map((itemselect) => {
-                return (
-                  <MenuItem value={itemselect.id_esp }>{itemselect.descripcion_esp}</MenuItem>
-                )
-                })
-              }
-              </Select>
-          </FormControl>
-        </Grid>
-      </Grid>      
-      <br /><br />
-      <div align="right">    
-        <Button color="primary" onClick = { () => grabarProveedor() } >Insertar</Button>
-        <Button onClick={()=> abrirCerrarModalInsertar()} >Cancelar</Button>
-      </div>
-    </div>
-  )
-
-  const proveedorEditar=(
-    <div className={styles.modal}>
-      <Typography align="center" className={styles.typography} variant="button" display="block">Actualizar Proveedor</Typography>
-      <br/>
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> <TextField  name="codigo_tipo_int" label="Tipo Interlocutor" fullWidth disabled="true"
-          onChange={handleChange} value={proveedoresSeleccionado&&proveedoresSeleccionado.codigo_tipo_int} /> </Grid>
-        <Grid item xs={12} md={6}> <TextField  name="nit_int" label="Nit del Interlocutor" fullWidth 
-          onChange={handleChange} value={proveedoresSeleccionado&&proveedoresSeleccionado.nit_int} /> </Grid>
-      </Grid>
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={12}> <TextField  name="razonsocial_int" label="Razon Social" fullWidth 
-          onChange={handleChange} value={proveedoresSeleccionado&&proveedoresSeleccionado.razonsocial_int} />
-        </Grid>
-      </Grid>
-      <Grid container spacing={2} > 
-         <Grid item xs={12} md={12}> <TextField  name="direccion_int" label="Direccion" fullWidth 
-          onChange={handleChange} value={proveedoresSeleccionado&&proveedoresSeleccionado.direccion_int} /> 
-        </Grid>
-       </Grid>
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
-            <InputLabel id="idselectCiudad"  >Ciudad</InputLabel>
-              <Select
-                labelId="selecCiudad"
-                name="ciudad_int"
-                id="idselectCiudad"
-                fullWidth 
-                onChange={handleChange} value={proveedoresSeleccionado&&proveedoresSeleccionado.ciudad_int}
-              >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarCiudades.map((itemselect) => {
-                return (
-                  <MenuItem value={itemselect.id_ciu }>{itemselect.nombre_ciu}</MenuItem>
-                )
-                })
-              }
-              </Select>
+            </Select>
           </FormControl>
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl}>
             <InputLabel id="idselectEstado"  >Estado</InputLabel>
-              <Select
-                labelId="selectEstado"
-                name="estado_int"
-                id="idselectEstado"
-                fullWidth 
-                onChange={handleChange} value={proveedoresSeleccionado&&proveedoresSeleccionado.estado_int}
-              >
+            <Select
+              labelId="selectEstado"
+              name="estado_int"
+              id="idselectEstado"
+              fullWidth
+              onChange={handleChange}
+            >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
                 listarEstados.map((itemselect) => {
                   return (
-                    <MenuItem value={itemselect.id_est }>{itemselect.nombre_est}</MenuItem>
+                    <MenuItem value={itemselect.id_est}>{itemselect.nombre_est}</MenuItem>
                   )
                 })
               }
-          </Select>
+            </Select>
           </FormControl>
         </Grid>
       </Grid>
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> <TextField  name="telefono_int" label="Telefono" fullWidth 
-          onChange={handleChange} value={proveedoresSeleccionado&&proveedoresSeleccionado.telefono_int} /> </Grid>
-        <Grid item xs={12} md={6}> <TextField  name="email_int" label="Email" fullWidth 
-          onChange={handleChange} value={proveedoresSeleccionado&&proveedoresSeleccionado.email_int} /> </Grid>
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={6}> <TextField name="telefono_int" label="Telefono" fullWidth onChange={handleChange} /> </Grid>
+        <Grid item xs={12} md={6}> <TextField name="email_int" label="Email" fullWidth onChange={handleChange} /> </Grid>
       </Grid>
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> 
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl}>
             <InputLabel id="idselectCiudad" >Empresa</InputLabel>
-              <Select
-                labelId="selecEmpresa"
-                name="empresa_int"
-                id="idselectEmpresa"
-                fullWidth 
-                onChange={handleChange} value={proveedoresSeleccionado&&proveedoresSeleccionado.empresa_int}
-              >
+            <Select
+              labelId="selecEmpresa"
+              name="empresa_int"
+              id="idselectEmpresa"
+              fullWidth
+              onChange={handleChange}
+            >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
                 listarEmpresas.map((itemselect) => {
-                return (
-                  <MenuItem value={itemselect.id_emp }>{itemselect.nombre_emp}</MenuItem>
-                )
+                  return (
+                    <MenuItem value={itemselect.id_emp}>{itemselect.nombre_emp}</MenuItem>
+                  )
                 })
               }
-              </Select>
+            </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}> 
-          <TextField name="fecha_creacion_int" label="Fecha Creación" fullWidth 
-          onChange={handleChange} value={proveedoresSeleccionado&&proveedoresSeleccionado.fecha_creacion_int} />
+        <Grid item xs={12} md={6} >
+          <TextField type="date" name="fecha_creacion_int" label="Fecha de Creación"
+            InputLabelProps={{ shrink: true }} fullWidth onChange={handleChange} />
         </Grid>
       </Grid>
-      <Grid container spacing={2} > 
-        <Grid item xs={12} md={6}> 
-          <TextField name="fecha_modificacion_int" label="Fecha Modificación" fullWidth 
-          onChange={handleChange} value={proveedoresSeleccionado&&proveedoresSeleccionado.fecha_modificacion_int} />
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={6}>
+          <TextField type="date" name="fecha_modificacion_int" label="Fecha Modificación"
+            InputLabelProps={{ shrink: true }} fullWidth onChange={handleChange} />
         </Grid>
-        <Grid item xs={12} md={6}> 
+        <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl}>
             <InputLabel id="idselectEspecialidad" >Especialidad</InputLabel>
-              <Select
-                labelId="selecEspecialidad"
-                name="especialidad_int"
-                id="idselectEspecialidad"
-                fullWidth 
-                onChange={handleChange} value={proveedoresSeleccionado&&proveedoresSeleccionado.especialidad_int}
-              >
+            <Select
+              labelId="selecEspecialidad"
+              name="especialidad_int"
+              id="idselectEspecialidad"
+              fullWidth
+              onChange={handleChange}
+            >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
                 listarEspecialidades.map((itemselect) => {
-                return (
-                  <MenuItem value={itemselect.id_esp }>{itemselect.descripcion_esp}</MenuItem>
-                )
+                  return (
+                    <MenuItem value={itemselect.id_esp}>{itemselect.descripcion_esp}</MenuItem>
+                  )
                 })
               }
-              </Select>
+            </Select>
           </FormControl>
         </Grid>
-      </Grid>           
+      </Grid>
       <br /><br />
       <div align="right">
-        <Button color="primary"  onClick={()=>actualizarProveedor()} >Editar</Button>
-        <Button onClick={()=>abrirCerrarModalEditar()}>Cancelar</Button>
+        <Button color="primary" onClick={() => grabarProveedor()} >Insertar</Button>
+        <Button onClick={() => abrirCerrarModalInsertar()} >Cancelar</Button>
+      </div>
+    </div>
+  )
+
+  const proveedorEditar = (
+    <div className={styles.modal}>
+      <Typography align="center" className={styles.typography} variant="button" display="block">Actualizar Proveedor</Typography>
+      <br />
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={4}> <TextField name="codigo_tipo_int" label="Tipo Interlocutor" fullWidth disabled="true"
+          onChange={handleChange} value={proveedoresSeleccionado && proveedoresSeleccionado.codigo_tipo_int} /> </Grid>
+        <Grid item xs={12} md={6}> <TextField name="nit_int" label="Nit del Interlocutor" fullWidth
+          onChange={handleChange} value={proveedoresSeleccionado && proveedoresSeleccionado.nit_int} /> </Grid>
+        <Grid item xs={12} md={2}> <TextField name="digitochequeo_int" label="Digito Chequeo" fullWidth onChange={handleChange} 
+          value={proveedoresSeleccionado && proveedoresSeleccionado.digitochequeo_int} /> </Grid>
+      </Grid>
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={12}> <TextField name="razonsocial_int" label="Razon Social" fullWidth
+          onChange={handleChange} value={proveedoresSeleccionado && proveedoresSeleccionado.razonsocial_int} />
+        </Grid>
+      </Grid>
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={12}> <TextField name="direccion_int" label="Direccion" fullWidth
+          onChange={handleChange} value={proveedoresSeleccionado && proveedoresSeleccionado.direccion_int} />
+        </Grid>
+      </Grid>
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={6}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectCiudad"  >Ciudad</InputLabel>
+            <Select
+              labelId="selecCiudad"
+              name="ciudad_int"
+              id="idselectCiudad"
+              fullWidth
+              onChange={handleChange} value={proveedoresSeleccionado && proveedoresSeleccionado.ciudad_int}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarCiudades.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_ciu}>{itemselect.nombre_ciu}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectEstado"  >Estado</InputLabel>
+            <Select
+              labelId="selectEstado"
+              name="estado_int"
+              id="idselectEstado"
+              fullWidth
+              onChange={handleChange} value={proveedoresSeleccionado && proveedoresSeleccionado.estado_int}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarEstados.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_est}>{itemselect.nombre_est}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+      </Grid>
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={6}> <TextField name="telefono_int" label="Telefono" fullWidth
+          onChange={handleChange} value={proveedoresSeleccionado && proveedoresSeleccionado.telefono_int} /> </Grid>
+        <Grid item xs={12} md={6}> <TextField name="email_int" label="Email" fullWidth
+          onChange={handleChange} value={proveedoresSeleccionado && proveedoresSeleccionado.email_int} /> </Grid>
+      </Grid>
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={6}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectCiudad" >Empresa</InputLabel>
+            <Select
+              labelId="selecEmpresa"
+              name="empresa_int"
+              id="idselectEmpresa"
+              fullWidth
+              onChange={handleChange} value={proveedoresSeleccionado && proveedoresSeleccionado.empresa_int}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarEmpresas.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_emp}>{itemselect.nombre_emp}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <TextField type="date" type="date" InputLabelProps={{ shrink: true }} name="fecha_creacion_int" label="Fecha de Creación"
+            defaultValue={Moment(proveedoresSeleccionado.fecha_creacion_int).format('YYYY-MM-DD')}
+            InputLabelProps={{ shrink: true }} fullWidth onChange={handleChange} />
+        </Grid>
+      </Grid>
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={6}>
+          <TextField type="date" type="date" InputLabelProps={{ shrink: true }} name="fecha_modificacion_int" label="Fecha de Modificación"
+            defaultValue={Moment(proveedoresSeleccionado.fecha_modificacion_int).format('YYYY-MM-DD')}
+            InputLabelProps={{ shrink: true }} fullWidth onChange={handleChange} />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectEspecialidad" >Especialidad</InputLabel>
+            <Select
+              labelId="selecEspecialidad"
+              name="especialidad_int"
+              id="idselectEspecialidad"
+              fullWidth
+              onChange={handleChange} value={proveedoresSeleccionado && proveedoresSeleccionado.especialidad_int}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarEspecialidades.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_esp}>{itemselect.descripcion_esp}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+      </Grid>
+      <br /><br />
+      <div align="right">
+        <Button color="primary" onClick={() => actualizarProveedor()} >Editar</Button>
+        <Button onClick={() => abrirCerrarModalEditar()}>Cancelar</Button>
       </div>
       <MenuContactos interlocutor={proveedoresSeleccionado.id_int} />
     </div>
@@ -704,8 +724,8 @@ function Proveedores() {
     <div className={styles.modal}>
       <p>Estás seguro que deseas eliminar el Proveedor <b>{proveedoresSeleccionado && proveedoresSeleccionado.razonsocial_int}</b>? </p>
       <div align="right">
-        <Button color="secondary" onClick = {() => borrarProveedor() }> Confirmar </Button>
-        <Button onClick={()=>abrirCerrarModalEliminar()}> Cancelar </Button>
+        <Button color="secondary" onClick={() => borrarProveedor()}> Confirmar </Button>
+        <Button onClick={() => abrirCerrarModalEliminar()}> Cancelar </Button>
       </div>
     </div>
   )
@@ -714,25 +734,24 @@ function Proveedores() {
     <div className="App">
       <br />
       <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Proveedor</Button>
-      <Button variant="contained" startIcon={<CachedIcon />} color="primary" onClick={() => longitud()} >Longitud Array</Button>
       <MaterialTable
         columns={columnas}
         data={listarProveedores}
         title="MAESTRA DE PROVEEDORES"
         actions={[
           {
-            icon     : 'edit',
-            tooltip  : 'Editar Proveedor',
-            onClick  : (event, rowData) => seleccionarProveedor(rowData, "Editar")
+            icon: 'edit',
+            tooltip: 'Editar Proveedor',
+            onClick: (event, rowData) => seleccionarProveedor(rowData, "Editar")
           },
           {
-            icon     : 'delete',
-            tooltip  : 'Borrar Proveedor',
-            onClick  : (event, rowData) =>   seleccionarProveedor(rowData, "Eliminar")
-          } 
+            icon: 'delete',
+            tooltip: 'Borrar Proveedor',
+            onClick: (event, rowData) => seleccionarProveedor(rowData, "Eliminar")
+          }
         ]}
         options={{
-         actionsColumnIndex: 11
+          actionsColumnIndex: 11
         }}
         localization={{
           header: {

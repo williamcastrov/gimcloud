@@ -27,6 +27,7 @@ import equiposServices from "../../../services/Mantenimiento/Equipos";
 import clasificacionabcServices from "../../../services/Mantenimiento/ClasificacionABC";
 import tiposmttoServices from "../../../services/Mantenimiento/Tiposmtto";
 import tipooperacionServices from "../../../services/GestionOrdenes/TipoOperacion";
+import contactosServices from "../../../services/Interlocutores/Contactos";
 
 //Componentes Gestion de Ordenes
 import MenuListaChequeo from "../MenuListaChequeo";
@@ -127,6 +128,7 @@ function CrearListaChequeo() {
   const [listarClientes, setListarClientes] = useState([]);
   const [listarEmpleados, setListarEmpleados] = useState([]);
   const [listarGruposEquipos, setListarGruposEquipos] = useState([]);
+  const [listarContactos, setListarContactos] = useState([]);
   const [listarSubGruposEquipos, setListarSubGruposEquipos] = useState([]);
   const [listarEquipos, setListarEquipos] = useState([]);
   const [listarConceptososerv, setListarConceptosOserv] = useState([]);
@@ -169,12 +171,12 @@ function CrearListaChequeo() {
     'equipo_otr': "",
     'proveedor_otr': "",
     'cliente_otr': "",
-    'operario_otr': 1,
+    'operario_otr': 1002,
     'grupoequipo_otr': "",
     'subgrupoequipo_otr': "",
     'ciudad_otr': "",
     'resumenorden_otr': "",
-    'prioridad_otr': "",
+    'prioridad_otr': 1,
     'empresa_otr': 1
   })
 
@@ -338,17 +340,37 @@ function CrearListaChequeo() {
       [name]: value
     }));
   }
-  /*
-    useEffect(() => {
-      function fetchDataEstado() {
-        if (estado !== 0) {
-          setEstado(cambio);
-        }
+  
+  const contactosInterlocutor = (cliente) => {
+    //console.log("CODIGO CLIENTE : ", cliente)
+
+    async function fetchDataContactos() {
+      const res = await contactosServices.contactosInterlocutor(cliente);
+      setListarContactos(res.data);
+      //console.log("CONTACTOS : ", res.data)
+      if (!res.success) {
+        swal("Contactos", "Cliente Seleccionado no tiene Contactos!", "warning", { button: "Aceptar" });
       }
-      fetchDataEstado();
-    }, [estado])
-  */
+    }
+    fetchDataContactos();
+  }
+
+  const leerContactos = (cliente) => {
+    //console.log("CODIGO CLIENTE : ", cliente)
+
+    async function fetchDataContactos() {
+      const res = await contactosServices.listContactosInterlocutor(cliente);
+      setListarContactos(res.data);
+      //console.log("CONTACTOS : ", res.data)
+      if (!res.success) {
+        swal("Contactos", "Cliente Seleccionado no tiene Contactos!", "warning", { button: "Aceptar" });
+      }
+    }
+    fetchDataContactos();
+  }
+
   const seleccionarOrden = (orden, caso) => {
+    leerContactos(orden.contactocliente_otr);
     setOrdenSeleccionado(orden);
     (caso === "Editar") ? abrirCerrarModalEditar() : abrirCerrarModalEliminar()
   }
@@ -442,8 +464,8 @@ function CrearListaChequeo() {
         formOk = false;
       }
 */
-      if (!ordenSeleccionado.grupoequipo_otr) {
-        errors.grupoequipo_otr = true;
+      if (!ordenSeleccionado.contactocliente_otr) {
+        errors.contactocliente_otr = true;
         formOk = false;
       }
 
@@ -495,7 +517,7 @@ function CrearListaChequeo() {
           delete ordenSeleccionado.proveedor_otr;
           delete ordenSeleccionado.cliente_otr;
           delete ordenSeleccionado.operario_otr;
-          delete ordenSeleccionado.grupoequipo_otr;
+          delete ordenSeleccionado.contactocliente_otr;
           delete ordenSeleccionado.subgrupoequipo_otr;
           delete ordenSeleccionado.ciudad_otr;
           delete ordenSeleccionado.resumenorden_otr;
@@ -585,8 +607,8 @@ function CrearListaChequeo() {
       formOk = false;
     }
 
-    if (!ordenSeleccionado.grupoequipo_otr) {
-      errors.grupoequipo_otr = true;
+    if (!ordenSeleccionado.contactocliente_otr) {
+      errors.contactocliente_otr = true;
       formOk = false;
     }
 
@@ -632,7 +654,7 @@ function CrearListaChequeo() {
         delete ordenSeleccionado.proveedor_otr;
         delete ordenSeleccionado.cliente_otr;
         delete ordenSeleccionado.operario_otr;
-        delete ordenSeleccionado.grupoequipo_otr;
+        delete ordenSeleccionado.contactocliente_otr;
         delete ordenSeleccionado.subgrupoequipo_otr;
         delete ordenSeleccionado.ciudad_otr;
         delete ordenSeleccionado.resumenorden_otr;
@@ -926,6 +948,7 @@ function CrearListaChequeo() {
               id="idselectcliente_otr"
               fullWidth
               onChange={handleChange}
+              onClick={(e) => contactosInterlocutor(e.target.value)}
             >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
@@ -945,7 +968,7 @@ function CrearListaChequeo() {
               labelId="selectoperario_otr_otr"
               name="operario_otr"
               id="idselectoperario_otr"
-              defaultValue={1}
+              defaultValue={1002}
               fullWidth
               disabled="true"
               onChange={handleChange}
@@ -962,22 +985,25 @@ function CrearListaChequeo() {
           </FormControl>
         </Grid>
         <Grid item xs={12} md={4}>
-          <FormControl className={styles.formControl}>
-            <InputLabel id="idselectgrupoequipo_otr">Grupo del Equipo</InputLabel>
+        <FormControl className={styles.formControl}>
+            <InputLabel id="idselectcontactocliente_otr">Contacto</InputLabel>
             <Select
-              labelId="selectgrupoequipo_otr"
-              name="grupoequipo_otr"
-              id="idselectgrupoequipo_otr"
+              labelId="selectcontactocliente_otr"
+              name="contactocliente_otr"
+              id="idselectcontactocliente_otr"
               fullWidth
               onChange={handleChange}
             >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
-                listarGruposEquipos.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_grp}>{itemselect.descripcion_grp}</MenuItem>
-                  )
-                })
+                listarContactos ?
+                  listarContactos.map((itemselect) => {
+                    return (
+                      <MenuItem value={itemselect.id_con}>{itemselect.primer_nombre_con}{" "}{itemselect.primer_apellido_con}</MenuItem>
+                    )
+                  })
+                  :
+                  console.log("Sin Datos")
               }
             </Select>
           </FormControl>
@@ -1253,6 +1279,7 @@ function CrearListaChequeo() {
                 fullWidth
                 onChange={handleChange}
                 value={ordenSeleccionado && ordenSeleccionado.cliente_otr}
+                onClick={(e) => leerContactos(e.target.value)}
               >
                 <MenuItem value=""> <em>None</em> </MenuItem>
                 {
@@ -1290,23 +1317,26 @@ function CrearListaChequeo() {
             </FormControl>
           </Grid>
           <Grid item xs={12} md={4}>
-            <FormControl className={styles.formControl}>
-              <InputLabel id="idselectgrupoequipo_otr">Grupo del Equipo</InputLabel>
+          <FormControl className={styles.formControl}>
+              <InputLabel id="idselectcontactocliente_otr">Contacto</InputLabel>
               <Select
-                labelId="selectgrupoequipo_otr"
-                name="grupoequipo_otr"
-                id="idselectgrupoequipo_otr"
+                labelId="selectcontactocliente_otr"
+                name="contactocliente_otr"
+                id="idselectcontactocliente_otr"
                 fullWidth
                 onChange={handleChange}
-                value={ordenSeleccionado && ordenSeleccionado.grupoequipo_otr}
+                value={ordenSeleccionado && ordenSeleccionado.contactocliente_otr}
               >
                 <MenuItem value=""> <em>None</em> </MenuItem>
                 {
-                  listarGruposEquipos.map((itemselect) => {
-                    return (
-                      <MenuItem value={itemselect.id_grp}>{itemselect.descripcion_grp}</MenuItem>
-                    )
-                  })
+                  listarContactos ?
+                    listarContactos.map((itemselect) => {
+                      return (
+                        <MenuItem value={itemselect.id_con}>{itemselect.primer_nombre_con}{" " }{itemselect.primer_apellido_con}</MenuItem>
+                      )
+                    })
+                    :
+                    console.log("Sin Datos")
                 }
               </Select>
             </FormControl>
@@ -1416,8 +1446,9 @@ function CrearListaChequeo() {
                     backgroundColor: '#0277bd',
                   }}
                 >
-                  <Button variant="contained">Estado Contable : </Button> {}
-
+                 <Button variant="contained">Datos Contacto: {rowData.primer_nombre_con} { } {rowData.primer_apellido_con} { }
+                          Telefono: {rowData.telefono_con} { } email: {rowData.email_con}{ }
+                  </Button>
                 </div>
               )
             },

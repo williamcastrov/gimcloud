@@ -75,7 +75,7 @@ function Almacenes() {
                 <ListItemIcon>
                   <ReorderIcon />
                 </ListItemIcon>
-                <ListItemText primary="Gestión Almacenes" />
+                <ListItemText primary="Almacenes" />
               </ListItem>
             </List>
           </Collapse>

@@ -44,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MenuContactos(props) {
   const { interlocutor } = props;
+  //console.log("INTERLOCUTOR : ", interlocutor)
 
   const styles = useStyles();
   const [isOpen, setIsOpen] = useState(false);

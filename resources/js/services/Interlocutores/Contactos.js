@@ -16,19 +16,25 @@ contactos.listContactos = async () => {
     const res = await axios.get(urlList)
     .then(response=>{ return response.data; })
     .catch(error=>{ return error; })
-   
     return res;
 }
 
-contactos.listContactosInterlocutor = async (idinterlocutor_con) => {
-    const urlList = baseUrl+"/get/"+idinterlocutor_con
+contactos.listContactosInterlocutor = async (id_con) => {
+    const urlList = baseUrl+"/get/"+id_con
     const res = await axios.get(urlList)
     .then(response=>{ return response.data; })
     .catch(error=>{ return error; })
-   
     return res;
 }
 
+contactos.contactosInterlocutor = async (idinterlocutor_con) => {
+    console.log("DATA : ",idinterlocutor_con)
+    const urlList = baseUrl+"/contactosinterlocutor/"+idinterlocutor_con
+    const res = await axios.get(urlList)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+    return res;
+}
 
 contactos.update = async (data) => {
     console.log(data);
@@ -36,7 +42,6 @@ contactos.update = async (data) => {
     const res = await axios.put(urlUpdate, data)
     .then(response=>{ return response.data; })
     .catch(error=>{ return error; })
-   
     return res;
 }
 

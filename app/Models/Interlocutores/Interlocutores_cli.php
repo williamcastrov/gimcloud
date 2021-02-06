@@ -15,7 +15,8 @@ class Interlocutores_cli extends Model
 
     protected $fillable = [
 	    'codigo_tipo_cli',
-	    'nit_cli',
+		'nit_cli',
+		'digitochequeo_cli',
 	    'estado_cli',
 	    'primer_nombre_cli', 
 	    'segundo_nombre_cli',

@@ -39,12 +39,16 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0),
     minWidth: 250,
+  },
+  typography: {
+    fontSize: 16,
+    color: "#ff3d00"
   }
 }));
 
 function Contactos(props) {
   const { interlocutor } = props;
-  console.log("INTERLOCUTOR : ",interlocutor)
+  //console.log("INTERLOCUTOR : ",interlocutor)
 
   const styles = useStyles();
   const [listarContactos, setListarContactos] = useState([]);
@@ -56,6 +60,7 @@ function Contactos(props) {
   const [listarCiudades, setListarCiudades] = useState([]);
   const [fechaHoy, setFechaHoy] = useState(new Date());
   const fechaactual = Moment(new Date()).format('YYYY-MM-DD');
+  const [actualiza, setActualiza] = useState(false);
   const horaactual = Moment(new Date()).format('HH:mm:ss');
   let contacto = 10
   let estado   = 1
@@ -80,18 +85,19 @@ function Contactos(props) {
 
   useEffect(() => {
     async function fetchDataContactos() {
-      const res = await contactosServices.listContactosInterlocutor(interlocutor);
+      const res = await contactosServices.contactosInterlocutor(interlocutor);
       setListarContactos(res.data);
-      console.log(res.data)
+      //console.log("DATOS CONTACTOS : ",res.data)
+      setActualiza(false);
     }
     fetchDataContactos();
-  }, [])
+  }, [actualiza])
 
   const leerContactos = () => {
     async function fetchDataContactos() {
-      const res = await contactosServices.listContactosInterlocutor(interlocutor);
+      const res = await contactosServices.contactosInterlocutor(interlocutor);
       setListarContactos(res.data);
-      console.log(res.data)
+      //console.log("DATOS CONTACTOS : ",res.data)
     }
     fetchDataContactos();
   }
@@ -248,6 +254,7 @@ function Contactos(props) {
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
+    setActualiza(true);
   }
 
   const actualizarContacto = async () => {
@@ -357,6 +364,7 @@ function Contactos(props) {
       console.log(res.message);
       abrirCerrarModalEditar();
     }
+    setActualiza(true);
   }
 
   const borrarContacto = async () => {
@@ -373,7 +381,7 @@ function Contactos(props) {
       console.log(res.message);
       abrirCerrarModalEliminar();
     }
-
+    setActualiza(true);
   }
 
   // "string","boolean","numeric","date","datetime","time","currency"
@@ -483,19 +491,16 @@ function Contactos(props) {
           </FormControl>
         </Grid>
         <Grid item xs={12} md={6}>
-          <TextField name="direccion_con" label="Direccion" onChange={handleChange} fullWidth />
-        </Grid>
-        <Grid item xs={12} md={6}>
           <TextField name="telefono_con" label="Telefono" fullWidth onChange={handleChange} />
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField name="email_con" label="Email" fullWidth onChange={handleChange} />
         </Grid>
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={6}>
           <TextField type="date" InputLabelProps={{ shrink: true }} name="fecha_creacion_con" label="Fecha Creación" fullWidth
             defaultValue={Moment(fechaactual).format('YYYY-MM-DD')} onChange={handleChange} />
         </Grid>
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={6}>
           <TextField type="date" InputLabelProps={{ shrink: true }} name="fecha_modificacion_con" label="Fecha Ultima Modificación" fullWidth
             defaultValue={Moment(fechaactual).format('YYYY-MM-DD')} onChange={handleChange} />
         </Grid>
@@ -507,7 +512,6 @@ function Contactos(props) {
               name="estado_con"
               id="idselectEstado"
               defaultValue={estado}
-              disabled="true"
               fullWidth
               onChange={handleChange}
             >
@@ -521,6 +525,9 @@ function Contactos(props) {
               }
             </Select>
           </FormControl>
+        </Grid>
+        <Grid item xs={12} md={12}>
+          <TextField name="direccion_con" label="Direccion" onChange={handleChange} fullWidth />
         </Grid>
       </Grid>
       <br /><br />
@@ -584,10 +591,6 @@ function Contactos(props) {
           </FormControl>
         </Grid>
         <Grid item xs={12} md={6}>
-          <TextField name="direccion_con" label="Direccion" onChange={handleChange} fullWidth 
-                     value={contactosSeleccionado&&contactosSeleccionado.direccion_con} />
-        </Grid>
-        <Grid item xs={12} md={6}>
           <TextField name="telefono_con" label="Telefono" fullWidth onChange={handleChange}
                      value={contactosSeleccionado&&contactosSeleccionado.telefono_con} />
         </Grid>
@@ -595,15 +598,13 @@ function Contactos(props) {
           <TextField name="email_con" label="Email" fullWidth onChange={handleChange} 
                      value={contactosSeleccionado&&contactosSeleccionado.email_con} />
         </Grid>
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={6}>
           <TextField type="date" InputLabelProps={{ shrink: true }} name="fecha_creacion_con" label="Fecha Creación" fullWidth
-            defaultValue={Moment(fechaactual).format('YYYY-MM-DD')} onChange={handleChange} 
-            value={contactosSeleccionado&&contactosSeleccionado.fecha_creacion_con}  />
+            defaultValue={Moment(contactosSeleccionado.fecha_creacion_con).format('YYYY-MM-DD')} onChange={handleChange}   />
         </Grid>
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={6}>
           <TextField type="date" InputLabelProps={{ shrink: true }} name="fecha_modificacion_con" label="Fecha Ultima Modificación" fullWidth
-            defaultValue={Moment(fechaactual).format('YYYY-MM-DD')} onChange={handleChange} 
-            value={contactosSeleccionado&&contactosSeleccionado.fecha_modificacion_con} />
+            defaultValue={Moment(contactosSeleccionado.fecha_modificacion_con).format('YYYY-MM-DD')} onChange={handleChange}  />
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl}>
@@ -613,7 +614,6 @@ function Contactos(props) {
               name="estado_con"
               id="idselectEstado"
               defaultValue={estado}
-              disabled="true"
               fullWidth
               onChange={handleChange}
               value={contactosSeleccionado&&contactosSeleccionado.estado_con}
@@ -628,6 +628,10 @@ function Contactos(props) {
               }
             </Select>
           </FormControl>
+        </Grid>
+        <Grid item xs={12} md={12}>
+          <TextField name="direccion_con" label="Direccion" onChange={handleChange} fullWidth 
+                     value={contactosSeleccionado&&contactosSeleccionado.direccion_con} />
         </Grid>
       </Grid>
       <br />
@@ -656,7 +660,7 @@ function Contactos(props) {
       <MaterialTable
         columns={columnas}
         data={listarContactos}
-        title="Gestionar Información de Contactos"
+        title="GESTIONAR INFORMACION DEL CONTACTO"
         actions={[
           {
             icon: 'edit',

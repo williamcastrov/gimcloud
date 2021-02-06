@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import MaterialTable from "material-table";
-import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
+import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
 import swal from 'sweetalert';
@@ -31,6 +30,10 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0),
     minWidth: 315,
+  },
+  typography: {
+    fontSize: 16,
+    color   : "#ff3d00"
   }
 }));
 
@@ -217,7 +220,9 @@ function Regiones() {
 
   const regionInsertar=(
     <div className={styles.modal}>
-      <h3 align="center" >Agregar Nueva Región</h3>
+      <Typography  align="center" className={ styles.typography } variant="button" display="block" >
+        Agregar Nueva Región
+      </Typography>
       <TextField className={styles.inputMaterial} label="Región" name="nombre_reg" onChange={handleChange} />          
       <br />
       <FormControl className={styles.formControl}>
@@ -248,7 +253,9 @@ function Regiones() {
 
   const regionEditar=(
     <div className={styles.modal}>
-      <h3 align="center" >Actualizar Regiones</h3>
+      <Typography  align="center" className={ styles.typography } variant="button" display="block" >
+        Actualizar Regiones
+      </Typography>
       <TextField className={styles.inputMaterial} label="Región" name="nombre_reg" onChange={handleChange} value={regionSeleccionado&&regionSeleccionado.nombre_reg}/>
       <br />
       <FormControl className={styles.formControl}>
@@ -297,7 +304,7 @@ function Regiones() {
      <MaterialTable
        columns={columnas}
        data={listRegiones}
-       title="Maestra de Regiones"
+       title="MAESTRA DE REGIONES"
        actions={[
          {
            icon     : 'edit',
