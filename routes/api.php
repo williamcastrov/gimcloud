@@ -271,6 +271,12 @@ Route::get('/tipooperacion/get/{id}', 'App\Http\Controllers\API\GestionOrdenes\T
 Route::delete('/tipooperacion/delete/{id}', 'App\Http\Controllers\API\GestionOrdenes\TipoOperacionController@delete');
 Route::put('/tipooperacion/update/{id}', 'App\Http\Controllers\API\GestionOrdenes\TipoOperacionController@update');
 
+Route::get('/actividadrealizada/listar_actividadrealizada', 'App\Http\Controllers\API\GestionOrdenes\ActividadRealizadaController@listar_actividadrealizada');
+Route::post('/actividadrealizada/create', 'App\Http\Controllers\API\GestionOrdenes\ActividadRealizadaController@create');
+Route::get('/actividadrealizada/get/{id}', 'App\Http\Controllers\API\GestionOrdenes\ActividadRealizadaController@get');
+Route::delete('/actividadrealizada/delete/{id}', 'App\Http\Controllers\API\GestionOrdenes\ActividadRealizadaController@delete');
+Route::put('/actividadrealizada/update/{id}', 'App\Http\Controllers\API\GestionOrdenes\ActividadRealizadaController@update');
+
 Route::get('/tiposservicio/listar_tiposservicio', 'App\Http\Controllers\API\GestionOrdenes\TiposServicioController@listar_tiposservicio');
 Route::post('/tiposservicio/create', 'App\Http\Controllers\API\GestionOrdenes\TiposServicioController@create');
 Route::get('/tiposservicio/get/{id}', 'App\Http\Controllers\API\GestionOrdenes\TiposServicioController@get');

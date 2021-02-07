@@ -10,6 +10,7 @@ import ReplayIcon from '@material-ui/icons/Replay';
 import { green, purple } from '@material-ui/core/colors';
 import swal from 'sweetalert';
 import Moment from 'moment';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 // Componentes de Conexion con el Backend
 import empresasServices from "../../../services/Empresa";
@@ -374,6 +375,18 @@ function CrearOrdenes() {
     (caso === "Editar") ? abrirCerrarModalEditar() : abrirCerrarModalCancelar()
   }
 
+  const cancelarOrden = (orden, caso) => {
+    setOrdenSeleccionado(orden);
+    //console.log("ORDEN A CANCELAR : ", orden);
+    if(orden.estado_otr === 15 || orden.estado_otr === 14){
+      swal("Orden de Servicio", "Estado de la Orden no permite Cancelación!", "error", { button: "Aceptar" });
+    }else
+    {
+        cancelarOT();
+    }
+   
+  }
+
   const abrirCerrarModalInsertar = () => {
     setModalInsertar(!modalInsertar);
   }
@@ -657,21 +670,21 @@ function CrearOrdenes() {
     }
   }
 
-
-  const asignarEstado = async () => {
-    console.log("EN ASIGNAR  ESTADO : ", listarEstadoModificado)
-
-    const res = await crearordenesServices.updateestadoasignado(ordenSeleccionado);
+  const cancelarOT = async () => {
+    //console.log("ORDEN A CANCELAR : ", ordenSeleccionado);
+    const res = await crearordenesServices.cancelar(ordenSeleccionado)
 
     if (res.success) {
-      swal("Orden de Servicio", "Orden de Servicio Actualizada de forma Correcta!", "success", { button: "Aceptar" });
+      swal("Orden de Servicio", "Cancelada de forma Correcta!", "success", { button: "Aceptar" });
       console.log(res.message)
-      abrirCerrarModalAsignar();
-    } else {
-      swal("Orden de Servicio", "Error Actualizando la Orden de Servicio!", "error", { button: "Aceptar" });
-      console.log(res.message);
-      abrirCerrarModalAsignar();
+      abrirCerrarModalEliminar();
     }
+    else {
+      swal("Orden de Servicio", "Error Cancelando la Orden de Servicio!", "error", { button: "Aceptar" });
+      console.log(res.message);
+      abrirCerrarModalEliminar();
+    }
+
   }
 
   // "string","boolean","numeric","date","datetime","time","currency"
@@ -1369,6 +1382,11 @@ function CrearOrdenes() {
             icon: 'edit',
             tooltip: 'Editar Orden',
             onClick: (event, rowData) => seleccionarOrden(rowData, "Editar")
+          },
+          {
+            icon: CancelIcon,
+            tooltip: 'Editar Orden',
+            onClick: (event, rowData) => cancelarOrden(rowData, "Cancelar")
           }
         ]}
         options={{

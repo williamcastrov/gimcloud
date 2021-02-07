@@ -1,29 +1,19 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import {
-  Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography, Grid, InputAdornment, Container, Table,
-  TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel, Toolbar, FormControlLabel, Switch,
-  Paper, Checkbox, ButtonGroup
+  Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography, Grid, ButtonGroup
 } from "@material-ui/core";
-import { makeStyles, lighten } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { blue, blueGrey, red } from '@material-ui/core/colors';
 import NumberFormat from 'react-number-format';
 import swal from 'sweetalert';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import Moment from 'moment';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 
 // Componentes de Conexion con el Backend
 import inventariosServices from "../../../services/Almacenes/Inventarios";
-import crearordenesServices from "../../../services/GestionOrdenes/CrearOrdenes";
 import cumplimientooservServices from "../../../services/GestionOrdenes/CumplimientoOserv";
 import tipooperacionServices from "../../../services/GestionOrdenes/TipoOperacion";
+import actividadrealizadaServices from "../../../services/GestionOrdenes/ActividadRealizada";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -134,8 +124,8 @@ function NumberFormatCustom(props) {
 }
 function ActividadesOservChequeo(props) {
   const { id_otr, nombre_emp, razonsocial_cli, telefono_cli, nombre_ciu, email_cli, descripcion_mar, modelo_dequ,
-          fechainicia_otr, descripcion_tser, descripcion_tmt, serie_dequ, codigo_equ, descripcion_con, tipooperacion_otr,
-          referencia_dequ } = props.ordenSeleccionado;
+    fechainicia_otr, descripcion_tser, descripcion_tmt, serie_dequ, codigo_equ, descripcion_con, tipooperacion_otr,
+    referencia_dequ } = props.ordenSeleccionado;
 
   const styles = useStyles();
   const [listInventarios, setListInventarios] = useState([]);
@@ -147,6 +137,7 @@ function ActividadesOservChequeo(props) {
   const [modalActualizarCumplimiento, setModalActualizarCumplimiento] = useState(false);
   const [formError, setFormError] = useState(false);
   const [listarTipoOperacion, setListarTipoOperacion] = useState([]);
+  const [listarActividadRealizada, setListarActividadRealizada] = useState([]);
   const [grabar, setGrabar] = React.useState(false);
   const [grabarCambios, setGrabarCambios] = React.useState(false)
   const fechaactual = Moment(new Date()).format('YYYY-MM-DD');
@@ -224,6 +215,16 @@ function ActividadesOservChequeo(props) {
     }
     fetchDataTipoOperacion();
   }, [])
+
+  useEffect(() => {
+    async function fetchDataActividadRealizada() {
+      const res = await actividadrealizadaServices.listActividadrealizada();
+      setListarActividadRealizada(res.data);
+      console.log("ACTIVIDAD REALIZADA : ", res.data)
+    }
+    fetchDataActividadRealizada();
+  }, [])
+
 
   useEffect(() => {
     async function fetchDataUnCumplimiento() {
@@ -339,8 +340,8 @@ function ActividadesOservChequeo(props) {
   const guardarCambiosCumplimiento = async () => {
 
     {
-     //console.log("DATOS A GRABAR EN CUMPLIMIENTO : ",cumplimientoSeleccionado)
-      
+      //console.log("DATOS A GRABAR EN CUMPLIMIENTO : ",cumplimientoSeleccionado)
+
       let resultado = (cantidad * valorunitario)
       //Asignar Valores al Estado Cumplimiento
       setCumplimientoSeleccionado([{
@@ -349,10 +350,10 @@ function ActividadesOservChequeo(props) {
         descripcion_cosv: cumplimientoSeleccionado.descripcion_cosv,
         tipooperacion_cosv: cumplimientoSeleccionado.tipooperacion_cosv,
         referencia_cosv: cumplimientoSeleccionado.referencia_cosv,
-        fechainicia_cosv: fechaactual,
-        fechafinal_cosv: fechaactual,
-        horainiciacosv: horainicial,
-        horafinal_cosv: horafinal,
+        fechainicia_cosv: cumplimientoSeleccionado.fechainicia_cosv,
+        fechafinal_cosv: cumplimientoSeleccionado.fechafinal_cosv,
+        horainiciacosv: cumplimientoSeleccionado.horainiciacosv,
+        horafinal_cosv: cumplimientoSeleccionado.horafinal_cosv,
         cantidad_cosv: cantidad,
         valorunitario_cosv: valorunitario,
         valortotal_cosv: resultado,
@@ -392,7 +393,7 @@ function ActividadesOservChequeo(props) {
 
       if (grabar) {
         //console.log("VALIDAR DATOS A GRABAR : ",cumplimientoSeleccionado[0])
-        
+
         const res = await cumplimientooservServices.save(cumplimientoSeleccionado[0]);
 
         if (res.success) {
@@ -402,7 +403,7 @@ function ActividadesOservChequeo(props) {
           swal("Actividades Orden de Servicio", "Error registrando la Actividad!", "error", { button: "Aceptar" });
           console.log(res.message);
         }
-        
+
         setGrabar(false);
         abrirCerrarModalCumplimiento();
       }
@@ -411,6 +412,11 @@ function ActividadesOservChequeo(props) {
   }, [grabar])
 
   const cumplimiento = [
+    {
+      title: '# OT',
+      field: 'id_cosv',
+      cellStyle: { minWidth: 50 }
+    },
     {
       title: 'Actividad',
       field: 'descripcion_inv',
@@ -493,7 +499,7 @@ function ActividadesOservChequeo(props) {
         </Typography>
         <br />
         <Grid container spacing={2} >
-        <Grid item xs={12} md={2}> <TextField name="id" label="Id Cumplimiento" disabled="true"
+          <Grid item xs={12} md={2}> <TextField name="id" label="Id Cumplimiento" disabled="true"
             defaultValue={idCumplimiento}
             fullWidth onChange={handleChange} />
           </Grid>
@@ -547,10 +553,14 @@ function ActividadesOservChequeo(props) {
                 value={1}
                 onChange={(e) => setServicioRealizado(e.target.value)}
               >
-                <MenuItem value="1"> Cambiado </MenuItem>
-                <MenuItem value="2"> Revisado </MenuItem>
-                <MenuItem value="3"> Limpiar </MenuItem>
-                <MenuItem value="4"> Reparar </MenuItem>
+                <MenuItem value=""> <em>None</em> </MenuItem>
+                {
+                  listarActividadRealizada.map((itemselect) => {
+                    return (
+                      <MenuItem value={itemselect.id_are}>{itemselect.descripcion_are}</MenuItem>
+                    )
+                  })
+                }
               </Select>
             </FormControl>
           </Grid>
@@ -580,7 +590,7 @@ function ActividadesOservChequeo(props) {
           </Grid>
           <Grid item xs={12} md={8}>
             <TextField className={styles.inputMaterial} label="Observación" name="observacion_cosv"
-              onChange={(e) => setObservacion(e.target.value)}  />
+              onChange={(e) => setObservacion(e.target.value)} />
           </Grid>
         </Grid>
         <br />
@@ -618,8 +628,8 @@ function ActividadesOservChequeo(props) {
                 name="tipooperacion_cosv"
                 id="idselecttipooperacion_cosv"
                 value={tipooperacion}
-                onChange={(e) => setOperario(e.target.value)}
-                fullWidth onChange={handleChange}
+                fullWidth 
+                onChange={handleChange}
                 value={cumplimientoSeleccionado && cumplimientoSeleccionado.tipooperacion_cosv}
               >
                 <MenuItem value=""> <em>None</em> </MenuItem>
@@ -636,7 +646,7 @@ function ActividadesOservChequeo(props) {
           <Grid item xs={12} md={4}>
             <TextField name="referencia_cosv" label="Referencia Producto"
               value={referencia}
-              onChange={(e) => setReferencia(e.target.value)}
+              onChange={handleChange}
               fullWidth
               disabled="true"
               value={cumplimientoSeleccionado && cumplimientoSeleccionado.referencia_cosv}
@@ -644,8 +654,7 @@ function ActividadesOservChequeo(props) {
           </Grid>
           <Grid item xs={12} md={8}>
             <TextField className={styles.inputMaterial} label="Actividad Realizada" name="descripcion_cosv"
-              value={actividadrealizada}
-              onChange={(e) => setActividadrealizada(e.target.value)} />
+              value={actividadrealizada} onChange={handleChange} />
           </Grid>
           <Grid item xs={12} md={4}>
             <FormControl className={styles.formControl2}>
@@ -654,30 +663,35 @@ function ActividadesOservChequeo(props) {
                 labelId="selectservicio_cosv"
                 name="servicio_cosv"
                 id="idselectservicio_cosv"
-                value={1}
-                onChange={(e) => setServicioRealizado(e.target.value)}
+                onChange={handleChange}
+                value={cumplimientoSeleccionado && cumplimientoSeleccionado.servicio_cosv}
               >
-                <MenuItem value="1"> Cambiado </MenuItem>
-                <MenuItem value="2"> Revisado </MenuItem>
-                <MenuItem value="3"> Limpiar </MenuItem>
+                <MenuItem value=""> <em>None</em> </MenuItem>
+                {
+                  listarActividadRealizada.map((itemselect) => {
+                    return (
+                      <MenuItem value={itemselect.id_are}>{itemselect.descripcion_are}</MenuItem>
+                    )
+                  })
+                }
               </Select>
             </FormControl>
           </Grid>
           <Grid item xs={12} md={3}> <TextField type="date" InputLabelProps={{ shrink: true }} name="fechainicia_cosv"
-            defaultValue={Moment(inventariosSeleccionado.fechaactual).format('YYYY-MM-DD')}
-            label="Fecha Inicia Actividad" fullWidth value={fechaactual} onChange={(e) => setFechainicial(e.target.value)} />
+            defaultValue={Moment(inventariosSeleccionado.fechainicia_cosv).format('YYYY-MM-DD')}
+            label="Fecha Inicia Actividad" fullWidth onChange={handleChange} />
           </Grid>
           <Grid item xs={12} md={3}> <TextField type="date" InputLabelProps={{ shrink: true }} name="fechafinal_cosv"
-            defaultValue={Moment(inventariosSeleccionado.fechaactual).format('YYYY-MM-DD')}
-            label="Fecha Finaliza Actividad" fullWidth value={fechaactual} onChange={(e) => setFechafinal(e.target.value)}  />
+            defaultValue={Moment(inventariosSeleccionado.fechafinal_cosv).format('YYYY-MM-DD')}
+            label="Fecha Finaliza Actividad" fullWidth onChange={handleChange}  />
           </Grid>
           <Grid item xs={12} md={3}> <TextField type="time" InputLabelProps={{ shrink: true }} name="horainiciacosv"
-            label="Hora Inicia Actividad" fullWidth defaultValue={Moment(inventariosSeleccionado.horaactual).format('HH:mm:ss')}
-            value={horaactual} onChange={(e) => ssetHorainicial(e.target.value)}  />
+            label="Hora Inicia Actividad" fullWidth defaultValue={Moment(inventariosSeleccionado.horainiciacosv).format('HH:mm:ss')}
+            onChange={handleChange}  />
           </Grid>
           <Grid item xs={12} md={3}> <TextField type="time" InputLabelProps={{ shrink: true }} name="horafinal_cosv"
-            label="Hora Final Actividad" fullWidth defaultValue={Moment(inventariosSeleccionado.horaactual).format('HH:mm:ss')}
-            value={horaactual} onChange={(e) => setHorafinal(e.target.value)}  />
+            label="Hora Final Actividad" fullWidth defaultValue={Moment(inventariosSeleccionado.horafinal_cosv).format('HH:mm:ss')}
+            onChange={handleChange} />
           </Grid>
           <Grid item xs={12} md={12}>
             <TextField className={styles.inputMaterial} label="Observaciones o Comentarios" name="observacion_cosv"
@@ -707,10 +721,10 @@ function ActividadesOservChequeo(props) {
             onClick: (event, rowData) => seleccionarCumplimiento(rowData, "Editar")
           },
           {
-            icon     : 'delete',
-            tooltip  : 'Eliminar Item',
-            onClick  : (event, rowData) =>   seleccionarCumplimiento(rowData, "Eliminar")
-          } 
+            icon: 'delete',
+            tooltip: 'Eliminar Item',
+            onClick: (event, rowData) => seleccionarCumplimiento(rowData, "Eliminar")
+          }
         ]}
         options={{
           actionsColumnIndex: -1
@@ -742,39 +756,32 @@ function ActividadesOservChequeo(props) {
       <Typography align="center" className={styles.typography} variant="button" display="block" >
         ORDEN DE SERVICIO # {props.ordenSeleccionado.id_otr}
       </Typography>
+      <ButtonGroup>
+        <Button variant="outlined" color="primary" >CLIENTE : {razonsocial_cli} </Button>
+        <Button variant="outlined" color="primary" >TELEFONO : {telefono_cli}</Button>
+        <Button variant="outlined" color="primary" >CIUDAD : {nombre_ciu}  </Button>
+      </ButtonGroup>
+      <ButtonGroup>
+        <Button variant="outlined" color="primary" >CONTACTO : XXXXXXXXXXXXXXXXXXXXX</Button>
+        <Button variant="outlined" color="primary" >CORREO : {email_cli} </Button>
+        <Button variant="outlined" color="primary">MODELO : {modelo_dequ} </Button>
+        <Button variant="outlined" color="primary" >MARCA : {descripcion_mar} </Button>
+      </ButtonGroup>
+      <ButtonGroup>
+        <Button variant="outlined" color="primary" >FECHA : {fechainicia_otr} </Button>
+        <Button variant="outlined" color="primary" >SERIE : {serie_dequ} </Button>
+        <Button variant="outlined" color="primary" >ID INTERNO : {codigo_equ} </Button>
+        <Button variant="outlined" color="primary" >HOROMETRO : XX </Button>
+      </ButtonGroup>
 
-      <ButtonGroup orientation="vertical" className={styles.button} color="primary" aria-label="outlined primary button group">
-        <Button>EMPRESA : {nombre_emp} </Button>
-        <Button>CLIENTE : {razonsocial_cli} </Button>
-        <Button>TELEFONO : {telefono_cli} </Button>
-      </ButtonGroup>
-      <ButtonGroup orientation="vertical" className={styles.button} color="primary" aria-label="outlined primary button group">
-        <Button >CONTACTO : XXXXXXXXXXXXXXXXXXXXXXXXXX </Button>
-        <Button >CIUDAD : {nombre_ciu} </Button>
-        <Button >CORREO : {email_cli} </Button>
-      </ButtonGroup>
-      <ButtonGroup orientation="vertical" className={styles.button} color="primary" aria-label="outlined primary button group">
-        <Button >MARCA : {descripcion_mar} </Button>
-        <Button >MODELO : {modelo_dequ} </Button>
-        <Button >FECHA : {fechainicia_otr} </Button>
-      </ButtonGroup>
-      <ButtonGroup className={styles.button} color="primary" aria-label="outlined primary button group">
-        <Button >SERIE : {serie_dequ}  </Button>
-        <Button >ID INTERNO : {codigo_equ}  </Button>
-        <Button >HOROMETRO : XX </Button>
-      </ButtonGroup>
-      <ButtonGroup className={styles.button} color="primary" aria-label="outlined primary button group">
-        <Button >TIPO DE SERVICIO : {descripcion_tser} </Button>
-        <Button >TIPO DE ACTIVIDAD : {descripcion_tmt}  </Button>
-      </ButtonGroup>  
       <div>
         {
           activo ? (
-            <div>
+            <ButtonGroup>
+              <Button variant="outlined" color="primary" >TIPO DE ACTIVIDAD : {descripcion_tmt}  </Button>
               <Button className={styles.button2} onClick={() => consultarCumplimiento()} >Revisar Cumplimiento </Button>
               <Button className={styles.button3} onClick={() => abrirCerrarModalCerrarOrden()} >Cerrar Orden </Button>
-            </div>
-
+            </ButtonGroup>
           )
             :
             (
@@ -838,7 +845,7 @@ function ActividadesOservChequeo(props) {
 
           )
       }
-    
+
       <Modal
         open={modalCumplimiento}
         onClose={abrirCerrarModalCumplimiento}

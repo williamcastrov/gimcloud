@@ -6,6 +6,7 @@ import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
 import Divider from '@material-ui/core/Divider';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import ReceiptIcon from '@material-ui/icons/Receipt';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import LibraryAddCheckIcon from '@material-ui/icons/LibraryAddCheck';
@@ -90,11 +91,11 @@ function ListaChequeo() {
                 </ListItemIcon>
                 <ListItemText primary="Crear/Listar/Modificar" />
               </ListItem>
-              <ListItem button className={classes.nested}>
+              <ListItem  component={Link} button to="/pdf/imprimirotchequeo" className={classes.nested}>
                 <ListItemIcon>
-                  <ArrowForwardIcon />
+                  <ReceiptIcon />
                 </ListItemIcon>
-                <ListItemText primary="Por Asignar" />
+                <ListItemText primary="Imprimir/Descargar" />
               </ListItem>
             </List>
           </Collapse>

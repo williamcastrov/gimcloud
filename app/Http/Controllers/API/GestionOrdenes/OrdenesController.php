@@ -64,7 +64,8 @@ class OrdenesController extends Controller
                                            t5.razonsocial_cli,     t5.razonsocial_cli,  t5.telefono_cli,     t5.email_cli,
                                            t6.primer_nombre_emp,   t7.descripcion_con,  t8.descripcion_sgre, t9.primer_nombre_con,
                                            t9.primer_apellido_con, t9.telefono_con,     t9.email_con,
-                                           t10.codigo_equ,         t10.antiguedad_equ,  t11.descripcion_abc, t12.descripcion_tmt,
+                                           t10.codigo_equ,         t10.antiguedad_equ,  t10.marca_equ,       t11.descripcion_abc,
+                                           t12.descripcion_tmt,
                                            t13.descripcion_mar,    t14.modelo_dequ,     t14.serie_dequ,      t14.referencia_dequ,
                                            t15.descripcion_tser,   t16.descripcion_tope
           FROM  ordenservicio                 as t0  INNER JOIN empresa        as t1  INNER JOIN estados               as t2 
@@ -97,13 +98,14 @@ class OrdenesController extends Controller
       public function listar_ordenesserv(){  
         try {
           //Muestra Unicamente los tipos de Interlocutores PROVEEDORES = 1
-          $data = DB::select("SELECT t0.*, t1.nombre_emp,          t2.nombre_est,       t3.nombre_ciu,       t4.razonsocial_int,
-                                           t5.razonsocial_cli,     t5.razonsocial_cli,  t5.telefono_cli,     t5.email_cli,
-                                           t6.primer_nombre_emp,   t7.descripcion_con,  t8.descripcion_sgre, t9.primer_nombre_con,
-                                           t9.primer_apellido_con, t9.telefono_con,     t9.email_con,
-                                           t10.codigo_equ,         t10.antiguedad_equ,  t11.descripcion_abc, t12.descripcion_tmt,
-                                           t13.descripcion_mar,    t14.modelo_dequ,     t14.serie_dequ,      t14.referencia_dequ,
-                                           t15.descripcion_tser,   t16.descripcion_tope
+          $data = DB::select("SELECT t0.*,  t1.nombre_emp,          t2.nombre_est,       t3.nombre_ciu,       t4.razonsocial_int,
+                                            t5.razonsocial_cli,     t5.razonsocial_cli,  t5.telefono_cli,     t5.email_cli,
+                                            t6.primer_nombre_emp,   t7.descripcion_con,  t8.descripcion_sgre, t9.primer_nombre_con,
+                                            t9.primer_apellido_con, t9.telefono_con,     t9.email_con,
+                                            t10.codigo_equ,         t10.antiguedad_equ,  t10.marca_equ,       t11.descripcion_abc,
+                                            t12.descripcion_tmt,
+                                            t13.descripcion_mar,    t14.modelo_dequ,     t14.serie_dequ,      t14.referencia_dequ,
+                                            t15.descripcion_tser,   t16.descripcion_tope
           FROM  ordenservicio                 as t0  INNER JOIN empresa        as t1  INNER JOIN estados               as t2 
                 INNER JOIN ciudades           as t3  INNER JOIN interlocutores as t4  INNER JOIN interlocutores_cli    as t5
                 INNER JOIN interlocutores_emp as t6  INNER JOIN conceptooserv  as t7  INNER JOIN subgruposequipos      as t8
@@ -134,13 +136,14 @@ class OrdenesController extends Controller
       public function listar_ordeneschequeo(){  
         try {
           //Muestra Unicamente los tipos de Interlocutores PROVEEDORES = 1
-          $data = DB::select("SELECT t0.*, t1.nombre_emp,          t2.nombre_est,       t3.nombre_ciu,       t4.razonsocial_int,
-                                           t5.razonsocial_cli,     t5.razonsocial_cli,  t5.telefono_cli,     t5.email_cli,
-                                           t6.primer_nombre_emp,   t7.descripcion_con,  t8.descripcion_sgre, t9.primer_nombre_con,
-                                           t9.primer_apellido_con, t9.telefono_con,     t9.email_con,
-                                           t10.codigo_equ,         t10.antiguedad_equ,  t11.descripcion_abc, t12.descripcion_tmt,
-                                           t13.descripcion_mar,    t14.modelo_dequ,     t14.serie_dequ,      t14.referencia_dequ,
-                                           t15.descripcion_tser,   t16.descripcion_tope
+          $data = DB::select("SELECT t0.*,  t1.nombre_emp,          t2.nombre_est,       t3.nombre_ciu,       t4.razonsocial_int,
+                                            t5.razonsocial_cli,     t5.razonsocial_cli,  t5.telefono_cli,     t5.email_cli,
+                                            t6.primer_nombre_emp,   t7.descripcion_con,  t8.descripcion_sgre, t9.primer_nombre_con,
+                                            t9.primer_apellido_con, t9.telefono_con,     t9.email_con,
+                                            t10.codigo_equ,         t10.antiguedad_equ,  t10.marca_equ,       t11.descripcion_abc,
+                                            t12.descripcion_tmt,
+                                            t13.descripcion_mar,    t14.modelo_dequ,     t14.serie_dequ,      t14.referencia_dequ,
+                                            t15.descripcion_tser,   t16.descripcion_tope
           FROM  ordenservicio                 as t0  INNER JOIN empresa        as t1  INNER JOIN estados               as t2 
                 INNER JOIN ciudades           as t3  INNER JOIN interlocutores as t4  INNER JOIN interlocutores_cli    as t5
                 INNER JOIN interlocutores_emp as t6  INNER JOIN conceptooserv  as t7  INNER JOIN subgruposequipos      as t8
@@ -171,13 +174,14 @@ class OrdenesController extends Controller
       public function listar_ordeneschequeoactivas(){  
         try {
           //Muestra Unicamente los tipos de Interlocutores PROVEEDORES = 1
-          $data = DB::select("SELECT t0.*, t1.nombre_emp,          t2.nombre_est,       t3.nombre_ciu,       t4.razonsocial_int,
-                                           t5.razonsocial_cli,     t5.razonsocial_cli,  t5.telefono_cli,     t5.email_cli,
-                                           t6.primer_nombre_emp,   t7.descripcion_con,  t8.descripcion_sgre, t9.primer_nombre_con,
-                                           t9.primer_apellido_con, t9.telefono_con,     t9.email_con,
-                                           t10.codigo_equ,         t10.antiguedad_equ,  t11.descripcion_abc, t12.descripcion_tmt,
-                                           t13.descripcion_mar,    t14.modelo_dequ,     t14.serie_dequ,      t14.referencia_dequ,
-                                           t15.descripcion_tser,   t16.descripcion_tope
+          $data = DB::select("SELECT  t0.*, t1.nombre_emp,    t2.nombre_est,       t3.nombre_ciu,       t4.razonsocial_int,
+                                      t5.razonsocial_cli,     t5.razonsocial_cli,  t5.telefono_cli,     t5.email_cli,
+                                      t6.primer_nombre_emp,   t7.descripcion_con,  t8.descripcion_sgre, t9.primer_nombre_con,
+                                      t9.primer_apellido_con, t9.telefono_con,     t9.email_con,
+                                      t10.codigo_equ,         t10.antiguedad_equ,  t10.marca_equ,       t11.descripcion_abc,
+                                      t12.descripcion_tmt,
+                                      t13.descripcion_mar,    t14.modelo_dequ,     t14.serie_dequ,      t14.referencia_dequ,
+                                      t15.descripcion_tser,   t16.descripcion_tope
           FROM  ordenservicio                 as t0  INNER JOIN empresa        as t1  INNER JOIN estados               as t2 
                 INNER JOIN ciudades           as t3  INNER JOIN interlocutores as t4  INNER JOIN interlocutores_cli    as t5
                 INNER JOIN interlocutores_emp as t6  INNER JOIN conceptooserv  as t7  INNER JOIN subgruposequipos      as t8
@@ -209,13 +213,14 @@ class OrdenesController extends Controller
         try { 
           //$data = Frecuencias::find($id_fre);
          
-          $data = DB::select("SELECT t0.*, t1.nombre_emp,          t2.nombre_est,       t3.nombre_ciu,       t4.razonsocial_int,
-                                           t5.razonsocial_cli,     t5.razonsocial_cli,  t5.telefono_cli,     t5.email_cli,
-                                           t6.primer_nombre_emp,   t7.descripcion_con,  t8.descripcion_sgre, t9.primer_nombre_con,
-                                           t9.primer_apellido_con, t9.telefono_con,     t9.email_con,
-                                           t10.codigo_equ,         t10.antiguedad_equ,  t11.descripcion_abc, t12.descripcion_tmt,
-                                           t13.descripcion_mar,    t14.modelo_dequ,     t14.serie_dequ,      t14.referencia_dequ,
-                                           t15.descripcion_tser,   t16.descripcion_tope
+          $data = DB::select("SELECT t0.*,  t1.nombre_emp,          t2.nombre_est,       t3.nombre_ciu,       t4.razonsocial_int,
+                                            t5.razonsocial_cli,     t5.razonsocial_cli,  t5.telefono_cli,     t5.email_cli,
+                                            t6.primer_nombre_emp,   t7.descripcion_con,  t8.descripcion_sgre, t9.primer_nombre_con,
+                                            t9.primer_apellido_con, t9.telefono_con,     t9.email_con,
+                                            t10.codigo_equ,         t10.antiguedad_equ,  t10.marca_equ,       t11.descripcion_abc,
+                                            t12.descripcion_tmt,
+                                            t13.descripcion_mar,    t14.modelo_dequ,     t14.serie_dequ,      t14.referencia_dequ,
+                                            t15.descripcion_tser,   t16.descripcion_tope
           FROM  ordenservicio                 as t0  INNER JOIN empresa        as t1  INNER JOIN estados               as t2 
                 INNER JOIN ciudades           as t3  INNER JOIN interlocutores as t4  INNER JOIN interlocutores_cli    as t5
                 INNER JOIN interlocutores_emp as t6  INNER JOIN conceptooserv  as t7  INNER JOIN subgruposequipos      as t8

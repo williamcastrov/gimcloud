@@ -65,9 +65,9 @@ class CumplimientoOServController extends Controller
       public function listar_cumplimiento(){  
         try {
           
-            $data = DB::select("SELECT t0.*, t1.descripcion_tope
-            FROM  cumplimientooserv as t0 INNER JOIN tipooperacion as t1
-            WHERE t0.tipooperacion_cosv = t1.id_tope");
+            $data = DB::select("SELECT t0.*, t1.descripcion_tope, t2.descripcion_are
+            FROM  cumplimientooserv as t0 INNER JOIN tipooperacion as t1 INNER JOIN actividadrealizada as t2
+            WHERE t0.tipooperacion_cosv = t1.id_tope and t0.servicio_cosv = t2.id_are");
   
           $response['data'] = $data;
           // $response['data'] = $data1;
@@ -83,9 +83,9 @@ class CumplimientoOServController extends Controller
     
       public function get($id_cosv){
         try { 
-          $data = DB::select("SELECT t0.*, t1.descripcion_tope
-          FROM cumplimientooserv as t0 INNER JOIN tipooperacion as t1
-          WHERE t0.id_cosv = $id_cosv and t0.tipooperacion_cosv = t1.id_tope");
+          $data = DB::select("SELECT t0.*, t1.descripcion_tope, t2.descripcion_are
+          FROM cumplimientooserv as t0 INNER JOIN tipooperacion as t1 INNER JOIN actividadrealizada as t2
+          WHERE t0.id_cosv = $id_cosv and t0.tipooperacion_cosv = t1.id_tope and t0.servicio_cosv = t2.id_are ");
       
           if ($data) {
               $response['data'] = $data;

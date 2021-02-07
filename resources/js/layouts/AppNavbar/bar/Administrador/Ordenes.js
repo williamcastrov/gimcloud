@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from 'react-router-dom';
 import { makeStyles } from "@material-ui/core/styles";
-import { ListSubheader, List, ListItem, ListItemIcon, ListItemText, Collapse } from "@material-ui/core";
+import { List, ListItem, ListItemIcon, ListItemText, Collapse } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
 import Divider from '@material-ui/core/Divider';
@@ -102,6 +102,12 @@ function Ordenes() {
                 </ListItemIcon>
                 <ListItemText primary="Tipos de Servicios" />
               </ListItem>
+              <ListItem component={Link} button to="/gestionordenes/actividadrealizada" className={classes.nested}>
+                <ListItemIcon>
+                  <CategoryIcon/>
+                </ListItemIcon>
+                <ListItemText primary="Actvidades Ordenes" />
+              </ListItem>
             </List>
           </Collapse>
 
@@ -123,7 +129,7 @@ function Ordenes() {
                 </ListItemIcon>
                 <ListItemText primary="Crear/Listar/Modificar" />
               </ListItem>
-              <ListItem button className={classes.nested}>
+              <ListItem  component={Link} button to="/pdf/imprimirot" className={classes.nested}>
                 <ListItemIcon>
                   <ReceiptIcon />
                 </ListItemIcon>

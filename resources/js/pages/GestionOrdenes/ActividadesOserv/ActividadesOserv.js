@@ -16,6 +16,7 @@ import shortid from "shortid";
 import inventariosServices from "../../../services/Almacenes/Inventarios";
 import cumplimientooservServices from "../../../services/GestionOrdenes/CumplimientoOserv";
 import tipooperacionServices from "../../../services/GestionOrdenes/TipoOperacion";
+import actividadrealizadaServices from "../../../services/GestionOrdenes/ActividadRealizada";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -158,6 +159,7 @@ function ActividadesOserv(props) {
   const [modalRevisarCumplimiento, setModalRevisarCumplimiento] = useState(false);
   const [formError, setFormError] = useState(false);
   const [listarTipoOperacion, setListarTipoOperacion] = useState([]);
+  const [listarActividadRealizada, setListarActividadRealizada] = useState([]);
   const [grabar, setGrabar] = React.useState(false);
   const [grabarCambios, setGrabarCambios] = React.useState(false);
   const fechaactual = Moment(new Date()).format('YYYY-MM-DD');
@@ -211,6 +213,15 @@ function ActividadesOserv(props) {
       setListarTipoOperacion(res.data);
     }
     fetchDataTipoOperacion();
+  }, [])
+
+  useEffect(() => {
+    async function fetchDataActividadRealizada() {
+      const res = await actividadrealizadaServices.listActividadrealizada();
+      setListarActividadRealizada(res.data);
+      //console.log("ACTIVIDAD REALIZADA : ", res.data)
+    }
+    fetchDataActividadRealizada();
   }, [])
 
   useEffect(() => {
@@ -322,10 +333,10 @@ function ActividadesOserv(props) {
         descripcion_cosv: cumplimientoSeleccionado.descripcion_cosv,
         tipooperacion_cosv: cumplimientoSeleccionado.tipooperacion_cosv,
         referencia_cosv: cumplimientoSeleccionado.referencia_cosv,
-        fechainicia_cosv: fechaactual,
-        fechafinal_cosv: fechaactual,
-        horainiciacosv: horainicial,
-        horafinal_cosv: horafinal,
+        fechainicia_cosv: cumplimientoSeleccionado.fechainicia_cosv,
+        fechafinal_cosv: cumplimientoSeleccionado.fechafinal_cosv,
+        horainiciacosv: cumplimientoSeleccionado.horainiciacosv,
+        horafinal_cosv: cumplimientoSeleccionado.horafinal_cosv,
         cantidad_cosv: cumplimientoSeleccionado.cantidad_cosv,
         valorunitario_cosv: cumplimientoSeleccionado.valorunitario_cosv,
         valortotal_cosv: resultado,
@@ -445,6 +456,11 @@ function ActividadesOserv(props) {
 
   const cumplimiento = [
     {
+      title: '# OT',
+      field: 'id_cosv',
+      cellStyle: { minWidth: 50 }
+    },
+    {
       title: 'Actividad',
       field: 'descripcion_cosv',
       cellStyle: { minWidth: 250 }
@@ -546,9 +562,14 @@ function ActividadesOserv(props) {
                 value={1}
                 onChange={(e) => setServicioRealizado(e.target.value)}
               >
-                <MenuItem value="1"> Cambiado </MenuItem>
-                <MenuItem value="2"> Revisado </MenuItem>
-                <MenuItem value="3"> Limpiar </MenuItem>
+                <MenuItem value=""> <em>None</em> </MenuItem>
+                {
+                  listarActividadRealizada.map((itemselect) => {
+                    return (
+                      <MenuItem value={itemselect.id_are}>{itemselect.descripcion_are}</MenuItem>
+                    )
+                  })
+                }              
               </Select>
             </FormControl>
           </Grid>
@@ -639,7 +660,7 @@ function ActividadesOserv(props) {
                 name="tipooperacion_cosv"
                 id="idselecttipooperacion_cosv"
                 value={tipooperacion}
-                onChange={(e) => setOperario(e.target.value)}
+                onChange={handleChange}
                 fullWidth onChange={handleChange}
                 value={cumplimientoSeleccionado && cumplimientoSeleccionado.tipooperacion_cosv}
               >
@@ -657,7 +678,7 @@ function ActividadesOserv(props) {
           <Grid item xs={12} md={4}>
             <TextField name="referencia_cosv" label="Referencia Producto"
               value={referencia}
-              onChange={(e) => setReferencia(e.target.value)}
+              onChange={handleChange}
               fullWidth
               disabled="true"
               value={cumplimientoSeleccionado && cumplimientoSeleccionado.referencia_cosv}
@@ -674,31 +695,36 @@ function ActividadesOserv(props) {
               <Select
                 labelId="selectservicio_cosv"
                 name="servicio_cosv"
-                id="idselectservicio_cosv"
-                value={1}
-                onChange={(e) => setServicioRealizado(e.target.value)}
+                id="idselectservicio_cosv"  
+                onChange={handleChange}
+                value={cumplimientoSeleccionado && cumplimientoSeleccionado.servicio_cosv}
               >
-                <MenuItem value="1"> Cambiado </MenuItem>
-                <MenuItem value="2"> Revisado </MenuItem>
-                <MenuItem value="3"> Limpiar </MenuItem>
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarActividadRealizada.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_are}>{itemselect.descripcion_are}</MenuItem>
+                  )
+                })
+              }            
               </Select>
             </FormControl>
           </Grid>
           <Grid item xs={12} md={3}> <TextField type="date" InputLabelProps={{ shrink: true }} name="fechainicia_cosv"
-            defaultValue={Moment(inventariosSeleccionado.fechaactual).format('YYYY-MM-DD')}
-            label="Fecha Inicia Actividad" fullWidth value={fechaactual} onChange={(e) => setFechainicial(e.target.value)} />
+            defaultValue={Moment(inventariosSeleccionado.fechainicia_cosv).format('YYYY-MM-DD')}
+            label="Fecha Inicia Actividad" fullWidth onChange={handleChange} />
           </Grid>
           <Grid item xs={12} md={3}> <TextField type="date" InputLabelProps={{ shrink: true }} name="fechafinal_cosv"
-            defaultValue={Moment(inventariosSeleccionado.fechaactual).format('YYYY-MM-DD')}
-            label="Fecha Finaliza Actividad" fullWidth value={fechaactual} onChange={(e) => setFechafinal(e.target.value)}  />
+            defaultValue={Moment(inventariosSeleccionado.fechafinal_cosv).format('YYYY-MM-DD')}
+            label="Fecha Finaliza Actividad" fullWidth onChange={handleChange}  />
           </Grid>
           <Grid item xs={12} md={3}> <TextField type="time" InputLabelProps={{ shrink: true }} name="horainiciacosv"
-            label="Hora Inicia Actividad" fullWidth defaultValue={Moment(inventariosSeleccionado.horaactual).format('HH:mm:ss')}
-            value={horaactual} onChange={(e) => ssetHorainicial(e.target.value)}  />
+            label="Hora Inicia Actividad" fullWidth defaultValue={Moment(inventariosSeleccionado.horainiciacosv).format('HH:mm:ss')}
+            onChange={handleChange}  />
           </Grid>
           <Grid item xs={12} md={3}> <TextField type="time" InputLabelProps={{ shrink: true }} name="horafinal_cosv"
-            label="Hora Final Actividad" fullWidth defaultValue={Moment(inventariosSeleccionado.horaactual).format('HH:mm:ss')}
-            value={horaactual} onChange={(e) => setHorafinal(e.target.value)}  />
+            label="Hora Final Actividad" fullWidth defaultValue={Moment(inventariosSeleccionado.horafinal_cosv).format('HH:mm:ss')}
+            onChange={handleChange} />
           </Grid>
           <Grid item xs={12} md={4}>
             <TextField className={styles.inputMaterial} name="cantidad_cosv" InputLabelProps={{ shrink: true }}  

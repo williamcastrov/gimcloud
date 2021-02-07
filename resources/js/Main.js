@@ -41,6 +41,7 @@ import EstadosMtto from './pages/Mantenimiento/EstadosMtto';
 import Tiposmtto from './pages/GestionOrdenes/Parameters/Tiposmtto';
 import TipoOperacion from './pages/GestionOrdenes/Parameters/TipoOperacion';
 import TiposServicio from './pages/GestionOrdenes/Parameters/TiposServicio';
+import ActividadRealizada from "./pages/GestionOrdenes/Parameters/ActividadRealizada";
 import ConceptosOserv from './pages/GestionOrdenes/Parameters/ConceptosOserv/ConceptosOserv';
 import Ordenes from './pages/GestionOrdenes/Ordenes';
 import CrearOrdenes from './pages/GestionOrdenes/CrearOrdenes';
@@ -76,6 +77,10 @@ import Contactos from './pages/Interlocutores/Contactos';
 //Componentes Modulo Activos
 import Areas from './pages/Activos/Areas';
 import Cencostos from './pages/Activos/Cencostos';
+
+//Impresión PDF
+import ImprimirOT from './pages/Listar/Ordenes/OrdenesPdf';
+import ImprimirOTChequeo from './pages/Listar/Ordenes/OrdenChequeoPdf';
 
 import {
   BrowserRouter as Router,
@@ -157,6 +162,7 @@ function Main() {
 
               <Route path="/gestionordenes/ordenes" component={Ordenes} />
               <Route path="/gestionordenes/crearordenes" component={CrearOrdenes} />
+              <Route path="/gestionordenes/actividadrealizada" component={ActividadRealizada} />
               <Route path="/mantenimiento/tiposmtto" component={Tiposmtto} />
               <Route path="/mantenimiento/conceptososerv" component={ConceptosOserv} />
               <Route path="/mantenimiento/tipooperacion" component={TipoOperacion} />
@@ -168,6 +174,9 @@ function Main() {
 
               <Route path="/activos/areas" component={Areas} />
               <Route path="/activos/cencostos" component={Cencostos} />
+
+              <Route path="/pdf/imprimirot" component={ImprimirOT} />
+              <Route path="/pdf/imprimirotchequeo" component={ImprimirOTChequeo} />
               
             </Switch>
           </ThemeProvider>
