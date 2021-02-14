@@ -50,6 +50,7 @@ function Unidades() {
   const [unidadesSeleccionado, setUnidadesSeleccionado] = useState({
     id_und: "",
     descripcion_und: "",
+    tipo_und: "",
     empresa_und: "",
     estado_und: ""
   })
@@ -117,6 +118,11 @@ function Unidades() {
       formOk = false;
     }
 
+    if (!unidadesSeleccionado.tipo_und) {
+      errors.tipo_und = true;
+      formOk = false;
+    }
+
     if (!unidadesSeleccionado.empresa_und) {
       errors.empresa_und = true;
       formOk = false;
@@ -143,6 +149,7 @@ function Unidades() {
         console.log(res.message)
         abrirCerrarModalInsertar();
         delete unidadesSeleccionado.descripcion_und;
+        delete unidadesSeleccionado.tipo_und;
         delete unidadesSeleccionado.empresa_und;
         delete unidadesSeleccionado.estado_und;
       } else
@@ -176,7 +183,12 @@ function Unidades() {
     let formOk = true;
 
     if (!unidadesSeleccionado.descripcion_und) {
-      errors.descripcion_und = true;
+      errors.nombre_und = true;
+      formOk = false;
+    }
+
+    if (!unidadesSeleccionado.tipo_und) {
+      errors.tipo_und = true;
       formOk = false;
     }
 
@@ -206,6 +218,7 @@ function Unidades() {
         console.log(res.message)
         abrirCerrarModalEditar();
         delete unidadesSeleccionado.descripcion_und;
+        delete unidadesSeleccionado.tipo_und;
         delete unidadesSeleccionado.empresa_und;
         delete unidadesSeleccionado.estado_und;
     } else
@@ -270,6 +283,10 @@ function Unidades() {
       field: 'descripcion_und'
     },
     {
+      title: 'Tipo',
+      field: 'tipo_und',
+     },
+    {
       title: 'Código',
       field: 'empresa_und'
     },
@@ -294,6 +311,8 @@ function Unidades() {
       </Typography>
       <br />
       <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_und" onChange={handleChange} />          
+      <br />
+      <TextField className={styles.inputMaterial} label="Tipo" name="tipo_und" onChange={handleChange} />          
       <br />
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectEmpresa">Empresa</InputLabel>
@@ -346,8 +365,13 @@ function Unidades() {
         Actualizar Tipo de Unidad
       </Typography>
       <br />
-      <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_und" onChange={handleChange} value={unidadesSeleccionado&&unidadesSeleccionado.descripcion_und}/>
+      <TextField className={styles.inputMaterial} label="Descripción" name="descripcion_und" onChange={handleChange} 
+            value={unidadesSeleccionado&&unidadesSeleccionado.descripcion_und}/>
       <br />
+      <TextField className={styles.inputMaterial} label="Tipo" name="tipo_und" onChange={handleChange} 
+            value={unidadesSeleccionado&&unidadesSeleccionado.tipo_und}
+      />          
+      <br />   
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectEmpresa">Empresa</InputLabel>
         <Select

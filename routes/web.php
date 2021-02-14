@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+   // return view('welcome');
+   return redirect('gim');
 });
 
 Route::get('/gim', function () {
@@ -57,10 +58,12 @@ Route::get('/mantenimiento/estadosclientes', 'App\Http\Controllers\GimController
 Route::get('/mantenimiento/estadosmtto', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/frecuencias', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/gruposequipos', 'App\Http\Controllers\GimController@index');
-Route::get('/mantenimiento/subgruposequipos', 'App\Http\Controllers\GimController@index');
+Route::get('/mantenimiento/subgrupospartes', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/clasificacionABC', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/referencias', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/equipos', 'App\Http\Controllers\GimController@index');
+Route::get('/mantenimiento/accesorios', 'App\Http\Controllers\GimController@index');
+Route::get('/mantenimiento/extrasequipos', 'App\Http\Controllers\GimController@index');
 
 // Rutas del Modulo Gestion de Ordenes de Servicio
 Route::get('/gestionordenes/ordenes', 'App\Http\Controllers\GimController@index');

@@ -19,6 +19,34 @@ equipos.listEquipos = async () => {
     return res;
 }
 
+equipos.listEquiposMontacargas = async () => {
+    const urlList = baseUrl+"/listar_equiposmontacargas"
+    const res = await axios.get(urlList)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
+equipos.listEquiposAccesorios = async () => {
+    const urlList = baseUrl+"/listar_equiposaccesorios"
+    const res = await axios.get(urlList)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
+
+equipos.listUnEquipo = async (id_equ) => {
+    const urlList = baseUrl+"/get/"+id_equ
+    const res = await axios.get(urlList)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
 equipos.update = async (data) => {
     //console.log(data);
     const urlUpdate = baseUrl+"/update/"+data.id_equ

@@ -14,6 +14,7 @@ import marcasServices from "../../../services/Mantenimiento/Marcas";
 import frecuenciasServices from "../../../services/Mantenimiento/Frecuencias";
 import propietariosServices from "../../../services/Interlocutores/Proveedores";
 import gruposequiposServices from "../../../services/Mantenimiento/GruposEquipos";
+import subgruposequiposServices from "../../../services/Mantenimiento/SubGruposPartes";
 import equiposServices from "../../../services/Mantenimiento/Equipos";
 import estadosclientesServices from "../../../services/Mantenimiento/EstadosClientes";
 import estadosmttoServices from "../../../services/Mantenimiento/EstadosMtto";
@@ -113,11 +114,13 @@ function Equipos() {
   const [listarPropietarios, setListarPropietarios] = useState([]);
   const [listarMarcas, setListarMarcas] = useState([]);
   const [listarGruposEquipos, setListarGruposEquipos] = useState([]);
+  const [listarSubGruposEquipos, setListarSubGruposEquipos] = useState([]);
   const [fechaHoy, setFechaHoy] = useState(new Date());
   const [actualiza, setActualiza] = useState(false);
   const [equiposSeleccionado, setEquiposSeleccionado] = useState({
     'id_equ': "",
     'codigo_equ': "",
+    'tipo_equ': "EQM",
     'descripcion_equ': "",
     'empresa_equ': "",
     'frecuencia_equ': "",
@@ -125,6 +128,7 @@ function Equipos() {
     'marca_equ': "",
     'antiguedad_equ': "",
     'grupoequipo_equ': "",
+    'subgrupoparte_equ': "",
     'valoradquisicion_equ': "",
     'estadocontable_equ': "",
     'estadocliente_equ': "",
@@ -134,7 +138,7 @@ function Equipos() {
 
   useEffect(() => {
     async function fetchDataEquipos() {
-      const res = await equiposServices.listEquipos();
+      const res = await equiposServices.listEquiposMontacargas();
       setListarEquipos(res.data);
       setActualiza(false);
       //console.log(res.data)
@@ -223,6 +227,15 @@ function Equipos() {
     fetchDataGruposEquipos();
   }, [])
 
+  useEffect(() => {
+    async function fetchDataSubGruposEquipos() {
+      const res = await subgruposequiposServices.listSubGrupospartesequipos ();
+      setListarSubGruposEquipos(res.data)
+      //console.log(res.data);
+    }
+    fetchDataSubGruposEquipos();
+  }, [])
+
   const handleChange = e => {
     const { name, value } = e.target;
 
@@ -295,6 +308,11 @@ function Equipos() {
       formOk = false;
     }
 
+    if (!equiposSeleccionado.subgrupoparte_equ) {
+      errors.subgrupoparte_equ = true;
+      formOk = false;
+    }
+
     if (!equiposSeleccionado.valoradquisicion_equ) {
       errors.valoradquisicion_equ = true;
       formOk = false;
@@ -338,6 +356,7 @@ function Equipos() {
         delete equiposSeleccionado.marca_equ;
         delete equiposSeleccionado.antiguedad_equ;
         delete equiposSeleccionado.grupoequipo_equ;
+        delete equiposSeleccionado.subgrupoparte_equ;
         delete equiposSeleccionado.valoradquisicion_equ;
         delete equiposSeleccionado.estadocontable_equ;
         delete equiposSeleccionado.estadocliente_equ;
@@ -403,6 +422,11 @@ function Equipos() {
       errors.grupoequipo_equ = true;
       formOk = false;
     }
+    
+    if (!equiposSeleccionado.subgrupoparte_equ) {
+      errors.subgrupoparte_equ = true;
+      formOk = false;
+    }
 
     if (!equiposSeleccionado.valoradquisicion_equ) {
       errors.valoradquisicion_equ = true;
@@ -447,6 +471,7 @@ function Equipos() {
         delete equiposSeleccionado.marca_equ;
         delete equiposSeleccionado.antiguedad_equ;
         delete equiposSeleccionado.grupoequipo_equ;
+        delete equiposSeleccionado.subgrupoparte_equ;
         delete equiposSeleccionado.valoradquisicion_equ;
         delete equiposSeleccionado.estadocontable_equ;
         delete equiposSeleccionado.estadocliente_equ;
@@ -610,6 +635,48 @@ function Equipos() {
             </Select>
           </FormControl>
         </Grid>
+        <Grid item xs={12} md={6}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectGrupoEquipo">Grupos de Equipos</InputLabel>
+            <Select
+              labelId="selectGrupoEquipo"
+              name="grupoequipo_equ"
+              id="idselectGrupoEquipo"
+              fullWidth
+              onChange={handleChange}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarGruposEquipos.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_grp}>{itemselect.descripcion_grp}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectSubGrupoParte">SubGrupo Equipo</InputLabel>
+            <Select
+              labelId="selectSubGrupoParte"
+              name="subgrupoparte_equ"
+              id="idselectSubGrupoParte"
+              fullWidth
+              onChange={handleChange}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarSubGruposEquipos && listarSubGruposEquipos.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_sgre}>{itemselect.descripcion_sgre}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
         <Grid item xs={12} md={4}>
           <FormControl className={styles.formControlEstados}>
             <InputLabel id="idselectMarca">Marca</InputLabel>
@@ -634,34 +701,13 @@ function Equipos() {
         <Grid item xs={12} md={4}> <TextField name="antiguedad_equ" label="Antiguedad" fullWidth onChange={handleChange} /> </Grid>
         <Grid item xs={12} md={4}> <TextField name="ctacontable_equ" label="Cuenta Contable" fullWidth onChange={handleChange} /> </Grid>
         <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
-            <InputLabel id="idselectGrupoEquipo">Grupos de Equipos</InputLabel>
-            <Select
-              labelId="selectGrupoEquipo"
-              name="grupoequipo_equ"
-              id="idselectGrupoEquipo"
-              fullWidth
-              onChange={handleChange}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarGruposEquipos.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_grp}>{itemselect.descripcion_grp}</MenuItem>
-                  )
-                })
-              }
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={6}>
           <TextField className={styles.inputMaterial} name="valoradquisicion_equ" label="Valor de Compra" fullWidth
             InputLabelProps={{ shrink: true }} InputProps={{ inputComponent: NumberFormatCustom, }}
             onChange={handleChange}
           />
         </Grid>
-        <Grid item xs={12} md={4}>
-          <FormControl className={styles.formControlEstados}>
+        <Grid item xs={12} md={6}>
+          <FormControl className={styles.formControl}>
             <InputLabel id="idselectEstadoContable">Estado en Contabilidad</InputLabel>
             <Select
               labelId="selectEstadoContable"
@@ -681,8 +727,8 @@ function Equipos() {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={4}>
-          <FormControl className={styles.formControlEstados}>
+        <Grid item xs={12} md={6}>
+          <FormControl className={styles.formControl}>
             <InputLabel id="idselectEstadoCliente">Estado del Cliente</InputLabel>
             <Select
               labelId="selectEstadoCliente"
@@ -702,8 +748,8 @@ function Equipos() {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={4}>
-          <FormControl className={styles.formControlEstados}>
+        <Grid item xs={12} md={6}>
+          <FormControl className={styles.formControl}>
             <InputLabel id="idselectEstadoMtto">Estado de Mantenimiento</InputLabel>
             <Select
               labelId="selectEstadoMtto"
@@ -736,25 +782,25 @@ function Equipos() {
     <div className={styles.modal}>
       <Typography align="center" className={styles.typography} variant="button" display="block" > Actualizar Equipo </Typography>
       <Grid container spacing={2} >
-        <Grid item xs={12} md={6}> <TextField name="codigo_equ" label="Codigo Equipo" disabled="true"
-          fullWidth onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.codigo_equ} />
+      <Grid item xs={12} md={6}> <TextField name="codigo_equ" label="Codigo Equipo"
+          fullWidth onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.codigo_equ}  />
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl}>
-            <InputLabel id="idselectEmpresa" >Empresa</InputLabel>
+            <InputLabel id="idselectFrecuencia">Frecuencia</InputLabel>
             <Select
-              labelId="selecEmpresa"
-              name="empresa_equ"
-              id="idselectEmpresa"
+              labelId="selectFrecuencia"
+              name="frecuencia_equ"
+              id="idselectFrecuencia"
               fullWidth
               onChange={handleChange}
-              onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.empresa_equ}
+              value={equiposSeleccionado && equiposSeleccionado.frecuencia_equ} 
             >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
-                listarEmpresas.map((itemselect) => {
+                listarFrecuencias.map((itemselect) => {
                   return (
-                    <MenuItem value={itemselect.id_emp}>{itemselect.nombre_emp}</MenuItem>
+                    <MenuItem value={itemselect.id_fre}>{itemselect.descripcion_fre}</MenuItem>
                   )
                 })
               }
@@ -766,20 +812,20 @@ function Equipos() {
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl}>
-            <InputLabel id="idselectFrecuencia">Frecuencia</InputLabel>
+            <InputLabel id="idselectEmpresa" >Empresa</InputLabel>
             <Select
-              labelId="selectFrecuencia"
-              name="frecuencia_equ"
-              id="idselectFrecuencia"
+              labelId="selecEmpresa"
+              name="empresa_equ"
+              id="idselectEmpresa"
               fullWidth
               onChange={handleChange}
-              value={equiposSeleccionado && equiposSeleccionado.frecuencia_equ}
+              value={equiposSeleccionado && equiposSeleccionado.empresa_equ}
             >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
-                listarFrecuencias.map((itemselect) => {
+                listarEmpresas.map((itemselect) => {
                   return (
-                    <MenuItem value={itemselect.id_fre}>{itemselect.descripcion_fre}</MenuItem>
+                    <MenuItem value={itemselect.id_emp}>{itemselect.nombre_emp}</MenuItem>
                   )
                 })
               }
@@ -808,6 +854,50 @@ function Equipos() {
             </Select>
           </FormControl>
         </Grid>
+        <Grid item xs={12} md={6}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectGrupoEquipo">Grupos de Equipos</InputLabel>
+            <Select
+              labelId="selectGrupoEquipo"
+              name="grupoequipo_equ"
+              id="idselectGrupoEquipo"
+              fullWidth
+              onChange={handleChange}
+              value={equiposSeleccionado && equiposSeleccionado.grupoequipo_equ}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarGruposEquipos.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_grp}>{itemselect.descripcion_grp}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectSubGrupoParte">SubGrupo Equipo</InputLabel>
+            <Select
+              labelId="selectSubGrupoParte"
+              name="subgrupoparte_equ"
+              id="idselectSubGrupoParte"
+              fullWidth
+              onChange={handleChange}
+              value={equiposSeleccionado && equiposSeleccionado.subgrupoparte_equ}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarSubGruposEquipos && listarSubGruposEquipos.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_sgre}>{itemselect.descripcion_sgre}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
         <Grid item xs={12} md={4}>
           <FormControl className={styles.formControlEstados}>
             <InputLabel id="idselectMarca">Marca</InputLabel>
@@ -830,41 +920,23 @@ function Equipos() {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={4}> <TextField name="antiguedad_equ" label="Antiguedad"
-          fullWidth onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.antiguedad_equ} />
+        <Grid item xs={12} md={4}> 
+            <TextField name="antiguedad_equ" label="Antiguedad" fullWidth onChange={handleChange} 
+                      value={equiposSeleccionado && equiposSeleccionado.antiguedad_equ} /> 
         </Grid>
-        <Grid item xs={12} md={4}> <TextField name="ctacontable_equ" label="Cuenta Contable"
-          fullWidth onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.ctacontable_equ} />
+        <Grid item xs={12} md={4}> 
+            <TextField name="ctacontable_equ" label="Cuenta Contable" fullWidth onChange={handleChange} 
+                         value={equiposSeleccionado && equiposSeleccionado.ctacontable_equ} /> 
         </Grid>
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
-            <InputLabel id="idselectGrupoEquipo">Tipo de Equipo</InputLabel>
-            <Select
-              labelId="selectGrupoEquipo"
-              name="grupoequipo_equ"
-              id="idselectGrupoEquipo"
-              fullWidth
-              onChange={handleChange}
-              value={equiposSeleccionado && equiposSeleccionado.grupoequipo_equ}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarGruposEquipos.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_grp}>{itemselect.descripcion_grp}</MenuItem>
-                  )
-                })
-              }
-            </Select>
-          </FormControl>
-        </Grid>
+        
         <Grid item xs={12} md={6}>
           <TextField className={styles.inputMaterial} name="valoradquisicion_equ" label="Valor de Compra" fullWidth
             InputLabelProps={{ shrink: true }} InputProps={{ inputComponent: NumberFormatCustom, }}
-            onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.valoradquisicion_equ} />
+            onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.valoradquisicion_equ}
+          />
         </Grid>
-        <Grid item xs={12} md={4}>
-          <FormControl className={styles.formControlEstados}>
+        <Grid item xs={12} md={6}>
+          <FormControl className={styles.formControl}>
             <InputLabel id="idselectEstadoContable">Estado en Contabilidad</InputLabel>
             <Select
               labelId="selectEstadoContable"
@@ -885,8 +957,8 @@ function Equipos() {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={4}>
-          <FormControl className={styles.formControlEstados}>
+        <Grid item xs={12} md={6}>
+          <FormControl className={styles.formControl}>
             <InputLabel id="idselectEstadoCliente">Estado del Cliente</InputLabel>
             <Select
               labelId="selectEstadoCliente"
@@ -907,8 +979,8 @@ function Equipos() {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={4}>
-          <FormControl className={styles.formControlEstados}>
+        <Grid item xs={12} md={6}>
+          <FormControl className={styles.formControl}>
             <InputLabel id="idselectEstadoMtto">Estado de Mantenimiento</InputLabel>
             <Select
               labelId="selectEstadoMtto"

@@ -19,6 +19,15 @@ unidades.listUnidades = async () => {
     return res;
 }
 
+unidades.listTipopartes = async () => {
+    const urlList = baseUrl+"/listar_tipopartes"
+    const res = await axios.get(urlList)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
 unidades.update = async (data) => {
     console.log(data);
     const urlUpdate = baseUrl+"/update/"+data.id_und

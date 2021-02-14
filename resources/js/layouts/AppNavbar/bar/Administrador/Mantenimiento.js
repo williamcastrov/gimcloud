@@ -86,11 +86,11 @@ function Mantenimiento() {
                 </ListItemIcon>
                 <ListItemText primary="Grupos de Equipos" />
               </ListItem>
-              <ListItem component={Link} button to="/mantenimiento/subgruposequipos" className={classes.nested}>
+              <ListItem component={Link} button to="/mantenimiento/subgrupospartes" className={classes.nested}>
                 <ListItemIcon>
                   <CategoryIcon />
                 </ListItemIcon>
-                <ListItemText primary="Sub Grupos de Equipos" />
+                <ListItemText primary="SubGrupos de Partes" />
               </ListItem>
               <ListItem component={Link} button to="/mantenimiento/frecuencias" className={classes.nested}>
                 <ListItemIcon>
@@ -148,11 +148,11 @@ function Mantenimiento() {
                 </ListItemIcon>
                 <ListItemText primary="Equipos" />
               </ListItem>
-              <ListItem button className={classes.nested}>
+              <ListItem component={Link} button to="/mantenimiento/accesorios" className={classes.nested}>
                 <ListItemIcon>
-                  <ReceiptIcon />
+                  <CategoryIcon />
                 </ListItemIcon>
-                <ListItemText primary="Hoja de Vida" />
+                <ListItemText primary="Accesorios" />
               </ListItem>
             </List>
           </Collapse>

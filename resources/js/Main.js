@@ -29,8 +29,10 @@ import Monedas from './pages/Parameters/Monedas';
 // Componentes Modulo Gestión Mantenimiento
 import Frecuencias from './pages/Mantenimiento/Frecuencias';
 import Equipos from './pages/Mantenimiento/Equipos';
+import Accesorios from './pages/Mantenimiento/Accesorios';
+import ExtrasEquipos from './pages/Mantenimiento/ExtrasEquipos';
 import Gruposequipos from './pages/Mantenimiento/Gruposequipos';
-import SubGruposequipos from './pages/Mantenimiento/SubGruposequipos';
+import SubGrupospartes from './pages/Mantenimiento/SubGrupospartes';
 import Referencias from './pages/Mantenimiento/Referencias';
 import Marcas from './pages/Mantenimiento/Marcas';
 import ClasificacionABC from './pages/Mantenimiento/ClasificacionABC';
@@ -149,11 +151,13 @@ function Main() {
               <Route path="/mantenimiento/estadosmtto" component={EstadosMtto} />
        
               <Route path="/mantenimiento/gruposequipos" component={Gruposequipos} />
-              <Route path="/mantenimiento/subgruposequipos" component={SubGruposequipos} />
+              <Route path="/mantenimiento/subgrupospartes" component={SubGrupospartes} />
               <Route path="/mantenimiento/clasificacionABC" component={ClasificacionABC} />
               <Route path="/mantenimiento/referencias" component={Referencias} />
               <Route path="/mantenimiento/frecuencias" component={Frecuencias} />
               <Route path="/mantenimiento/equipos" component={Equipos} />
+              <Route path="/mantenimiento/extrasequipos" component={ExtrasEquipos} />
+              <Route path="/mantenimiento/accesorios" component={Accesorios} />
               <Route path="/mantenimiento/tipogarantia" component={TipoGarantia} />
               <Route path="/mantenimiento/garantias" component={Garantias} />
               <Route path="/mantenimiento/contratos" component={Contratos} />

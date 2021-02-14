@@ -15,6 +15,7 @@ class Equipos extends Model
 
     protected $fillable = [
         'codigo_equ',
+        'tipo_equ',
         'descripcion_equ',
         'empresa_equ',
         'frecuencia_equ',
@@ -22,6 +23,7 @@ class Equipos extends Model
         'marca_equ',
         'antiguedad_equ',
         'grupoequipo_equ',
+        'subgrupoparte_equ',
         'valoradquisicion_equ',
         'estadocontable_equ',
         'estadocliente_equ',

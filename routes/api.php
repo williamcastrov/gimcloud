@@ -52,6 +52,7 @@ Route::delete('/ciudades/delete/{id}', 'App\Http\Controllers\API\Parameters\Ciud
 Route::put('/ciudades/update/{id}', 'App\Http\Controllers\API\Parameters\CiudadesController@update');
 
 Route::get('/unidades/listar_unidades', 'App\Http\Controllers\API\Parameters\UnidadesController@listar_unidades');
+Route::get('/unidades/listar_tipopartes', 'App\Http\Controllers\API\Parameters\UnidadesController@listar_tipopartes');
 Route::post('/unidades/create', 'App\Http\Controllers\API\Parameters\UnidadesController@create');
 Route::get('/unidades/get/{id}', 'App\Http\Controllers\API\Parameters\UnidadesController@get');
 Route::delete('/unidades/delete/{id}', 'App\Http\Controllers\API\Parameters\UnidadesController@delete');
@@ -173,11 +174,13 @@ Route::get('/gruposequipos/get/{id}', 'App\Http\Controllers\API\Mantenimiento\Gr
 Route::delete('/gruposequipos/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\GruposEquiposController@delete');
 Route::put('/gruposequipos/update/{id}', 'App\Http\Controllers\API\Mantenimiento\GruposEquiposController@update');
 
-Route::get('/subgruposequipos/listar_subgruposequipos', 'App\Http\Controllers\API\Mantenimiento\SubGruposEquiposController@listar_subgruposequipos');
-Route::post('/subgruposequipos/create', 'App\Http\Controllers\API\Mantenimiento\SubGruposEquiposController@create');
-Route::get('/subgruposequipos/get/{id}', 'App\Http\Controllers\API\Mantenimiento\SubGruposEquiposController@get');
-Route::delete('/subgruposequipos/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\SubGruposEquiposController@delete');
-Route::put('/subgruposequipos/update/{id}', 'App\Http\Controllers\API\Mantenimiento\SubGruposEquiposController@update');
+Route::get('/subgrupospartes/listar_subgrupospartes', 'App\Http\Controllers\API\Mantenimiento\SubGruposPartesController@listar_subgrupospartes');
+Route::get('/subgrupospartes/listar_subgrupospartesequipos', 'App\Http\Controllers\API\Mantenimiento\SubGruposPartesController@listar_subgrupospartesequipos');
+Route::get('/subgrupospartes/listar_subgrupospartescomponentes', 'App\Http\Controllers\API\Mantenimiento\SubGruposPartesController@listar_subgrupospartescomponentes');
+Route::post('/subgrupospartes/create', 'App\Http\Controllers\API\Mantenimiento\SubGruposPartesController@create');
+Route::get('/subgrupospartes/get/{id}', 'App\Http\Controllers\API\Mantenimiento\SubGruposPartesController@get');
+Route::delete('/subgrupospartes/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\SubGruposPartesController@delete');
+Route::put('/subgrupospartes/update/{id}', 'App\Http\Controllers\API\Mantenimiento\SubGruposPartesController@update');
 
 Route::get('/frecuencias/listar_frecuencias', 'App\Http\Controllers\API\Mantenimiento\FrecuenciasController@listar_frecuencias');
 Route::post('/frecuencias/create', 'App\Http\Controllers\API\Mantenimiento\FrecuenciasController@create');
@@ -198,10 +201,18 @@ Route::delete('/referencias/delete/{id}', 'App\Http\Controllers\API\Mantenimient
 Route::put('/referencias/update/{id}', 'App\Http\Controllers\API\Mantenimiento\ReferenciasController@update');
 
 Route::get('/equipos/listar_equipos', 'App\Http\Controllers\API\Mantenimiento\EquiposController@listar_equipos');
+Route::get('/equipos/listar_equiposmontacargas', 'App\Http\Controllers\API\Mantenimiento\EquiposController@listar_equiposmontacargas');
+Route::get('/equipos/listar_equiposaccesorios', 'App\Http\Controllers\API\Mantenimiento\EquiposController@listar_equiposaccesorios');
 Route::post('/equipos/create', 'App\Http\Controllers\API\Mantenimiento\EquiposController@create');
 Route::get('/equipos/get/{id}', 'App\Http\Controllers\API\Mantenimiento\EquiposController@get');
 Route::delete('/equipos/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\EquiposController@delete');
 Route::put('/equipos/update/{id}', 'App\Http\Controllers\API\Mantenimiento\EquiposController@update');
+
+Route::get('/extrasequipos/listar_extrasequipos', 'App\Http\Controllers\API\Mantenimiento\ExtrasEquiposController@listar_extrasequipos');
+Route::post('/extrasequipos/create', 'App\Http\Controllers\API\Mantenimiento\ExtrasEquiposController@create');
+Route::get('/extrasequipos/get/{id}', 'App\Http\Controllers\API\Mantenimiento\ExtrasEquiposController@get');
+Route::delete('/extrasequipos/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\ExtrasEquiposController@delete');
+Route::put('/extrasequipos/update/{id}', 'App\Http\Controllers\API\Mantenimiento\ExtrasEquiposController@update');
 
 // Rutas Gestión Datos Adicionales de los Equipos
 Route::get('/datosequipos/listar_datosequipos', 'App\Http\Controllers\API\DatosEquipos\DatosEquiposController@listar_datosequipos');
