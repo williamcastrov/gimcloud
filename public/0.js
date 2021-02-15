@@ -1305,7 +1305,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_corejs3_core_js_stable_reflect_apply__WEBPACK_IMPORTED_MODULE_49___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs3_core_js_stable_reflect_apply__WEBPACK_IMPORTED_MODULE_49__);
 /* harmony import */ var _babel_runtime_corejs3_core_js_stable_reflect_get_prototype_of__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! @babel/runtime-corejs3/core-js-stable/reflect/get-prototype-of */ "./node_modules/@babel/runtime-corejs3/core-js-stable/reflect/get-prototype-of.js");
 /* harmony import */ var _babel_runtime_corejs3_core_js_stable_reflect_get_prototype_of__WEBPACK_IMPORTED_MODULE_50___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs3_core_js_stable_reflect_get_prototype_of__WEBPACK_IMPORTED_MODULE_50__);
-/* harmony import */ var stackblur_canvas__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! stackblur-canvas */ "./node_modules/stackblur-canvas/dist/stackblur-es.js");
+/* harmony import */ var stackblur_canvas__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! stackblur-canvas */ "./node_modules/canvg/node_modules/stackblur-canvas/dist/stackblur-es.js");
 
 
 
@@ -9186,6 +9186,655 @@ var index = /*#__PURE__*/Object.freeze({
 
 /***/ }),
 
+/***/ "./node_modules/canvg/node_modules/stackblur-canvas/dist/stackblur-es.js":
+/*!*******************************************************************************!*\
+  !*** ./node_modules/canvg/node_modules/stackblur-canvas/dist/stackblur-es.js ***!
+  \*******************************************************************************/
+/*! exports provided: BlurStack, canvasRGB, canvasRGBA, image, imageDataRGB, imageDataRGBA */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BlurStack", function() { return BlurStack; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "canvasRGB", function() { return processCanvasRGB; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "canvasRGBA", function() { return processCanvasRGBA; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "image", function() { return processImage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "imageDataRGB", function() { return processImageDataRGB; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "imageDataRGBA", function() { return processImageDataRGBA; });
+function _typeof(obj) {
+  "@babel/helpers - typeof";
+
+  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+    _typeof = function (obj) {
+      return typeof obj;
+    };
+  } else {
+    _typeof = function (obj) {
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    };
+  }
+
+  return _typeof(obj);
+}
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+/* eslint-disable no-bitwise -- used for calculations */
+
+/* eslint-disable unicorn/prefer-query-selector -- aiming at
+  backward-compatibility */
+
+/**
+* StackBlur - a fast almost Gaussian Blur For Canvas
+*
+* In case you find this class useful - especially in commercial projects -
+* I am not totally unhappy for a small donation to my PayPal account
+* mario@quasimondo.de
+*
+* Or support me on flattr:
+* {@link https://flattr.com/thing/72791/StackBlur-a-fast-almost-Gaussian-Blur-Effect-for-CanvasJavascript}.
+*
+* @module StackBlur
+* @author Mario Klingemann
+* Contact: mario@quasimondo.com
+* Website: {@link http://www.quasimondo.com/StackBlurForCanvas/StackBlurDemo.html}
+* Twitter: @quasimondo
+*
+* @copyright (c) 2010 Mario Klingemann
+*
+* Permission is hereby granted, free of charge, to any person
+* obtaining a copy of this software and associated documentation
+* files (the "Software"), to deal in the Software without
+* restriction, including without limitation the rights to use,
+* copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the
+* Software is furnished to do so, subject to the following
+* conditions:
+*
+* The above copyright notice and this permission notice shall be
+* included in all copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+* OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+* NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+* HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+* WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+* FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+* OTHER DEALINGS IN THE SOFTWARE.
+*/
+var mulTable = [512, 512, 456, 512, 328, 456, 335, 512, 405, 328, 271, 456, 388, 335, 292, 512, 454, 405, 364, 328, 298, 271, 496, 456, 420, 388, 360, 335, 312, 292, 273, 512, 482, 454, 428, 405, 383, 364, 345, 328, 312, 298, 284, 271, 259, 496, 475, 456, 437, 420, 404, 388, 374, 360, 347, 335, 323, 312, 302, 292, 282, 273, 265, 512, 497, 482, 468, 454, 441, 428, 417, 405, 394, 383, 373, 364, 354, 345, 337, 328, 320, 312, 305, 298, 291, 284, 278, 271, 265, 259, 507, 496, 485, 475, 465, 456, 446, 437, 428, 420, 412, 404, 396, 388, 381, 374, 367, 360, 354, 347, 341, 335, 329, 323, 318, 312, 307, 302, 297, 292, 287, 282, 278, 273, 269, 265, 261, 512, 505, 497, 489, 482, 475, 468, 461, 454, 447, 441, 435, 428, 422, 417, 411, 405, 399, 394, 389, 383, 378, 373, 368, 364, 359, 354, 350, 345, 341, 337, 332, 328, 324, 320, 316, 312, 309, 305, 301, 298, 294, 291, 287, 284, 281, 278, 274, 271, 268, 265, 262, 259, 257, 507, 501, 496, 491, 485, 480, 475, 470, 465, 460, 456, 451, 446, 442, 437, 433, 428, 424, 420, 416, 412, 408, 404, 400, 396, 392, 388, 385, 381, 377, 374, 370, 367, 363, 360, 357, 354, 350, 347, 344, 341, 338, 335, 332, 329, 326, 323, 320, 318, 315, 312, 310, 307, 304, 302, 299, 297, 294, 292, 289, 287, 285, 282, 280, 278, 275, 273, 271, 269, 267, 265, 263, 261, 259];
+var shgTable = [9, 11, 12, 13, 13, 14, 14, 15, 15, 15, 15, 16, 16, 16, 16, 17, 17, 17, 17, 17, 17, 17, 18, 18, 18, 18, 18, 18, 18, 18, 18, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24];
+/**
+ * @param {string|HTMLImageElement} img
+ * @param {string|HTMLCanvasElement} canvas
+ * @param {Float} radius
+ * @param {boolean} blurAlphaChannel
+ * @param {boolean} useOffsetWidth
+ * @returns {undefined}
+ */
+
+function processImage(img, canvas, radius, blurAlphaChannel, useOffsetWidth) {
+  if (typeof img === 'string') {
+    img = document.getElementById(img);
+  }
+
+  if (!img || !('naturalWidth' in img)) {
+    return;
+  }
+
+  var dimensionType = useOffsetWidth ? 'offset' : 'natural';
+  var w = img[dimensionType + 'Width'];
+  var h = img[dimensionType + 'Height'];
+
+  if (typeof canvas === 'string') {
+    canvas = document.getElementById(canvas);
+  }
+
+  if (!canvas || !('getContext' in canvas)) {
+    return;
+  }
+
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+  canvas.width = w;
+  canvas.height = h;
+  var context = canvas.getContext('2d');
+  context.clearRect(0, 0, w, h);
+  context.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, w, h);
+
+  if (isNaN(radius) || radius < 1) {
+    return;
+  }
+
+  if (blurAlphaChannel) {
+    processCanvasRGBA(canvas, 0, 0, w, h, radius);
+  } else {
+    processCanvasRGB(canvas, 0, 0, w, h, radius);
+  }
+}
+/**
+ * @param {string|HTMLCanvasElement} canvas
+ * @param {Integer} topX
+ * @param {Integer} topY
+ * @param {Integer} width
+ * @param {Integer} height
+ * @throws {Error|TypeError}
+ * @returns {ImageData} See {@link https://html.spec.whatwg.org/multipage/canvas.html#imagedata}
+ */
+
+
+function getImageDataFromCanvas(canvas, topX, topY, width, height) {
+  if (typeof canvas === 'string') {
+    canvas = document.getElementById(canvas);
+  }
+
+  if (!canvas || _typeof(canvas) !== 'object' || !('getContext' in canvas)) {
+    throw new TypeError('Expecting canvas with `getContext` method ' + 'in processCanvasRGB(A) calls!');
+  }
+
+  var context = canvas.getContext('2d');
+
+  try {
+    return context.getImageData(topX, topY, width, height);
+  } catch (e) {
+    throw new Error('unable to access image data: ' + e);
+  }
+}
+/**
+ * @param {HTMLCanvasElement} canvas
+ * @param {Integer} topX
+ * @param {Integer} topY
+ * @param {Integer} width
+ * @param {Integer} height
+ * @param {Float} radius
+ * @returns {undefined}
+ */
+
+
+function processCanvasRGBA(canvas, topX, topY, width, height, radius) {
+  if (isNaN(radius) || radius < 1) {
+    return;
+  }
+
+  radius |= 0;
+  var imageData = getImageDataFromCanvas(canvas, topX, topY, width, height);
+  imageData = processImageDataRGBA(imageData, topX, topY, width, height, radius);
+  canvas.getContext('2d').putImageData(imageData, topX, topY);
+}
+/**
+ * @param {ImageData} imageData
+ * @param {Integer} topX
+ * @param {Integer} topY
+ * @param {Integer} width
+ * @param {Integer} height
+ * @param {Float} radius
+ * @returns {ImageData}
+ */
+
+
+function processImageDataRGBA(imageData, topX, topY, width, height, radius) {
+  var pixels = imageData.data;
+  var div = 2 * radius + 1; // const w4 = width << 2;
+
+  var widthMinus1 = width - 1;
+  var heightMinus1 = height - 1;
+  var radiusPlus1 = radius + 1;
+  var sumFactor = radiusPlus1 * (radiusPlus1 + 1) / 2;
+  var stackStart = new BlurStack();
+  var stack = stackStart;
+  var stackEnd;
+
+  for (var i = 1; i < div; i++) {
+    stack = stack.next = new BlurStack();
+
+    if (i === radiusPlus1) {
+      stackEnd = stack;
+    }
+  }
+
+  stack.next = stackStart;
+  var stackIn = null,
+      stackOut = null,
+      yw = 0,
+      yi = 0;
+  var mulSum = mulTable[radius];
+  var shgSum = shgTable[radius];
+
+  for (var y = 0; y < height; y++) {
+    stack = stackStart;
+    var pr = pixels[yi],
+        pg = pixels[yi + 1],
+        pb = pixels[yi + 2],
+        pa = pixels[yi + 3];
+
+    for (var _i = 0; _i < radiusPlus1; _i++) {
+      stack.r = pr;
+      stack.g = pg;
+      stack.b = pb;
+      stack.a = pa;
+      stack = stack.next;
+    }
+
+    var rInSum = 0,
+        gInSum = 0,
+        bInSum = 0,
+        aInSum = 0,
+        rOutSum = radiusPlus1 * pr,
+        gOutSum = radiusPlus1 * pg,
+        bOutSum = radiusPlus1 * pb,
+        aOutSum = radiusPlus1 * pa,
+        rSum = sumFactor * pr,
+        gSum = sumFactor * pg,
+        bSum = sumFactor * pb,
+        aSum = sumFactor * pa;
+
+    for (var _i2 = 1; _i2 < radiusPlus1; _i2++) {
+      var p = yi + ((widthMinus1 < _i2 ? widthMinus1 : _i2) << 2);
+      var r = pixels[p],
+          g = pixels[p + 1],
+          b = pixels[p + 2],
+          a = pixels[p + 3];
+      var rbs = radiusPlus1 - _i2;
+      rSum += (stack.r = r) * rbs;
+      gSum += (stack.g = g) * rbs;
+      bSum += (stack.b = b) * rbs;
+      aSum += (stack.a = a) * rbs;
+      rInSum += r;
+      gInSum += g;
+      bInSum += b;
+      aInSum += a;
+      stack = stack.next;
+    }
+
+    stackIn = stackStart;
+    stackOut = stackEnd;
+
+    for (var x = 0; x < width; x++) {
+      var paInitial = aSum * mulSum >> shgSum;
+      pixels[yi + 3] = paInitial;
+
+      if (paInitial !== 0) {
+        var _a2 = 255 / paInitial;
+
+        pixels[yi] = (rSum * mulSum >> shgSum) * _a2;
+        pixels[yi + 1] = (gSum * mulSum >> shgSum) * _a2;
+        pixels[yi + 2] = (bSum * mulSum >> shgSum) * _a2;
+      } else {
+        pixels[yi] = pixels[yi + 1] = pixels[yi + 2] = 0;
+      }
+
+      rSum -= rOutSum;
+      gSum -= gOutSum;
+      bSum -= bOutSum;
+      aSum -= aOutSum;
+      rOutSum -= stackIn.r;
+      gOutSum -= stackIn.g;
+      bOutSum -= stackIn.b;
+      aOutSum -= stackIn.a;
+
+      var _p = x + radius + 1;
+
+      _p = yw + (_p < widthMinus1 ? _p : widthMinus1) << 2;
+      rInSum += stackIn.r = pixels[_p];
+      gInSum += stackIn.g = pixels[_p + 1];
+      bInSum += stackIn.b = pixels[_p + 2];
+      aInSum += stackIn.a = pixels[_p + 3];
+      rSum += rInSum;
+      gSum += gInSum;
+      bSum += bInSum;
+      aSum += aInSum;
+      stackIn = stackIn.next;
+      var _stackOut = stackOut,
+          _r = _stackOut.r,
+          _g = _stackOut.g,
+          _b = _stackOut.b,
+          _a = _stackOut.a;
+      rOutSum += _r;
+      gOutSum += _g;
+      bOutSum += _b;
+      aOutSum += _a;
+      rInSum -= _r;
+      gInSum -= _g;
+      bInSum -= _b;
+      aInSum -= _a;
+      stackOut = stackOut.next;
+      yi += 4;
+    }
+
+    yw += width;
+  }
+
+  for (var _x = 0; _x < width; _x++) {
+    yi = _x << 2;
+
+    var _pr = pixels[yi],
+        _pg = pixels[yi + 1],
+        _pb = pixels[yi + 2],
+        _pa = pixels[yi + 3],
+        _rOutSum = radiusPlus1 * _pr,
+        _gOutSum = radiusPlus1 * _pg,
+        _bOutSum = radiusPlus1 * _pb,
+        _aOutSum = radiusPlus1 * _pa,
+        _rSum = sumFactor * _pr,
+        _gSum = sumFactor * _pg,
+        _bSum = sumFactor * _pb,
+        _aSum = sumFactor * _pa;
+
+    stack = stackStart;
+
+    for (var _i3 = 0; _i3 < radiusPlus1; _i3++) {
+      stack.r = _pr;
+      stack.g = _pg;
+      stack.b = _pb;
+      stack.a = _pa;
+      stack = stack.next;
+    }
+
+    var yp = width;
+    var _gInSum = 0,
+        _bInSum = 0,
+        _aInSum = 0,
+        _rInSum = 0;
+
+    for (var _i4 = 1; _i4 <= radius; _i4++) {
+      yi = yp + _x << 2;
+
+      var _rbs = radiusPlus1 - _i4;
+
+      _rSum += (stack.r = _pr = pixels[yi]) * _rbs;
+      _gSum += (stack.g = _pg = pixels[yi + 1]) * _rbs;
+      _bSum += (stack.b = _pb = pixels[yi + 2]) * _rbs;
+      _aSum += (stack.a = _pa = pixels[yi + 3]) * _rbs;
+      _rInSum += _pr;
+      _gInSum += _pg;
+      _bInSum += _pb;
+      _aInSum += _pa;
+      stack = stack.next;
+
+      if (_i4 < heightMinus1) {
+        yp += width;
+      }
+    }
+
+    yi = _x;
+    stackIn = stackStart;
+    stackOut = stackEnd;
+
+    for (var _y = 0; _y < height; _y++) {
+      var _p2 = yi << 2;
+
+      pixels[_p2 + 3] = _pa = _aSum * mulSum >> shgSum;
+
+      if (_pa > 0) {
+        _pa = 255 / _pa;
+        pixels[_p2] = (_rSum * mulSum >> shgSum) * _pa;
+        pixels[_p2 + 1] = (_gSum * mulSum >> shgSum) * _pa;
+        pixels[_p2 + 2] = (_bSum * mulSum >> shgSum) * _pa;
+      } else {
+        pixels[_p2] = pixels[_p2 + 1] = pixels[_p2 + 2] = 0;
+      }
+
+      _rSum -= _rOutSum;
+      _gSum -= _gOutSum;
+      _bSum -= _bOutSum;
+      _aSum -= _aOutSum;
+      _rOutSum -= stackIn.r;
+      _gOutSum -= stackIn.g;
+      _bOutSum -= stackIn.b;
+      _aOutSum -= stackIn.a;
+      _p2 = _x + ((_p2 = _y + radiusPlus1) < heightMinus1 ? _p2 : heightMinus1) * width << 2;
+      _rSum += _rInSum += stackIn.r = pixels[_p2];
+      _gSum += _gInSum += stackIn.g = pixels[_p2 + 1];
+      _bSum += _bInSum += stackIn.b = pixels[_p2 + 2];
+      _aSum += _aInSum += stackIn.a = pixels[_p2 + 3];
+      stackIn = stackIn.next;
+      _rOutSum += _pr = stackOut.r;
+      _gOutSum += _pg = stackOut.g;
+      _bOutSum += _pb = stackOut.b;
+      _aOutSum += _pa = stackOut.a;
+      _rInSum -= _pr;
+      _gInSum -= _pg;
+      _bInSum -= _pb;
+      _aInSum -= _pa;
+      stackOut = stackOut.next;
+      yi += width;
+    }
+  }
+
+  return imageData;
+}
+/**
+ * @param {HTMLCanvasElement} canvas
+ * @param {Integer} topX
+ * @param {Integer} topY
+ * @param {Integer} width
+ * @param {Integer} height
+ * @param {Float} radius
+ * @returns {undefined}
+ */
+
+
+function processCanvasRGB(canvas, topX, topY, width, height, radius) {
+  if (isNaN(radius) || radius < 1) {
+    return;
+  }
+
+  radius |= 0;
+  var imageData = getImageDataFromCanvas(canvas, topX, topY, width, height);
+  imageData = processImageDataRGB(imageData, topX, topY, width, height, radius);
+  canvas.getContext('2d').putImageData(imageData, topX, topY);
+}
+/**
+ * @param {ImageData} imageData
+ * @param {Integer} topX
+ * @param {Integer} topY
+ * @param {Integer} width
+ * @param {Integer} height
+ * @param {Float} radius
+ * @returns {ImageData}
+ */
+
+
+function processImageDataRGB(imageData, topX, topY, width, height, radius) {
+  var pixels = imageData.data;
+  var div = 2 * radius + 1; // const w4 = width << 2;
+
+  var widthMinus1 = width - 1;
+  var heightMinus1 = height - 1;
+  var radiusPlus1 = radius + 1;
+  var sumFactor = radiusPlus1 * (radiusPlus1 + 1) / 2;
+  var stackStart = new BlurStack();
+  var stack = stackStart;
+  var stackEnd;
+
+  for (var i = 1; i < div; i++) {
+    stack = stack.next = new BlurStack();
+
+    if (i === radiusPlus1) {
+      stackEnd = stack;
+    }
+  }
+
+  stack.next = stackStart;
+  var stackIn = null;
+  var stackOut = null;
+  var mulSum = mulTable[radius];
+  var shgSum = shgTable[radius];
+  var p, rbs;
+  var yw = 0,
+      yi = 0;
+
+  for (var y = 0; y < height; y++) {
+    var pr = pixels[yi],
+        pg = pixels[yi + 1],
+        pb = pixels[yi + 2],
+        rOutSum = radiusPlus1 * pr,
+        gOutSum = radiusPlus1 * pg,
+        bOutSum = radiusPlus1 * pb,
+        rSum = sumFactor * pr,
+        gSum = sumFactor * pg,
+        bSum = sumFactor * pb;
+    stack = stackStart;
+
+    for (var _i5 = 0; _i5 < radiusPlus1; _i5++) {
+      stack.r = pr;
+      stack.g = pg;
+      stack.b = pb;
+      stack = stack.next;
+    }
+
+    var rInSum = 0,
+        gInSum = 0,
+        bInSum = 0;
+
+    for (var _i6 = 1; _i6 < radiusPlus1; _i6++) {
+      p = yi + ((widthMinus1 < _i6 ? widthMinus1 : _i6) << 2);
+      rSum += (stack.r = pr = pixels[p]) * (rbs = radiusPlus1 - _i6);
+      gSum += (stack.g = pg = pixels[p + 1]) * rbs;
+      bSum += (stack.b = pb = pixels[p + 2]) * rbs;
+      rInSum += pr;
+      gInSum += pg;
+      bInSum += pb;
+      stack = stack.next;
+    }
+
+    stackIn = stackStart;
+    stackOut = stackEnd;
+
+    for (var x = 0; x < width; x++) {
+      pixels[yi] = rSum * mulSum >> shgSum;
+      pixels[yi + 1] = gSum * mulSum >> shgSum;
+      pixels[yi + 2] = bSum * mulSum >> shgSum;
+      rSum -= rOutSum;
+      gSum -= gOutSum;
+      bSum -= bOutSum;
+      rOutSum -= stackIn.r;
+      gOutSum -= stackIn.g;
+      bOutSum -= stackIn.b;
+      p = yw + ((p = x + radius + 1) < widthMinus1 ? p : widthMinus1) << 2;
+      rInSum += stackIn.r = pixels[p];
+      gInSum += stackIn.g = pixels[p + 1];
+      bInSum += stackIn.b = pixels[p + 2];
+      rSum += rInSum;
+      gSum += gInSum;
+      bSum += bInSum;
+      stackIn = stackIn.next;
+      rOutSum += pr = stackOut.r;
+      gOutSum += pg = stackOut.g;
+      bOutSum += pb = stackOut.b;
+      rInSum -= pr;
+      gInSum -= pg;
+      bInSum -= pb;
+      stackOut = stackOut.next;
+      yi += 4;
+    }
+
+    yw += width;
+  }
+
+  for (var _x2 = 0; _x2 < width; _x2++) {
+    yi = _x2 << 2;
+
+    var _pr2 = pixels[yi],
+        _pg2 = pixels[yi + 1],
+        _pb2 = pixels[yi + 2],
+        _rOutSum2 = radiusPlus1 * _pr2,
+        _gOutSum2 = radiusPlus1 * _pg2,
+        _bOutSum2 = radiusPlus1 * _pb2,
+        _rSum2 = sumFactor * _pr2,
+        _gSum2 = sumFactor * _pg2,
+        _bSum2 = sumFactor * _pb2;
+
+    stack = stackStart;
+
+    for (var _i7 = 0; _i7 < radiusPlus1; _i7++) {
+      stack.r = _pr2;
+      stack.g = _pg2;
+      stack.b = _pb2;
+      stack = stack.next;
+    }
+
+    var _rInSum2 = 0,
+        _gInSum2 = 0,
+        _bInSum2 = 0;
+
+    for (var _i8 = 1, yp = width; _i8 <= radius; _i8++) {
+      yi = yp + _x2 << 2;
+      _rSum2 += (stack.r = _pr2 = pixels[yi]) * (rbs = radiusPlus1 - _i8);
+      _gSum2 += (stack.g = _pg2 = pixels[yi + 1]) * rbs;
+      _bSum2 += (stack.b = _pb2 = pixels[yi + 2]) * rbs;
+      _rInSum2 += _pr2;
+      _gInSum2 += _pg2;
+      _bInSum2 += _pb2;
+      stack = stack.next;
+
+      if (_i8 < heightMinus1) {
+        yp += width;
+      }
+    }
+
+    yi = _x2;
+    stackIn = stackStart;
+    stackOut = stackEnd;
+
+    for (var _y2 = 0; _y2 < height; _y2++) {
+      p = yi << 2;
+      pixels[p] = _rSum2 * mulSum >> shgSum;
+      pixels[p + 1] = _gSum2 * mulSum >> shgSum;
+      pixels[p + 2] = _bSum2 * mulSum >> shgSum;
+      _rSum2 -= _rOutSum2;
+      _gSum2 -= _gOutSum2;
+      _bSum2 -= _bOutSum2;
+      _rOutSum2 -= stackIn.r;
+      _gOutSum2 -= stackIn.g;
+      _bOutSum2 -= stackIn.b;
+      p = _x2 + ((p = _y2 + radiusPlus1) < heightMinus1 ? p : heightMinus1) * width << 2;
+      _rSum2 += _rInSum2 += stackIn.r = pixels[p];
+      _gSum2 += _gInSum2 += stackIn.g = pixels[p + 1];
+      _bSum2 += _bInSum2 += stackIn.b = pixels[p + 2];
+      stackIn = stackIn.next;
+      _rOutSum2 += _pr2 = stackOut.r;
+      _gOutSum2 += _pg2 = stackOut.g;
+      _bOutSum2 += _pb2 = stackOut.b;
+      _rInSum2 -= _pr2;
+      _gInSum2 -= _pg2;
+      _bInSum2 -= _pb2;
+      stackOut = stackOut.next;
+      yi += width;
+    }
+  }
+
+  return imageData;
+}
+/**
+ *
+ */
+
+
+var BlurStack =
+/**
+ * Set properties.
+ */
+function BlurStack() {
+  _classCallCheck(this, BlurStack);
+
+  this.r = 0;
+  this.g = 0;
+  this.b = 0;
+  this.a = 0;
+  this.next = null;
+};
+
+
+
+
+/***/ }),
+
 /***/ "./node_modules/core-js-pure/es/array/from.js":
 /*!****************************************************!*\
   !*** ./node_modules/core-js-pure/es/array/from.js ***!
@@ -10434,7 +11083,7 @@ var toAbsoluteIndex = __webpack_require__(/*! ../internals/to-absolute-index */ 
 var toLength = __webpack_require__(/*! ../internals/to-length */ "./node_modules/core-js-pure/internals/to-length.js");
 
 // `Array.prototype.fill` method implementation
-// https://tc39.github.io/ecma262/#sec-array.prototype.fill
+// https://tc39.es/ecma262/#sec-array.prototype.fill
 module.exports = function fill(value /* , start = 0, end = @length */) {
   var O = toObject(this);
   var length = toLength(O.length);
@@ -10466,7 +11115,7 @@ var STRICT_METHOD = arrayMethodIsStrict('forEach');
 var USES_TO_LENGTH = arrayMethodUsesToLength('forEach');
 
 // `Array.prototype.forEach` method implementation
-// https://tc39.github.io/ecma262/#sec-array.prototype.foreach
+// https://tc39.es/ecma262/#sec-array.prototype.foreach
 module.exports = (!STRICT_METHOD || !USES_TO_LENGTH) ? function forEach(callbackfn /* , thisArg */) {
   return $forEach(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
 } : [].forEach;
@@ -10492,7 +11141,7 @@ var createProperty = __webpack_require__(/*! ../internals/create-property */ "./
 var getIteratorMethod = __webpack_require__(/*! ../internals/get-iterator-method */ "./node_modules/core-js-pure/internals/get-iterator-method.js");
 
 // `Array.from` method implementation
-// https://tc39.github.io/ecma262/#sec-array.from
+// https://tc39.es/ecma262/#sec-array.from
 module.exports = function from(arrayLike /* , mapfn = undefined, thisArg = undefined */) {
   var O = toObject(arrayLike);
   var C = typeof this == 'function' ? this : Array;
@@ -10560,10 +11209,10 @@ var createMethod = function (IS_INCLUDES) {
 
 module.exports = {
   // `Array.prototype.includes` method
-  // https://tc39.github.io/ecma262/#sec-array.prototype.includes
+  // https://tc39.es/ecma262/#sec-array.prototype.includes
   includes: createMethod(true),
   // `Array.prototype.indexOf` method
-  // https://tc39.github.io/ecma262/#sec-array.prototype.indexof
+  // https://tc39.es/ecma262/#sec-array.prototype.indexof
   indexOf: createMethod(false)
 };
 
@@ -10585,13 +11234,14 @@ var arraySpeciesCreate = __webpack_require__(/*! ../internals/array-species-crea
 
 var push = [].push;
 
-// `Array.prototype.{ forEach, map, filter, some, every, find, findIndex }` methods implementation
+// `Array.prototype.{ forEach, map, filter, some, every, find, findIndex, filterOut }` methods implementation
 var createMethod = function (TYPE) {
   var IS_MAP = TYPE == 1;
   var IS_FILTER = TYPE == 2;
   var IS_SOME = TYPE == 3;
   var IS_EVERY = TYPE == 4;
   var IS_FIND_INDEX = TYPE == 6;
+  var IS_FILTER_OUT = TYPE == 7;
   var NO_HOLES = TYPE == 5 || IS_FIND_INDEX;
   return function ($this, callbackfn, that, specificCreate) {
     var O = toObject($this);
@@ -10600,7 +11250,7 @@ var createMethod = function (TYPE) {
     var length = toLength(self.length);
     var index = 0;
     var create = specificCreate || arraySpeciesCreate;
-    var target = IS_MAP ? create($this, length) : IS_FILTER ? create($this, 0) : undefined;
+    var target = IS_MAP ? create($this, length) : IS_FILTER || IS_FILTER_OUT ? create($this, 0) : undefined;
     var value, result;
     for (;length > index; index++) if (NO_HOLES || index in self) {
       value = self[index];
@@ -10612,7 +11262,10 @@ var createMethod = function (TYPE) {
           case 5: return value;             // find
           case 6: return index;             // findIndex
           case 2: push.call(target, value); // filter
-        } else if (IS_EVERY) return false;  // every
+        } else switch (TYPE) {
+          case 4: return false;             // every
+          case 7: push.call(target, value); // filterOut
+        }
       }
     }
     return IS_FIND_INDEX ? -1 : IS_SOME || IS_EVERY ? IS_EVERY : target;
@@ -10621,26 +11274,29 @@ var createMethod = function (TYPE) {
 
 module.exports = {
   // `Array.prototype.forEach` method
-  // https://tc39.github.io/ecma262/#sec-array.prototype.foreach
+  // https://tc39.es/ecma262/#sec-array.prototype.foreach
   forEach: createMethod(0),
   // `Array.prototype.map` method
-  // https://tc39.github.io/ecma262/#sec-array.prototype.map
+  // https://tc39.es/ecma262/#sec-array.prototype.map
   map: createMethod(1),
   // `Array.prototype.filter` method
-  // https://tc39.github.io/ecma262/#sec-array.prototype.filter
+  // https://tc39.es/ecma262/#sec-array.prototype.filter
   filter: createMethod(2),
   // `Array.prototype.some` method
-  // https://tc39.github.io/ecma262/#sec-array.prototype.some
+  // https://tc39.es/ecma262/#sec-array.prototype.some
   some: createMethod(3),
   // `Array.prototype.every` method
-  // https://tc39.github.io/ecma262/#sec-array.prototype.every
+  // https://tc39.es/ecma262/#sec-array.prototype.every
   every: createMethod(4),
   // `Array.prototype.find` method
-  // https://tc39.github.io/ecma262/#sec-array.prototype.find
+  // https://tc39.es/ecma262/#sec-array.prototype.find
   find: createMethod(5),
   // `Array.prototype.findIndex` method
-  // https://tc39.github.io/ecma262/#sec-array.prototype.findIndex
-  findIndex: createMethod(6)
+  // https://tc39.es/ecma262/#sec-array.prototype.findIndex
+  findIndex: createMethod(6),
+  // `Array.prototype.filterOut` method
+  // https://github.com/tc39/proposal-array-filtering
+  filterOut: createMethod(7)
 };
 
 
@@ -10777,10 +11433,10 @@ var createMethod = function (IS_RIGHT) {
 
 module.exports = {
   // `Array.prototype.reduce` method
-  // https://tc39.github.io/ecma262/#sec-array.prototype.reduce
+  // https://tc39.es/ecma262/#sec-array.prototype.reduce
   left: createMethod(false),
   // `Array.prototype.reduceRight` method
-  // https://tc39.github.io/ecma262/#sec-array.prototype.reduceright
+  // https://tc39.es/ecma262/#sec-array.prototype.reduceright
   right: createMethod(true)
 };
 
@@ -10801,7 +11457,7 @@ var wellKnownSymbol = __webpack_require__(/*! ../internals/well-known-symbol */ 
 var SPECIES = wellKnownSymbol('species');
 
 // `ArraySpeciesCreate` abstract operation
-// https://tc39.github.io/ecma262/#sec-arrayspeciescreate
+// https://tc39.es/ecma262/#sec-arrayspeciescreate
 module.exports = function (originalArray, length) {
   var C;
   if (isArray(originalArray)) {
@@ -11494,7 +12150,7 @@ module.exports = function (NAME) {
 
 var fails = __webpack_require__(/*! ../internals/fails */ "./node_modules/core-js-pure/internals/fails.js");
 
-// Thank's IE8 for his funny defineProperty
+// Detect IE8's incomplete defineProperty implementation
 module.exports = !fails(function () {
   return Object.defineProperty({}, 1, { get: function () { return 7; } })[1] != 7;
 });
@@ -11594,6 +12250,20 @@ var classof = __webpack_require__(/*! ../internals/classof-raw */ "./node_module
 var global = __webpack_require__(/*! ../internals/global */ "./node_modules/core-js-pure/internals/global.js");
 
 module.exports = classof(global.process) == 'process';
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js-pure/internals/engine-is-webos-webkit.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/core-js-pure/internals/engine-is-webos-webkit.js ***!
+  \***********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var userAgent = __webpack_require__(/*! ../internals/engine-user-agent */ "./node_modules/core-js-pure/internals/engine-user-agent.js");
+
+module.exports = /web0s(?!.*chrome)/i.test(userAgent);
 
 
 /***/ }),
@@ -11883,7 +12553,7 @@ var construct = function (C, argsLength, args) {
 };
 
 // `Function.prototype.bind` method implementation
-// https://tc39.github.io/ecma262/#sec-function.prototype.bind
+// https://tc39.es/ecma262/#sec-function.prototype.bind
 module.exports = Function.bind || function bind(that /* , ...args */) {
   var fn = aFunction(this);
   var partArgs = slice.call(arguments, 1);
@@ -12294,7 +12964,7 @@ module.exports = function (it) {
 var classof = __webpack_require__(/*! ../internals/classof-raw */ "./node_modules/core-js-pure/internals/classof-raw.js");
 
 // `IsArray` abstract operation
-// https://tc39.github.io/ecma262/#sec-isarray
+// https://tc39.es/ecma262/#sec-isarray
 module.exports = Array.isArray || function isArray(arg) {
   return classof(arg) == 'Array';
 };
@@ -12398,7 +13068,7 @@ var wellKnownSymbol = __webpack_require__(/*! ../internals/well-known-symbol */ 
 var MATCH = wellKnownSymbol('match');
 
 // `IsRegExp` abstract operation
-// https://tc39.github.io/ecma262/#sec-isregexp
+// https://tc39.es/ecma262/#sec-isregexp
 module.exports = function (it) {
   var isRegExp;
   return isObject(it) && ((isRegExp = it[MATCH]) !== undefined ? !!isRegExp : classof(it) == 'RegExp');
@@ -12504,6 +13174,7 @@ module.exports = function (iterator) {
 
 "use strict";
 
+var fails = __webpack_require__(/*! ../internals/fails */ "./node_modules/core-js-pure/internals/fails.js");
 var getPrototypeOf = __webpack_require__(/*! ../internals/object-get-prototype-of */ "./node_modules/core-js-pure/internals/object-get-prototype-of.js");
 var createNonEnumerableProperty = __webpack_require__(/*! ../internals/create-non-enumerable-property */ "./node_modules/core-js-pure/internals/create-non-enumerable-property.js");
 var has = __webpack_require__(/*! ../internals/has */ "./node_modules/core-js-pure/internals/has.js");
@@ -12516,7 +13187,7 @@ var BUGGY_SAFARI_ITERATORS = false;
 var returnThis = function () { return this; };
 
 // `%IteratorPrototype%` object
-// https://tc39.github.io/ecma262/#sec-%iteratorprototype%-object
+// https://tc39.es/ecma262/#sec-%iteratorprototype%-object
 var IteratorPrototype, PrototypeOfArrayIteratorPrototype, arrayIterator;
 
 if ([].keys) {
@@ -12529,10 +13200,16 @@ if ([].keys) {
   }
 }
 
-if (IteratorPrototype == undefined) IteratorPrototype = {};
+var NEW_ITERATOR_PROTOTYPE = IteratorPrototype == undefined || fails(function () {
+  var test = {};
+  // FF44- legacy iterators case
+  return IteratorPrototype[ITERATOR].call(test) !== test;
+});
+
+if (NEW_ITERATOR_PROTOTYPE) IteratorPrototype = {};
 
 // 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-if (!IS_PURE && !has(IteratorPrototype, ITERATOR)) {
+if ((!IS_PURE || NEW_ITERATOR_PROTOTYPE) && !has(IteratorPrototype, ITERATOR)) {
   createNonEnumerableProperty(IteratorPrototype, ITERATOR, returnThis);
 }
 
@@ -12567,6 +13244,7 @@ var global = __webpack_require__(/*! ../internals/global */ "./node_modules/core
 var getOwnPropertyDescriptor = __webpack_require__(/*! ../internals/object-get-own-property-descriptor */ "./node_modules/core-js-pure/internals/object-get-own-property-descriptor.js").f;
 var macrotask = __webpack_require__(/*! ../internals/task */ "./node_modules/core-js-pure/internals/task.js").set;
 var IS_IOS = __webpack_require__(/*! ../internals/engine-is-ios */ "./node_modules/core-js-pure/internals/engine-is-ios.js");
+var IS_WEBOS_WEBKIT = __webpack_require__(/*! ../internals/engine-is-webos-webkit */ "./node_modules/core-js-pure/internals/engine-is-webos-webkit.js");
 var IS_NODE = __webpack_require__(/*! ../internals/engine-is-node */ "./node_modules/core-js-pure/internals/engine-is-node.js");
 
 var MutationObserver = global.MutationObserver || global.WebKitMutationObserver;
@@ -12599,7 +13277,8 @@ if (!queueMicrotask) {
   };
 
   // browsers with MutationObserver, except iOS - https://github.com/zloirock/core-js/issues/339
-  if (!IS_IOS && !IS_NODE && MutationObserver && document) {
+  // also except WebOS Webkit https://github.com/zloirock/core-js/issues/898
+  if (!IS_IOS && !IS_NODE && !IS_WEBOS_WEBKIT && MutationObserver && document) {
     toggle = true;
     node = document.createTextNode('');
     new MutationObserver(flush).observe(node, { characterData: true });
@@ -12757,7 +13436,7 @@ var $parseFloat = global.parseFloat;
 var FORCED = 1 / $parseFloat(whitespaces + '-0') !== -Infinity;
 
 // `parseFloat` method
-// https://tc39.github.io/ecma262/#sec-parsefloat-string
+// https://tc39.es/ecma262/#sec-parsefloat-string
 module.exports = FORCED ? function parseFloat(string) {
   var trimmedString = trim(String(string));
   var result = $parseFloat(trimmedString);
@@ -12783,7 +13462,7 @@ var hex = /^[+-]?0[Xx]/;
 var FORCED = $parseInt(whitespaces + '08') !== 8 || $parseInt(whitespaces + '0x16') !== 22;
 
 // `parseInt` method
-// https://tc39.github.io/ecma262/#sec-parseint-string-radix
+// https://tc39.es/ecma262/#sec-parseint-string-radix
 module.exports = FORCED ? function parseInt(string, radix) {
   var S = trim(String(string));
   return $parseInt(S, (radix >>> 0) || (hex.test(S) ? 16 : 10));
@@ -12865,7 +13544,7 @@ var NullProtoObject = function () {
 hiddenKeys[IE_PROTO] = true;
 
 // `Object.create` method
-// https://tc39.github.io/ecma262/#sec-object.create
+// https://tc39.es/ecma262/#sec-object.create
 module.exports = Object.create || function create(O, Properties) {
   var result;
   if (O !== null) {
@@ -12894,7 +13573,7 @@ var anObject = __webpack_require__(/*! ../internals/an-object */ "./node_modules
 var objectKeys = __webpack_require__(/*! ../internals/object-keys */ "./node_modules/core-js-pure/internals/object-keys.js");
 
 // `Object.defineProperties` method
-// https://tc39.github.io/ecma262/#sec-object.defineproperties
+// https://tc39.es/ecma262/#sec-object.defineproperties
 module.exports = DESCRIPTORS ? Object.defineProperties : function defineProperties(O, Properties) {
   anObject(O);
   var keys = objectKeys(Properties);
@@ -12923,7 +13602,7 @@ var toPrimitive = __webpack_require__(/*! ../internals/to-primitive */ "./node_m
 var nativeDefineProperty = Object.defineProperty;
 
 // `Object.defineProperty` method
-// https://tc39.github.io/ecma262/#sec-object.defineproperty
+// https://tc39.es/ecma262/#sec-object.defineproperty
 exports.f = DESCRIPTORS ? nativeDefineProperty : function defineProperty(O, P, Attributes) {
   anObject(O);
   P = toPrimitive(P, true);
@@ -12957,7 +13636,7 @@ var IE8_DOM_DEFINE = __webpack_require__(/*! ../internals/ie8-dom-define */ "./n
 var nativeGetOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 
 // `Object.getOwnPropertyDescriptor` method
-// https://tc39.github.io/ecma262/#sec-object.getownpropertydescriptor
+// https://tc39.es/ecma262/#sec-object.getownpropertydescriptor
 exports.f = DESCRIPTORS ? nativeGetOwnPropertyDescriptor : function getOwnPropertyDescriptor(O, P) {
   O = toIndexedObject(O);
   P = toPrimitive(P, true);
@@ -13016,7 +13695,7 @@ var enumBugKeys = __webpack_require__(/*! ../internals/enum-bug-keys */ "./node_
 var hiddenKeys = enumBugKeys.concat('length', 'prototype');
 
 // `Object.getOwnPropertyNames` method
-// https://tc39.github.io/ecma262/#sec-object.getownpropertynames
+// https://tc39.es/ecma262/#sec-object.getownpropertynames
 exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
   return internalObjectKeys(O, hiddenKeys);
 };
@@ -13052,7 +13731,7 @@ var IE_PROTO = sharedKey('IE_PROTO');
 var ObjectPrototype = Object.prototype;
 
 // `Object.getPrototypeOf` method
-// https://tc39.github.io/ecma262/#sec-object.getprototypeof
+// https://tc39.es/ecma262/#sec-object.getprototypeof
 module.exports = CORRECT_PROTOTYPE_GETTER ? Object.getPrototypeOf : function (O) {
   O = toObject(O);
   if (has(O, IE_PROTO)) return O[IE_PROTO];
@@ -13103,7 +13782,7 @@ var internalObjectKeys = __webpack_require__(/*! ../internals/object-keys-intern
 var enumBugKeys = __webpack_require__(/*! ../internals/enum-bug-keys */ "./node_modules/core-js-pure/internals/enum-bug-keys.js");
 
 // `Object.keys` method
-// https://tc39.github.io/ecma262/#sec-object.keys
+// https://tc39.es/ecma262/#sec-object.keys
 module.exports = Object.keys || function keys(O) {
   return internalObjectKeys(O, enumBugKeys);
 };
@@ -13127,7 +13806,7 @@ var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 var NASHORN_BUG = getOwnPropertyDescriptor && !nativePropertyIsEnumerable.call({ 1: 2 }, 1);
 
 // `Object.prototype.propertyIsEnumerable` method implementation
-// https://tc39.github.io/ecma262/#sec-object.prototype.propertyisenumerable
+// https://tc39.es/ecma262/#sec-object.prototype.propertyisenumerable
 exports.f = NASHORN_BUG ? function propertyIsEnumerable(V) {
   var descriptor = getOwnPropertyDescriptor(this, V);
   return !!descriptor && descriptor.enumerable;
@@ -13147,7 +13826,7 @@ var anObject = __webpack_require__(/*! ../internals/an-object */ "./node_modules
 var aPossiblePrototype = __webpack_require__(/*! ../internals/a-possible-prototype */ "./node_modules/core-js-pure/internals/a-possible-prototype.js");
 
 // `Object.setPrototypeOf` method
-// https://tc39.github.io/ecma262/#sec-object.setprototypeof
+// https://tc39.es/ecma262/#sec-object.setprototypeof
 // Works with __proto__ only. Old v8 can't work with null proto objects.
 /* eslint-disable no-proto */
 module.exports = Object.setPrototypeOf || ('__proto__' in {} ? function () {
@@ -13184,7 +13863,7 @@ var TO_STRING_TAG_SUPPORT = __webpack_require__(/*! ../internals/to-string-tag-s
 var classof = __webpack_require__(/*! ../internals/classof */ "./node_modules/core-js-pure/internals/classof.js");
 
 // `Object.prototype.toString` method implementation
-// https://tc39.github.io/ecma262/#sec-object.prototype.tostring
+// https://tc39.es/ecma262/#sec-object.prototype.tostring
 module.exports = TO_STRING_TAG_SUPPORT ? {}.toString : function toString() {
   return '[object ' + classof(this) + ']';
 };
@@ -13311,7 +13990,7 @@ module.exports = function (target, key, value, options) {
 /***/ (function(module, exports) {
 
 // `RequireObjectCoercible` abstract operation
-// https://tc39.github.io/ecma262/#sec-requireobjectcoercible
+// https://tc39.es/ecma262/#sec-requireobjectcoercible
 module.exports = function (it) {
   if (it == undefined) throw TypeError("Can't call method on " + it);
   return it;
@@ -13453,9 +14132,9 @@ var store = __webpack_require__(/*! ../internals/shared-store */ "./node_modules
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.7.0',
+  version: '3.8.3',
   mode: IS_PURE ? 'pure' : 'global',
-  copyright: '© 2020 Denis Pushkarev (zloirock.ru)'
+  copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
 
 
@@ -13475,7 +14154,7 @@ var wellKnownSymbol = __webpack_require__(/*! ../internals/well-known-symbol */ 
 var SPECIES = wellKnownSymbol('species');
 
 // `SpeciesConstructor` abstract operation
-// https://tc39.github.io/ecma262/#sec-speciesconstructor
+// https://tc39.es/ecma262/#sec-speciesconstructor
 module.exports = function (O, defaultConstructor) {
   var C = anObject(O).constructor;
   var S;
@@ -13513,7 +14192,7 @@ var createMethod = function (CONVERT_TO_STRING) {
 
 module.exports = {
   // `String.prototype.codePointAt` method
-  // https://tc39.github.io/ecma262/#sec-string.prototype.codepointat
+  // https://tc39.es/ecma262/#sec-string.prototype.codepointat
   codeAt: createMethod(false),
   // `String.prototype.at` method
   // https://github.com/mathiasbynens/String.prototype.at
@@ -13572,13 +14251,13 @@ var createMethod = function (TYPE) {
 
 module.exports = {
   // `String.prototype.{ trimLeft, trimStart }` methods
-  // https://tc39.github.io/ecma262/#sec-string.prototype.trimstart
+  // https://tc39.es/ecma262/#sec-string.prototype.trimstart
   start: createMethod(1),
   // `String.prototype.{ trimRight, trimEnd }` methods
-  // https://tc39.github.io/ecma262/#sec-string.prototype.trimend
+  // https://tc39.es/ecma262/#sec-string.prototype.trimend
   end: createMethod(2),
   // `String.prototype.trim` method
-  // https://tc39.github.io/ecma262/#sec-string.prototype.trim
+  // https://tc39.es/ecma262/#sec-string.prototype.trim
   trim: createMethod(3)
 };
 
@@ -13755,7 +14434,7 @@ var ceil = Math.ceil;
 var floor = Math.floor;
 
 // `ToInteger` abstract operation
-// https://tc39.github.io/ecma262/#sec-tointeger
+// https://tc39.es/ecma262/#sec-tointeger
 module.exports = function (argument) {
   return isNaN(argument = +argument) ? 0 : (argument > 0 ? floor : ceil)(argument);
 };
@@ -13775,7 +14454,7 @@ var toInteger = __webpack_require__(/*! ../internals/to-integer */ "./node_modul
 var min = Math.min;
 
 // `ToLength` abstract operation
-// https://tc39.github.io/ecma262/#sec-tolength
+// https://tc39.es/ecma262/#sec-tolength
 module.exports = function (argument) {
   return argument > 0 ? min(toInteger(argument), 0x1FFFFFFFFFFFFF) : 0; // 2 ** 53 - 1 == 9007199254740991
 };
@@ -13793,7 +14472,7 @@ module.exports = function (argument) {
 var requireObjectCoercible = __webpack_require__(/*! ../internals/require-object-coercible */ "./node_modules/core-js-pure/internals/require-object-coercible.js");
 
 // `ToObject` abstract operation
-// https://tc39.github.io/ecma262/#sec-toobject
+// https://tc39.es/ecma262/#sec-toobject
 module.exports = function (argument) {
   return Object(requireObjectCoercible(argument));
 };
@@ -13811,7 +14490,7 @@ module.exports = function (argument) {
 var isObject = __webpack_require__(/*! ../internals/is-object */ "./node_modules/core-js-pure/internals/is-object.js");
 
 // `ToPrimitive` abstract operation
-// https://tc39.github.io/ecma262/#sec-toprimitive
+// https://tc39.es/ecma262/#sec-toprimitive
 // instead of the ES6 spec version, we didn't implement @@toPrimitive case
 // and the second argument - flag - preferred type is a string
 module.exports = function (input, PREFERRED_STRING) {
@@ -13957,6 +14636,7 @@ var $AggregateError = function AggregateError(errors, message) {
   var that = this;
   if (!(that instanceof $AggregateError)) return new $AggregateError(errors, message);
   if (setPrototypeOf) {
+    // eslint-disable-next-line unicorn/error-message
     that = setPrototypeOf(new Error(undefined), getPrototypeOf(that));
   }
   if (message !== undefined) createNonEnumerableProperty(that, 'message', String(message));
@@ -13972,6 +14652,8 @@ $AggregateError.prototype = create(Error.prototype, {
   name: createPropertyDescriptor(5, 'AggregateError')
 });
 
+// `AggregateError` constructor
+// https://tc39.es/ecma262/#sec-aggregate-error-constructor
 $({ global: true }, {
   AggregateError: $AggregateError
 });
@@ -14024,7 +14706,7 @@ var isConcatSpreadable = function (O) {
 var FORCED = !IS_CONCAT_SPREADABLE_SUPPORT || !SPECIES_SUPPORT;
 
 // `Array.prototype.concat` method
-// https://tc39.github.io/ecma262/#sec-array.prototype.concat
+// https://tc39.es/ecma262/#sec-array.prototype.concat
 // with adding support of @@isConcatSpreadable and @@species
 $({ target: 'Array', proto: true, forced: FORCED }, {
   concat: function concat(arg) { // eslint-disable-line no-unused-vars
@@ -14069,7 +14751,7 @@ var STRICT_METHOD = arrayMethodIsStrict('every');
 var USES_TO_LENGTH = arrayMethodUsesToLength('every');
 
 // `Array.prototype.every` method
-// https://tc39.github.io/ecma262/#sec-array.prototype.every
+// https://tc39.es/ecma262/#sec-array.prototype.every
 $({ target: 'Array', proto: true, forced: !STRICT_METHOD || !USES_TO_LENGTH }, {
   every: function every(callbackfn /* , thisArg */) {
     return $every(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
@@ -14091,12 +14773,12 @@ var fill = __webpack_require__(/*! ../internals/array-fill */ "./node_modules/co
 var addToUnscopables = __webpack_require__(/*! ../internals/add-to-unscopables */ "./node_modules/core-js-pure/internals/add-to-unscopables.js");
 
 // `Array.prototype.fill` method
-// https://tc39.github.io/ecma262/#sec-array.prototype.fill
+// https://tc39.es/ecma262/#sec-array.prototype.fill
 $({ target: 'Array', proto: true }, {
   fill: fill
 });
 
-// https://tc39.github.io/ecma262/#sec-array.prototype-@@unscopables
+// https://tc39.es/ecma262/#sec-array.prototype-@@unscopables
 addToUnscopables('fill');
 
 
@@ -14121,7 +14803,7 @@ var HAS_SPECIES_SUPPORT = arrayMethodHasSpeciesSupport('filter');
 var USES_TO_LENGTH = arrayMethodUsesToLength('filter');
 
 // `Array.prototype.filter` method
-// https://tc39.github.io/ecma262/#sec-array.prototype.filter
+// https://tc39.es/ecma262/#sec-array.prototype.filter
 // with adding support of @@species
 $({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT || !USES_TO_LENGTH }, {
   filter: function filter(callbackfn /* , thisArg */) {
@@ -14145,7 +14827,7 @@ var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js-p
 var forEach = __webpack_require__(/*! ../internals/array-for-each */ "./node_modules/core-js-pure/internals/array-for-each.js");
 
 // `Array.prototype.forEach` method
-// https://tc39.github.io/ecma262/#sec-array.prototype.foreach
+// https://tc39.es/ecma262/#sec-array.prototype.foreach
 $({ target: 'Array', proto: true, forced: [].forEach != forEach }, {
   forEach: forEach
 });
@@ -14169,7 +14851,7 @@ var INCORRECT_ITERATION = !checkCorrectnessOfIteration(function (iterable) {
 });
 
 // `Array.from` method
-// https://tc39.github.io/ecma262/#sec-array.from
+// https://tc39.es/ecma262/#sec-array.from
 $({ target: 'Array', stat: true, forced: INCORRECT_ITERATION }, {
   from: from
 });
@@ -14194,14 +14876,14 @@ var arrayMethodUsesToLength = __webpack_require__(/*! ../internals/array-method-
 var USES_TO_LENGTH = arrayMethodUsesToLength('indexOf', { ACCESSORS: true, 1: 0 });
 
 // `Array.prototype.includes` method
-// https://tc39.github.io/ecma262/#sec-array.prototype.includes
+// https://tc39.es/ecma262/#sec-array.prototype.includes
 $({ target: 'Array', proto: true, forced: !USES_TO_LENGTH }, {
   includes: function includes(el /* , fromIndex = 0 */) {
     return $includes(this, el, arguments.length > 1 ? arguments[1] : undefined);
   }
 });
 
-// https://tc39.github.io/ecma262/#sec-array.prototype-@@unscopables
+// https://tc39.es/ecma262/#sec-array.prototype-@@unscopables
 addToUnscopables('includes');
 
 
@@ -14228,7 +14910,7 @@ var STRICT_METHOD = arrayMethodIsStrict('indexOf');
 var USES_TO_LENGTH = arrayMethodUsesToLength('indexOf', { ACCESSORS: true, 1: 0 });
 
 // `Array.prototype.indexOf` method
-// https://tc39.github.io/ecma262/#sec-array.prototype.indexof
+// https://tc39.es/ecma262/#sec-array.prototype.indexof
 $({ target: 'Array', proto: true, forced: NEGATIVE_ZERO || !STRICT_METHOD || !USES_TO_LENGTH }, {
   indexOf: function indexOf(searchElement /* , fromIndex = 0 */) {
     return NEGATIVE_ZERO
@@ -14252,7 +14934,7 @@ var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js-p
 var isArray = __webpack_require__(/*! ../internals/is-array */ "./node_modules/core-js-pure/internals/is-array.js");
 
 // `Array.isArray` method
-// https://tc39.github.io/ecma262/#sec-array.isarray
+// https://tc39.es/ecma262/#sec-array.isarray
 $({ target: 'Array', stat: true }, {
   isArray: isArray
 });
@@ -14280,15 +14962,15 @@ var setInternalState = InternalStateModule.set;
 var getInternalState = InternalStateModule.getterFor(ARRAY_ITERATOR);
 
 // `Array.prototype.entries` method
-// https://tc39.github.io/ecma262/#sec-array.prototype.entries
+// https://tc39.es/ecma262/#sec-array.prototype.entries
 // `Array.prototype.keys` method
-// https://tc39.github.io/ecma262/#sec-array.prototype.keys
+// https://tc39.es/ecma262/#sec-array.prototype.keys
 // `Array.prototype.values` method
-// https://tc39.github.io/ecma262/#sec-array.prototype.values
+// https://tc39.es/ecma262/#sec-array.prototype.values
 // `Array.prototype[@@iterator]` method
-// https://tc39.github.io/ecma262/#sec-array.prototype-@@iterator
+// https://tc39.es/ecma262/#sec-array.prototype-@@iterator
 // `CreateArrayIterator` internal method
-// https://tc39.github.io/ecma262/#sec-createarrayiterator
+// https://tc39.es/ecma262/#sec-createarrayiterator
 module.exports = defineIterator(Array, 'Array', function (iterated, kind) {
   setInternalState(this, {
     type: ARRAY_ITERATOR,
@@ -14297,7 +14979,7 @@ module.exports = defineIterator(Array, 'Array', function (iterated, kind) {
     kind: kind                         // kind
   });
 // `%ArrayIteratorPrototype%.next` method
-// https://tc39.github.io/ecma262/#sec-%arrayiteratorprototype%.next
+// https://tc39.es/ecma262/#sec-%arrayiteratorprototype%.next
 }, function () {
   var state = getInternalState(this);
   var target = state.target;
@@ -14313,11 +14995,11 @@ module.exports = defineIterator(Array, 'Array', function (iterated, kind) {
 }, 'values');
 
 // argumentsList[@@iterator] is %ArrayProto_values%
-// https://tc39.github.io/ecma262/#sec-createunmappedargumentsobject
-// https://tc39.github.io/ecma262/#sec-createmappedargumentsobject
+// https://tc39.es/ecma262/#sec-createunmappedargumentsobject
+// https://tc39.es/ecma262/#sec-createmappedargumentsobject
 Iterators.Arguments = Iterators.Array;
 
-// https://tc39.github.io/ecma262/#sec-array.prototype-@@unscopables
+// https://tc39.es/ecma262/#sec-array.prototype-@@unscopables
 addToUnscopables('keys');
 addToUnscopables('values');
 addToUnscopables('entries');
@@ -14344,7 +15026,7 @@ var HAS_SPECIES_SUPPORT = arrayMethodHasSpeciesSupport('map');
 var USES_TO_LENGTH = arrayMethodUsesToLength('map');
 
 // `Array.prototype.map` method
-// https://tc39.github.io/ecma262/#sec-array.prototype.map
+// https://tc39.es/ecma262/#sec-array.prototype.map
 // with adding support of @@species
 $({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT || !USES_TO_LENGTH }, {
   map: function map(callbackfn /* , thisArg */) {
@@ -14378,7 +15060,7 @@ var USES_TO_LENGTH = arrayMethodUsesToLength('reduce', { 1: 0 });
 var CHROME_BUG = !IS_NODE && CHROME_VERSION > 79 && CHROME_VERSION < 83;
 
 // `Array.prototype.reduce` method
-// https://tc39.github.io/ecma262/#sec-array.prototype.reduce
+// https://tc39.es/ecma262/#sec-array.prototype.reduce
 $({ target: 'Array', proto: true, forced: !STRICT_METHOD || !USES_TO_LENGTH || CHROME_BUG }, {
   reduce: function reduce(callbackfn /* , initialValue */) {
     return $reduce(this, callbackfn, arguments.length, arguments.length > 1 ? arguments[1] : undefined);
@@ -14404,7 +15086,7 @@ var nativeReverse = [].reverse;
 var test = [1, 2];
 
 // `Array.prototype.reverse` method
-// https://tc39.github.io/ecma262/#sec-array.prototype.reverse
+// https://tc39.es/ecma262/#sec-array.prototype.reverse
 // fix for Safari 12.0 bug
 // https://bugs.webkit.org/show_bug.cgi?id=188794
 $({ target: 'Array', proto: true, forced: String(test) === String(test.reverse()) }, {
@@ -14446,7 +15128,7 @@ var nativeSlice = [].slice;
 var max = Math.max;
 
 // `Array.prototype.slice` method
-// https://tc39.github.io/ecma262/#sec-array.prototype.slice
+// https://tc39.es/ecma262/#sec-array.prototype.slice
 // fallback for not array-like ES3 strings and DOM objects
 $({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT || !USES_TO_LENGTH }, {
   slice: function slice(start, end) {
@@ -14497,7 +15179,7 @@ var STRICT_METHOD = arrayMethodIsStrict('some');
 var USES_TO_LENGTH = arrayMethodUsesToLength('some');
 
 // `Array.prototype.some` method
-// https://tc39.github.io/ecma262/#sec-array.prototype.some
+// https://tc39.es/ecma262/#sec-array.prototype.some
 $({ target: 'Array', proto: true, forced: !STRICT_METHOD || !USES_TO_LENGTH }, {
   some: function some(callbackfn /* , thisArg */) {
     return $some(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
@@ -14517,7 +15199,7 @@ $({ target: 'Array', proto: true, forced: !STRICT_METHOD || !USES_TO_LENGTH }, {
 var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js-pure/internals/export.js");
 
 // `Date.now` method
-// https://tc39.github.io/ecma262/#sec-date.now
+// https://tc39.es/ecma262/#sec-date.now
 $({ target: 'Date', stat: true }, {
   now: function now() {
     return new Date().getTime();
@@ -14538,7 +15220,7 @@ var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js-p
 var bind = __webpack_require__(/*! ../internals/function-bind */ "./node_modules/core-js-pure/internals/function-bind.js");
 
 // `Function.prototype.bind` method
-// https://tc39.github.io/ecma262/#sec-function.prototype.bind
+// https://tc39.es/ecma262/#sec-function.prototype.bind
 $({ target: 'Function', proto: true }, {
   bind: bind
 });
@@ -14557,7 +15239,7 @@ var global = __webpack_require__(/*! ../internals/global */ "./node_modules/core
 var setToStringTag = __webpack_require__(/*! ../internals/set-to-string-tag */ "./node_modules/core-js-pure/internals/set-to-string-tag.js");
 
 // JSON[@@toStringTag] property
-// https://tc39.github.io/ecma262/#sec-json-@@tostringtag
+// https://tc39.es/ecma262/#sec-json-@@tostringtag
 setToStringTag(global.JSON, 'JSON', true);
 
 
@@ -14576,7 +15258,7 @@ var collection = __webpack_require__(/*! ../internals/collection */ "./node_modu
 var collectionStrong = __webpack_require__(/*! ../internals/collection-strong */ "./node_modules/core-js-pure/internals/collection-strong.js");
 
 // `Map` constructor
-// https://tc39.github.io/ecma262/#sec-map-objects
+// https://tc39.es/ecma262/#sec-map-objects
 module.exports = collection('Map', function (init) {
   return function Map() { return init(this, arguments.length ? arguments[0] : undefined); };
 }, collectionStrong);
@@ -14608,7 +15290,7 @@ var DESCRIPTORS = __webpack_require__(/*! ../internals/descriptors */ "./node_mo
 var create = __webpack_require__(/*! ../internals/object-create */ "./node_modules/core-js-pure/internals/object-create.js");
 
 // `Object.create` method
-// https://tc39.github.io/ecma262/#sec-object.create
+// https://tc39.es/ecma262/#sec-object.create
 $({ target: 'Object', stat: true, sham: !DESCRIPTORS }, {
   create: create
 });
@@ -14628,7 +15310,7 @@ var DESCRIPTORS = __webpack_require__(/*! ../internals/descriptors */ "./node_mo
 var defineProperties = __webpack_require__(/*! ../internals/object-define-properties */ "./node_modules/core-js-pure/internals/object-define-properties.js");
 
 // `Object.defineProperties` method
-// https://tc39.github.io/ecma262/#sec-object.defineproperties
+// https://tc39.es/ecma262/#sec-object.defineproperties
 $({ target: 'Object', stat: true, forced: !DESCRIPTORS, sham: !DESCRIPTORS }, {
   defineProperties: defineProperties
 });
@@ -14648,7 +15330,7 @@ var DESCRIPTORS = __webpack_require__(/*! ../internals/descriptors */ "./node_mo
 var objectDefinePropertyModile = __webpack_require__(/*! ../internals/object-define-property */ "./node_modules/core-js-pure/internals/object-define-property.js");
 
 // `Object.defineProperty` method
-// https://tc39.github.io/ecma262/#sec-object.defineproperty
+// https://tc39.es/ecma262/#sec-object.defineproperty
 $({ target: 'Object', stat: true, forced: !DESCRIPTORS, sham: !DESCRIPTORS }, {
   defineProperty: objectDefinePropertyModile.f
 });
@@ -14673,7 +15355,7 @@ var FAILS_ON_PRIMITIVES = fails(function () { nativeGetOwnPropertyDescriptor(1);
 var FORCED = !DESCRIPTORS || FAILS_ON_PRIMITIVES;
 
 // `Object.getOwnPropertyDescriptor` method
-// https://tc39.github.io/ecma262/#sec-object.getownpropertydescriptor
+// https://tc39.es/ecma262/#sec-object.getownpropertydescriptor
 $({ target: 'Object', stat: true, forced: FORCED, sham: !DESCRIPTORS }, {
   getOwnPropertyDescriptor: function getOwnPropertyDescriptor(it, key) {
     return nativeGetOwnPropertyDescriptor(toIndexedObject(it), key);
@@ -14698,7 +15380,7 @@ var getOwnPropertyDescriptorModule = __webpack_require__(/*! ../internals/object
 var createProperty = __webpack_require__(/*! ../internals/create-property */ "./node_modules/core-js-pure/internals/create-property.js");
 
 // `Object.getOwnPropertyDescriptors` method
-// https://tc39.github.io/ecma262/#sec-object.getownpropertydescriptors
+// https://tc39.es/ecma262/#sec-object.getownpropertydescriptors
 $({ target: 'Object', stat: true, sham: !DESCRIPTORS }, {
   getOwnPropertyDescriptors: function getOwnPropertyDescriptors(object) {
     var O = toIndexedObject(object);
@@ -14734,7 +15416,7 @@ var CORRECT_PROTOTYPE_GETTER = __webpack_require__(/*! ../internals/correct-prot
 var FAILS_ON_PRIMITIVES = fails(function () { nativeGetPrototypeOf(1); });
 
 // `Object.getPrototypeOf` method
-// https://tc39.github.io/ecma262/#sec-object.getprototypeof
+// https://tc39.es/ecma262/#sec-object.getprototypeof
 $({ target: 'Object', stat: true, forced: FAILS_ON_PRIMITIVES, sham: !CORRECT_PROTOTYPE_GETTER }, {
   getPrototypeOf: function getPrototypeOf(it) {
     return nativeGetPrototypeOf(toObject(it));
@@ -14760,7 +15442,7 @@ var fails = __webpack_require__(/*! ../internals/fails */ "./node_modules/core-j
 var FAILS_ON_PRIMITIVES = fails(function () { nativeKeys(1); });
 
 // `Object.keys` method
-// https://tc39.github.io/ecma262/#sec-object.keys
+// https://tc39.es/ecma262/#sec-object.keys
 $({ target: 'Object', stat: true, forced: FAILS_ON_PRIMITIVES }, {
   keys: function keys(it) {
     return nativeKeys(toObject(it));
@@ -14781,7 +15463,7 @@ var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js-p
 var setPrototypeOf = __webpack_require__(/*! ../internals/object-set-prototype-of */ "./node_modules/core-js-pure/internals/object-set-prototype-of.js");
 
 // `Object.setPrototypeOf` method
-// https://tc39.github.io/ecma262/#sec-object.setprototypeof
+// https://tc39.es/ecma262/#sec-object.setprototypeof
 $({ target: 'Object', stat: true }, {
   setPrototypeOf: setPrototypeOf
 });
@@ -14812,7 +15494,7 @@ var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js-p
 var parseFloatImplementation = __webpack_require__(/*! ../internals/number-parse-float */ "./node_modules/core-js-pure/internals/number-parse-float.js");
 
 // `parseFloat` method
-// https://tc39.github.io/ecma262/#sec-parsefloat-string
+// https://tc39.es/ecma262/#sec-parsefloat-string
 $({ global: true, forced: parseFloat != parseFloatImplementation }, {
   parseFloat: parseFloatImplementation
 });
@@ -14831,7 +15513,7 @@ var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js-p
 var parseIntImplementation = __webpack_require__(/*! ../internals/number-parse-int */ "./node_modules/core-js-pure/internals/number-parse-int.js");
 
 // `parseInt` method
-// https://tc39.github.io/ecma262/#sec-parseint-string-radix
+// https://tc39.es/ecma262/#sec-parseint-string-radix
 $({ global: true, forced: parseInt != parseIntImplementation }, {
   parseInt: parseIntImplementation
 });
@@ -14855,7 +15537,7 @@ var perform = __webpack_require__(/*! ../internals/perform */ "./node_modules/co
 var iterate = __webpack_require__(/*! ../internals/iterate */ "./node_modules/core-js-pure/internals/iterate.js");
 
 // `Promise.allSettled` method
-// https://github.com/tc39/proposal-promise-allSettled
+// https://tc39.es/ecma262/#sec-promise.allsettled
 $({ target: 'Promise', stat: true }, {
   allSettled: function allSettled(iterable) {
     var C = this;
@@ -14913,7 +15595,7 @@ var iterate = __webpack_require__(/*! ../internals/iterate */ "./node_modules/co
 var PROMISE_ANY_ERROR = 'No one promise resolved';
 
 // `Promise.any` method
-// https://github.com/tc39/proposal-promise-any
+// https://tc39.es/ecma262/#sec-promise.any
 $({ target: 'Promise', stat: true }, {
   any: function any(iterable) {
     var C = this;
@@ -14976,7 +15658,7 @@ var NON_GENERIC = !!NativePromise && fails(function () {
 });
 
 // `Promise.prototype.finally` method
-// https://tc39.github.io/ecma262/#sec-promise.prototype.finally
+// https://tc39.es/ecma262/#sec-promise.prototype.finally
 $({ target: 'Promise', proto: true, real: true, forced: NON_GENERIC }, {
   'finally': function (onFinally) {
     var C = speciesConstructor(this, getBuiltIn('Promise'));
@@ -15262,7 +15944,7 @@ if (FORCED) {
   };
   Internal.prototype = redefineAll(PromiseConstructor.prototype, {
     // `Promise.prototype.then` method
-    // https://tc39.github.io/ecma262/#sec-promise.prototype.then
+    // https://tc39.es/ecma262/#sec-promise.prototype.then
     then: function then(onFulfilled, onRejected) {
       var state = getInternalPromiseState(this);
       var reaction = newPromiseCapability(speciesConstructor(this, PromiseConstructor));
@@ -15275,7 +15957,7 @@ if (FORCED) {
       return reaction.promise;
     },
     // `Promise.prototype.catch` method
-    // https://tc39.github.io/ecma262/#sec-promise.prototype.catch
+    // https://tc39.es/ecma262/#sec-promise.prototype.catch
     'catch': function (onRejected) {
       return this.then(undefined, onRejected);
     }
@@ -15327,7 +16009,7 @@ PromiseWrapper = getBuiltIn(PROMISE);
 // statics
 $({ target: PROMISE, stat: true, forced: FORCED }, {
   // `Promise.reject` method
-  // https://tc39.github.io/ecma262/#sec-promise.reject
+  // https://tc39.es/ecma262/#sec-promise.reject
   reject: function reject(r) {
     var capability = newPromiseCapability(this);
     capability.reject.call(undefined, r);
@@ -15337,7 +16019,7 @@ $({ target: PROMISE, stat: true, forced: FORCED }, {
 
 $({ target: PROMISE, stat: true, forced: IS_PURE || FORCED }, {
   // `Promise.resolve` method
-  // https://tc39.github.io/ecma262/#sec-promise.resolve
+  // https://tc39.es/ecma262/#sec-promise.resolve
   resolve: function resolve(x) {
     return promiseResolve(IS_PURE && this === PromiseWrapper ? PromiseConstructor : this, x);
   }
@@ -15345,7 +16027,7 @@ $({ target: PROMISE, stat: true, forced: IS_PURE || FORCED }, {
 
 $({ target: PROMISE, stat: true, forced: INCORRECT_ITERATION }, {
   // `Promise.all` method
-  // https://tc39.github.io/ecma262/#sec-promise.all
+  // https://tc39.es/ecma262/#sec-promise.all
   all: function all(iterable) {
     var C = this;
     var capability = newPromiseCapability(C);
@@ -15374,7 +16056,7 @@ $({ target: PROMISE, stat: true, forced: INCORRECT_ITERATION }, {
     return capability.promise;
   },
   // `Promise.race` method
-  // https://tc39.github.io/ecma262/#sec-promise.race
+  // https://tc39.es/ecma262/#sec-promise.race
   race: function race(iterable) {
     var C = this;
     var capability = newPromiseCapability(C);
@@ -15415,7 +16097,7 @@ var OPTIONAL_ARGUMENTS_LIST = !fails(function () {
 });
 
 // `Reflect.apply` method
-// https://tc39.github.io/ecma262/#sec-reflect.apply
+// https://tc39.es/ecma262/#sec-reflect.apply
 $({ target: 'Reflect', stat: true, forced: OPTIONAL_ARGUMENTS_LIST }, {
   apply: function apply(target, thisArgument, argumentsList) {
     aFunction(target);
@@ -15448,7 +16130,7 @@ var fails = __webpack_require__(/*! ../internals/fails */ "./node_modules/core-j
 var nativeConstruct = getBuiltIn('Reflect', 'construct');
 
 // `Reflect.construct` method
-// https://tc39.github.io/ecma262/#sec-reflect.construct
+// https://tc39.es/ecma262/#sec-reflect.construct
 // MS Edge supports only 2 arguments and argumentsList argument is optional
 // FF Nightly sets third argument as `new.target`, but does not create `this` from it
 var NEW_TARGET_BUG = fails(function () {
@@ -15503,7 +16185,7 @@ var anObject = __webpack_require__(/*! ../internals/an-object */ "./node_modules
 var getOwnPropertyDescriptor = __webpack_require__(/*! ../internals/object-get-own-property-descriptor */ "./node_modules/core-js-pure/internals/object-get-own-property-descriptor.js").f;
 
 // `Reflect.deleteProperty` method
-// https://tc39.github.io/ecma262/#sec-reflect.deleteproperty
+// https://tc39.es/ecma262/#sec-reflect.deleteproperty
 $({ target: 'Reflect', stat: true }, {
   deleteProperty: function deleteProperty(target, propertyKey) {
     var descriptor = getOwnPropertyDescriptor(anObject(target), propertyKey);
@@ -15527,7 +16209,7 @@ var objectGetPrototypeOf = __webpack_require__(/*! ../internals/object-get-proto
 var CORRECT_PROTOTYPE_GETTER = __webpack_require__(/*! ../internals/correct-prototype-getter */ "./node_modules/core-js-pure/internals/correct-prototype-getter.js");
 
 // `Reflect.getPrototypeOf` method
-// https://tc39.github.io/ecma262/#sec-reflect.getprototypeof
+// https://tc39.es/ecma262/#sec-reflect.getprototypeof
 $({ target: 'Reflect', stat: true, sham: !CORRECT_PROTOTYPE_GETTER }, {
   getPrototypeOf: function getPrototypeOf(target) {
     return objectGetPrototypeOf(anObject(target));
@@ -15552,7 +16234,7 @@ var getOwnPropertyDescriptorModule = __webpack_require__(/*! ../internals/object
 var getPrototypeOf = __webpack_require__(/*! ../internals/object-get-prototype-of */ "./node_modules/core-js-pure/internals/object-get-prototype-of.js");
 
 // `Reflect.get` method
-// https://tc39.github.io/ecma262/#sec-reflect.get
+// https://tc39.es/ecma262/#sec-reflect.get
 function get(target, propertyKey /* , receiver */) {
   var receiver = arguments.length < 3 ? target : arguments[2];
   var descriptor, prototype;
@@ -15599,7 +16281,7 @@ var requireObjectCoercible = __webpack_require__(/*! ../internals/require-object
 var correctIsRegExpLogic = __webpack_require__(/*! ../internals/correct-is-regexp-logic */ "./node_modules/core-js-pure/internals/correct-is-regexp-logic.js");
 
 // `String.prototype.includes` method
-// https://tc39.github.io/ecma262/#sec-string.prototype.includes
+// https://tc39.es/ecma262/#sec-string.prototype.includes
 $({ target: 'String', proto: true, forced: !correctIsRegExpLogic('includes') }, {
   includes: function includes(searchString /* , position = 0 */) {
     return !!~String(requireObjectCoercible(this))
@@ -15628,7 +16310,7 @@ var setInternalState = InternalStateModule.set;
 var getInternalState = InternalStateModule.getterFor(STRING_ITERATOR);
 
 // `String.prototype[@@iterator]` method
-// https://tc39.github.io/ecma262/#sec-string.prototype-@@iterator
+// https://tc39.es/ecma262/#sec-string.prototype-@@iterator
 defineIterator(String, 'String', function (iterated) {
   setInternalState(this, {
     type: STRING_ITERATOR,
@@ -15636,7 +16318,7 @@ defineIterator(String, 'String', function (iterated) {
     index: 0
   });
 // `%StringIteratorPrototype%.next` method
-// https://tc39.github.io/ecma262/#sec-%stringiteratorprototype%.next
+// https://tc39.es/ecma262/#sec-%stringiteratorprototype%.next
 }, function next() {
   var state = getInternalState(this);
   var string = state.string;
@@ -15679,7 +16361,7 @@ var MDN_POLYFILL_BUG = !IS_PURE && !CORRECT_IS_REGEXP_LOGIC && !!function () {
 }();
 
 // `String.prototype.startsWith` method
-// https://tc39.github.io/ecma262/#sec-string.prototype.startswith
+// https://tc39.es/ecma262/#sec-string.prototype.startswith
 $({ target: 'String', proto: true, forced: !MDN_POLYFILL_BUG && !CORRECT_IS_REGEXP_LOGIC }, {
   startsWith: function startsWith(searchString /* , position = 0 */) {
     var that = String(requireObjectCoercible(this));
@@ -15709,7 +16391,7 @@ var $trim = __webpack_require__(/*! ../internals/string-trim */ "./node_modules/
 var forcedStringTrimMethod = __webpack_require__(/*! ../internals/string-trim-forced */ "./node_modules/core-js-pure/internals/string-trim-forced.js");
 
 // `String.prototype.trim` method
-// https://tc39.github.io/ecma262/#sec-string.prototype.trim
+// https://tc39.es/ecma262/#sec-string.prototype.trim
 $({ target: 'String', proto: true, forced: forcedStringTrimMethod('trim') }, {
   trim: function trim() {
     return $trim(this);
@@ -15729,7 +16411,7 @@ $({ target: 'String', proto: true, forced: forcedStringTrimMethod('trim') }, {
 var defineWellKnownSymbol = __webpack_require__(/*! ../internals/define-well-known-symbol */ "./node_modules/core-js-pure/internals/define-well-known-symbol.js");
 
 // `Symbol.asyncIterator` well-known symbol
-// https://tc39.github.io/ecma262/#sec-symbol.asynciterator
+// https://tc39.es/ecma262/#sec-symbol.asynciterator
 defineWellKnownSymbol('asyncIterator');
 
 
@@ -15757,7 +16439,7 @@ defineWellKnownSymbol('asyncIterator');
 var defineWellKnownSymbol = __webpack_require__(/*! ../internals/define-well-known-symbol */ "./node_modules/core-js-pure/internals/define-well-known-symbol.js");
 
 // `Symbol.hasInstance` well-known symbol
-// https://tc39.github.io/ecma262/#sec-symbol.hasinstance
+// https://tc39.es/ecma262/#sec-symbol.hasinstance
 defineWellKnownSymbol('hasInstance');
 
 
@@ -15773,7 +16455,7 @@ defineWellKnownSymbol('hasInstance');
 var defineWellKnownSymbol = __webpack_require__(/*! ../internals/define-well-known-symbol */ "./node_modules/core-js-pure/internals/define-well-known-symbol.js");
 
 // `Symbol.isConcatSpreadable` well-known symbol
-// https://tc39.github.io/ecma262/#sec-symbol.isconcatspreadable
+// https://tc39.es/ecma262/#sec-symbol.isconcatspreadable
 defineWellKnownSymbol('isConcatSpreadable');
 
 
@@ -15789,7 +16471,7 @@ defineWellKnownSymbol('isConcatSpreadable');
 var defineWellKnownSymbol = __webpack_require__(/*! ../internals/define-well-known-symbol */ "./node_modules/core-js-pure/internals/define-well-known-symbol.js");
 
 // `Symbol.iterator` well-known symbol
-// https://tc39.github.io/ecma262/#sec-symbol.iterator
+// https://tc39.es/ecma262/#sec-symbol.iterator
 defineWellKnownSymbol('iterator');
 
 
@@ -15964,7 +16646,7 @@ var $getOwnPropertySymbols = function getOwnPropertySymbols(O) {
 };
 
 // `Symbol` constructor
-// https://tc39.github.io/ecma262/#sec-symbol-constructor
+// https://tc39.es/ecma262/#sec-symbol-constructor
 if (!NATIVE_SYMBOL) {
   $Symbol = function Symbol() {
     if (this instanceof $Symbol) throw TypeError('Symbol is not a constructor');
@@ -16021,7 +16703,7 @@ $forEach(objectKeys(WellKnownSymbolsStore), function (name) {
 
 $({ target: SYMBOL, stat: true, forced: !NATIVE_SYMBOL }, {
   // `Symbol.for` method
-  // https://tc39.github.io/ecma262/#sec-symbol.for
+  // https://tc39.es/ecma262/#sec-symbol.for
   'for': function (key) {
     var string = String(key);
     if (has(StringToSymbolRegistry, string)) return StringToSymbolRegistry[string];
@@ -16031,7 +16713,7 @@ $({ target: SYMBOL, stat: true, forced: !NATIVE_SYMBOL }, {
     return symbol;
   },
   // `Symbol.keyFor` method
-  // https://tc39.github.io/ecma262/#sec-symbol.keyfor
+  // https://tc39.es/ecma262/#sec-symbol.keyfor
   keyFor: function keyFor(sym) {
     if (!isSymbol(sym)) throw TypeError(sym + ' is not a symbol');
     if (has(SymbolToStringRegistry, sym)) return SymbolToStringRegistry[sym];
@@ -16042,25 +16724,25 @@ $({ target: SYMBOL, stat: true, forced: !NATIVE_SYMBOL }, {
 
 $({ target: 'Object', stat: true, forced: !NATIVE_SYMBOL, sham: !DESCRIPTORS }, {
   // `Object.create` method
-  // https://tc39.github.io/ecma262/#sec-object.create
+  // https://tc39.es/ecma262/#sec-object.create
   create: $create,
   // `Object.defineProperty` method
-  // https://tc39.github.io/ecma262/#sec-object.defineproperty
+  // https://tc39.es/ecma262/#sec-object.defineproperty
   defineProperty: $defineProperty,
   // `Object.defineProperties` method
-  // https://tc39.github.io/ecma262/#sec-object.defineproperties
+  // https://tc39.es/ecma262/#sec-object.defineproperties
   defineProperties: $defineProperties,
   // `Object.getOwnPropertyDescriptor` method
-  // https://tc39.github.io/ecma262/#sec-object.getownpropertydescriptors
+  // https://tc39.es/ecma262/#sec-object.getownpropertydescriptors
   getOwnPropertyDescriptor: $getOwnPropertyDescriptor
 });
 
 $({ target: 'Object', stat: true, forced: !NATIVE_SYMBOL }, {
   // `Object.getOwnPropertyNames` method
-  // https://tc39.github.io/ecma262/#sec-object.getownpropertynames
+  // https://tc39.es/ecma262/#sec-object.getownpropertynames
   getOwnPropertyNames: $getOwnPropertyNames,
   // `Object.getOwnPropertySymbols` method
-  // https://tc39.github.io/ecma262/#sec-object.getownpropertysymbols
+  // https://tc39.es/ecma262/#sec-object.getownpropertysymbols
   getOwnPropertySymbols: $getOwnPropertySymbols
 });
 
@@ -16073,7 +16755,7 @@ $({ target: 'Object', stat: true, forced: fails(function () { getOwnPropertySymb
 });
 
 // `JSON.stringify` method behavior with symbols
-// https://tc39.github.io/ecma262/#sec-json.stringify
+// https://tc39.es/ecma262/#sec-json.stringify
 if ($stringify) {
   var FORCED_JSON_STRINGIFY = !NATIVE_SYMBOL || fails(function () {
     var symbol = $Symbol();
@@ -16105,12 +16787,12 @@ if ($stringify) {
 }
 
 // `Symbol.prototype[@@toPrimitive]` method
-// https://tc39.github.io/ecma262/#sec-symbol.prototype-@@toprimitive
+// https://tc39.es/ecma262/#sec-symbol.prototype-@@toprimitive
 if (!$Symbol[PROTOTYPE][TO_PRIMITIVE]) {
   createNonEnumerableProperty($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
 }
 // `Symbol.prototype[@@toStringTag]` property
-// https://tc39.github.io/ecma262/#sec-symbol.prototype-@@tostringtag
+// https://tc39.es/ecma262/#sec-symbol.prototype-@@tostringtag
 setToStringTag($Symbol, SYMBOL);
 
 hiddenKeys[HIDDEN] = true;
@@ -16128,6 +16810,7 @@ hiddenKeys[HIDDEN] = true;
 var defineWellKnownSymbol = __webpack_require__(/*! ../internals/define-well-known-symbol */ "./node_modules/core-js-pure/internals/define-well-known-symbol.js");
 
 // `Symbol.matchAll` well-known symbol
+// https://tc39.es/ecma262/#sec-symbol.matchall
 defineWellKnownSymbol('matchAll');
 
 
@@ -16143,7 +16826,7 @@ defineWellKnownSymbol('matchAll');
 var defineWellKnownSymbol = __webpack_require__(/*! ../internals/define-well-known-symbol */ "./node_modules/core-js-pure/internals/define-well-known-symbol.js");
 
 // `Symbol.match` well-known symbol
-// https://tc39.github.io/ecma262/#sec-symbol.match
+// https://tc39.es/ecma262/#sec-symbol.match
 defineWellKnownSymbol('match');
 
 
@@ -16159,7 +16842,7 @@ defineWellKnownSymbol('match');
 var defineWellKnownSymbol = __webpack_require__(/*! ../internals/define-well-known-symbol */ "./node_modules/core-js-pure/internals/define-well-known-symbol.js");
 
 // `Symbol.replace` well-known symbol
-// https://tc39.github.io/ecma262/#sec-symbol.replace
+// https://tc39.es/ecma262/#sec-symbol.replace
 defineWellKnownSymbol('replace');
 
 
@@ -16175,7 +16858,7 @@ defineWellKnownSymbol('replace');
 var defineWellKnownSymbol = __webpack_require__(/*! ../internals/define-well-known-symbol */ "./node_modules/core-js-pure/internals/define-well-known-symbol.js");
 
 // `Symbol.search` well-known symbol
-// https://tc39.github.io/ecma262/#sec-symbol.search
+// https://tc39.es/ecma262/#sec-symbol.search
 defineWellKnownSymbol('search');
 
 
@@ -16191,7 +16874,7 @@ defineWellKnownSymbol('search');
 var defineWellKnownSymbol = __webpack_require__(/*! ../internals/define-well-known-symbol */ "./node_modules/core-js-pure/internals/define-well-known-symbol.js");
 
 // `Symbol.species` well-known symbol
-// https://tc39.github.io/ecma262/#sec-symbol.species
+// https://tc39.es/ecma262/#sec-symbol.species
 defineWellKnownSymbol('species');
 
 
@@ -16207,7 +16890,7 @@ defineWellKnownSymbol('species');
 var defineWellKnownSymbol = __webpack_require__(/*! ../internals/define-well-known-symbol */ "./node_modules/core-js-pure/internals/define-well-known-symbol.js");
 
 // `Symbol.split` well-known symbol
-// https://tc39.github.io/ecma262/#sec-symbol.split
+// https://tc39.es/ecma262/#sec-symbol.split
 defineWellKnownSymbol('split');
 
 
@@ -16223,7 +16906,7 @@ defineWellKnownSymbol('split');
 var defineWellKnownSymbol = __webpack_require__(/*! ../internals/define-well-known-symbol */ "./node_modules/core-js-pure/internals/define-well-known-symbol.js");
 
 // `Symbol.toPrimitive` well-known symbol
-// https://tc39.github.io/ecma262/#sec-symbol.toprimitive
+// https://tc39.es/ecma262/#sec-symbol.toprimitive
 defineWellKnownSymbol('toPrimitive');
 
 
@@ -16239,7 +16922,7 @@ defineWellKnownSymbol('toPrimitive');
 var defineWellKnownSymbol = __webpack_require__(/*! ../internals/define-well-known-symbol */ "./node_modules/core-js-pure/internals/define-well-known-symbol.js");
 
 // `Symbol.toStringTag` well-known symbol
-// https://tc39.github.io/ecma262/#sec-symbol.tostringtag
+// https://tc39.es/ecma262/#sec-symbol.tostringtag
 defineWellKnownSymbol('toStringTag');
 
 
@@ -16255,7 +16938,7 @@ defineWellKnownSymbol('toStringTag');
 var defineWellKnownSymbol = __webpack_require__(/*! ../internals/define-well-known-symbol */ "./node_modules/core-js-pure/internals/define-well-known-symbol.js");
 
 // `Symbol.unscopables` well-known symbol
-// https://tc39.github.io/ecma262/#sec-symbol.unscopables
+// https://tc39.es/ecma262/#sec-symbol.unscopables
 defineWellKnownSymbol('unscopables');
 
 
@@ -17409,655 +18092,6 @@ module.exports = function(color_string) {
     }
 
 }
-
-
-/***/ }),
-
-/***/ "./node_modules/stackblur-canvas/dist/stackblur-es.js":
-/*!************************************************************!*\
-  !*** ./node_modules/stackblur-canvas/dist/stackblur-es.js ***!
-  \************************************************************/
-/*! exports provided: BlurStack, canvasRGB, canvasRGBA, image, imageDataRGB, imageDataRGBA */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BlurStack", function() { return BlurStack; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "canvasRGB", function() { return processCanvasRGB; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "canvasRGBA", function() { return processCanvasRGBA; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "image", function() { return processImage; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "imageDataRGB", function() { return processImageDataRGB; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "imageDataRGBA", function() { return processImageDataRGBA; });
-function _typeof(obj) {
-  "@babel/helpers - typeof";
-
-  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-    _typeof = function (obj) {
-      return typeof obj;
-    };
-  } else {
-    _typeof = function (obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    };
-  }
-
-  return _typeof(obj);
-}
-
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-
-/* eslint-disable no-bitwise -- used for calculations */
-
-/* eslint-disable unicorn/prefer-query-selector -- aiming at
-  backward-compatibility */
-
-/**
-* StackBlur - a fast almost Gaussian Blur For Canvas
-*
-* In case you find this class useful - especially in commercial projects -
-* I am not totally unhappy for a small donation to my PayPal account
-* mario@quasimondo.de
-*
-* Or support me on flattr:
-* {@link https://flattr.com/thing/72791/StackBlur-a-fast-almost-Gaussian-Blur-Effect-for-CanvasJavascript}.
-*
-* @module StackBlur
-* @author Mario Klingemann
-* Contact: mario@quasimondo.com
-* Website: {@link http://www.quasimondo.com/StackBlurForCanvas/StackBlurDemo.html}
-* Twitter: @quasimondo
-*
-* @copyright (c) 2010 Mario Klingemann
-*
-* Permission is hereby granted, free of charge, to any person
-* obtaining a copy of this software and associated documentation
-* files (the "Software"), to deal in the Software without
-* restriction, including without limitation the rights to use,
-* copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the
-* Software is furnished to do so, subject to the following
-* conditions:
-*
-* The above copyright notice and this permission notice shall be
-* included in all copies or substantial portions of the Software.
-*
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-* OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-* NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-* HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-* WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-* FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-* OTHER DEALINGS IN THE SOFTWARE.
-*/
-var mulTable = [512, 512, 456, 512, 328, 456, 335, 512, 405, 328, 271, 456, 388, 335, 292, 512, 454, 405, 364, 328, 298, 271, 496, 456, 420, 388, 360, 335, 312, 292, 273, 512, 482, 454, 428, 405, 383, 364, 345, 328, 312, 298, 284, 271, 259, 496, 475, 456, 437, 420, 404, 388, 374, 360, 347, 335, 323, 312, 302, 292, 282, 273, 265, 512, 497, 482, 468, 454, 441, 428, 417, 405, 394, 383, 373, 364, 354, 345, 337, 328, 320, 312, 305, 298, 291, 284, 278, 271, 265, 259, 507, 496, 485, 475, 465, 456, 446, 437, 428, 420, 412, 404, 396, 388, 381, 374, 367, 360, 354, 347, 341, 335, 329, 323, 318, 312, 307, 302, 297, 292, 287, 282, 278, 273, 269, 265, 261, 512, 505, 497, 489, 482, 475, 468, 461, 454, 447, 441, 435, 428, 422, 417, 411, 405, 399, 394, 389, 383, 378, 373, 368, 364, 359, 354, 350, 345, 341, 337, 332, 328, 324, 320, 316, 312, 309, 305, 301, 298, 294, 291, 287, 284, 281, 278, 274, 271, 268, 265, 262, 259, 257, 507, 501, 496, 491, 485, 480, 475, 470, 465, 460, 456, 451, 446, 442, 437, 433, 428, 424, 420, 416, 412, 408, 404, 400, 396, 392, 388, 385, 381, 377, 374, 370, 367, 363, 360, 357, 354, 350, 347, 344, 341, 338, 335, 332, 329, 326, 323, 320, 318, 315, 312, 310, 307, 304, 302, 299, 297, 294, 292, 289, 287, 285, 282, 280, 278, 275, 273, 271, 269, 267, 265, 263, 261, 259];
-var shgTable = [9, 11, 12, 13, 13, 14, 14, 15, 15, 15, 15, 16, 16, 16, 16, 17, 17, 17, 17, 17, 17, 17, 18, 18, 18, 18, 18, 18, 18, 18, 18, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24];
-/**
- * @param {string|HTMLImageElement} img
- * @param {string|HTMLCanvasElement} canvas
- * @param {Float} radius
- * @param {boolean} blurAlphaChannel
- * @param {boolean} useOffsetWidth
- * @returns {undefined}
- */
-
-function processImage(img, canvas, radius, blurAlphaChannel, useOffsetWidth) {
-  if (typeof img === 'string') {
-    img = document.getElementById(img);
-  }
-
-  if (!img || !('naturalWidth' in img)) {
-    return;
-  }
-
-  var dimensionType = useOffsetWidth ? 'offset' : 'natural';
-  var w = img[dimensionType + 'Width'];
-  var h = img[dimensionType + 'Height'];
-
-  if (typeof canvas === 'string') {
-    canvas = document.getElementById(canvas);
-  }
-
-  if (!canvas || !('getContext' in canvas)) {
-    return;
-  }
-
-  canvas.style.width = w + 'px';
-  canvas.style.height = h + 'px';
-  canvas.width = w;
-  canvas.height = h;
-  var context = canvas.getContext('2d');
-  context.clearRect(0, 0, w, h);
-  context.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, w, h);
-
-  if (isNaN(radius) || radius < 1) {
-    return;
-  }
-
-  if (blurAlphaChannel) {
-    processCanvasRGBA(canvas, 0, 0, w, h, radius);
-  } else {
-    processCanvasRGB(canvas, 0, 0, w, h, radius);
-  }
-}
-/**
- * @param {string|HTMLCanvasElement} canvas
- * @param {Integer} topX
- * @param {Integer} topY
- * @param {Integer} width
- * @param {Integer} height
- * @throws {Error|TypeError}
- * @returns {ImageData} See {@link https://html.spec.whatwg.org/multipage/canvas.html#imagedata}
- */
-
-
-function getImageDataFromCanvas(canvas, topX, topY, width, height) {
-  if (typeof canvas === 'string') {
-    canvas = document.getElementById(canvas);
-  }
-
-  if (!canvas || _typeof(canvas) !== 'object' || !('getContext' in canvas)) {
-    throw new TypeError('Expecting canvas with `getContext` method ' + 'in processCanvasRGB(A) calls!');
-  }
-
-  var context = canvas.getContext('2d');
-
-  try {
-    return context.getImageData(topX, topY, width, height);
-  } catch (e) {
-    throw new Error('unable to access image data: ' + e);
-  }
-}
-/**
- * @param {HTMLCanvasElement} canvas
- * @param {Integer} topX
- * @param {Integer} topY
- * @param {Integer} width
- * @param {Integer} height
- * @param {Float} radius
- * @returns {undefined}
- */
-
-
-function processCanvasRGBA(canvas, topX, topY, width, height, radius) {
-  if (isNaN(radius) || radius < 1) {
-    return;
-  }
-
-  radius |= 0;
-  var imageData = getImageDataFromCanvas(canvas, topX, topY, width, height);
-  imageData = processImageDataRGBA(imageData, topX, topY, width, height, radius);
-  canvas.getContext('2d').putImageData(imageData, topX, topY);
-}
-/**
- * @param {ImageData} imageData
- * @param {Integer} topX
- * @param {Integer} topY
- * @param {Integer} width
- * @param {Integer} height
- * @param {Float} radius
- * @returns {ImageData}
- */
-
-
-function processImageDataRGBA(imageData, topX, topY, width, height, radius) {
-  var pixels = imageData.data;
-  var div = 2 * radius + 1; // const w4 = width << 2;
-
-  var widthMinus1 = width - 1;
-  var heightMinus1 = height - 1;
-  var radiusPlus1 = radius + 1;
-  var sumFactor = radiusPlus1 * (radiusPlus1 + 1) / 2;
-  var stackStart = new BlurStack();
-  var stack = stackStart;
-  var stackEnd;
-
-  for (var i = 1; i < div; i++) {
-    stack = stack.next = new BlurStack();
-
-    if (i === radiusPlus1) {
-      stackEnd = stack;
-    }
-  }
-
-  stack.next = stackStart;
-  var stackIn = null,
-      stackOut = null,
-      yw = 0,
-      yi = 0;
-  var mulSum = mulTable[radius];
-  var shgSum = shgTable[radius];
-
-  for (var y = 0; y < height; y++) {
-    stack = stackStart;
-    var pr = pixels[yi],
-        pg = pixels[yi + 1],
-        pb = pixels[yi + 2],
-        pa = pixels[yi + 3];
-
-    for (var _i = 0; _i < radiusPlus1; _i++) {
-      stack.r = pr;
-      stack.g = pg;
-      stack.b = pb;
-      stack.a = pa;
-      stack = stack.next;
-    }
-
-    var rInSum = 0,
-        gInSum = 0,
-        bInSum = 0,
-        aInSum = 0,
-        rOutSum = radiusPlus1 * pr,
-        gOutSum = radiusPlus1 * pg,
-        bOutSum = radiusPlus1 * pb,
-        aOutSum = radiusPlus1 * pa,
-        rSum = sumFactor * pr,
-        gSum = sumFactor * pg,
-        bSum = sumFactor * pb,
-        aSum = sumFactor * pa;
-
-    for (var _i2 = 1; _i2 < radiusPlus1; _i2++) {
-      var p = yi + ((widthMinus1 < _i2 ? widthMinus1 : _i2) << 2);
-      var r = pixels[p],
-          g = pixels[p + 1],
-          b = pixels[p + 2],
-          a = pixels[p + 3];
-      var rbs = radiusPlus1 - _i2;
-      rSum += (stack.r = r) * rbs;
-      gSum += (stack.g = g) * rbs;
-      bSum += (stack.b = b) * rbs;
-      aSum += (stack.a = a) * rbs;
-      rInSum += r;
-      gInSum += g;
-      bInSum += b;
-      aInSum += a;
-      stack = stack.next;
-    }
-
-    stackIn = stackStart;
-    stackOut = stackEnd;
-
-    for (var x = 0; x < width; x++) {
-      var paInitial = aSum * mulSum >> shgSum;
-      pixels[yi + 3] = paInitial;
-
-      if (paInitial !== 0) {
-        var _a2 = 255 / paInitial;
-
-        pixels[yi] = (rSum * mulSum >> shgSum) * _a2;
-        pixels[yi + 1] = (gSum * mulSum >> shgSum) * _a2;
-        pixels[yi + 2] = (bSum * mulSum >> shgSum) * _a2;
-      } else {
-        pixels[yi] = pixels[yi + 1] = pixels[yi + 2] = 0;
-      }
-
-      rSum -= rOutSum;
-      gSum -= gOutSum;
-      bSum -= bOutSum;
-      aSum -= aOutSum;
-      rOutSum -= stackIn.r;
-      gOutSum -= stackIn.g;
-      bOutSum -= stackIn.b;
-      aOutSum -= stackIn.a;
-
-      var _p = x + radius + 1;
-
-      _p = yw + (_p < widthMinus1 ? _p : widthMinus1) << 2;
-      rInSum += stackIn.r = pixels[_p];
-      gInSum += stackIn.g = pixels[_p + 1];
-      bInSum += stackIn.b = pixels[_p + 2];
-      aInSum += stackIn.a = pixels[_p + 3];
-      rSum += rInSum;
-      gSum += gInSum;
-      bSum += bInSum;
-      aSum += aInSum;
-      stackIn = stackIn.next;
-      var _stackOut = stackOut,
-          _r = _stackOut.r,
-          _g = _stackOut.g,
-          _b = _stackOut.b,
-          _a = _stackOut.a;
-      rOutSum += _r;
-      gOutSum += _g;
-      bOutSum += _b;
-      aOutSum += _a;
-      rInSum -= _r;
-      gInSum -= _g;
-      bInSum -= _b;
-      aInSum -= _a;
-      stackOut = stackOut.next;
-      yi += 4;
-    }
-
-    yw += width;
-  }
-
-  for (var _x = 0; _x < width; _x++) {
-    yi = _x << 2;
-
-    var _pr = pixels[yi],
-        _pg = pixels[yi + 1],
-        _pb = pixels[yi + 2],
-        _pa = pixels[yi + 3],
-        _rOutSum = radiusPlus1 * _pr,
-        _gOutSum = radiusPlus1 * _pg,
-        _bOutSum = radiusPlus1 * _pb,
-        _aOutSum = radiusPlus1 * _pa,
-        _rSum = sumFactor * _pr,
-        _gSum = sumFactor * _pg,
-        _bSum = sumFactor * _pb,
-        _aSum = sumFactor * _pa;
-
-    stack = stackStart;
-
-    for (var _i3 = 0; _i3 < radiusPlus1; _i3++) {
-      stack.r = _pr;
-      stack.g = _pg;
-      stack.b = _pb;
-      stack.a = _pa;
-      stack = stack.next;
-    }
-
-    var yp = width;
-    var _gInSum = 0,
-        _bInSum = 0,
-        _aInSum = 0,
-        _rInSum = 0;
-
-    for (var _i4 = 1; _i4 <= radius; _i4++) {
-      yi = yp + _x << 2;
-
-      var _rbs = radiusPlus1 - _i4;
-
-      _rSum += (stack.r = _pr = pixels[yi]) * _rbs;
-      _gSum += (stack.g = _pg = pixels[yi + 1]) * _rbs;
-      _bSum += (stack.b = _pb = pixels[yi + 2]) * _rbs;
-      _aSum += (stack.a = _pa = pixels[yi + 3]) * _rbs;
-      _rInSum += _pr;
-      _gInSum += _pg;
-      _bInSum += _pb;
-      _aInSum += _pa;
-      stack = stack.next;
-
-      if (_i4 < heightMinus1) {
-        yp += width;
-      }
-    }
-
-    yi = _x;
-    stackIn = stackStart;
-    stackOut = stackEnd;
-
-    for (var _y = 0; _y < height; _y++) {
-      var _p2 = yi << 2;
-
-      pixels[_p2 + 3] = _pa = _aSum * mulSum >> shgSum;
-
-      if (_pa > 0) {
-        _pa = 255 / _pa;
-        pixels[_p2] = (_rSum * mulSum >> shgSum) * _pa;
-        pixels[_p2 + 1] = (_gSum * mulSum >> shgSum) * _pa;
-        pixels[_p2 + 2] = (_bSum * mulSum >> shgSum) * _pa;
-      } else {
-        pixels[_p2] = pixels[_p2 + 1] = pixels[_p2 + 2] = 0;
-      }
-
-      _rSum -= _rOutSum;
-      _gSum -= _gOutSum;
-      _bSum -= _bOutSum;
-      _aSum -= _aOutSum;
-      _rOutSum -= stackIn.r;
-      _gOutSum -= stackIn.g;
-      _bOutSum -= stackIn.b;
-      _aOutSum -= stackIn.a;
-      _p2 = _x + ((_p2 = _y + radiusPlus1) < heightMinus1 ? _p2 : heightMinus1) * width << 2;
-      _rSum += _rInSum += stackIn.r = pixels[_p2];
-      _gSum += _gInSum += stackIn.g = pixels[_p2 + 1];
-      _bSum += _bInSum += stackIn.b = pixels[_p2 + 2];
-      _aSum += _aInSum += stackIn.a = pixels[_p2 + 3];
-      stackIn = stackIn.next;
-      _rOutSum += _pr = stackOut.r;
-      _gOutSum += _pg = stackOut.g;
-      _bOutSum += _pb = stackOut.b;
-      _aOutSum += _pa = stackOut.a;
-      _rInSum -= _pr;
-      _gInSum -= _pg;
-      _bInSum -= _pb;
-      _aInSum -= _pa;
-      stackOut = stackOut.next;
-      yi += width;
-    }
-  }
-
-  return imageData;
-}
-/**
- * @param {HTMLCanvasElement} canvas
- * @param {Integer} topX
- * @param {Integer} topY
- * @param {Integer} width
- * @param {Integer} height
- * @param {Float} radius
- * @returns {undefined}
- */
-
-
-function processCanvasRGB(canvas, topX, topY, width, height, radius) {
-  if (isNaN(radius) || radius < 1) {
-    return;
-  }
-
-  radius |= 0;
-  var imageData = getImageDataFromCanvas(canvas, topX, topY, width, height);
-  imageData = processImageDataRGB(imageData, topX, topY, width, height, radius);
-  canvas.getContext('2d').putImageData(imageData, topX, topY);
-}
-/**
- * @param {ImageData} imageData
- * @param {Integer} topX
- * @param {Integer} topY
- * @param {Integer} width
- * @param {Integer} height
- * @param {Float} radius
- * @returns {ImageData}
- */
-
-
-function processImageDataRGB(imageData, topX, topY, width, height, radius) {
-  var pixels = imageData.data;
-  var div = 2 * radius + 1; // const w4 = width << 2;
-
-  var widthMinus1 = width - 1;
-  var heightMinus1 = height - 1;
-  var radiusPlus1 = radius + 1;
-  var sumFactor = radiusPlus1 * (radiusPlus1 + 1) / 2;
-  var stackStart = new BlurStack();
-  var stack = stackStart;
-  var stackEnd;
-
-  for (var i = 1; i < div; i++) {
-    stack = stack.next = new BlurStack();
-
-    if (i === radiusPlus1) {
-      stackEnd = stack;
-    }
-  }
-
-  stack.next = stackStart;
-  var stackIn = null;
-  var stackOut = null;
-  var mulSum = mulTable[radius];
-  var shgSum = shgTable[radius];
-  var p, rbs;
-  var yw = 0,
-      yi = 0;
-
-  for (var y = 0; y < height; y++) {
-    var pr = pixels[yi],
-        pg = pixels[yi + 1],
-        pb = pixels[yi + 2],
-        rOutSum = radiusPlus1 * pr,
-        gOutSum = radiusPlus1 * pg,
-        bOutSum = radiusPlus1 * pb,
-        rSum = sumFactor * pr,
-        gSum = sumFactor * pg,
-        bSum = sumFactor * pb;
-    stack = stackStart;
-
-    for (var _i5 = 0; _i5 < radiusPlus1; _i5++) {
-      stack.r = pr;
-      stack.g = pg;
-      stack.b = pb;
-      stack = stack.next;
-    }
-
-    var rInSum = 0,
-        gInSum = 0,
-        bInSum = 0;
-
-    for (var _i6 = 1; _i6 < radiusPlus1; _i6++) {
-      p = yi + ((widthMinus1 < _i6 ? widthMinus1 : _i6) << 2);
-      rSum += (stack.r = pr = pixels[p]) * (rbs = radiusPlus1 - _i6);
-      gSum += (stack.g = pg = pixels[p + 1]) * rbs;
-      bSum += (stack.b = pb = pixels[p + 2]) * rbs;
-      rInSum += pr;
-      gInSum += pg;
-      bInSum += pb;
-      stack = stack.next;
-    }
-
-    stackIn = stackStart;
-    stackOut = stackEnd;
-
-    for (var x = 0; x < width; x++) {
-      pixels[yi] = rSum * mulSum >> shgSum;
-      pixels[yi + 1] = gSum * mulSum >> shgSum;
-      pixels[yi + 2] = bSum * mulSum >> shgSum;
-      rSum -= rOutSum;
-      gSum -= gOutSum;
-      bSum -= bOutSum;
-      rOutSum -= stackIn.r;
-      gOutSum -= stackIn.g;
-      bOutSum -= stackIn.b;
-      p = yw + ((p = x + radius + 1) < widthMinus1 ? p : widthMinus1) << 2;
-      rInSum += stackIn.r = pixels[p];
-      gInSum += stackIn.g = pixels[p + 1];
-      bInSum += stackIn.b = pixels[p + 2];
-      rSum += rInSum;
-      gSum += gInSum;
-      bSum += bInSum;
-      stackIn = stackIn.next;
-      rOutSum += pr = stackOut.r;
-      gOutSum += pg = stackOut.g;
-      bOutSum += pb = stackOut.b;
-      rInSum -= pr;
-      gInSum -= pg;
-      bInSum -= pb;
-      stackOut = stackOut.next;
-      yi += 4;
-    }
-
-    yw += width;
-  }
-
-  for (var _x2 = 0; _x2 < width; _x2++) {
-    yi = _x2 << 2;
-
-    var _pr2 = pixels[yi],
-        _pg2 = pixels[yi + 1],
-        _pb2 = pixels[yi + 2],
-        _rOutSum2 = radiusPlus1 * _pr2,
-        _gOutSum2 = radiusPlus1 * _pg2,
-        _bOutSum2 = radiusPlus1 * _pb2,
-        _rSum2 = sumFactor * _pr2,
-        _gSum2 = sumFactor * _pg2,
-        _bSum2 = sumFactor * _pb2;
-
-    stack = stackStart;
-
-    for (var _i7 = 0; _i7 < radiusPlus1; _i7++) {
-      stack.r = _pr2;
-      stack.g = _pg2;
-      stack.b = _pb2;
-      stack = stack.next;
-    }
-
-    var _rInSum2 = 0,
-        _gInSum2 = 0,
-        _bInSum2 = 0;
-
-    for (var _i8 = 1, yp = width; _i8 <= radius; _i8++) {
-      yi = yp + _x2 << 2;
-      _rSum2 += (stack.r = _pr2 = pixels[yi]) * (rbs = radiusPlus1 - _i8);
-      _gSum2 += (stack.g = _pg2 = pixels[yi + 1]) * rbs;
-      _bSum2 += (stack.b = _pb2 = pixels[yi + 2]) * rbs;
-      _rInSum2 += _pr2;
-      _gInSum2 += _pg2;
-      _bInSum2 += _pb2;
-      stack = stack.next;
-
-      if (_i8 < heightMinus1) {
-        yp += width;
-      }
-    }
-
-    yi = _x2;
-    stackIn = stackStart;
-    stackOut = stackEnd;
-
-    for (var _y2 = 0; _y2 < height; _y2++) {
-      p = yi << 2;
-      pixels[p] = _rSum2 * mulSum >> shgSum;
-      pixels[p + 1] = _gSum2 * mulSum >> shgSum;
-      pixels[p + 2] = _bSum2 * mulSum >> shgSum;
-      _rSum2 -= _rOutSum2;
-      _gSum2 -= _gOutSum2;
-      _bSum2 -= _bOutSum2;
-      _rOutSum2 -= stackIn.r;
-      _gOutSum2 -= stackIn.g;
-      _bOutSum2 -= stackIn.b;
-      p = _x2 + ((p = _y2 + radiusPlus1) < heightMinus1 ? p : heightMinus1) * width << 2;
-      _rSum2 += _rInSum2 += stackIn.r = pixels[p];
-      _gSum2 += _gInSum2 += stackIn.g = pixels[p + 1];
-      _bSum2 += _bInSum2 += stackIn.b = pixels[p + 2];
-      stackIn = stackIn.next;
-      _rOutSum2 += _pr2 = stackOut.r;
-      _gOutSum2 += _pg2 = stackOut.g;
-      _bOutSum2 += _pb2 = stackOut.b;
-      _rInSum2 -= _pr2;
-      _gInSum2 -= _pg2;
-      _bInSum2 -= _pb2;
-      stackOut = stackOut.next;
-      yi += width;
-    }
-  }
-
-  return imageData;
-}
-/**
- *
- */
-
-
-var BlurStack =
-/**
- * Set properties.
- */
-function BlurStack() {
-  _classCallCheck(this, BlurStack);
-
-  this.r = 0;
-  this.g = 0;
-  this.b = 0;
-  this.a = 0;
-  this.next = null;
-};
-
-
 
 
 /***/ }),
