@@ -7,6 +7,7 @@ import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import RoomIcon from '@material-ui/icons/Room';
 import DescriptionIcon from '@material-ui/icons/Description';
 import RecentActorsIcon from '@material-ui/icons/RecentActors';
+import CategoryIcon from '@material-ui/icons/Category';
 import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 
 // Floating Button
@@ -17,6 +18,7 @@ import DatosEquipos from "../DatosEquipos";
 import Contratos from "../Contratos";
 import FichaTecnica from "../FichaTecnica";
 import Ubicaciones from "../Ubicaciones";
+import ExtrasEquipos from "../../Mantenimiento/ExtrasEquipos";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -61,6 +63,8 @@ export default function MenuEquipos(props) {
   const [listGarantia, setListGarantia] = useState([]);
   const [modalInsertar, setModalInsertar] = useState(false);
   const [modalEditar, setModalEditar] = useState(false);
+
+  const [modalExtrasEquipos, setModalExtrasEquipos] = useState(false);
   const [modalDatosEquipos, setModalDatosEquipos] = useState(false);
   const [modalGarantias, setModalGarantias] = useState(false);
   const [modalContratos, setModalContratos] = useState(false);
@@ -75,6 +79,16 @@ export default function MenuEquipos(props) {
   const datosequipos = (
     <div>
       <DatosEquipos equipoID={equipoID} equipoCodigo={equipoCodigo} />
+    </div>
+  )
+
+  const abrirCerrarModalExtrasEquipos = () => {
+    setModalExtrasEquipos(!modalExtrasEquipos);
+  }
+  
+  const extrasequipos = (
+    <div>
+      <ExtrasEquipos equipoID={equipoID} equipoCodigo={equipoCodigo} />
     </div>
   )
 
@@ -143,6 +157,13 @@ export default function MenuEquipos(props) {
       </Modal>
 
       <Modal
+        open={modalExtrasEquipos}
+        onClose={abrirCerrarModalExtrasEquipos}
+      >
+        {extrasequipos}
+      </Modal>
+
+      <Modal
         open={modalContratos}
         onClose={abrirCerrarModalContratos}
       >
@@ -176,6 +197,12 @@ export default function MenuEquipos(props) {
           rotate={true}
           styles={{ backgroundColor: darkColors.grey, color: lightColors.white }}
           onClick={() => setModalHojaVida(true)} ><RecentActorsIcon />
+        </Button>
+        <Button
+          tooltip="Accesorios Adicionales"
+          rotate={true}
+          styles={{ backgroundColor: darkColors.orange, color: lightColors.white }}
+          onClick={() => setModalExtrasEquipos(true)} ><CategoryIcon />
         </Button>
         <Button
           tooltip="Ubicación"

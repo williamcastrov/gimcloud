@@ -25,9 +25,9 @@ function OrdenesActivas() {
   useEffect(() => {
     async function fetchDataDashboard() {
       const res = await dashboardServices.listarDashboard();
-      console.log(res.data);
+      //console.log(res.data);
       setListDashboard(res.data);
-      console.log(listDashboard);
+      //console.log(listDashboard);
      
     }
     fetchDataDashboard();
@@ -35,10 +35,12 @@ function OrdenesActivas() {
 
   return (
     <div style={{ height: 400, width: '100%' }}>
-      <DataGrid autoHeight rows={listDashboard} columns={columns} pageSize={6} checkboxSelection />
+      <h2>Listado de Ordenes Activas</h2>
     </div>
   );
 }
+
+//  <DataGrid autoHeight rows={listDashboard} columns={columns} pageSize={6} checkboxSelection />
 
 
 export default OrdenesActivas;

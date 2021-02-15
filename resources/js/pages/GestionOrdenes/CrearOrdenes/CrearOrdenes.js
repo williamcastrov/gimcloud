@@ -23,7 +23,7 @@ import conceptososervServices from "../../../services/GestionOrdenes/ConceptosOs
 import crearordenesServices from "../../../services/GestionOrdenes/CrearOrdenes";
 import tiposservicioServices from "../../../services/GestionOrdenes/TiposServicio";
 import gruposequiposServices from "../../../services/Mantenimiento/GruposEquipos";
-import subgruposequiposServices from "../../../services/Mantenimiento/SubGruposEquipos";
+import subgruposequiposServices from "../../../services/Mantenimiento/SubGruposPartes";
 import equiposServices from "../../../services/Mantenimiento/Equipos";
 import clasificacionabcServices from "../../../services/Mantenimiento/ClasificacionABC";
 import tiposmttoServices from "../../../services/Mantenimiento/Tiposmtto";
@@ -298,7 +298,7 @@ function CrearOrdenes() {
 
   useEffect(() => {
     async function fetchDataSubGruposEquipos() {
-      const res = await subgruposequiposServices.listSubGruposequipos();
+      const res = await subgruposequiposServices.listSubGrupospartes();
       setListarSubGruposEquipos(res.data)
       //console.log(res.data);
     }
@@ -307,7 +307,7 @@ function CrearOrdenes() {
 
   useEffect(() => {
     async function fetchDataEquipos() {
-      const res = await equiposServices.listEquipos();
+      const res = await equiposServices.listEquiposMontacargas();
       setListarEquipos(res.data);
     }
     fetchDataEquipos();
@@ -1385,7 +1385,7 @@ function CrearOrdenes() {
           },
           {
             icon: CancelIcon,
-            tooltip: 'Editar Orden',
+            tooltip: 'Cancelar Orden',
             onClick: (event, rowData) => cancelarOrden(rowData, "Cancelar")
           }
         ]}

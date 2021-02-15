@@ -15,6 +15,7 @@ class Unidades extends Model
 
     protected $fillable = [
         'descripcion_und',
+        'tipo_und',
         'empresa_und',
         'estado_und',
     ];
