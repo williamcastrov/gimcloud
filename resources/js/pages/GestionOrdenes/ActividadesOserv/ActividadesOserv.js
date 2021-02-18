@@ -146,7 +146,8 @@ NumberFormatCustom.propTypes = {
 
 function ActividadesOserv(props) {
   const { id_otr, nombre_emp, razonsocial_cli, telefono_cli, nombre_ciu, email_cli, descripcion_mar, modelo_dequ,
-    fechainicia_otr, descripcion_tser, descripcion_tmt, serie_dequ, codigo_equ, descripcion_con } = props.ordenSeleccionado;
+          fechainicia_otr, descripcion_tser, descripcion_tmt, serie_dequ, codigo_equ, descripcion_con, primer_apellido_con,
+          primer_nombre_con } = props.ordenSeleccionado;
 
   const styles = useStyles();
   const [listInventarios, setListInventarios] = useState([]);
@@ -825,7 +826,7 @@ function ActividadesOserv(props) {
         <Button>TELEFONO : {telefono_cli} </Button>
       </ButtonGroup>
       <ButtonGroup orientation="vertical" className={styles.button} color="primary" aria-label="outlined primary button group">
-        <Button >CONTACTO : XXXXXXXXXXXXXXXXXXXXXXXXXX </Button>
+        <Button >CONTACTO :{primer_apellido_con}{" "}{primer_nombre_con} </Button>
         <Button >CIUDAD : {nombre_ciu} </Button>
         <Button >CORREO : {email_cli} </Button>
       </ButtonGroup>

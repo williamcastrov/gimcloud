@@ -1,5 +1,4 @@
 import url from "../../components/Url";
-
 const baseUrl = `${url}/api/paises`;
 import axios from "axios";
 const pais = {};

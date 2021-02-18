@@ -1,4 +1,5 @@
-const baseUrl = "http://127.0.0.1:8000/api/actividadrealizada";   
+import url from "../../components/Url";
+const baseUrl = `${url}/api/actividadrealizada`;   
 import axios from "axios";
 const actividadrealizada = {};
 

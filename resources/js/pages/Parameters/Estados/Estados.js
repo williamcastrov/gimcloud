@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MaterialTable from "material-table";
-import {Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography } from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
+import { Modal, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import SaveIcon from '@material-ui/icons/Save';
 import swal from 'sweetalert';
 
 // Componentes de Conexion con el Backend
 import estadosServices from "../../../services/Parameters/Estados";
 import empresasServices from "../../../services/Empresa";
+import tipooperacionServices from "../../../services/GestionOrdenes/TipoOperacion";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -22,10 +23,10 @@ const useStyles = makeStyles((theme) => ({
     left: '50%',
     transform: 'translate(-50%, -50%)'
   },
-  iconos:{
+  iconos: {
     cursor: 'pointer'
-  }, 
-  inputMaterial:{
+  },
+  inputMaterial: {
     width: '100%'
   },
   formControl: {
@@ -34,21 +35,23 @@ const useStyles = makeStyles((theme) => ({
   },
   typography: {
     fontSize: 16,
-    color   : "#ff3d00"
+    color: "#ff3d00"
   }
 }));
 
 function Estados() {
   const styles = useStyles();
   const [listEstados, setListEstados] = useState([]);
-  const [modalInsertar, setModalInsertar ] = useState(false);
-  const [modalEditar, setModalEditar]= useState(false);
-  const [modalEliminar, setModalEliminar]= useState(false);
+  const [modalInsertar, setModalInsertar] = useState(false);
+  const [modalEditar, setModalEditar] = useState(false);
+  const [modalEliminar, setModalEliminar] = useState(false);
   const [formError, setFormError] = useState(false);
   const [listarEmpresas, setListarEmpresas] = useState([]);
+  const [listarTipoOperacion, setListarTipoOperacion] = useState([]);
   const [actualiza, setActualiza] = useState(false);
   const [estadoSeleccionado, setEstadoSeleccionado] = useState({
     id_est: "",
+    tipooperacion_est: "",
     nombre_est: "",
     empresa_est: ""
   })
@@ -71,18 +74,26 @@ function Estados() {
     fetchDataEmpresas();
   }, [])
 
-  const handleChange = e => {
-    const {name, value} = e.target;
+  useEffect(() => {
+    async function fetchDataTipoOperacion() {
+      const res = await tipooperacionServices.listTipooperacionEstados();
+      setListarTipoOperacion(res.data);
+    }
+    fetchDataTipoOperacion();
+  }, [])
 
-    setEstadoSeleccionado( prevState => ({
+  const handleChange = e => {
+    const { name, value } = e.target;
+
+    setEstadoSeleccionado(prevState => ({
       ...prevState,
       [name]: value
     }));
   }
 
-  const seleccionarEstado = (estado, caso)=>{
+  const seleccionarEstado = (estado, caso) => {
     setEstadoSeleccionado(estado);
-    (caso==="Editar") ? abrirCerrarModalEditar() : abrirCerrarModalEliminar()
+    (caso === "Editar") ? abrirCerrarModalEditar() : abrirCerrarModalEliminar()
   }
 
   const abrirCerrarModalInsertar = () => {
@@ -108,6 +119,11 @@ function Estados() {
       formOk = false;
     }
 
+    if (!estadoSeleccionado.tipooperacion_est) {
+      errors.tipooperacion_est = true;
+      formOk = false;
+    }
+
     if (!estadoSeleccionado.empresa_est) {
       errors.empresa_est = true;
       formOk = false;
@@ -129,9 +145,9 @@ function Estados() {
         console.log(res.message)
         abrirCerrarModalInsertar();
         delete estadoSeleccionado.nombre_est;
+        delete estadoSeleccionado.tipooperacion_est;
         delete estadoSeleccionado.empresa_est;
-      } else
-      {
+      } else {
         swal({
           title: "Estado",
           text: "Error Creando el Estado!",
@@ -156,13 +172,18 @@ function Estados() {
   }
 
   const actualizarEstado = async () => {
-  
+
     setFormError({});
     let errors = {};
     let formOk = true;
 
     if (!estadoSeleccionado.nombre_est) {
       errors.nombre_est = true;
+      formOk = false;
+    }
+
+    if (!estadoSeleccionado.tipooperacion_est) {
+      errors.tipooperacion_est = true;
       formOk = false;
     }
 
@@ -174,10 +195,10 @@ function Estados() {
     setFormError(errors);
 
     if (formOk) {
-    
-    const res = await estadosServices.update(estadoSeleccionado);
 
-    if (res.success) {
+      const res = await estadosServices.update(estadoSeleccionado);
+
+      if (res.success) {
         swal({
           title: "Estado",
           text: "Actualizado de forma Correcta!",
@@ -187,9 +208,9 @@ function Estados() {
         console.log(res.message)
         abrirCerrarModalEditar();
         delete estadoSeleccionado.nombre_est;
+        delete estadoSeleccionado.tipooperacion_est;
         delete estadoSeleccionado.empresa_est;
-    } else
-    {
+      } else {
         swal({
           title: "Estado",
           text: "Error Actualizando el Estado!",
@@ -198,7 +219,7 @@ function Estados() {
         });
         console.log(res.message);
         abrirCerrarModalEditar();
-    }
+      }
     }
     else {
       swal({
@@ -209,37 +230,37 @@ function Estados() {
       });
       console.log(res.message);
       abrirCerrarModalEditar();
-    } 
+    }
     setActualiza(true);
   }
 
-  const borrarEstado = async()=>{
-   
+  const borrarEstado = async () => {
+
     const res = await estadosServices.delete(estadoSeleccionado.id_est);
 
     if (res.success) {
-        swal({
-          title: "Estado",
-          text: "Borrado de forma Correcta!",
-          icon: "success",
-          button: "Aceptar"
-        });
-        console.log(res.message)
-        abrirCerrarModalEliminar();
+      swal({
+        title: "Estado",
+        text: "Borrado de forma Correcta!",
+        icon: "success",
+        button: "Aceptar"
+      });
+      console.log(res.message)
+      abrirCerrarModalEliminar();
     }
     else {
-        swal({
-          title: "Estado",
-          text: "Error Brorrando el Estado!",
-          icon: "error",
-          button: "Aceptar"
-        });
-        console.log(res.message);
-        abrirCerrarModalEliminar();
+      swal({
+        title: "Estado",
+        text: "Error Brorrando el Estado!",
+        icon: "error",
+        button: "Aceptar"
+      });
+      console.log(res.message);
+      abrirCerrarModalEliminar();
     }
     setActualiza(true);
   }
- // "string","boolean","numeric","date","datetime","time","currency"
+  // "string","boolean","numeric","date","datetime","time","currency"
   const columnas = [
     {
       title: 'Id',
@@ -250,21 +271,45 @@ function Estados() {
       field: 'nombre_est'
     },
     {
+      title: 'Tipos Estados',
+      field: 'descripcion_tope'
+    },
+    {
       title: 'Codigo Empresa',
       field: 'empresa_est'
     },
     {
       title: 'Nombre Empresa',
-      field: 'empresa.nombre_emp'
+      field: 'nombre_emp'
     }
   ]
 
   const estadoInsertar = (
     <div className={styles.modal}>
-      <Typography  align="center" className={ styles.typography } variant="button" display="block" >
+      <Typography align="center" className={styles.typography} variant="button" display="block" >
         Agregar Nuevo Estado
       </Typography>
-      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_est" onChange={handleChange} />          
+      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_est" onChange={handleChange} />
+      <br />
+      <FormControl className={styles.formControl}>
+        <InputLabel id="idselecttipooperacion_est">Tipo</InputLabel>
+        <Select
+          labelId="selecttipooperacion_est"
+          name="tipooperacion_est"
+          id="idselecttipooperacion_est"
+          fullWidth
+          onChange={handleChange}
+        >
+          <MenuItem value=""> <em>None</em> </MenuItem>
+          {
+            listarTipoOperacion.map((itemselect) => {
+              return (
+                <MenuItem value={itemselect.id_tope}>{itemselect.descripcion_tope}</MenuItem>
+              )
+            })
+          }
+        </Select>
+      </FormControl>
       <br />
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectEmpresa"> Empresa </InputLabel>
@@ -278,26 +323,47 @@ function Estados() {
           {
             listarEmpresas.map((itemselect) => {
               return (
-                <MenuItem value={itemselect.id_emp }>{itemselect.nombre_emp}</MenuItem>
+                <MenuItem value={itemselect.id_emp}>{itemselect.nombre_emp}</MenuItem>
               )
             })
           }
         </Select>
       </FormControl>
       <br /><br />
-      <div align="right">    
-        <Button color="primary" onClick = { () => grabarEstado() } >Insertar</Button>
-        <Button onClick={()=> abrirCerrarModalInsertar()} >Cancelar</Button>
+      <div align="right">
+        <Button color="primary" onClick={() => grabarEstado()} >Insertar</Button>
+        <Button onClick={() => abrirCerrarModalInsertar()} >Cancelar</Button>
       </div>
     </div>
   )
 
-  const estadoEditar=(
+  const estadoEditar = (
     <div className={styles.modal}>
-      <Typography  align="center" className={ styles.typography } variant="button" display="block" >
+      <Typography align="center" className={styles.typography} variant="button" display="block" >
         Actualizar Estado
       </Typography>
-      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_est" onChange={handleChange} value={estadoSeleccionado&&estadoSeleccionado.nombre_est}/>
+      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_est" onChange={handleChange} value={estadoSeleccionado && estadoSeleccionado.nombre_est} />
+      <br />
+      <FormControl className={styles.formControl}>
+        <InputLabel id="idselecttipooperacion_est">Tipo</InputLabel>
+        <Select
+          labelId="selecttipooperacion_est"
+          name="tipooperacion_est"
+          id="idselecttipooperacion_est"
+          fullWidth
+          onChange={handleChange}
+          value={estadoSeleccionado && estadoSeleccionado.tipooperacion_est}
+        >
+          <MenuItem value=""> <em>None</em> </MenuItem>
+          {
+            listarTipoOperacion.map((itemselect) => {
+              return (
+                <MenuItem value={itemselect.id_tope}>{itemselect.descripcion_tope}</MenuItem>
+              )
+            })
+          }
+        </Select>
+      </FormControl>
       <br />
       <FormControl className={styles.formControl} >
         <InputLabel id="idselectEmpresa">Empresa</InputLabel>
@@ -306,13 +372,13 @@ function Estados() {
           name="empresa_est"
           id="idselectEmpresa"
           onChange={handleChange}
-          value={estadoSeleccionado&&estadoSeleccionado.empresa_est}
+          value={estadoSeleccionado && estadoSeleccionado.empresa_est}
         >
           <MenuItem value="">  <em>None</em> </MenuItem>
           {
             listarEmpresas.map((itemselect) => {
               return (
-                <MenuItem value={itemselect.id_emp }>{itemselect.nombre_emp}</MenuItem>
+                <MenuItem value={itemselect.id_emp}>{itemselect.nombre_emp}</MenuItem>
               )
             })
           }
@@ -320,8 +386,8 @@ function Estados() {
       </FormControl>
       <br /><br />
       <div align="right">
-        <Button color="primary"  onClick={()=>actualizarEstado()} >Editar</Button>
-        <Button onClick={()=>abrirCerrarModalEditar()}>Cancelar</Button>
+        <Button color="primary" onClick={() => actualizarEstado()} >Editar</Button>
+        <Button onClick={() => abrirCerrarModalEditar()}>Cancelar</Button>
       </div>
     </div>
   )
@@ -330,8 +396,8 @@ function Estados() {
     <div className={styles.modal}>
       <p>Estás seguro que deseas eliminar el Estado <b>{estadoSeleccionado && estadoSeleccionado.nombre_est}</b>? </p>
       <div align="right">
-        <Button color="secondary" onClick = {() => borrarEstado() }> Confirmar </Button>
-        <Button onClick={()=>abrirCerrarModalEliminar()}> Cancelar </Button>
+        <Button color="secondary" onClick={() => borrarEstado()}> Confirmar </Button>
+        <Button onClick={() => abrirCerrarModalEliminar()}> Cancelar </Button>
 
       </div>
 
@@ -340,53 +406,53 @@ function Estados() {
 
   return (
     <div className="App">
-    <br />
-    <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={()=> abrirCerrarModalInsertar() } >Agregar Estado</Button>
-     <MaterialTable
-       columns={columnas}
-       data={listEstados}
-       title="MAESTRA DE ESTADOS"
-       actions={[
-         {
-           icon     : 'edit',
-           tooltip  : 'Editar Estado',
-           onClick  : (event, rowData) => seleccionarEstado(rowData, "Editar")
-         },
-         {
-          icon     : 'delete',
-          tooltip  : 'Borrar Estado',
-          onClick  : (event, rowData) =>   seleccionarEstado(rowData, "Eliminar")
-         } 
-       ]}
-       options={{
-         actionsColumnIndex: -1
-       }}
-       localization={{
-         header: {
-           actions: "Acciones"
-         }
-       }}
-    />{}
-    <Modal
-      open={modalInsertar}
-      onClose={abrirCerrarModalInsertar}
-    >
-      {estadoInsertar}
-    </Modal>
+      <br />
+      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Estado</Button>
+      <MaterialTable
+        columns={columnas}
+        data={listEstados}
+        title="MAESTRA DE ESTADOS"
+        actions={[
+          {
+            icon: 'edit',
+            tooltip: 'Editar Estado',
+            onClick: (event, rowData) => seleccionarEstado(rowData, "Editar")
+          },
+          {
+            icon: 'delete',
+            tooltip: 'Borrar Estado',
+            onClick: (event, rowData) => seleccionarEstado(rowData, "Eliminar")
+          }
+        ]}
+        options={{
+          actionsColumnIndex: -1
+        }}
+        localization={{
+          header: {
+            actions: "Acciones"
+          }
+        }}
+      />{ }
+      <Modal
+        open={modalInsertar}
+        onClose={abrirCerrarModalInsertar}
+      >
+        {estadoInsertar}
+      </Modal>
 
-    <Modal
-      open={modalEditar}
-      onClose={abrirCerrarModalEditar}
-    >
-      {estadoEditar}
-    </Modal>
+      <Modal
+        open={modalEditar}
+        onClose={abrirCerrarModalEditar}
+      >
+        {estadoEditar}
+      </Modal>
 
-    <Modal
-      open={modalEliminar}
-      onClose={abrirCerrarModalEliminar}
-    >
-      {estadoEliminar}
-    </Modal>
+      <Modal
+        open={modalEliminar}
+        onClose={abrirCerrarModalEliminar}
+      >
+        {estadoEliminar}
+      </Modal>
     </div>
   );
 }

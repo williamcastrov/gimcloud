@@ -48,6 +48,25 @@ class TipoOperacionController extends Controller
         }
           return $response;
       }
+
+      public function listar_tipooperacionestados(){  
+        try {
+          
+          $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est
+          FROM tipooperacion as t0 INNER JOIN empresa as t1 INNER JOIN estados as t2
+          WHERE t0.empresa_tope = t1.id_emp and t0.estado_tope = t2.id_est and (t0.id_tope IN (2,5)) ");
+  
+          $response['data'] = $data;
+          // $response['data'] = $data1;
+          $response['message'] = "load successful";
+          $response['success'] = true;
+      
+        } catch (\Exception $e) {
+          $response['message'] = $e->getMessage();
+          $response['success'] = false;
+        }
+          return $response;
+      }
     
       public function get($id_tope){
         try { 

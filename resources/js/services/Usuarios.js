@@ -1,4 +1,5 @@
-const baseUrl = "http://127.0.0.1:8000/api/usuarios";
+import url from "../components/Url";
+const baseUrl = `${url}/api/usuarios`;
 import axios from "axios";
 const usuarios = {};
 

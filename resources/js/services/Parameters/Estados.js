@@ -1,4 +1,5 @@
-const baseUrl = "http://127.0.0.1:8000/api/estados";   
+import url from "../../components/Url";
+const baseUrl = `${url}/api/estados`;
 import axios from "axios";
 const estados = {};
 
@@ -12,6 +13,24 @@ estados.save = async (data) => {
 
 estados.listEstados = async () => {
     const urlList = baseUrl+"/listar_estados"
+    const res = await axios.get(urlList)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
+estados.listEstadosGenerales = async () => {
+    const urlList = baseUrl+"/listar_estadosgenerales"
+    const res = await axios.get(urlList)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
+estados.listEstadosMtto = async () => {
+    const urlList = baseUrl+"listar_estadosmtto"
     const res = await axios.get(urlList)
     .then(response=>{ return response.data; })
     .catch(error=>{ return error; })

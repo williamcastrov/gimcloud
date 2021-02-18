@@ -38,7 +38,7 @@ class CencostoController extends Controller
           
           $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est, t3.descripcion_are
           FROM centrodecosto as t0 INNER JOIN empresa as t1 INNER JOIN estados as t2 INNER JOIN areas as t3
-          WHERE t0.empresa_cco = t1.id_emp and t0.estado_cco = t2.id_est and t0.area_cco = t3.id_are ");
+          WHERE t0.empresa_cco = t1.id_emp and t0.estado_cco = t2.id_est and t0.area_cco = t3.codigo_are ");
   
           $response['data'] = $data;
           // $response['data'] = $data1;
@@ -56,7 +56,7 @@ class CencostoController extends Controller
         try { 
           $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est, t3.descripcion_are
           FROM centrodecosto as t0 INNER JOIN empresa as t1 INNER JOIN estados as t2 INNER JOIN areas as t3
-          WHERE t0.id_cco = $id_cco and t0.empresa_cco = t1.id_emp and t0.estado_cco = t2.id_est and t0.area_cco = t3.id_are");
+          WHERE t0.id_cco = $id_cco and t0.empresa_cco = t1.id_emp and t0.estado_cco = t2.id_est and t0.area_cco = t3.codigo_are");
       
           if ($data) {
               $response['data'] = $data;

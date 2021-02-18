@@ -62,6 +62,7 @@ function Cencostos() {
     async function fetchDataCencostos() {
       const res = await cencostosServices.listCencostos();
       setListCencostos(res.data);
+      //console.log("CENTOS DE COSTOS : ",res.data)
     }
     fetchDataCencostos();
   }, [])
@@ -70,7 +71,7 @@ function Cencostos() {
       async function fetchDataEmpresas() {
       const res = await empresasServices.listEmpresas();
       setListarEmpresas(res.data) 
-      console.log(res.data);
+      //console.log(res.data);
     }
     fetchDataEmpresas();
   }, [])
@@ -79,7 +80,7 @@ function Cencostos() {
     async function fetchDataEstados() {
     const res = await estadosServices.listEstados();
     setListarEstados(res.data) 
-    console.log(res.data);
+    //console.log(res.data);
   }
   fetchDataEstados();
   }, [])

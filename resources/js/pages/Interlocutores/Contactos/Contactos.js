@@ -83,6 +83,18 @@ function Contactos(props) {
     'estado_con': estado,
   })
 
+  // Se Comenta por que no se deben listar todos los contactos, solamente los contactos del Interlocutor
+  /*
+  useEffect(() => {
+    async function fetchDataContactos() {
+      const res = await contactosServices.listContactos();
+      setListarContactos(res.data);
+      console.log("DATOS CONTACTOS : ",res.data)
+    }
+    fetchDataContactos();
+  }, [])
+ */
+
   useEffect(() => {
     async function fetchDataContactos() {
       const res = await contactosServices.contactosInterlocutor(interlocutor);

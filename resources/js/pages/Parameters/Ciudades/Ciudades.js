@@ -169,7 +169,7 @@ function Ciudades() {
     setFormError(errors);
 
     if (formOk) {
-    
+    console.log("DATOS DE CIUDAD : ", ciudadSeleccionado);
     const res = await ciudadesServices.update(ciudadSeleccionado);
 
     if (res.success) {
@@ -261,7 +261,7 @@ function Ciudades() {
           {
             listarDepartamentos.map((itemselect) => {
               return (
-                <MenuItem value={itemselect.id_dep }>{itemselect.nombre_dep}</MenuItem>
+                <MenuItem value={itemselect.codigo_dep }>{itemselect.nombre_dep}</MenuItem>
               )
             })
           }
@@ -294,7 +294,7 @@ function Ciudades() {
           onChange={handleChange} value={ciudadSeleccionado&&ciudadSeleccionado.nombre_ciu}/>
         </Grid>
         <Grid item xs={12} md={12}>
-          <FormControl className={styles.formControl} value={ciudadSeleccionado&&ciudadSeleccionado.departamento_ciu} >
+          <FormControl className={styles.formControl} >
             <InputLabel id="idselectDepartamento">Departamento</InputLabel>
             <Select
               labelId="selectDepartamento"
@@ -307,7 +307,7 @@ function Ciudades() {
               {
                 listarDepartamentos.map((itemselect) => {
                   return (
-                    <MenuItem value={itemselect.id_dep }>{itemselect.nombre_dep}</MenuItem>
+                    <MenuItem value={itemselect.codigo_dep }>{itemselect.nombre_dep}</MenuItem>
                   )
                 })
               }

@@ -12,7 +12,7 @@ use App\Models\Interlocutores\Interlocutores;
 use App\Models\Interlocutores\Interlocutores_cli;
 use App\Models\Interlocutores\Interlocutores_emp;
 use App\Models\GestionOrdenes\Conceptososerv;
-use App\Models\Mantenimiento\SubGruposEquipos;
+use App\Models\Mantenimiento\SubGruposPartes;
 use App\Models\Mantenimiento\GruposEquipos;
 use App\Models\Mantenimiento\Equipos;
 use App\Models\Mantenimiento\ClasificacionABC;
@@ -57,30 +57,49 @@ class OrdenesController extends Controller
         return $response;
       }
 
+      public function listar_listarot(){  
+        try {
+          $data = DB::select("SELECT t0.* FROM  ordenservicio as t0");
+
+          $response['data'] = $data;
+          
+          // $response['data'] = $data1;
+          $response['message'] = "load successful";
+          $response['success'] = true;
+      
+        } catch (\Exception $e) {
+          $response['message'] = $e->getMessage();
+          $response['success'] = false;
+        }
+          return $response;
+      }
+
+
       public function listar_ordenesservactivas(){  
         try {
           //Muestra Unicamente los tipos de Interlocutores PROVEEDORES = 1
-          $data = DB::select("SELECT t0.*, t1.nombre_emp,          t2.nombre_est,       t3.nombre_ciu,       t4.razonsocial_int,
-                                           t5.razonsocial_cli,     t5.razonsocial_cli,  t5.telefono_cli,     t5.email_cli,
-                                           t6.primer_nombre_emp,   t7.descripcion_con,  t8.descripcion_sgre, t9.primer_nombre_con,
-                                           t9.primer_apellido_con, t9.telefono_con,     t9.email_con,
-                                           t10.codigo_equ,         t10.antiguedad_equ,  t10.marca_equ,       t11.descripcion_abc,
-                                           t12.descripcion_tmt,
-                                           t13.descripcion_mar,    t14.modelo_dequ,     t14.serie_dequ,      t14.referencia_dequ,
-                                           t15.descripcion_tser,   t16.descripcion_tope
-          FROM  ordenservicio                 as t0  INNER JOIN empresa        as t1  INNER JOIN estados               as t2 
-                INNER JOIN ciudades           as t3  INNER JOIN interlocutores as t4  INNER JOIN interlocutores_cli    as t5
-                INNER JOIN interlocutores_emp as t6  INNER JOIN conceptooserv  as t7  INNER JOIN subgruposequipos      as t8
-                INNER JOIN contactos          as t9  INNER JOIN equipos        as t10 INNER JOIN clasificacionABC      as t11
-                INNER JOIN tiposmantenimiento as t12 INNER JOIN marcas         as t13 INNER JOIN datosadicionalequipos as t14
-                INNER JOIN tiposservicio      as t15 INNER JOIN tipooperacion  as t16
-          WHERE ((t0.tipooperacion_otr != 3)      and (t0.tipooperacion_otr != 4))        and (t0.estado_otr IN (1,11,12,13 ))  and
-                t0.empresa_otr       = t1.id_emp  and t0.estado_otr         = t2.id_est   and t0.ciudad_otr       = t3.id_ciu   and
-                t0.proveedor_otr     = t4.id_int  and t0.cliente_otr        = t5.id_cli   and t0.operario_otr   	= t6.id_emp   and
-                t0.concepto_otr      = t7.id_con  and t0.subgrupoequipo_otr = t8.id_sgre  and t0.contactocliente_otr = t9.id_con and
-                t0.equipo_otr        = t10.id_equ and t0.prioridad_otr 	    = t11.id_abc  and t0.tipo_otr      	  = t12.id_tmt  and 
-                t10.marca_equ  	     = t13.id_mar and t10.id_equ 	          = t14.id_dequ and t0.tiposervicio_otr = t15.id_tser and
-                t0.tipooperacion_otr = t16.id_tope");
+          $data = DB::select("SELECT ordenservicio.*,    t1.nombre_emp,       t2.nombre_est,       t3.nombre_ciu, t4.razonsocial_int,
+                                     t5.razonsocial_cli, t5.razonsocial_cli,  t5.telefono_cli,     t5.email_cli,  t6.primer_nombre_emp,
+                                     t7.descripcion_con, t8.descripcion_sgre, t9.primer_nombre_con,t9.primer_apellido_con, t9.telefono_con,
+                                     t9.email_con,       t10.codigo_equ,      t10.antiguedad_equ,  t10.marca_equ,  t11.descripcion_abc,
+                                     t12.descripcion_tmt,t13.descripcion_mar, t15.descripcion_tser,t16.descripcion_tope,
+                                     datosadicionalequipos.modelo_dequ, datosadicionalequipos.serie_dequ, datosadicionalequipos.referencia_dequ
+                              FROM   ordenservicio  INNER JOIN empresa as t1 INNER JOIN estados     as t2 
+                                     INNER JOIN ciudades           as t3  INNER JOIN interlocutores as t4  INNER JOIN interlocutores_cli as t5
+                                     INNER JOIN interlocutores_emp as t6  INNER JOIN conceptooserv  as t7  INNER JOIN subgrupopartes     as t8
+                                     INNER JOIN contactos          as t9  INNER JOIN equipos        as t10 INNER JOIN clasificacionABC   as t11
+                                     INNER JOIN tiposmantenimiento as t12 INNER JOIN marcas         as t13 INNER JOIN tiposservicio      as t15
+                                     INNER JOIN tipooperacion  as t16
+                                     left join datosadicionalequipos on (datosadicionalequipos.id_dequ = ordenservicio.equipo_otr)
+                              WHERE ((ordenservicio.tipooperacion_otr != 3)        and (ordenservicio.tipooperacion_otr != 4))       and  
+                                      ordenservicio.empresa_otr        = t1.id_emp and ordenservicio.estado_otr          = t2.id_est and
+                                      ordenservicio.ciudad_otr         = t3.id_ciu and ordenservicio.proveedor_otr       = t4.id_int and
+                                      ordenservicio.cliente_otr        = t5.id_cli and ordenservicio.operario_otr   	   = t6.id_emp and
+                                      ordenservicio.concepto_otr       = t7.id_con and ordenservicio.subgrupoequipo_otr  = t8.id_sgre and
+                                      ordenservicio.contactocliente_otr= t9.id_con and ordenservicio.equipo_otr          = t10.id_equ and
+                                      ordenservicio.prioridad_otr 	   = t11.id_abc and ordenservicio.tipo_otr      	   = t12.id_tmt and
+                                      t10.marca_equ  	                 = t13.id_mar and ordenservicio.tiposervicio_otr   = t15.id_tser and
+                                      ordenservicio.tipooperacion_otr  = t16.id_tope and (ordenservicio.estado_otr IN (1,11,12,13 ))");
 
           $response['data'] = $data;
           
@@ -98,27 +117,28 @@ class OrdenesController extends Controller
       public function listar_ordenesserv(){  
         try {
           //Muestra Unicamente los tipos de Interlocutores PROVEEDORES = 1
-          $data = DB::select("SELECT t0.*,  t1.nombre_emp,          t2.nombre_est,       t3.nombre_ciu,       t4.razonsocial_int,
-                                            t5.razonsocial_cli,     t5.razonsocial_cli,  t5.telefono_cli,     t5.email_cli,
-                                            t6.primer_nombre_emp,   t7.descripcion_con,  t8.descripcion_sgre, t9.primer_nombre_con,
-                                            t9.primer_apellido_con, t9.telefono_con,     t9.email_con,
-                                            t10.codigo_equ,         t10.antiguedad_equ,  t10.marca_equ,       t11.descripcion_abc,
-                                            t12.descripcion_tmt,
-                                            t13.descripcion_mar,    t14.modelo_dequ,     t14.serie_dequ,      t14.referencia_dequ,
-                                            t15.descripcion_tser,   t16.descripcion_tope
-          FROM  ordenservicio                 as t0  INNER JOIN empresa        as t1  INNER JOIN estados               as t2 
-                INNER JOIN ciudades           as t3  INNER JOIN interlocutores as t4  INNER JOIN interlocutores_cli    as t5
-                INNER JOIN interlocutores_emp as t6  INNER JOIN conceptooserv  as t7  INNER JOIN subgruposequipos      as t8
-                INNER JOIN contactos          as t9  INNER JOIN equipos        as t10 INNER JOIN clasificacionABC      as t11
-                INNER JOIN tiposmantenimiento as t12 INNER JOIN marcas         as t13 INNER JOIN datosadicionalequipos as t14
-                INNER JOIN tiposservicio      as t15 INNER JOIN tipooperacion  as t16
-          WHERE ((t0.tipooperacion_otr != 3)      and (t0.tipooperacion_otr != 4)) and
-                t0.empresa_otr       = t1.id_emp  and t0.estado_otr         = t2.id_est   and t0.ciudad_otr       = t3.id_ciu   and
-                t0.proveedor_otr     = t4.id_int  and t0.cliente_otr        = t5.id_cli   and t0.operario_otr   	= t6.id_emp   and
-                t0.concepto_otr      = t7.id_con  and t0.subgrupoequipo_otr = t8.id_sgre  and t0.contactocliente_otr = t9.id_con and
-                t0.equipo_otr        = t10.id_equ and t0.prioridad_otr 	    = t11.id_abc  and t0.tipo_otr      	  = t12.id_tmt  and 
-                t10.marca_equ  	     = t13.id_mar and t0.equipo_otr         = t14.id_dequ and t0.tiposervicio_otr = t15.id_tser and
-                t0.tipooperacion_otr = t16.id_tope");
+          $data = DB::select("SELECT ordenservicio.*,    t1.nombre_emp,       t2.nombre_est,       t3.nombre_ciu, t4.razonsocial_int,
+                                     t5.razonsocial_cli, t5.razonsocial_cli,  t5.telefono_cli,     t5.email_cli,  t6.primer_nombre_emp,
+                                     t7.descripcion_con, t8.descripcion_sgre, t9.primer_nombre_con,t9.primer_apellido_con, t9.telefono_con,
+                                     t9.email_con,       t10.codigo_equ,      t10.antiguedad_equ,  t10.marca_equ,  t11.descripcion_abc,
+                                     t12.descripcion_tmt,t13.descripcion_mar, t15.descripcion_tser,t16.descripcion_tope,
+                                     datosadicionalequipos.modelo_dequ, datosadicionalequipos.serie_dequ, datosadicionalequipos.referencia_dequ
+                              FROM   ordenservicio  INNER JOIN empresa as t1 INNER JOIN estados     as t2 
+                                     INNER JOIN ciudades           as t3  INNER JOIN interlocutores as t4  INNER JOIN interlocutores_cli as t5
+                                     INNER JOIN interlocutores_emp as t6  INNER JOIN conceptooserv  as t7  INNER JOIN subgrupopartes     as t8
+                                     INNER JOIN contactos          as t9  INNER JOIN equipos        as t10 INNER JOIN clasificacionABC   as t11
+                                     INNER JOIN tiposmantenimiento as t12 INNER JOIN marcas         as t13 INNER JOIN tiposservicio      as t15
+                                     INNER JOIN tipooperacion  as t16
+                                     left join datosadicionalequipos on (datosadicionalequipos.id_dequ = ordenservicio.equipo_otr)
+                              WHERE ((ordenservicio.tipooperacion_otr != 3)        and (ordenservicio.tipooperacion_otr != 4))       and  
+                                      ordenservicio.empresa_otr        = t1.id_emp and ordenservicio.estado_otr          = t2.id_est and
+                                      ordenservicio.ciudad_otr         = t3.id_ciu and ordenservicio.proveedor_otr       = t4.id_int and
+                                      ordenservicio.cliente_otr        = t5.id_cli and ordenservicio.operario_otr   	   = t6.id_emp and
+                                      ordenservicio.concepto_otr       = t7.id_con and ordenservicio.subgrupoequipo_otr  = t8.id_sgre and
+                                      ordenservicio.contactocliente_otr= t9.id_con and ordenservicio.equipo_otr          = t10.id_equ and
+                                      ordenservicio.prioridad_otr 	   = t11.id_abc and ordenservicio.tipo_otr      	   = t12.id_tmt and
+                                      t10.marca_equ  	                 = t13.id_mar and ordenservicio.tiposervicio_otr   = t15.id_tser and
+                                      ordenservicio.tipooperacion_otr  = t16.id_tope");
 
           $response['data'] = $data;
           
@@ -136,27 +156,28 @@ class OrdenesController extends Controller
       public function listar_ordeneschequeo(){  
         try {
           //Muestra Unicamente los tipos de Interlocutores PROVEEDORES = 1
-          $data = DB::select("SELECT t0.*,  t1.nombre_emp,          t2.nombre_est,       t3.nombre_ciu,       t4.razonsocial_int,
-                                            t5.razonsocial_cli,     t5.razonsocial_cli,  t5.telefono_cli,     t5.email_cli,
-                                            t6.primer_nombre_emp,   t7.descripcion_con,  t8.descripcion_sgre, t9.primer_nombre_con,
-                                            t9.primer_apellido_con, t9.telefono_con,     t9.email_con,
-                                            t10.codigo_equ,         t10.antiguedad_equ,  t10.marca_equ,       t11.descripcion_abc,
-                                            t12.descripcion_tmt,
-                                            t13.descripcion_mar,    t14.modelo_dequ,     t14.serie_dequ,      t14.referencia_dequ,
-                                            t15.descripcion_tser,   t16.descripcion_tope
-          FROM  ordenservicio                 as t0  INNER JOIN empresa        as t1  INNER JOIN estados               as t2 
-                INNER JOIN ciudades           as t3  INNER JOIN interlocutores as t4  INNER JOIN interlocutores_cli    as t5
-                INNER JOIN interlocutores_emp as t6  INNER JOIN conceptooserv  as t7  INNER JOIN subgruposequipos      as t8
-                INNER JOIN contactos          as t9  INNER JOIN equipos        as t10 INNER JOIN clasificacionABC      as t11
-                INNER JOIN tiposmantenimiento as t12 INNER JOIN marcas         as t13 INNER JOIN datosadicionalequipos as t14
-                INNER JOIN tiposservicio      as t15 INNER JOIN tipooperacion  as t16
-          WHERE (t0.tipooperacion_otr IN ( 3, 4)) and
-                t0.empresa_otr       = t1.id_emp  and t0.estado_otr         = t2.id_est   and t0.ciudad_otr       = t3.id_ciu   and
-                t0.proveedor_otr     = t4.id_int  and t0.cliente_otr        = t5.id_cli   and t0.operario_otr   	= t6.id_emp   and
-                t0.concepto_otr      = t7.id_con  and t0.subgrupoequipo_otr = t8.id_sgre  and t0.contactocliente_otr = t9.id_con and
-                t0.equipo_otr        = t10.id_equ and t0.prioridad_otr 	    = t11.id_abc  and t0.tipo_otr      	  = t12.id_tmt  and 
-                t10.marca_equ  	     = t13.id_mar and t10.id_equ 	          = t14.id_dequ and t0.tiposervicio_otr = t15.id_tser and
-                t0.tipooperacion_otr = t16.id_tope");
+          $data = DB::select("SELECT ordenservicio.*,    t1.nombre_emp,       t2.nombre_est,       t3.nombre_ciu, t4.razonsocial_int,
+                                     t5.razonsocial_cli, t5.razonsocial_cli,  t5.telefono_cli,     t5.email_cli,  t6.primer_nombre_emp,
+                                     t7.descripcion_con, t8.descripcion_sgre, t9.primer_nombre_con,t9.primer_apellido_con, t9.telefono_con,
+                                     t9.email_con,       t10.codigo_equ,      t10.antiguedad_equ,  t10.marca_equ,  t11.descripcion_abc,
+                                     t12.descripcion_tmt,t13.descripcion_mar, t15.descripcion_tser,t16.descripcion_tope,
+                                     datosadicionalequipos.modelo_dequ, datosadicionalequipos.serie_dequ, datosadicionalequipos.referencia_dequ
+                              FROM   ordenservicio INNER JOIN empresa as t1 INNER JOIN estados      as t2 
+                                     INNER JOIN ciudades           as t3  INNER JOIN interlocutores as t4  INNER JOIN interlocutores_cli as t5
+                                     INNER JOIN interlocutores_emp as t6  INNER JOIN conceptooserv  as t7  INNER JOIN subgrupopartes     as t8
+                                     INNER JOIN contactos          as t9  INNER JOIN equipos        as t10 INNER JOIN clasificacionABC   as t11
+                                     INNER JOIN tiposmantenimiento as t12 INNER JOIN marcas         as t13 INNER JOIN tiposservicio      as t15
+                                     INNER JOIN tipooperacion  as t16
+                                     left join datosadicionalequipos on (datosadicionalequipos.id_dequ = ordenservicio.equipo_otr)
+                              WHERE (ordenservicio.tipooperacion_otr IN ( 3, 4))      and  
+                                      ordenservicio.empresa_otr        = t1.id_emp and ordenservicio.estado_otr          = t2.id_est and
+                                      ordenservicio.ciudad_otr         = t3.id_ciu and ordenservicio.proveedor_otr       = t4.id_int and
+                                      ordenservicio.cliente_otr        = t5.id_cli and ordenservicio.operario_otr   	   = t6.id_emp and
+                                      ordenservicio.concepto_otr       = t7.id_con and ordenservicio.subgrupoequipo_otr  = t8.id_sgre and
+                                      ordenservicio.contactocliente_otr= t9.id_con and ordenservicio.equipo_otr          = t10.id_equ and
+                                      ordenservicio.prioridad_otr 	   = t11.id_abc and ordenservicio.tipo_otr      	   = t12.id_tmt and
+                                      t10.marca_equ  	                 = t13.id_mar and ordenservicio.tiposervicio_otr   = t15.id_tser and
+                                      ordenservicio.tipooperacion_otr  = t16.id_tope");
 
           $response['data'] = $data;
           
@@ -174,29 +195,31 @@ class OrdenesController extends Controller
       public function listar_ordeneschequeoactivas(){  
         try {
           //Muestra Unicamente los tipos de Interlocutores PROVEEDORES = 1
-          $data = DB::select("SELECT  t0.*, t1.nombre_emp,    t2.nombre_est,       t3.nombre_ciu,       t4.razonsocial_int,
-                                      t5.razonsocial_cli,     t5.razonsocial_cli,  t5.telefono_cli,     t5.email_cli,
-                                      t6.primer_nombre_emp,   t7.descripcion_con,  t8.descripcion_sgre, t9.primer_nombre_con,
-                                      t9.primer_apellido_con, t9.telefono_con,     t9.email_con,
-                                      t10.codigo_equ,         t10.antiguedad_equ,  t10.marca_equ,       t11.descripcion_abc,
-                                      t12.descripcion_tmt,
-                                      t13.descripcion_mar,    t14.modelo_dequ,     t14.serie_dequ,      t14.referencia_dequ,
-                                      t15.descripcion_tser,   t16.descripcion_tope
-          FROM  ordenservicio                 as t0  INNER JOIN empresa        as t1  INNER JOIN estados               as t2 
-                INNER JOIN ciudades           as t3  INNER JOIN interlocutores as t4  INNER JOIN interlocutores_cli    as t5
-                INNER JOIN interlocutores_emp as t6  INNER JOIN conceptooserv  as t7  INNER JOIN subgruposequipos      as t8
-                INNER JOIN contactos          as t9  INNER JOIN equipos        as t10 INNER JOIN clasificacionABC      as t11
-                INNER JOIN tiposmantenimiento as t12 INNER JOIN marcas         as t13 INNER JOIN datosadicionalequipos as t14
-                INNER JOIN tiposservicio      as t15 INNER JOIN tipooperacion  as t16
-          WHERE (t0.tipooperacion_otr IN ( 3, 4)) and (t0.estado_otr   IN (1,11,12,13 ))  and
-                t0.empresa_otr       = t1.id_emp  and t0.estado_otr         = t2.id_est   and t0.ciudad_otr       = t3.id_ciu   and
-                t0.proveedor_otr     = t4.id_int  and t0.cliente_otr        = t5.id_cli   and t0.operario_otr   	= t6.id_emp   and
-                t0.concepto_otr      = t7.id_con  and t0.subgrupoequipo_otr = t8.id_sgre  and t0.contactocliente_otr = t9.id_con and
-                t0.equipo_otr        = t10.id_equ and t0.prioridad_otr 	    = t11.id_abc  and t0.tipo_otr      	  = t12.id_tmt  and 
-                t10.marca_equ  	     = t13.id_mar and t10.id_equ 	          = t14.id_dequ and t0.tiposervicio_otr = t15.id_tser and
-                t0.tipooperacion_otr = t16.id_tope");
+          $data = DB::select("SELECT ordenservicio.*,    t1.nombre_emp,       t2.nombre_est,       t3.nombre_ciu, t4.razonsocial_int,
+                                     t5.razonsocial_cli, t5.razonsocial_cli,  t5.telefono_cli,     t5.email_cli,  t6.primer_nombre_emp,
+                                     t7.descripcion_con, t8.descripcion_sgre, t9.primer_nombre_con,t9.primer_apellido_con, t9.telefono_con,
+                                     t9.email_con,       t10.codigo_equ,      t10.antiguedad_equ,  t10.marca_equ,  t11.descripcion_abc,
+                                     t12.descripcion_tmt,t13.descripcion_mar, t15.descripcion_tser,t16.descripcion_tope,
+                                     datosadicionalequipos.modelo_dequ, datosadicionalequipos.serie_dequ, datosadicionalequipos.referencia_dequ
+                              FROM   ordenservicio INNER JOIN empresa as t1 INNER JOIN estados      as t2 
+                                     INNER JOIN ciudades           as t3  INNER JOIN interlocutores as t4  INNER JOIN interlocutores_cli as t5
+                                     INNER JOIN interlocutores_emp as t6  INNER JOIN conceptooserv  as t7  INNER JOIN subgrupopartes     as t8
+                                     INNER JOIN contactos          as t9  INNER JOIN equipos        as t10 INNER JOIN clasificacionABC   as t11
+                                     INNER JOIN tiposmantenimiento as t12 INNER JOIN marcas         as t13 INNER JOIN tiposservicio      as t15
+                                     INNER JOIN tipooperacion  as t16
+                                     left join datosadicionalequipos on (datosadicionalequipos.id_dequ = ordenservicio.equipo_otr)
+                              WHERE  (ordenservicio.tipooperacion_otr IN ( 3, 4)) and (ordenservicio.estado_otr   IN (1,11,12,13 ))  and 
+                                      ordenservicio.empresa_otr        = t1.id_emp and ordenservicio.estado_otr          = t2.id_est and
+                                      ordenservicio.ciudad_otr         = t3.id_ciu and ordenservicio.proveedor_otr       = t4.id_int and
+                                      ordenservicio.cliente_otr        = t5.id_cli and ordenservicio.operario_otr   	   = t6.id_emp and
+                                      ordenservicio.concepto_otr       = t7.id_con and ordenservicio.subgrupoequipo_otr  = t8.id_sgre and
+                                      ordenservicio.contactocliente_otr= t9.id_con and ordenservicio.equipo_otr          = t10.id_equ and
+                                      ordenservicio.prioridad_otr 	   = t11.id_abc and ordenservicio.tipo_otr      	   = t12.id_tmt and
+                                      t10.marca_equ  	                 = t13.id_mar and ordenservicio.tiposervicio_otr   = t15.id_tser and
+                                      ordenservicio.tipooperacion_otr  = t16.id_tope");
 
           $response['data'] = $data;
+         
           
           // $response['data'] = $data1;
           $response['message'] = "load successful";
@@ -213,29 +236,30 @@ class OrdenesController extends Controller
         try { 
           //$data = Frecuencias::find($id_fre);
          
-          $data = DB::select("SELECT t0.*,  t1.nombre_emp,          t2.nombre_est,       t3.nombre_ciu,       t4.razonsocial_int,
-                                            t5.razonsocial_cli,     t5.razonsocial_cli,  t5.telefono_cli,     t5.email_cli,
-                                            t6.primer_nombre_emp,   t7.descripcion_con,  t8.descripcion_sgre, t9.primer_nombre_con,
-                                            t9.primer_apellido_con, t9.telefono_con,     t9.email_con,
-                                            t10.codigo_equ,         t10.antiguedad_equ,  t10.marca_equ,       t11.descripcion_abc,
-                                            t12.descripcion_tmt,
-                                            t13.descripcion_mar,    t14.modelo_dequ,     t14.serie_dequ,      t14.referencia_dequ,
-                                            t15.descripcion_tser,   t16.descripcion_tope
-          FROM  ordenservicio                 as t0  INNER JOIN empresa        as t1  INNER JOIN estados               as t2 
-                INNER JOIN ciudades           as t3  INNER JOIN interlocutores as t4  INNER JOIN interlocutores_cli    as t5
-                INNER JOIN interlocutores_emp as t6  INNER JOIN conceptooserv  as t7  INNER JOIN subgruposequipos      as t8
-                INNER JOIN contactos          as t9  INNER JOIN equipos        as t10 INNER JOIN clasificacionABC      as t11
-                INNER JOIN tiposmantenimiento as t12 INNER JOIN marcas         as t13 INNER JOIN datosadicionalequipos as t14
-                INNER JOIN tiposservicio      as t15 INNER JOIN tipooperacion  as t16
-          WHERE t0.empresa_otr   = t1.id_emp  and t0.estado_otr         = t2.id_est  and t0.ciudad_otr       = t3.id_ciu   and
-                t0.proveedor_otr = t4.id_int  and t0.cliente_otr        = t5.id_cli  and t0.operario_otr     = t6.id_emp   and
-                t0.concepto_otr  = t7.id_con  and t0.subgrupoequipo_otr = t8.id_sgre and t0.contactocliente_otr = t9.id_con and
-                t0.equipo_otr    = t10.id_equ and t0.prioridad_otr 	   = t11.id_abc  and t0.tipo_otr      	 = t12.id_tmt  and 
-                t10.marca_equ  	 = t13.id_mar and t10.id_equ 	         = t14.id_dequ and t0.tiposervicio_otr = t15.id_tser and
-                t0.id_otr        = $id_otr    and t0.tipooperacion_otr = t16.id_tope ");
+          $data = DB::select("SELECT ordenservicio.*,   t1.nombre_emp,       t2.nombre_est,       t3.nombre_ciu, t4.razonsocial_int,
+                                    t5.razonsocial_cli, t5.razonsocial_cli,  t5.telefono_cli,     t5.email_cli,  t6.primer_nombre_emp,
+                                    t7.descripcion_con, t8.descripcion_sgre, t9.primer_nombre_con,t9.primer_apellido_con, t9.telefono_con,
+                                    t9.email_con,       t10.codigo_equ,      t10.antiguedad_equ,  t10.marca_equ,  t11.descripcion_abc,
+                                    t12.descripcion_tmt,t13.descripcion_mar, t15.descripcion_tser,t16.descripcion_tope,
+                                    datosadicionalequipos.modelo_dequ, datosadicionalequipos.serie_dequ, datosadicionalequipos.referencia_dequ
+                              FROM  ordenservicio INNER JOIN empresa as t1 INNER JOIN estados      as t2 
+                                    INNER JOIN ciudades           as t3  INNER JOIN interlocutores as t4  INNER JOIN interlocutores_cli as t5
+                                    INNER JOIN interlocutores_emp as t6  INNER JOIN conceptooserv  as t7  INNER JOIN subgrupopartes     as t8
+                                    INNER JOIN contactos          as t9  INNER JOIN equipos        as t10 INNER JOIN clasificacionABC   as t11
+                                    INNER JOIN tiposmantenimiento as t12 INNER JOIN marcas         as t13 INNER JOIN tiposservicio      as t15
+                                    INNER JOIN tipooperacion  as t16
+                                    left join datosadicionalequipos on (datosadicionalequipos.id_dequ = ordenservicio.equipo_otr)
+                              WHERE ordenservicio.id_otr             = $id_otr    and 
+                                    ordenservicio.empresa_otr        = t1.id_emp  and ordenservicio.estado_otr         = t2.id_est and
+                                    ordenservicio.ciudad_otr         = t3.id_ciu  and ordenservicio.proveedor_otr      = t4.id_int and
+                                    ordenservicio.cliente_otr        = t5.id_cli  and ordenservicio.operario_otr   	   = t6.id_emp and
+                                    ordenservicio.concepto_otr       = t7.id_con  and ordenservicio.subgrupoequipo_otr = t8.id_sgre and
+                                    ordenservicio.contactocliente_otr= t9.id_con  and ordenservicio.equipo_otr         = t10.id_equ and
+                                    ordenservicio.prioridad_otr 	   = t11.id_abc and ordenservicio.tipo_otr      	   = t12.id_tmt and
+                                    t10.marca_equ  	                 = t13.id_mar and ordenservicio.tiposervicio_otr   = t15.id_tser and
+                                    ordenservicio.tipooperacion_otr  = t16.id_tope");
             
-            
-            
+                  
 
           if ($data) {
               $response['data'] = $data;

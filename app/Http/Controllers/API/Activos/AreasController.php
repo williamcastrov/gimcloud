@@ -26,11 +26,11 @@ class AreasController extends Controller
       
         } catch (\Exception $e) {
             $response['message'] = $e->getMessage();
-            $response['success'] = true;
+            $response['success'] = false;
         }
         return $response;
     }
-    
+
     public function listar_areas(){  
         try { 
           $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est

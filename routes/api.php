@@ -59,6 +59,8 @@ Route::delete('/unidades/delete/{id}', 'App\Http\Controllers\API\Parameters\Unid
 Route::put('/unidades/update/{id}', 'App\Http\Controllers\API\Parameters\UnidadesController@update');
 
 Route::get('/estados/listar_estados', 'App\Http\Controllers\API\Parameters\EstadosController@listar_estados');
+Route::get('/estados/listar_estadosgenerales', 'App\Http\Controllers\API\Parameters\EstadosController@listar_estadosgenerales');
+Route::get('/estados/listar_estadosmtto', 'App\Http\Controllers\API\Parameters\EstadosController@listar_estadosmtto');
 Route::post('/estados/create', 'App\Http\Controllers\API\Parameters\EstadosController@create');
 Route::get('/estados/get/{id}', 'App\Http\Controllers\API\Parameters\EstadosController@get');
 Route::delete('/estados/delete/{id}', 'App\Http\Controllers\API\Parameters\EstadosController@delete');
@@ -277,6 +279,7 @@ Route::delete('/conceptososerv/delete/{id}', 'App\Http\Controllers\API\GestionOr
 Route::put('/conceptososerv/update/{id}', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@update');
 
 Route::get('/tipooperacion/listar_tipooperacion', 'App\Http\Controllers\API\GestionOrdenes\TipoOperacionController@listar_tipooperacion');
+Route::get('/tipooperacion/listar_tipooperacionestados', 'App\Http\Controllers\API\GestionOrdenes\TipoOperacionController@listar_tipooperacionestados');
 Route::post('/tipooperacion/create', 'App\Http\Controllers\API\GestionOrdenes\TipoOperacionController@create');
 Route::get('/tipooperacion/get/{id}', 'App\Http\Controllers\API\GestionOrdenes\TipoOperacionController@get');
 Route::delete('/tipooperacion/delete/{id}', 'App\Http\Controllers\API\GestionOrdenes\TipoOperacionController@delete');
@@ -295,6 +298,7 @@ Route::delete('/tiposservicio/delete/{id}', 'App\Http\Controllers\API\GestionOrd
 Route::put('/tiposservicio/update/{id}', 'App\Http\Controllers\API\GestionOrdenes\TiposServicioController@update');
 
 Route::get('/ordenesserv/listar_ordenesserv', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@listar_ordenesserv');
+Route::get('/ordenesserv/listar_listarot', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@listar_listarot');
 Route::get('/ordenesserv/listar_ordenesservactivas', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@listar_ordenesservactivas');
 Route::get('/ordenesserv/listar_ordeneschequeo', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@listar_ordeneschequeo');
 Route::get('/ordenesserv/listar_ordeneschequeoactivas', 'App\Http\Controllers\API\GestionOrdenes\OrdenesController@listar_ordeneschequeoactivas');

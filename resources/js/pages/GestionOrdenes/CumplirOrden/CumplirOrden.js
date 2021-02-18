@@ -150,7 +150,7 @@ function CumplirOrden() {
     async function fetchDataOrdenes() {
       const res = await crearordenesServices.listOrdenesServActivas();
       setListarOrdenes(res.data);
-      //console.log("Lee Ordenes Automaticas", res.data);
+      console.log("Lee Ordenes Automaticas", res.data);
     }
     fetchDataOrdenes();
   }, [])

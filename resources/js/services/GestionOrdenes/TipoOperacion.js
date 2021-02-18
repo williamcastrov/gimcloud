@@ -1,4 +1,5 @@
-const baseUrl = "http://127.0.0.1:8000/api/tipooperacion";   
+import url from "../../components/Url";
+const baseUrl = `${url}/api/tipooperacion`;   
 import axios from "axios";
 const tipooperacion = {};
 
@@ -12,6 +13,15 @@ tipooperacion.save = async (data) => {
 
 tipooperacion.listTipooperacion = async () => {
     const urlList = baseUrl+"/listar_tipooperacion"
+    const res = await axios.get(urlList)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
+tipooperacion.listTipooperacionEstados = async () => {
+    const urlList = baseUrl+"/listar_tipooperacionestados"
     const res = await axios.get(urlList)
     .then(response=>{ return response.data; })
     .catch(error=>{ return error; })
