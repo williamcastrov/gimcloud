@@ -38,6 +38,7 @@ import Marcas from './pages/Mantenimiento/Marcas';
 import ClasificacionABC from './pages/Mantenimiento/ClasificacionABC';
 import EstadosClientes from './pages/Mantenimiento/EstadosClientes';
 import EstadosMtto from './pages/Mantenimiento/EstadosMtto';
+import EstadosCalidad from './pages/Mantenimiento/EstadosCalidad/EstadosCalidad';
 
 // Componentes Modulo Gestión Ordenes de Servicios
 import Tiposmtto from './pages/GestionOrdenes/Parameters/Tiposmtto';
@@ -83,6 +84,11 @@ import Cencostos from './pages/Activos/Cencostos';
 //Impresión PDF
 import ImprimirOT from './pages/Listar/Ordenes/OrdenesPdf';
 import ImprimirOTChequeo from './pages/Listar/Ordenes/OrdenChequeoPdf';
+import PrincipalPDF from './components/Pdf/VisualizarPDF/PrincipalPDF.js';
+import Pdf from './components/Pdf/VisualizarPDF/Pdf';  
+
+//Impresión PDF
+import Cliente from './components/SubirArchivos/Cliente';
 
 import {
   BrowserRouter as Router,
@@ -149,6 +155,7 @@ function Main() {
               <Route path="/mantenimiento/tiposequipos" component={TiposEquipos} />
               <Route path="/mantenimiento/estadosclientes" component={EstadosClientes} />
               <Route path="/mantenimiento/estadosmtto" component={EstadosMtto} />
+              <Route path="/mantenimiento/estadoscalidad" component={EstadosCalidad} />
        
               <Route path="/mantenimiento/gruposequipos" component={Gruposequipos} />
               <Route path="/mantenimiento/subgrupospartes" component={SubGrupospartes} />
@@ -181,6 +188,10 @@ function Main() {
 
               <Route path="/pdf/imprimirot" component={ImprimirOT} />
               <Route path="/pdf/imprimirotchequeo" component={ImprimirOTChequeo} />
+              <Route path="/pdf/PrincipalPDF" component={PrincipalPDF} />
+              <Route path="/pdf/Pdf" component={Pdf} />
+
+              <Route path="/informes/clientes" component={Cliente} />
               
             </Switch>
           </ThemeProvider>

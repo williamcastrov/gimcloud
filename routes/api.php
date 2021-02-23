@@ -60,7 +60,8 @@ Route::put('/unidades/update/{id}', 'App\Http\Controllers\API\Parameters\Unidade
 
 Route::get('/estados/listar_estados', 'App\Http\Controllers\API\Parameters\EstadosController@listar_estados');
 Route::get('/estados/listar_estadosgenerales', 'App\Http\Controllers\API\Parameters\EstadosController@listar_estadosgenerales');
-Route::get('/estados/listar_estadosmtto', 'App\Http\Controllers\API\Parameters\EstadosController@listar_estadosmtto');
+Route::get('/estados/listar_estadosOT', 'App\Http\Controllers\API\Parameters\EstadosController@listar_estadosOT');
+Route::get('/estados/listar_estadosequipos', 'App\Http\Controllers\API\Parameters\EstadosController@listar_estadosequipos');
 Route::post('/estados/create', 'App\Http\Controllers\API\Parameters\EstadosController@create');
 Route::get('/estados/get/{id}', 'App\Http\Controllers\API\Parameters\EstadosController@get');
 Route::delete('/estados/delete/{id}', 'App\Http\Controllers\API\Parameters\EstadosController@delete');
@@ -163,6 +164,12 @@ Route::post('/estadosclientes/create', 'App\Http\Controllers\API\Mantenimiento\E
 Route::get('/estadosclientes/get/{id}', 'App\Http\Controllers\API\Mantenimiento\EstadosClienteController@get');
 Route::delete('/estadosclientes/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\EstadosClienteController@delete');
 Route::put('/estadosclientes/update/{id}', 'App\Http\Controllers\API\Mantenimiento\EstadosClienteController@update');
+
+Route::get('/estadoscalidad/listar_estadoscalidad', 'App\Http\Controllers\API\Mantenimiento\EstadosCalidadController@listar_estadoscalidad');
+Route::post('/estadoscalidad/create', 'App\Http\Controllers\API\Mantenimiento\EstadosCalidadController@create');
+Route::get('/estadoscalidad/get/{id}', 'App\Http\Controllers\API\Mantenimiento\EstadosCalidadController@get');
+Route::delete('/estadoscalidad/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\EstadosCalidadController@delete');
+Route::put('/estadoscalidad/update/{id}', 'App\Http\Controllers\API\Mantenimiento\EstadosCalidadController@update');
 
 Route::get('/estadosmtto/listar_estadosmtto', 'App\Http\Controllers\API\Mantenimiento\EstadosMttoController@listar_estadosmtto');
 Route::post('/estadosmtto/create', 'App\Http\Controllers\API\Mantenimiento\EstadosMttoController@create');
@@ -267,12 +274,16 @@ Route::put('/ubicaciones/update/{id}', 'App\Http\Controllers\API\DatosEquipos\Ub
 
 // Rutas Gestión Ordenes de Servicio
 Route::get('/tiposmtto/listar_tiposmtto', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@listar_tiposmtto');
+Route::get('/tiposmtto/listar_tiposmttoOT', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@listar_tiposmttoOT');
+Route::get('/tiposmtto/listar_tiposmttoalistamiento', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@listar_tiposmttoalistamiento');
 Route::post('/tiposmtto/create', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@create');
 Route::get('/tiposmtto/get/{id}', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@get');
 Route::delete('/tiposmtto/delete/{id}', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@delete');
 Route::put('/tiposmtto/update/{id}', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@update');
 
 Route::get('/conceptososerv/listar_conceptososerv', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@listar_conceptososerv');
+Route::get('/conceptososerv/listar_conceptososervOT', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@listar_conceptososervOT');
+Route::get('/conceptososerv/listar_conceptososervalistamiento', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@listar_conceptososervalistamiento');
 Route::post('/conceptososerv/create', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@create');
 Route::get('/conceptososerv/get/{id}', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@get');
 Route::delete('/conceptososerv/delete/{id}', 'App\Http\Controllers\API\GestionOrdenes\ConceptososervController@delete');

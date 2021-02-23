@@ -170,6 +170,7 @@ class OrdenesController extends Controller
                                      INNER JOIN tipooperacion  as t16
                                      left join datosadicionalequipos on (datosadicionalequipos.id_dequ = ordenservicio.equipo_otr)
                               WHERE (ordenservicio.tipooperacion_otr IN ( 3, 4))      and  
+                              
                                       ordenservicio.empresa_otr        = t1.id_emp and ordenservicio.estado_otr          = t2.id_est and
                                       ordenservicio.ciudad_otr         = t3.id_ciu and ordenservicio.proveedor_otr       = t4.id_int and
                                       ordenservicio.cliente_otr        = t5.id_cli and ordenservicio.operario_otr   	   = t6.id_emp and

@@ -28,7 +28,10 @@ class Equipos extends Model
         'estadocontable_equ',
         'estadocliente_equ',
         'estadomtto_equ',
-        'ctacontable_equ'
+        'estadocalidad_equ',
+        'ctacontable_equ',
+        'manejamatricula_equ',
+        'manejaDNI_equ'
     ];
 
     public $timestamps = false;

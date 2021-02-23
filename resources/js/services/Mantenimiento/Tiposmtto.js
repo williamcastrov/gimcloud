@@ -20,6 +20,24 @@ tiposmtto.listTiposmtto = async () => {
     return res;
 }
 
+tiposmtto.listTiposmttoOT = async () => {
+    const urlList = baseUrl+"/listar_tiposmttoOT"
+    const res = await axios.get(urlList)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
+tiposmtto.listTiposmttoAlistamiento = async () => {
+    const urlList = baseUrl+"/listar_tiposlistar_tiposmttoalistamiento"
+    const res = await axios.get(urlList)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
 tiposmtto.update = async (data) => {
     console.log(data);
     const urlUpdate = baseUrl+"/update/"+data.id_tmt

@@ -133,6 +133,7 @@ function CrearOrdenes() {
   let cambio = 12;
   let empresa = 1;
   let diasoperacion = 0;
+  let operariosinasignar = 1;
 
   /*
     const [dateDMY, setDateDMY] = useState(Moment(new Date()).format('DD-MM-YYYY'));
@@ -159,7 +160,7 @@ function CrearOrdenes() {
     'equipo_otr': "",
     'proveedor_otr': "",
     'cliente_otr': "",
-    'operario_otr': "",
+    'operario_otr': operariosinasignar = 1,
     'contactocliente_otr': "",
     'subgrupoequipo_otr': "",
     'ciudad_otr': "",
@@ -226,7 +227,7 @@ function CrearOrdenes() {
 
   useEffect(() => {
     async function fetchDataEstados() {
-      const res = await estadosServices.listEstados();
+      const res = await estadosServices.listEstadosOT();
       setListarEstados(res.data)
       //console.log(res.data);
     }
@@ -271,7 +272,7 @@ function CrearOrdenes() {
 
   useEffect(() => {
     async function fetchDataConceptosOserv() {
-      const res = await conceptososervServices.listConceptosOserv();
+      const res = await conceptososervServices.listConceptosOservOT();
       setListarConceptosOserv(res.data)
       //console.log("CONCEPTOS ORDEN : ",res.data);
     }
@@ -324,7 +325,7 @@ function CrearOrdenes() {
 
   useEffect(() => {
     async function fetchDataTiposMtto() {
-      const res = await tiposmttoServices.listTiposmtto();
+      const res = await tiposmttoServices.listTiposmttoOT();
       setListarTiposMtto(res.data)
       //console.log(res.data);
     }
@@ -939,6 +940,8 @@ function CrearOrdenes() {
               labelId="selectoperario_otr_otr"
               name="operario_otr"
               id="idselectoperario_otr"
+              defaultValue={operariosinasignar}
+              disabled="true"
               fullWidth
               onChange={handleChange}
 
@@ -1266,6 +1269,8 @@ function CrearOrdenes() {
                 name="operario_otr"
                 id="idselectoperario_otr"
                 fullWidth
+                defaultValue={operariosinasignar}
+                disabled="true"
                 onChange={handleChange}
                 value={ordenSeleccionado && ordenSeleccionado.operario_otr}
                 onClick={() => setEstado(16)}

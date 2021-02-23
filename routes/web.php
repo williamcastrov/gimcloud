@@ -56,6 +56,7 @@ Route::get('/almacenes/inventarios', 'App\Http\Controllers\GimController@index')
 Route::get('/mantenimiento/marcas', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/estadosclientes', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/estadosmtto', 'App\Http\Controllers\GimController@index');
+Route::get('/mantenimiento/estadoscalidad', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/frecuencias', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/gruposequipos', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/subgrupospartes', 'App\Http\Controllers\GimController@index');
@@ -95,4 +96,8 @@ Route::get('/activos/cencostos', 'App\Http\Controllers\GimController@index');
 // Rutas Impresión de PDF
 Route::get('/pdf/imprimirot', 'App\Http\Controllers\GimController@index');
 Route::get('/pdf/imprimirotchequeo', 'App\Http\Controllers\GimController@index');
+Route::get('/pdf/PrincipalPDF', 'App\Http\Controllers\GimController@index');
+
+// Rutas Informes
+Route::get('/informes/clientes', 'App\Http\Controllers\GimController@index');
 

@@ -18,6 +18,7 @@ import subgruposequiposServices from "../../../services/Mantenimiento/SubGruposP
 import equiposServices from "../../../services/Mantenimiento/Equipos";
 import estadosclientesServices from "../../../services/Mantenimiento/EstadosClientes";
 import estadosmttoServices from "../../../services/Mantenimiento/EstadosMtto";
+import estadoscalidadServices from "../../../services/Mantenimiento/EstadosCalidad";
 
 // Datos Adicionales de los Equipos
 import MenuEquipos from "../../DatosEquipos/MenuEquipos";
@@ -52,6 +53,10 @@ const useStyles = makeStyles((theme) => ({
   formControlEstados: {
     margin: theme.spacing(0),
     minWidth: 200,
+  },
+  formControlManeja: {
+    margin: theme.spacing(0),
+    minWidth: 140,
   },
   extendedIcon: {
     marginRight: theme.spacing(1),
@@ -110,6 +115,7 @@ function Equipos() {
   const [listarEstados, setListarEstados] = useState([]);
   const [listarEstadosClientes, setListarEstadosClientes] = useState([]);
   const [listarEstadosMtto, setListarEstadosMtto] = useState([]);
+  const [listarEstadosCalidad, setListarEstadosCalidad] = useState([]);
   const [listarFrecuencias, setListarFrecuencias] = useState([]);
   const [listarPropietarios, setListarPropietarios] = useState([]);
   const [listarMarcas, setListarMarcas] = useState([]);
@@ -117,13 +123,14 @@ function Equipos() {
   const [listarSubGruposEquipos, setListarSubGruposEquipos] = useState([]);
   const [fechaHoy, setFechaHoy] = useState(new Date());
   const [actualiza, setActualiza] = useState(false);
+  let frecuencia = 2
   const [equiposSeleccionado, setEquiposSeleccionado] = useState({
     'id_equ': "",
     'codigo_equ': "",
     'tipo_equ': "EQM",
     'descripcion_equ': "",
     'empresa_equ': "",
-    'frecuencia_equ': "",
+    'frecuencia_equ': frecuencia,
     'propietario_equ': "",
     'marca_equ': "",
     'antiguedad_equ': "",
@@ -133,7 +140,10 @@ function Equipos() {
     'estadocontable_equ': "",
     'estadocliente_equ': "",
     'estadomtto_equ': "",
-    'ctacontable_equ': ""
+    'estadocalidad_equ': "",
+    'ctacontable_equ': "",
+    'manejamatricula_equ': "",
+    'manejaDNI_equ': ""
   })
 
   useEffect(() => {
@@ -166,9 +176,9 @@ function Equipos() {
 
   useEffect(() => {
     async function fetchDataEstados() {
-      const res = await estadosServices.listEstados();
+      const res = await estadosServices.listEstadosEquipos();
       setListarEstados(res.data)
-      //console.log(res.data);
+      console.log("DATOS ESTADOS ",res.data);
     }
     fetchDataEstados();
   }, [])
@@ -181,6 +191,16 @@ function Equipos() {
     }
     fetchDataEstadosClientes();
   }, [])
+
+  useEffect(() => {
+    async function fetchDataEstadosCalidad() {
+      const res = await estadoscalidadServices.listEstadosCalidad();
+      setListarEstadosCalidad(res.data)
+      //console.log(res.data);
+    }
+    fetchDataEstadosCalidad();
+  }, [])
+
 
   useEffect(() => {
     async function fetchDataEstadosMtto() {
@@ -333,8 +353,23 @@ function Equipos() {
       formOk = false;
     }
 
+    if (!equiposSeleccionado.estadocalidad_equ) {
+      errors.estadocalidad_equ = true;
+      formOk = false;
+    }
+
     if (!equiposSeleccionado.ctacontable_equ) {
       errors.ctacontable_equ = true;
+      formOk = false;
+    }
+    
+    if (!equiposSeleccionado.manejamatricula_equ) {
+      errors.manejamatricula_equ = true;
+      formOk = false;
+    }
+
+    if (!equiposSeleccionado.manejaDNI_equ) {
+      errors.manejaDNI_equ = true;
       formOk = false;
     }
 
@@ -361,7 +396,10 @@ function Equipos() {
         delete equiposSeleccionado.estadocontable_equ;
         delete equiposSeleccionado.estadocliente_equ;
         delete equiposSeleccionado.estadomtto_equ;
+        delete equiposSeleccionado.estadocaliad_equ;
         delete equiposSeleccionado.ctacontable_equ;
+        delete equiposSeleccionado.manejamatricula_equ;
+        delete equiposSeleccionado.manejaDNI_equ;
       } else {
         swal("Equipo", "Error Creando el Equipo!", "error", { button: "Aceptar" });
         console.log(res.message);
@@ -448,8 +486,23 @@ function Equipos() {
       formOk = false;
     }
 
+    if (!equiposSeleccionado.estadocalidad_equ) {
+      errors.estadocalidad_equ = true;
+      formOk = false;
+    }
+
     if (!equiposSeleccionado.ctacontable_equ) {
       errors.ctacontable_equ = true;
+      formOk = false;
+    }
+
+    if (!equiposSeleccionado.manejamatricula_equ) {
+      errors.manejamatricula_equ = true;
+      formOk = false;
+    }
+
+    if (!equiposSeleccionado.manejaDNI_equ) {
+      errors.manejaDNI_equ = true;
       formOk = false;
     }
 
@@ -476,7 +529,10 @@ function Equipos() {
         delete equiposSeleccionado.estadocontable_equ;
         delete equiposSeleccionado.estadocliente_equ;
         delete equiposSeleccionado.estadomtto_equ;
+        delete equiposSeleccionado.estadocaliad_equ;
         delete equiposSeleccionado.ctacontable_equ;
+        delete equiposSeleccionado.manejamatricula_equ;
+        delete equiposSeleccionado.manejaDNI_equ;  
       } else {
         swal("Equipo", "Error Actualizando el Equipo!", "error", { button: "Aceptar" });
         console.log(res.message);
@@ -521,13 +577,24 @@ function Equipos() {
       cellStyle: { minWidth: 220 }
     },
     {
-      field: 'nombre_emp',
-      title: 'Propietario',
-      cellStyle: { minWidth: 150 }
+      field: 'referencia_dequ',
+      title: 'Referencia',
+      cellStyle: { minWidth: 70 }
     },
     {
-      field: 'descripcion_fre',
-      title: 'Descripcion de la Frecuencia'
+      field: 'modelo_dequ',
+      title: 'Modelo',
+      cellStyle: { minWidth: 70 }
+    },
+    {
+      field: 'serie_dequ',
+      title: 'Serie',
+      cellStyle: { minWidth: 70 }
+    },
+    {
+      field: 'annofabricacion_dequ',
+      title: 'Año Fabricacion',
+      cellStyle: { minWidth: 70 }
     },
     {
       field: 'razonsocial_int',
@@ -535,20 +602,9 @@ function Equipos() {
       cellStyle: { minWidth: 150 }
     },
     {
-      field: 'descripcion_mar',
-      title: 'Marca del Equipo'
-    },
-    {
       field: 'antiguedad_equ',
       title: 'Antiguedad Años',
-      cellStyle: { width: 10, maxWidth: 10 },
-      headerStyle: { width: 10, maxWidth: 10 }
-
-    },
-    {
-      field: 'codigogrupo_grp',
-      title: 'Grupo Equipo',
-      cellStyle: { minWidth: 50 }
+      cellStyle: { minWidth: 70 }
     },
     {
       field: 'descripcion_grp',
@@ -565,17 +621,19 @@ function Equipos() {
     <div className={styles.modal}>
       <Typography align="center" className={styles.typography} variant="button" display="block"> Agregar Nuevo Equipo </Typography>
       <Grid container spacing={2} >
-        <Grid item xs={12} md={6}> <TextField name="codigo_equ" label="Codigo Equipo"
+        <Grid item xs={12} md={3}> <TextField name="codigo_equ" label="Codigo Equipo"
           fullWidth onChange={handleChange} />
         </Grid>
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
+        <Grid item xs={12} md={3}>
+          <FormControl className={styles.formControlManeja}>
             <InputLabel id="idselectFrecuencia">Frecuencia</InputLabel>
             <Select
               labelId="selectFrecuencia"
               name="frecuencia_equ"
               id="idselectFrecuencia"
               fullWidth
+              disabled="true"
+              defaultValue={frecuencia}
               onChange={handleChange}
             >
               <MenuItem value=""> <em>None</em> </MenuItem>
@@ -589,8 +647,37 @@ function Equipos() {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={12}> <TextField name="descripcion_equ" label="Descripción del Equipo"
-          fullWidth onChange={handleChange} />
+        <Grid item xs={12} md={3}>
+          <FormControl className={styles.formControlManeja}>
+            <InputLabel id="idselectMatricula" >Maneja Matricula</InputLabel>
+            <Select
+              labelId="selecMatricula"
+              name="manejamatricula_equ"
+              id="idselectMatricula"
+              fullWidth
+              onChange={handleChange}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              <MenuItem value="S">Maneja Matricula S</MenuItem>
+              <MenuItem value="N">Maneja Matricula N</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={3}>
+          <FormControl className={styles.formControlManeja}>
+            <InputLabel id="idselectDNI" >Maneja Chapa</InputLabel>
+            <Select
+              labelId="selectDNI"
+              name="manejaDNI_equ"
+              id="idselectDNI"
+              fullWidth
+              onChange={handleChange}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              <MenuItem value="S">Maneja DNI S</MenuItem>
+              <MenuItem value="N">Maneja DNI N</MenuItem>
+            </Select>
+          </FormControl>
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl}>
@@ -613,7 +700,6 @@ function Equipos() {
             </Select>
           </FormControl>
         </Grid>
-
         <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl}>
             <InputLabel id="idselectPropietario">Propietario</InputLabel>
@@ -700,7 +786,10 @@ function Equipos() {
         </Grid>
         <Grid item xs={12} md={4}> <TextField name="antiguedad_equ" label="Antiguedad" fullWidth onChange={handleChange} /> </Grid>
         <Grid item xs={12} md={4}> <TextField name="ctacontable_equ" label="Cuenta Contable" fullWidth onChange={handleChange} /> </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={8}> <TextField name="descripcion_equ" label="Descripción del Equipo"
+          fullWidth onChange={handleChange} />
+        </Grid>
+        <Grid item xs={12} md={4}>
           <TextField className={styles.inputMaterial} name="valoradquisicion_equ" label="Valor de Compra" fullWidth
             InputLabelProps={{ shrink: true }} InputProps={{ inputComponent: NumberFormatCustom, }}
             onChange={handleChange}
@@ -708,7 +797,28 @@ function Equipos() {
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl}>
-            <InputLabel id="idselectEstadoContable">Estado en Contabilidad</InputLabel>
+            <InputLabel id="idselectEstadoCalidad">Estado Calidad</InputLabel>
+            <Select
+              labelId="selectEstadoCalidad"
+              name="estadocalidad_equ"
+              id="idselectEstadoCalidad"
+              fullWidth
+              onChange={handleChange}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarEstadosCalidad.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_estcal}>{itemselect.nombre_estcal}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectEstadoContable">Estado del Equipo</InputLabel>
             <Select
               labelId="selectEstadoContable"
               name="estadocontable_equ"
@@ -718,7 +828,7 @@ function Equipos() {
             >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
-                listarEstados.map((itemselect) => {
+                listarEstados && listarEstados.map((itemselect) => {
                   return (
                     <MenuItem value={itemselect.id_est}>{itemselect.nombre_est}</MenuItem>
                   )
@@ -782,10 +892,10 @@ function Equipos() {
     <div className={styles.modal}>
       <Typography align="center" className={styles.typography} variant="button" display="block" > Actualizar Equipo </Typography>
       <Grid container spacing={2} >
-      <Grid item xs={12} md={6}> <TextField name="codigo_equ" label="Codigo Equipo"
+      <Grid item xs={12} md={3}> <TextField name="codigo_equ" label="Codigo Equipo"
           fullWidth onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.codigo_equ}  />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={3}>
           <FormControl className={styles.formControl}>
             <InputLabel id="idselectFrecuencia">Frecuencia</InputLabel>
             <Select
@@ -793,6 +903,7 @@ function Equipos() {
               name="frecuencia_equ"
               id="idselectFrecuencia"
               fullWidth
+              disabled="true"
               onChange={handleChange}
               value={equiposSeleccionado && equiposSeleccionado.frecuencia_equ} 
             >
@@ -807,8 +918,39 @@ function Equipos() {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={12}> <TextField name="descripcion_equ" label="Descripción del Equipo"
-          fullWidth onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.descripcion_equ} />
+        <Grid item xs={12} md={3}>
+          <FormControl className={styles.formControlManeja}>
+            <InputLabel id="idselectMatricula" >Maneja Matricula</InputLabel>
+            <Select
+              labelId="selecMatricula"
+              name="manejamatricula_equ"
+              id="idselectMatricula"
+              fullWidth
+              onChange={handleChange}
+              value={equiposSeleccionado && equiposSeleccionado.manejamatricula_equ}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              <MenuItem value="S">Maneja Matricula S</MenuItem>
+              <MenuItem value="N">Maneja Matricula N</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={3}>
+          <FormControl className={styles.formControlManeja}>
+            <InputLabel id="idselectDNI" >Maneja Chapa</InputLabel>
+            <Select
+              labelId="selectDNI"
+              name="manejaDNI_equ"
+              id="idselectDNI"
+              fullWidth
+              onChange={handleChange}
+              value={equiposSeleccionado && equiposSeleccionado.manejaDNI_equ}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              <MenuItem value="S">Maneja DNI S</MenuItem>
+              <MenuItem value="N">Maneja DNI N</MenuItem>
+            </Select>
+          </FormControl>
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl}>
@@ -928,8 +1070,10 @@ function Equipos() {
             <TextField name="ctacontable_equ" label="Cuenta Contable" fullWidth onChange={handleChange} 
                          value={equiposSeleccionado && equiposSeleccionado.ctacontable_equ} /> 
         </Grid>
-        
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={8}> <TextField name="descripcion_equ" label="Descripción del Equipo"
+          fullWidth onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.descripcion_equ} />
+        </Grid>
+        <Grid item xs={12} md={4}>
           <TextField className={styles.inputMaterial} name="valoradquisicion_equ" label="Valor de Compra" fullWidth
             InputLabelProps={{ shrink: true }} InputProps={{ inputComponent: NumberFormatCustom, }}
             onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.valoradquisicion_equ}
@@ -937,7 +1081,29 @@ function Equipos() {
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl}>
-            <InputLabel id="idselectEstadoContable">Estado en Contabilidad</InputLabel>
+            <InputLabel id="idselectEstadoCalidad">Estado Calidad</InputLabel>
+            <Select
+              labelId="selectEstadoCalidad"
+              name="estadocalidad_equ"
+              id="idselectEstadoCalidad"
+              fullWidth
+              onChange={handleChange}
+              value={equiposSeleccionado && equiposSeleccionado.estadocalidad_equ}
+            >
+              <MenuItem value=""> <em>None</em> </MenuItem>
+              {
+                listarEstadosCalidad.map((itemselect) => {
+                  return (
+                    <MenuItem value={itemselect.id_estcal}>{itemselect.nombre_estcal}</MenuItem>
+                  )
+                })
+              }
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <FormControl className={styles.formControl}>
+            <InputLabel id="idselectEstadoContable">Estado del Equipo</InputLabel>
             <Select
               labelId="selectEstadoContable"
               name="estadocontable_equ"
@@ -948,7 +1114,7 @@ function Equipos() {
             >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
-                listarEstados.map((itemselect) => {
+                listarEstados && listarEstados.map((itemselect) => {
                   return (
                     <MenuItem value={itemselect.id_est}>{itemselect.nombre_est}</MenuItem>
                   )
@@ -1025,6 +1191,7 @@ function Equipos() {
     <div className="App">
       <br />
       <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Equipo</Button>
+      <br />
       <MaterialTable
         columns={columnas}
         data={listarEquipos}
@@ -1064,7 +1231,11 @@ function Equipos() {
                 >
                   <Button variant="contained">Estado Contable : {rowData.nombre_est}</Button> {}
                   <Button variant="contained">Estado Cliente  : {rowData.nombre_estcli}</Button> {}
-                  <Button variant="contained">Estado Mantenimiento :{rowData.nombre_estmtto}</Button>
+                  <Button variant="contained">Estado Mantenimiento :{rowData.nombre_estmtto}</Button>{}
+                  <Button variant="contained">Estado Calidad :{rowData.nombre_estcal}</Button>{}
+                  <Button variant="contained">Marca :{rowData.descripcion_mar}</Button>
+                  <Button variant="contained">Maneja Matricula :{rowData.manejamatricula_equ}</Button>
+                  <Button variant="contained">Maneja Chapa :{rowData.manejaDNI_equ}</Button>
                 </div>
               )
             },

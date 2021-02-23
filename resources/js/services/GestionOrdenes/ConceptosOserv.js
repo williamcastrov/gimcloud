@@ -20,6 +20,25 @@ conceptososerv.listConceptosOserv = async () => {
     return res;
 }
 
+conceptososerv.listConceptosOservOT = async () => {
+    const urlList = baseUrl+"/listar_conceptososervOT"
+    const res = await axios.get(urlList)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
+conceptososerv.listConceptosOservAlistamiento = async () => {
+    const urlList = baseUrl+"/listar_conceptososervalistamiento"
+    const res = await axios.get(urlList)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
+
 conceptososerv.update = async (data) => {
     console.log(data);
     const urlUpdate = baseUrl+"/update/"+data.id_con

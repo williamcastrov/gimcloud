@@ -49,7 +49,43 @@ class TiposmttoController extends Controller
             $response['success'] = false;
           }
           return $response;
-      }
+        }
+
+        public function listar_tiposmttoOT(){
+          try {
+            //$data = Tiposmtto::with("empresa")->get();
+            $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est
+            FROM tiposmantenimiento as t0 INNER JOIN empresa as t1 INNER JOIN estados as t2
+            WHERE t0.empresa_tmt = t1.id_emp and t0.estado_tmt = t2.id_est and id_tmt IN (2,3)");
+  
+            $response['data'] = $data;
+            $response['message'] = "load successful";
+            $response['success'] = true;
+    
+          } catch (\Exception $e) {
+            $response['message'] = $e->getMessage();
+            $response['success'] = false;
+          }
+          return $response;
+        }
+
+        public function listar_tiposmttoalistamiento(){
+          try {
+            //$data = Tiposmtto::with("empresa")->get();
+            $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est
+            FROM tiposmantenimiento as t0 INNER JOIN empresa as t1 INNER JOIN estados as t2
+            WHERE t0.empresa_tmt = t1.id_emp and t0.estado_tmt = t2.id_est and id_tmt IN (1)");
+  
+            $response['data'] = $data;
+            $response['message'] = "load successful";
+            $response['success'] = true;
+    
+          } catch (\Exception $e) {
+            $response['message'] = $e->getMessage();
+            $response['success'] = false;
+          }
+          return $response;
+        }
   
         public function get($id_tmt){
   

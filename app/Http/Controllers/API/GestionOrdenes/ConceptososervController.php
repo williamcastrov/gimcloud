@@ -12,7 +12,7 @@ use App\Models\Parameters\Estados;
 class ConceptososervController extends Controller
 {
     //
-    public function create(Request $request){
+      public function create(Request $request){
 
         try {
             $insert['id_con']          = $request['id_con'];
@@ -31,15 +31,14 @@ class ConceptososervController extends Controller
           }
            
           return $response;
-    }
+      }
   
-    public function listar_conceptososerv(){
-  
+      public function listar_conceptososerv(){
         try {
             //$data = Especialidades::with("empresa")->get();
             $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est 
             FROM conceptooserv as t0 INNER JOIN empresa as t1 INNER JOIN estados as t2 
-            WHERE t0.empresa_con = t1.id_emp and t0.estado_con = t2.id_est" );
+            WHERE t0.empresa_con = t1.id_emp and t0.estado_con = t2.id_est");
   
             $response['data'] = $data;
             $response['message'] = "load successful";
@@ -50,9 +49,45 @@ class ConceptososervController extends Controller
             $response['success'] = false;
         }
         return $response;
-    }
+      }
+
+      public function listar_conceptososervOT(){
+        try {
+            //$data = Especialidades::with("empresa")->get();
+            $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est 
+            FROM conceptooserv as t0 INNER JOIN empresa as t1 INNER JOIN estados as t2 
+            WHERE t0.empresa_con = t1.id_emp and t0.estado_con = t2.id_est and id_con IN (2,3)");
   
-    public function get($id_con){
+            $response['data'] = $data;
+            $response['message'] = "load successful";
+            $response['success'] = true;
+    
+        } catch (\Exception $e) {
+            $response['message'] = $e->getMessage();
+            $response['success'] = false;
+        }
+        return $response;
+      }
+
+      public function listar_conceptososervalistamiento(){
+        try {
+            //$data = Especialidades::with("empresa")->get();
+            $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est 
+            FROM conceptooserv as t0 INNER JOIN empresa as t1 INNER JOIN estados as t2 
+            WHERE t0.empresa_con = t1.id_emp and t0.estado_con = t2.id_est and id_con IN (1)");
+  
+            $response['data'] = $data;
+            $response['message'] = "load successful";
+            $response['success'] = true;
+    
+        } catch (\Exception $e) {
+            $response['message'] = $e->getMessage();
+            $response['success'] = false;
+        }
+        return $response;
+      }
+  
+      public function get($id_con){
   
         try {    
             //$data = Especialidades::find($id_esp);
@@ -76,9 +111,9 @@ class ConceptososervController extends Controller
             $response['success'] = false;
         }
         return $response;
-    }
+      }
   
-    public function update(Request $request, $id_con){
+      public function update(Request $request, $id_con){
   
           try {
             $data['id_con']          = $request['id_con'];
@@ -117,5 +152,5 @@ class ConceptososervController extends Controller
           }
     
           return $response;
-    }  
+      }  
 }

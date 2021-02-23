@@ -113,7 +113,7 @@ function Proveedores() {
 
   useEffect(() => {
     async function fetchDataEstados() {
-      const res = await estadosServices.listEstados();
+      const res = await estadosServices.listEstadosGenerales();
       setListarEstados(res.data)
       //console.log(res.data);
     }

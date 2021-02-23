@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Mantenimiento() {
+function Usuarios() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -65,4 +65,4 @@ function Mantenimiento() {
   );
 }
 
-export default Mantenimiento;
+export default Usuarios;

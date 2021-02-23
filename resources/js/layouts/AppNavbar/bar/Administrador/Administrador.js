@@ -10,6 +10,7 @@ import Mantenimiento from "./Mantenimiento";
 import Ordenes from "./Ordenes";
 import Planeacion from "./Planeacion";
 import ListaChequeo from "./ListaChequeo";
+import Informes from "./Informes";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -50,6 +51,7 @@ function Administrador() {
             <Ordenes />
             <ListaChequeo />
             <Planeacion />
+            <Informes />
         </List>
     );
 }

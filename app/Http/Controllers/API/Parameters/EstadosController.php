@@ -55,7 +55,7 @@ class EstadosController extends Controller
             
             $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.descripcion_tope
             FROM estados as t0 INNER JOIN empresa as t1 INNER JOIN tipooperacion as t2
-            WHERE t0.empresa_est = t1.id_emp and t0.tipooperacion_est = t2.id_tope and t0.tipooperacion_est = 5");
+            WHERE t0.empresa_est = t1.id_emp and t0.tipooperacion_est = t2.id_tope and t0.tipooperacion_est = 7");
     
             $response['data'] = $data;
             // $response['data'] = $data1;
@@ -69,12 +69,31 @@ class EstadosController extends Controller
             return $response;
         }
 
-        public function listar_estadosmtto(){  
+        public function listar_estadosOT(){  
           try {
             
             $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.descripcion_tope
             FROM estados as t0 INNER JOIN empresa as t1  INNER JOIN tipooperacion as t2
             WHERE t0.empresa_est = t1.id_emp and t0.tipooperacion_est = t2.id_tope and t0.tipooperacion_est = 2");
+    
+            $response['data'] = $data;
+            // $response['data'] = $data1;
+            $response['message'] = "load successful";
+            $response['success'] = true;
+        
+          } catch (\Exception $e) {
+            $response['message'] = $e->getMessage();
+            $response['success'] = false;
+          }
+            return $response;
+        }
+  
+        public function listar_estadosequipos(){  
+          try {
+            
+            $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.descripcion_tope
+            FROM estados as t0 INNER JOIN empresa as t1  INNER JOIN tipooperacion as t2
+            WHERE t0.empresa_est = t1.id_emp and t0.tipooperacion_est = t2.id_tope and t0.tipooperacion_est = 5");
     
             $response['data'] = $data;
             // $response['data'] = $data1;

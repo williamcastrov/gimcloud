@@ -80,6 +80,12 @@ function Mantenimiento() {
                 </ListItemIcon>
                 <ListItemText primary="Estados Mantenimiento" />
               </ListItem>
+              <ListItem component={Link} button to="/mantenimiento/estadoscalidad" className={classes.nested}>
+                <ListItemIcon>
+                  <CenterFocusWeakIcon />
+                </ListItemIcon>
+                <ListItemText primary="Estados de Calidad" />
+              </ListItem>
               <ListItem component={Link} button to="/mantenimiento/gruposequipos" className={classes.nested}>
                 <ListItemIcon>
                   <CategoryIcon />

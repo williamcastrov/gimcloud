@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\API\Parameters;
+use Illuminate\Support\Facades\DB;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -35,7 +36,10 @@ class CiudadesController extends Controller
   
           try {
   
-            $data = Ciudades::with("departamento")->get();
+            $data = DB::select("SELECT t0.*, t1.nombre_dep
+            FROM ciudades as t0 INNER JOIN departamentos as t1
+            WHERE t0.departamento_ciu = t1.id_dep
+            ORDER BY nombre_ciu ASC");
   
             $response['data'] = $data;
             $response['message'] = "load successful";

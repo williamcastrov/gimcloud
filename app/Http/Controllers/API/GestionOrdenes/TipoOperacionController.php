@@ -54,7 +54,7 @@ class TipoOperacionController extends Controller
           
           $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est
           FROM tipooperacion as t0 INNER JOIN empresa as t1 INNER JOIN estados as t2
-          WHERE t0.empresa_tope = t1.id_emp and t0.estado_tope = t2.id_est and (t0.id_tope IN (2,5)) ");
+          WHERE t0.empresa_tope = t1.id_emp and t0.estado_tope = t2.id_est and (t0.id_tope IN (2,5,7)) ");
   
           $response['data'] = $data;
           // $response['data'] = $data1;

@@ -29,8 +29,17 @@ estados.listEstadosGenerales = async () => {
     return res;
 }
 
-estados.listEstadosMtto = async () => {
-    const urlList = baseUrl+"listar_estadosmtto"
+estados.listEstadosOT = async () => {
+    const urlList = baseUrl+"/listar_estadosOT"
+    const res = await axios.get(urlList)
+    .then(response=>{ return response.data; })
+    .catch(error=>{ return error; })
+   
+    return res;
+}
+
+estados.listEstadosEquipos = async () => {
+    const urlList = baseUrl+"/listar_estadosequipos"
     const res = await axios.get(urlList)
     .then(response=>{ return response.data; })
     .catch(error=>{ return error; })
