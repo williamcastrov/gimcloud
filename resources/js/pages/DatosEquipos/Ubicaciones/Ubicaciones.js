@@ -11,7 +11,7 @@ import "./Ubicaciones.css";
 // Componentes de Conexion con el Backend
 import ubicacionesServices from "../../../services/DatosEquipos/Ubicaciones"
 import ciudadesServices from "../../../services/Parameters/Ciudades";
-import empresasServices from "../../../services/Empresa";
+import estadosServices from "../../../services/Parameters/Estados";
 import equiposServices from "../../../services/Mantenimiento/Equipos";
 import clientesServices from "../../../services/Interlocutores/Clientes";
 
@@ -49,7 +49,7 @@ function Ubicaciones(props) {
   const [modalEditar, setModalEditar] = useState(false);
   const [modalEliminar, setModalEliminar] = useState(false);
   const [formError, setFormError] = useState(false);
-  const [listarEmpresas, setListarEmpresas] = useState([]);
+  const [listarEstados, setListarEstados] = useState([]);
   const [listarCiudades, setListarCiudades] = useState([]);
   const [listarEquipos, setListarEquipos] = useState([]);
   const [listarClientes, setListarClientes] = useState([]);
@@ -59,7 +59,7 @@ function Ubicaciones(props) {
     'cliente_ubi': "",
     'direccion_ubi': "",
     'ciudad_ubi': "",
-    'empresa_ubi': ""
+    'estado_ubi': ""
   })
 
   useEffect(() => {
@@ -91,12 +91,12 @@ function Ubicaciones(props) {
   }, [])
 
   useEffect(() => {
-    async function fetchDataEmpresas() {
-      const res = await empresasServices.listEmpresas();
-      setListarEmpresas(res.data)
+    async function fetchDataEstados() {
+      const res = await estadosServices.listEstadosGenerales();
+      setListarEstados(res.data)
       //console.log(res.data);
     }
-    fetchDataEmpresas();
+    fetchDataEstados();
   }, [])
 
   const handleChange = e => {
@@ -151,8 +151,8 @@ function Ubicaciones(props) {
       formOk = false;
     }
 
-    if (!ubicacionesSeleccionado.empresa_ubi) {
-      errors.empresa_ubi = true;
+    if (!ubicacionesSeleccionado.estado_ubi) {
+      errors.estado_ubi = true;
       formOk = false;
     }
 
@@ -170,16 +170,17 @@ function Ubicaciones(props) {
         delete ubicacionesSeleccionado.cliente_ubi;
         delete ubicacionesSeleccionado.direccion_ubi;
         delete ubicacionesSeleccionado.ciudad_ubi;
-        delete ubicacionesSeleccionado.empresa_ubi;
+        delete ubicacionesSeleccionado.estado_ubi;
       } else {
         swal( "Ubicación", "Error Creando la Ubicación del Equipo!", "error", { button: "Aceptar" });
+        console.log(ubicacionesSeleccionado);
         console.log(res.message);
         abrirCerrarModalInsertar();
       }
     }
     else {
       swal( "Ubicación", "Debe Ingresar Todos los Datos, Error Creando la Ubicación del  Equipo!", "warning", { button: "Aceptar" });
-      //console.log(ubicacionesSeleccionado);
+      console.log(ubicacionesSeleccionado);
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
@@ -213,8 +214,8 @@ function Ubicaciones(props) {
       formOk = false;
     }
 
-    if (!ubicacionesSeleccionado.empresa_ubi) {
-      errors.empresa_ubi = true;
+    if (!ubicacionesSeleccionado.estado_ubi) {
+      errors.estado_ubi = true;
       formOk = false;
     }
 
@@ -232,7 +233,7 @@ function Ubicaciones(props) {
         delete ubicacionesSeleccionado.cliente_ubi;
         delete ubicacionesSeleccionado.direccion_ubi;
         delete ubicacionesSeleccionado.ciudad_ubi;
-        delete ubicacionesSeleccionado.empresa_ubi;
+        delete ubicacionesSeleccionado.estado_ubi;
       } else {
         swal( "Ubicación", "Error Actualizando el Tipo de Ubicación del  Equipo!", "error", { button: "Aceptar" });
         console.log(res.message);
@@ -292,8 +293,8 @@ function Ubicaciones(props) {
       cellStyle: { maxWidth: 100 }
     },
     {
-      title: 'Empresa',
-      field: 'nombre_emp'
+      title: 'Estado',
+      field: 'nombre_est'
     }
   ]
 
@@ -347,18 +348,18 @@ function Ubicaciones(props) {
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl}>
-            <InputLabel id="empresa_ubi">Empresa</InputLabel>
+            <InputLabel id="estado_ubi">Estado</InputLabel>
             <Select
-              labelId="selectempresa_ubi"
-              name="empresa_ubi"
-              id="idselectempresa_ubi"
+              labelId="selectestado_ubi"
+              name="estado_ubi"
+              id="idselectestado_ubi"
               onChange={handleChange}
             >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
-                listarEmpresas.map((itemselect) => {
+                listarEstados.map((itemselect) => {
                   return (
-                    <MenuItem value={itemselect.id_emp}>{itemselect.nombre_emp}</MenuItem>
+                    <MenuItem value={itemselect.id_est}>{itemselect.nombre_est}</MenuItem>
                   )
                 })
               }
@@ -429,19 +430,19 @@ function Ubicaciones(props) {
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControl className={styles.formControl}>
-            <InputLabel id="empresa_ubi">Empresa</InputLabel>
+            <InputLabel id="estado_ubi">Estado</InputLabel>
             <Select
-              labelId="selectempresa_ubi"
-              name="empresa_ubi"
-              id="idselectempresa_ubi"
+              labelId="selectestado_ubi"
+              name="estado_ubi"
+              id="idselectestado_ubi"
               onChange={handleChange}
-              value={ubicacionesSeleccionado && ubicacionesSeleccionado.empresa_ubi}
+              value={ubicacionesSeleccionado && ubicacionesSeleccionado.estado_ubi}
             >
               <MenuItem value=""> <em>None</em> </MenuItem>
               {
-                listarEmpresas.map((itemselect) => {
+                listarEstados.map((itemselect) => {
                   return (
-                    <MenuItem value={itemselect.id_emp}>{itemselect.nombre_emp}</MenuItem>
+                    <MenuItem value={itemselect.id_est}>{itemselect.nombre_est}</MenuItem>
                   )
                 })
               }

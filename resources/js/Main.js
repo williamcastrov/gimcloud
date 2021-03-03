@@ -57,6 +57,7 @@ import FichaTecnica from './pages/DatosEquipos/FichaTecnica';
 import TiposLlantas from './pages/DatosEquipos/TiposLlantas';
 import TiposEquipos from './pages/DatosEquipos/TiposEquipos';
 import Ubicaciones from './pages/DatosEquipos/Ubicaciones';
+import Seguros from './pages/DatosEquipos/Seguros';
 
 // Componentes Modulo Gestión de Almacenes
 import TiposAlmacenes from './pages/Almacenes/TiposAlmacenes';
@@ -170,6 +171,7 @@ function Main() {
               <Route path="/mantenimiento/contratos" component={Contratos} />
               <Route path="/mantenimiento/fichatecnica" component={FichaTecnica} />
               <Route path="/mantenimiento/ubicaciones" component={Ubicaciones} />
+              <Route path="/mantenimiento/seguros" component={Seguros} />
 
               <Route path="/gestionordenes/ordenes" component={Ordenes} />
               <Route path="/gestionordenes/crearordenes" component={CrearOrdenes} />

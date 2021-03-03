@@ -83,6 +83,7 @@ Route::get('/mantenimiento/fichatecnica', 'App\Http\Controllers\GimController@in
 Route::get('/mantenimiento/tiposllantas', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/tiposequipos', 'App\Http\Controllers\GimController@index');
 Route::get('/mantenimiento/ubicaciones', 'App\Http\Controllers\GimController@index');
+Route::get('/mantenimiento/seguros', 'App\Http\Controllers\GimController@index');
 
 // Rutas del Modulo de Lista de Chequeo Equipos
 Route::get('/listachequeo/entregaequipos', 'App\Http\Controllers\GimController@index');

@@ -17,7 +17,7 @@ class Ubicaciones extends Model
         'cliente_ubi',
         'direccion_ubi',
         'ciudad_ubi',
-        'empresa_ubi'
+        'estado_ubi'
     ];
 
     public $timestamps = false;

@@ -272,6 +272,12 @@ Route::get('/ubicaciones/get/{id}', 'App\Http\Controllers\API\DatosEquipos\Ubica
 Route::delete('/ubicaciones/delete/{id}', 'App\Http\Controllers\API\DatosEquipos\UbicacionesController@delete');
 Route::put('/ubicaciones/update/{id}', 'App\Http\Controllers\API\DatosEquipos\UbicacionesController@update');
 
+Route::get('/seguros/listar_seguros', 'App\Http\Controllers\API\DatosEquipos\SegurosController@listar_seguros');
+Route::post('/seguros/create', 'App\Http\Controllers\API\DatosEquipos\SegurosController@create');
+Route::get('/seguros/get/{id}', 'App\Http\Controllers\API\DatosEquipos\SegurosController@get');
+Route::delete('/seguros/delete/{id}', 'App\Http\Controllers\API\DatosEquipos\SegurosController@delete');
+Route::put('/seguros/update/{id}', 'App\Http\Controllers\API\DatosEquipos\SegurosController@update');
+
 // Rutas Gestión Ordenes de Servicio
 Route::get('/tiposmtto/listar_tiposmtto', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@listar_tiposmtto');
 Route::get('/tiposmtto/listar_tiposmttoOT', 'App\Http\Controllers\API\Mantenimiento\TiposmttoController@listar_tiposmttoOT');

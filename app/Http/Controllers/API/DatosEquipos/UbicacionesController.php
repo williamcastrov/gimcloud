@@ -10,6 +10,7 @@ use App\Models\Parameters\Empresa;
 use App\Models\Interlocutores\Interlocutores_cli;
 use App\Models\Mantenimiento\Equipos;
 use App\Models\Parameters\Ciudades;
+use App\Models\Parameters\Estados;
 
 class UbicacionesController extends Controller
 {
@@ -22,7 +23,7 @@ class UbicacionesController extends Controller
             $insert['cliente_ubi']    = $request['cliente_ubi'];
             $insert['direccion_ubi']  = $request['direccion_ubi'];
             $insert['ciudad_ubi']     = $request['ciudad_ubi'];
-            $insert['empresa_ubi']    = $request['empresa_ubi'];
+            $insert['estado_ubi']     = $request['estado_ubi'];
 
             Ubicaciones::insert($insert);
     
@@ -42,11 +43,11 @@ class UbicacionesController extends Controller
         try {
             //$data = Especialidades::with("empresa")->get();
              
-            $data = DB::select("SELECT t0.*,       t1.nombre_emp,  t2.descripcion_equ, t2.codigo_equ,
+            $data = DB::select("SELECT t0.*,       t1.nombre_est,  t2.descripcion_equ, t2.codigo_equ,
                                t3.razonsocial_cli, t4.nombre_ciu
-            FROM ubicaciones as t0 INNER JOIN empresa            as t1 INNER JOIN equipos  as t2 
+            FROM ubicaciones as t0 INNER JOIN estados            as t1 INNER JOIN equipos  as t2 
                                    INNER JOIN interlocutores_cli as t3 INNER JOIN ciudades as t4
-            WHERE t0.empresa_ubi = t1.id_emp and t0.equipo_ubi = t2.id_equ and t0.cliente_ubi = t3.id_cli 
+            WHERE t0.estado_ubi = t1.id_est and t0.equipo_ubi = t2.id_equ and t0.cliente_ubi = t3.id_cli 
               and t0.ciudad_ubi  = t4.id_ciu");
            
             $response['data'] = $data;
@@ -64,11 +65,11 @@ class UbicacionesController extends Controller
   
         try {    
             //$data = Especialidades::find($id_esp);
-            $data = DB::select("SELECT t0.*,        t1.nombre_emp,  t2.descripcion_equ, t2.codigo_equ,
+            $data = DB::select("SELECT t0.*,        t1.nombre_est,  t2.descripcion_equ, t2.codigo_equ,
                                 t3.razonsocial_cli, t4.nombre_ciu
-            FROM ubicaciones as t0 INNER JOIN empresa            as t1 INNER JOIN equipos  as t2 
+            FROM ubicaciones as t0 INNER JOIN estados            as t1 INNER JOIN equipos  as t2 
                                    INNER JOIN interlocutores_cli as t3 INNER JOIN ciudades as t4
-            WHERE t0.empresa_ubi = t1.id_emp and t0.equipo_ubi = t2.id_equ and t0.cliente_ubi = t3.id_cli 
+            WHERE t0.estado_ubi = t1.id_est and t0.equipo_ubi = t2.id_equ and t0.cliente_ubi = t3.id_cli 
               and t0.ciudad_ubi  = t4.id_ciu and t0.equipo_ubi = $equipo_ubi");
     
             if ($data) {
@@ -96,7 +97,7 @@ class UbicacionesController extends Controller
             $data['cliente_ubi']    = $request['cliente_ubi'];
             $data['direccion_ubi']  = $request['direccion_ubi'];
             $data['ciudad_ubi']     = $request['ciudad_ubi'];
-            $data['empresa_ubi']    = $request['empresa_ubi'];
+            $data['estado_ubi']     = $request['estado_ubi'];
 
             //Console::info('mymessage');
   

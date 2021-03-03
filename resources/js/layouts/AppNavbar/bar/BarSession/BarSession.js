@@ -1,6 +1,7 @@
 import React from 'react';
 import { Toolbar, Typography, makeStyles, Button, IconButton, Drawer } from "@material-ui/core";
 import Administrador from "../Administrador";
+import UsuarioUno from "../UsuarioUno";
 import firebase from "../../../../server/firebase";
 import "firebase/auth";
 import { useHistory } from "react-router-dom";
@@ -64,7 +65,7 @@ const BarSession = () => {
                         open={state[anchor]}
                         onClose={toggleDrawer(anchor, false)}
                     >
-                       <Administrador/>
+                       <Administrador />
                     </Drawer>
                     </React.Fragment>
                 ))}

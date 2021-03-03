@@ -9,6 +9,7 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import RecentActorsIcon from '@material-ui/icons/RecentActors';
 import CategoryIcon from '@material-ui/icons/Category';
 import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
+import LockIcon from '@material-ui/icons/Lock';
 
 // Floating Button
 import { Container, Button, Link, lightColors, darkColors } from 'react-floating-action-button'
@@ -19,6 +20,7 @@ import Contratos from "../Contratos";
 import FichaTecnica from "../FichaTecnica";
 import Ubicaciones from "../Ubicaciones";
 import ExtrasEquipos from "../../Mantenimiento/ExtrasEquipos";
+import Seguros from "../Seguros";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -70,6 +72,7 @@ export default function MenuEquipos(props) {
   const [modalContratos, setModalContratos] = useState(false);
   const [modalFichaTecnica, setModalFichaTecnica] = useState(false);
   const [modalUbicaciones, setModalUbicaciones] = useState(false);
+  const [modalSeguros, setModalSeguros] = useState(false);
   const [modalHojaVida, setModalHojaVida] = useState(false);
  
   const abrirCerrarModalDatosEquipos = () => {
@@ -132,6 +135,16 @@ export default function MenuEquipos(props) {
     </div>
   )
 
+  const abrirCerrarModalSeguros = () => {
+    setModalSeguros(!modalSeguros);
+  }
+  
+  const seguros = (
+    <div> 
+      <Seguros equipoID={equipoID} equipoCodigo={equipoCodigo} />
+    </div>
+  )
+
   const abrirCerrarModalHojaVida = () => {
     setModalHojaVida(!modalHojaVida);
   }
@@ -185,6 +198,13 @@ export default function MenuEquipos(props) {
       </Modal>
 
       <Modal
+        open={modalSeguros}
+        onClose={abrirCerrarModalSeguros}
+      >
+        {seguros}
+      </Modal>
+
+      <Modal
         open={modalHojaVida}
         onClose={abrirCerrarModalHojaVida}
       >
@@ -197,6 +217,12 @@ export default function MenuEquipos(props) {
           rotate={true}
           styles={{ backgroundColor: darkColors.grey, color: lightColors.white }}
           onClick={() => setModalHojaVida(true)} ><RecentActorsIcon />
+        </Button>
+        <Button
+          tooltip="Información Seguros"
+          rotate={true}
+          styles={{ backgroundColor: darkColors.lighterRed, color: lightColors.white }}
+          onClick={() => setModalSeguros(true)} ><LockIcon />
         </Button>
         <Button
           tooltip="Accesorios Adicionales"
