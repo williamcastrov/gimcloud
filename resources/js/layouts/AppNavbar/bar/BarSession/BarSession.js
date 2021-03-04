@@ -1,7 +1,6 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Toolbar, Typography, makeStyles, Button, IconButton, Drawer } from "@material-ui/core";
 import Administrador from "../Administrador";
-import UsuarioUno from "../UsuarioUno";
 import firebase from "../../../../server/firebase";
 import "firebase/auth";
 import { useHistory } from "react-router-dom";
@@ -24,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const BarSession = () => {
+const BarSession = (props) => {
     const classes = useStyles();
     const history = useHistory();
 
@@ -34,7 +33,7 @@ const BarSession = () => {
 
     const IraInicio = () => {
         history.push("/gim");
-    }
+    }  
 
     const [state, setState] = React.useState({
         left: false,
@@ -51,7 +50,7 @@ const BarSession = () => {
     
         setState({ ...state, [anchor]: open });
     };
-    // <i className="material-icons" >menu</i>
+  
     return (
         <div>
            
@@ -65,7 +64,7 @@ const BarSession = () => {
                         open={state[anchor]}
                         onClose={toggleDrawer(anchor, false)}
                     >
-                       <Administrador />
+                        <Administrador />
                     </Drawer>
                     </React.Fragment>
                 ))}
@@ -97,4 +96,3 @@ const BarSession = () => {
 };
 
 export default BarSession;
-//   <div className={classes.setionDesktop} >

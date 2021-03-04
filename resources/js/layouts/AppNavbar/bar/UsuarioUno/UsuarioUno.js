@@ -42,14 +42,10 @@ function UsuarioUno() {
             }
             className={classes.root}
         >
-           
-            <Interlocutores />
             <Almacenes />
             <Mantenimiento />
             <Ordenes />
             <ListaChequeo />
-            <Planeacion />
-            <Informes />
         </List>
     );
 }

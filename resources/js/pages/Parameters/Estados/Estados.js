@@ -58,7 +58,7 @@ function Estados() {
 
   useEffect(() => {
     async function fetchDataEstados() {
-      const res = await estadosServices.listEstados();
+      const res = await estadosServices.listEstado();
       setListEstados(res.data);
     }
     setActualiza(false);

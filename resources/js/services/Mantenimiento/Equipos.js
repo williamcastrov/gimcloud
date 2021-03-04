@@ -38,7 +38,6 @@ equipos.listEquiposAccesorios = async () => {
     return res;
 }
 
-
 equipos.listUnEquipo = async (id_equ) => {
     const urlList = baseUrl+"/get/"+id_equ
     const res = await axios.get(urlList)

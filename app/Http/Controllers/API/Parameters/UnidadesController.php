@@ -68,6 +68,25 @@ class UnidadesController extends Controller
         }
           return $response;
       }
+
+      public function listar_tipousuarios(){  
+        try {
+          
+          $data = DB::select("SELECT t0.*, t1.nombre_emp, t2.nombre_est
+          FROM unidades as t0 INNER JOIN empresa as t1 INNER JOIN estados as t2
+          WHERE t0.tipo_und = 'USU' and t0.empresa_und = t1.id_emp and t0.estado_und = t2.id_est ");
+  
+          $response['data'] = $data;
+          // $response['data'] = $data1;
+          $response['message'] = "load successful";
+          $response['success'] = true;
+      
+        } catch (\Exception $e) {
+          $response['message'] = $e->getMessage();
+          $response['success'] = false;
+        }
+          return $response;
+      }
     
       public function get($id_und){
         try { 

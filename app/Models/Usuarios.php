@@ -11,23 +11,20 @@ class Usuarios extends Model
 
     protected $table = "usuarios";
 
-    protected $primaryKey = "id";
+    protected $primaryKey = "id_usu";
 
     protected $fillable = [
-        'nit',
-	    'nombre',
-	    'company',
-	    'email',
-	    'telefono',
-	    'pais',
-	    'ciudad',
-	    'uid',
-	    'tipo', 
-	    'foto',
-	    'celular', 
-	    'direccion', 
-	    'activo'
-    ];
+        'cedula_usu',
+	    'nombre_usu',
+	    'email_usu',
+	    'pais_usu',
+	    'ciudad_usu',
+	    'uidfirebase_usu',
+	    'tipo_usu',
+	    'foto_usu',
+	    'celular_usu', 
+	    'estado_usu', 
+	 ];
 
     public $timestamps = false;
 }

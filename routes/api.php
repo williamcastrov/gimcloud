@@ -53,6 +53,7 @@ Route::put('/ciudades/update/{id}', 'App\Http\Controllers\API\Parameters\Ciudade
 
 Route::get('/unidades/listar_unidades', 'App\Http\Controllers\API\Parameters\UnidadesController@listar_unidades');
 Route::get('/unidades/listar_tipopartes', 'App\Http\Controllers\API\Parameters\UnidadesController@listar_tipopartes');
+Route::get('/unidades/listar_tipousuarios', 'App\Http\Controllers\API\Parameters\UnidadesController@listar_tipousuarios');
 Route::post('/unidades/create', 'App\Http\Controllers\API\Parameters\UnidadesController@create');
 Route::get('/unidades/get/{id}', 'App\Http\Controllers\API\Parameters\UnidadesController@get');
 Route::delete('/unidades/delete/{id}', 'App\Http\Controllers\API\Parameters\UnidadesController@delete');
@@ -118,11 +119,12 @@ Route::delete('/contactos/delete/{id}', 'App\Http\Controllers\API\Interlocutores
 Route::put('/contactos/update/{id}', 'App\Http\Controllers\API\Interlocutores\ContactosController@update');
 
 // Rutas Gestión Usuarios
-Route::get('/usuarios/listar_usuarios', 'App\Http\Controllers\API\Parameters\UsuariosController@listar_usuarios');
-Route::post('/usuarios/create', 'App\Http\Controllers\API\Parameters\UsuariosController@create');
-Route::get('/usuarios/get/{id}', 'App\Http\Controllers\API\Parameters\UsuariosController@get');
-Route::put('/usuarios/update/{id}', 'App\Http\Controllers\API\Parameters\UsuariosController@update');
-Route::delete('/usuarios/delete/{id}', 'App\Http\Controllers\API\Parameters\UsuariosController@delete');
+Route::get('/usuarios/listar_usuarios', 'App\Http\Controllers\API\UsuariosController@listar_usuarios');
+Route::get('/usuarios/leer_usuario/{id}', 'App\Http\Controllers\API\UsuariosController@leer_usuario');
+Route::post('/usuarios/create', 'App\Http\Controllers\API\UsuariosController@create');
+Route::get('/usuarios/get/{id}', 'App\Http\Controllers\API\UsuariosController@get');
+Route::put('/usuarios/update/{id}', 'App\Http\Controllers\API\UsuariosController@update');
+Route::delete('/usuarios/delete/{id}', 'App\Http\Controllers\API\UsuariosController@delete');
 
 Route::get('/dashboard/listar_dashboard', 'App\Http\Controllers\API\DashboardController@listar_dashboard');
 

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button, Icon, Form, Input } from "semantic-ui-react";
 import { validateEmail } from "../../../server/Validations";
+import {Typography, makeStyles } from "@material-ui/core";
 import firebase from "../../../server/firebase";
 import "firebase/auth";
 //import { useDispatch } from "react-redux";
@@ -9,9 +10,17 @@ import swal from 'sweetalert';
 
 import "./Login.scss";
 
+const useStyles = makeStyles((theme) => ({
+  typography: {
+    fontSize: 20,
+    color   : "#f9fbe7"
+  }
+}));
+
 export default function LoginForm(props) {
   //const { firebase } = React.useContext(BigContext);
   //const dispatch = useDispatch();
+  const styles = useStyles();
 
   const { setSelectedForm } = props;
   const [showPassword, setShowPassword] = useState(false);
@@ -72,7 +81,10 @@ export default function LoginForm(props) {
 
   return (
     <div className="login-form">
-      <h1>Gestionar de manera eficiente sus activos</h1>
+      <Typography  align="center" className={ styles.typography } variant="button" display="block" >
+        Iniciar Sesión en GIM CLoud
+      </Typography>
+      <br />
       <Form onSubmit={onSubmit} onChange={onChange}>
         <Form.Field>
           <Input

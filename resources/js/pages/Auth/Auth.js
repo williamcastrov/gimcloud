@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 
-import AuthOptions from "../../components/Auth/AuthOptions";
+import AuthOptions from "../../components/Auth/AuthOptions/AuthOptionsAdmon";
+//import AuthOptions from "../../components/Auth/AuthOptions";
 import Login from "../../components/Auth/Login";
 import RegistrarUsuario from "../../components/Auth/RegistrarUsuario";
+import RecuperarContraseña from "../../components/Auth/RecuperarContraseña";
 
 import LogoAuth from "../../assets/img/logo-3.png";
 import BackgroundAuth from "../../assets/img/background-auth-gim.jpg";
@@ -18,6 +20,8 @@ export default function Auth() {
         return <Login setSelectedForm={setSelectedForm} />;
       case "registro":
         return < RegistrarUsuario setSelectedForm={setSelectedForm} />
+      case "recuperarcontraseña":
+        return < RecuperarContraseña setSelectedForm={setSelectedForm} />
       default:
         return <AuthOptions setSelectedForm={setSelectedForm} />;
     }

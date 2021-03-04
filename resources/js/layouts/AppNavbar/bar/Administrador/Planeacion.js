@@ -97,7 +97,7 @@ function Planeacion() {
 
           <Collapse in={openGO} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-            <ListItem button className={classes.nested}>
+              <ListItem button className={classes.nested}>
                 <ListItemIcon>
                   <LocalShippingIcon  />
                 </ListItemIcon>

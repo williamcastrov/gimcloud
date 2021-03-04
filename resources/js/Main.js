@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ToastContainer } from "react-toastify";
 import ReactDOM from 'react-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 import firebase from "./server/firebase";
 import "firebase/auth";
 import "./app.scss";
+
+import usuariosServices from "./services/Usuarios";
 
 // Componentes Menu Bar
 import AppNavbar from "./layouts/AppNavbar/";
@@ -13,6 +15,8 @@ import theme from "./theme";
 // Componentes de Logueo
 import Login from './components/Auth/Login';
 import RegistrarUsuario from "./components/Auth/RegistrarUsuario";
+import Usuarios from './pages/Usuarios/Usuarios';
+import ActivarUsuario from './pages/Usuarios/ActivarUsuario';
 import Auth from "./pages/Auth";
 import Management from './components/Management/Management';
 
@@ -100,16 +104,18 @@ import {
 function Main() {
   const [user, setUser] = useState(false);
   const [componente, setComponente ] = useState("1");
+  const [metadata, setMetadata ] = useState("");
+  const [listarUsuarios, setListUsuarios] = useState([]);
 
   firebase.auth().onAuthStateChanged(currentUser => {
-
     console.log(currentUser ? "Estamos Logueados" : "No estamos logueados")
     if (currentUser) {
+      setMetadata(currentUser.metadata.a);
+      //console.log("CURRENT USER : ", metadata);
       setUser(true);
     } else {
       setUser(false);
     }
-    console.log(user);
   });
 
   return (
@@ -119,16 +125,18 @@ function Main() {
         :
         <Router >
           <ThemeProvider theme={theme}>
-            <AppNavbar />
+            <AppNavbar metadata={metadata} />
             <Switch>
               { componente === "1" ? 
-              <Route path="/gim" component={Management} /> 
+              <Route path="/gim" component={Management } /> 
               :
               <Route path="/login" component={Login} />
               }
 
               <Route path="/auth/registrarusuario" component={RegistrarUsuario} />
               <Route path="/login" component={Login} />
+              <Route path="/auth/usuarios" component={Usuarios} />
+              <Route path="/auth/activarusuario" component={ActivarUsuario} />
 
               <Route path="/parametros/paises" component={Paises}/>
               <Route path="/parametros/regiones" component={Regiones}/>

@@ -25,6 +25,8 @@ Route::get('/gim', function () {
 // Rutas de Logueo y Registro de Usuarios
 Route::get('/login', 'App\Http\Controllers\GimController@index');
 Route::get('/auth/registrarusuario', 'App\Http\Controllers\GimController@index');
+Route::get('/auth/usuarios', 'App\Http\Controllers\GimController@index');
+Route::get('/auth/activarusuario', 'App\Http\Controllers\GimController@index');
 
 Route::get('/parametros/pruebas', 'App\Http\Controllers\GimController@index');
 
