@@ -15,7 +15,8 @@ class EstadosMtto extends Model
 
     protected $fillable = [
         'nombre_estmtto',
-        'empresa_estmtto'
+        'empresa_estmtto',
+        'observacion_estmtto'
     ];
 
     public function empresa(){

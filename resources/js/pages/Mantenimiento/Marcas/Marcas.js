@@ -47,6 +47,7 @@ function Marcas() {
   const [formError, setFormError] = useState(false);
   const [listarEmpresas, setListarEmpresas] = useState([]);
   const [listarEstados, setListarEstados] = useState([]);
+  const [actualiza, setActualiza] = useState(false);
   const [marcasSeleccionado, setMarcasSeleccionado] = useState({
     id_mar: "",
     descripcion_mar: "",
@@ -58,9 +59,10 @@ function Marcas() {
     async function fetchDataMarcas() {
       const res = await marcasServices.listMarcas();
       setListMarcas(res.data);
+      setActualiza(false);
     }
     fetchDataMarcas();
-  }, [])
+  }, [actualiza])
 
   useEffect (() => {
       async function fetchDataEmpresas() {
@@ -73,7 +75,7 @@ function Marcas() {
 
   useEffect (() => {
     async function fetchDataEstados() {
-    const res = await estadosServices.listEstados();
+    const res = await estadosServices.listEstadosGenerales();
     setListarEstados(res.data) 
     console.log(res.data);
   }
@@ -152,6 +154,7 @@ function Marcas() {
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
+    setActualiza(true);
   }
 
   const actualizarMarca = async () => {
@@ -160,19 +163,22 @@ function Marcas() {
     let errors = {};
     let formOk = true;
 
-    if (!marcasSeleccionado.nombre_mar) {
-      errors.nombre_mar = true;
+    if (!marcasSeleccionado.descripcion_mar) {
+      errors.descripcion_mar = true;
       formOk = false;
+      alert("1")
     }
 
     if (!marcasSeleccionado.empresa_mar) {
       errors.empresa_mar = true;
       formOk = false;
+      alert("2")
     }
 
     if (!marcasSeleccionado.estado_mar) {
       errors.estado_mar = true;
       formOk = false;
+      alert("3")
     }
 
     setFormError(errors);
@@ -199,7 +205,8 @@ function Marcas() {
       swal("Marca", "Debe Ingresar Todos los Revisar Información!", "warning", { button: "Aceptar" });
       console.log(res.message);
       abrirCerrarModalEditar();
-    } 
+    }
+    setActualiza(true);
   }
 
   const borrarMarca = async()=>{
@@ -216,7 +223,7 @@ function Marcas() {
         console.log(res.message);
         abrirCerrarModalEliminar();
     }
-    
+    setActualiza(true);
   }
  // "string","boolean","numeric","date","datetime","time","currency"
   const columnas = [

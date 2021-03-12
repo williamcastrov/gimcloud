@@ -46,19 +46,22 @@ function EstadosMtto() {
   const [modalEliminar, setModalEliminar] = useState(false);
   const [formError, setFormError] = useState(false);
   const [listarEmpresas, setListarEmpresas] = useState([]);
+  const [actualiza, setActualiza] = useState(false);
   const [estadoSeleccionado, setEstadoSeleccionado] = useState({
     id_estmtto: "",
     nombre_estmtto: "",
-    empresa_estmtto: ""
+    empresa_estmtto: "",
+    observacion_estmtto: ""
   })
 
   useEffect(() => {
     async function fetchDataEstados() {
       const res = await estadosmttoServices.listEstadosMtto();
       setListEstados(res.data);
+      setActualiza(false);
     }
     fetchDataEstados();
-  }, [])
+  }, [actualiza])
 
   useEffect(() => {
     async function fetchDataEmpresas() {
@@ -112,6 +115,11 @@ function EstadosMtto() {
       formOk = false;
     }
 
+    if (!estadoSeleccionado.observacion_estmtto) {
+      errors.observacion_estmtto = true;
+      formOk = false;
+    }
+
     setFormError(errors);
 
     if (formOk) {
@@ -124,6 +132,7 @@ function EstadosMtto() {
         abrirCerrarModalInsertar();
         delete estadoSeleccionado.nombre_estmtto;
         delete estadoSeleccionado.empresa_estmtto;
+        delete estadoSeleccionado.observacion_estmtto;
       } else {
         alert("");
         swal("Estados Mantenimiento", "Estado Creado de forma Correcta!", "error", { button: "Aceptar" });
@@ -136,6 +145,7 @@ function EstadosMtto() {
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
+    setActualiza(true);
   }
 
   const actualizarEstado = async () => {
@@ -154,6 +164,11 @@ function EstadosMtto() {
       formOk = false;
     }
 
+    if (!estadoSeleccionado.observacion_estmtto) {
+      errors.observacion_estmtto = true;
+      formOk = false;
+    }
+
     setFormError(errors);
 
     if (formOk) {
@@ -166,6 +181,7 @@ function EstadosMtto() {
         abrirCerrarModalEditar();
         delete estadoSeleccionado.nombre_estmtto;
         delete estadoSeleccionado.empresa_estmtto;
+        delete estadoSeleccionado.observacion_estmtto;
       } else {
         swal("Estados Mantenimiento", "Error Creando Estado!", "error", { button: "Aceptar" });
         console.log(res.message);
@@ -177,6 +193,7 @@ function EstadosMtto() {
       console.log(res.message);
       abrirCerrarModalEditar();
     }
+    setActualiza(true);
   }
 
   const borrarEstado = async () => {
@@ -193,7 +210,7 @@ function EstadosMtto() {
       console.log(res.message);
       abrirCerrarModalEliminar();
     }
-
+    setActualiza(true);
   }
   // "string","boolean","numeric","date","datetime","time","currency"
   const columnas = [
@@ -204,6 +221,11 @@ function EstadosMtto() {
     {
       title: 'Descripción',
       field: 'nombre_estmtto'
+    },
+    {
+      title: 'Observación',
+      field: 'observacion_estmtto',
+      cellStyle: { minWidth: 300 }
     },
     {
       title: 'Codigo Empresa',
@@ -222,6 +244,7 @@ function EstadosMtto() {
       </Typography>
       <TextField className={styles.inputMaterial} label="Descripción" name="nombre_estmtto" onChange={handleChange} />
       <br />
+      <TextField className={styles.inputMaterial} label="Observación" name="observacion_estmtto" onChange={handleChange} />
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectEmpresa"> Empresa </InputLabel>
         <Select
@@ -253,8 +276,11 @@ function EstadosMtto() {
       <Typography align="center" className={styles.typography} variant="button" display="block">
         Actualizar Estado  Equipos
       </Typography>
-      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_estmtto" onChange={handleChange} value={estadoSeleccionado && estadoSeleccionado.nombre_estmtto} />
+      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_estmtto" onChange={handleChange} 
+          value={estadoSeleccionado && estadoSeleccionado.nombre_estmtto} />
       <br />
+      <TextField className={styles.inputMaterial} label="Observación" name="observacion_estmtto" onChange={handleChange}
+          value={estadoSeleccionado && estadoSeleccionado.observacion_estmtto} />
       <FormControl className={styles.formControl} >
         <InputLabel id="idselectEmpresa">Empresa</InputLabel>
         <Select
@@ -297,11 +323,11 @@ function EstadosMtto() {
   return (
     <div className="App">
       <br />
-      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Estado</Button>
+      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Estado Mantenimiento</Button>
       <MaterialTable
         columns={columnas}
         data={listEstados}
-        title="ESTADOS EQUIPOS"
+        title="ESTADOS DE MANTENIMIENTO"
         actions={[
           {
             icon: 'edit',

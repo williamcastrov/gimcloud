@@ -53,12 +53,13 @@ function Estados() {
     id_est: "",
     tipooperacion_est: "",
     nombre_est: "",
-    empresa_est: ""
+    empresa_est: "",
+    observacion_est: ""
   })
 
   useEffect(() => {
     async function fetchDataEstados() {
-      const res = await estadosServices.listEstado();
+      const res = await estadosServices.listEstados();
       setListEstados(res.data);
     }
     setActualiza(false);
@@ -129,6 +130,11 @@ function Estados() {
       formOk = false;
     }
 
+    if (!estadoSeleccionado.observacion_est) {
+      errors.observacion_est = true;
+      formOk = false;
+    }
+
     setFormError(errors);
 
     if (formOk) {
@@ -147,6 +153,7 @@ function Estados() {
         delete estadoSeleccionado.nombre_est;
         delete estadoSeleccionado.tipooperacion_est;
         delete estadoSeleccionado.empresa_est;
+        delete estadoSeleccionado.observacion_est;
       } else {
         swal({
           title: "Estado",
@@ -192,6 +199,11 @@ function Estados() {
       formOk = false;
     }
 
+    if (!estadoSeleccionado.observacion_est) {
+      errors.observacion_est = true;
+      formOk = false;
+    }
+
     setFormError(errors);
 
     if (formOk) {
@@ -210,6 +222,7 @@ function Estados() {
         delete estadoSeleccionado.nombre_est;
         delete estadoSeleccionado.tipooperacion_est;
         delete estadoSeleccionado.empresa_est;
+        delete estadoSeleccionado.observacion_est;
       } else {
         swal({
           title: "Estado",
@@ -275,6 +288,11 @@ function Estados() {
       field: 'descripcion_tope'
     },
     {
+      title: 'Observación',
+      field: 'observacion_est',
+      cellStyle: { minWidth: 400 }
+    },
+    {
       title: 'Codigo Empresa',
       field: 'empresa_est'
     },
@@ -310,6 +328,7 @@ function Estados() {
           }
         </Select>
       </FormControl>
+      <TextField className={styles.inputMaterial} label="Observación" name="observacion_est" onChange={handleChange} />
       <br />
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectEmpresa"> Empresa </InputLabel>
@@ -364,6 +383,8 @@ function Estados() {
           }
         </Select>
       </FormControl>
+      <TextField className={styles.inputMaterial} label="Observación" name="observacion_est" onChange={handleChange} 
+        value={estadoSeleccionado && estadoSeleccionado.observacion_est} />
       <br />
       <FormControl className={styles.formControl} >
         <InputLabel id="idselectEmpresa">Empresa</InputLabel>

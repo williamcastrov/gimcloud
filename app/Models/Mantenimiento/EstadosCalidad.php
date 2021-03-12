@@ -14,7 +14,8 @@ class EstadosCalidad extends Model
 
     protected $fillable = [
         'nombre_estcal',
-        'empresa_estcal'
+        'empresa_estcal',
+        'observacion_estcal'
     ];
 
     public $timestamps = false;

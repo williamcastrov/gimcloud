@@ -47,6 +47,7 @@ function Ciudades() {
   const [modalEliminar, setModalEliminar]= useState(false);
   const [formError, setFormError] = useState(false);
   const [listarDepartamentos, setListarDepartamentos] = useState([]);
+  const [actualiza, setActualiza] = useState(false);
   const [ciudadSeleccionado, setCiudadSeleccionado] = useState({
     id_ciu: "",
     codigo_ciu: "",
@@ -93,9 +94,10 @@ function Ciudades() {
     async function fetchDataCiudades() {
       const res = await ciudadesServices.listCiudades();
       setListCiudades(res.data);
+      setActualiza(false);
     }
     fetchDataCiudades();
-  }, [])
+  }, [actualiza])
 
   const grabarCiudad = async () => {
 
@@ -143,6 +145,7 @@ function Ciudades() {
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
+    setActualiza(true);
   }
 
   const actualizarCiudad = async () => {
@@ -191,6 +194,7 @@ function Ciudades() {
       console.log(res.message);
       abrirCerrarModalEditar();
     } 
+    setActualiza(true);
   }
 
   const borrarCiudad = async()=>{
@@ -207,7 +211,7 @@ function Ciudades() {
         console.log(res.message);
         abrirCerrarModalEliminar();
     }
-    
+    setActualiza(true);
   }
  // "string","boolean","numeric","date","datetime","time","currency"
   const columnas = [
@@ -234,7 +238,7 @@ function Ciudades() {
     },
     {
       title: 'Nombre Departamento',
-      field: 'departamento.nombre_dep'
+      field: 'nombre_dep'
     }
   ]
 

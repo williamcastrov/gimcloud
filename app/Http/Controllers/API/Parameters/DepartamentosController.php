@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\API\Parameters;
+use Illuminate\Support\Facades\DB;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -33,8 +34,11 @@ class DepartamentosController extends Controller
       public function listar_departamentos(){
   
           try {
-  
-            $data = Departamentos::with("region")->get();
+       
+            $data = DB::select("SELECT t0.*, t1.nombre_reg
+            FROM departamentos as t0 INNER JOIN regiones as t1
+            WHERE t0.region_dep = t1.id_reg
+            ORDER BY nombre_dep ASC");
   
             $response['data'] = $data;
             $response['message'] = "load successful";
@@ -47,11 +51,11 @@ class DepartamentosController extends Controller
           return $response;
       }
   
-      public function get($id_dep){
+      public function get($codigo_dep){
   
           try {
     
-            $data = Departamentos::find($id_dep);
+            $data = Departamentos::find($codigo_dep);
     
             if ($data) {
               $response['data'] = $data;
@@ -60,7 +64,7 @@ class DepartamentosController extends Controller
             }
             else {
               $response['data'] = null;
-              $response['message'] = "Not found data id_dep => $id_dep";
+              $response['message'] = "Not found data codigo_dep => $codigo_dep";
               $response['success'] = false;
             }
     
@@ -71,7 +75,7 @@ class DepartamentosController extends Controller
           return $response;
       }
   
-      public function update(Request $request, $id_dep){
+      public function update(Request $request, $codigo_dep){
   
           try {
           
@@ -81,7 +85,7 @@ class DepartamentosController extends Controller
             
             //Console::info('mymessage');
   
-            $res = Departamentos::where("id_dep",$id_dep)->update($data);
+            $res = Departamentos::where("codigo_dep",$codigo_dep)->update($data);
   
             $response['res'] = $res;
             $response['message'] = "Updated successful";
@@ -95,10 +99,10 @@ class DepartamentosController extends Controller
     
       }
   
-      public function delete($id_dep){
+      public function delete($codigo_dep){
   
           try {
-            $res = Departamentos::where("id_dep",$id_dep)->delete($id_dep);
+            $res = Departamentos::where("codigo_dep",$codigo_dep)->delete($codigo_dep);
             $response['res'] = $res;
   
             $response['message'] = "Deleted successful";

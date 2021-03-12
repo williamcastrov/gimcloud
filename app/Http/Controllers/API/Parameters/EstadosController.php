@@ -17,6 +17,7 @@ class EstadosController extends Controller
             $insert['nombre_est']        = $request['nombre_est'];
             $insert['tipooperacion_est'] = $request['tipooperacion_est'];
             $insert['empresa_est']       = $request['empresa_est'];
+            $insert['observacion_est']   = $request['observacion_est'];
   
             Estados::insert($insert);
     
@@ -136,9 +137,10 @@ class EstadosController extends Controller
         public function update(Request $request, $id_est){
   
           try {
-            $data['nombre_est']         = $request['nombre_est'];
-            $data['tipooperacion_est']  = $request['tipooperacion_est'];
-            $data['empresa_est']        = $request['empresa_est'];
+            $data['nombre_est']        = $request['nombre_est'];
+            $data['tipooperacion_est'] = $request['tipooperacion_est'];
+            $data['empresa_est']       = $request['empresa_est'];
+            $data['observacion_est']   = $request['observacion_est'];
   
             //Console::info('mymessage');
   

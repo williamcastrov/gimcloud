@@ -46,20 +46,23 @@ function EstadosCalidad() {
   const [modalEliminar, setModalEliminar] = useState(false);
   const [formError, setFormError] = useState(false);
   const [listarEmpresas, setListarEmpresas] = useState([]);
+  const [actualiza, setActualiza] = useState(false);
   const [estadoSeleccionado, setEstadoSeleccionado] = useState({
     id_estcal: "",
     nombre_estcal: "",
-    empresa_estcal: ""
+    empresa_estcal: "",
+    observacion_estcal: ""
   })
 
   useEffect(() => {
     async function fetchDataEstados() {
       const res = await estadoscalidadServices.listEstadosCalidad();
       setListEstados(res.data)
+      setActualiza(false);
       //console.log(res.data);
     }
     fetchDataEstados();
-  }, [])
+  }, [actualiza])
 
   useEffect(() => {
     async function fetchDataEmpresas() {
@@ -112,6 +115,11 @@ function EstadosCalidad() {
       formOk = false;
     }
 
+    if (!estadoSeleccionado.observacion_estcal) {
+      errors.observacion_estcal = true;
+      formOk = false;
+    }
+
     setFormError(errors);
 
     if (formOk) {
@@ -124,6 +132,7 @@ function EstadosCalidad() {
         abrirCerrarModalInsertar();
         delete estadoSeleccionado.nombre_estcal;
         delete estadoSeleccionado.empresa_estcal;
+        delete estadoSeleccionado.observacion_estcal;
       } else {
         swal("Estados de Calidad", "Error Creando el Estado!", "error", { button: "Aceptar" });
         console.log(res.message);
@@ -135,6 +144,7 @@ function EstadosCalidad() {
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
+    setActualiza(true);
   }
 
   const actualizarEstado = async () => {
@@ -153,6 +163,11 @@ function EstadosCalidad() {
       formOk = false;
     }
 
+    if (!estadoSeleccionado.observacion_estcal) {
+      errors.observacion_estcal = true;
+      formOk = false;
+    }
+
     setFormError(errors);
 
     if (formOk) {
@@ -165,6 +180,7 @@ function EstadosCalidad() {
         abrirCerrarModalEditar();
         delete estadoSeleccionado.nombre_estcal;
         delete estadoSeleccionado.empresa_estcal;
+        delete estadoSeleccionado.observacion_estcal;
       } else {
         swal("Estados de Calidad", "Error Actualizando el Estado del Cliente!", "error", { button: "Aceptar" });
         console.log(res.message);
@@ -176,6 +192,7 @@ function EstadosCalidad() {
       console.log(res.message);
       abrirCerrarModalEditar();
     }
+    setActualiza(true);
   }
 
   const borrarEstado = async () => {
@@ -192,7 +209,7 @@ function EstadosCalidad() {
       console.log(res.message);
       abrirCerrarModalEliminar();
     }
-
+    setActualiza(true);
   }
   // "string","boolean","numeric","date","datetime","time","currency"
   const columnas = [
@@ -203,6 +220,11 @@ function EstadosCalidad() {
     {
       title: 'Descripción',
       field: 'nombre_estcal'
+    },
+    {
+      title: 'Observación',
+      field: 'observacion_estcal',
+      cellStyle: { minWidth: 300 }
     },
     {
       title: 'Codigo Empresa',
@@ -219,6 +241,7 @@ function EstadosCalidad() {
       <Typography align="center" className={styles.typography} variant="button" display="block">Agregar Nuevo Estado de Calidad </Typography>
       <TextField className={styles.inputMaterial} label="Descripción" name="nombre_estcal" onChange={handleChange} />
       <br />
+      <TextField className={styles.inputMaterial} label="Observación" name="observacion_estcal" onChange={handleChange} />
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectEmpresa"> Empresa </InputLabel>
         <Select
@@ -248,8 +271,11 @@ function EstadosCalidad() {
   const estadoEditar = (
     <div className={styles.modal}>
       <Typography align="center" className={styles.typography} variant="button" display="block">Actualizar Estados de Calidad</Typography>
-      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_estcal" onChange={handleChange} value={estadoSeleccionado && estadoSeleccionado.nombre_estcal} />
+      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_estcal" onChange={handleChange} 
+                 value={estadoSeleccionado && estadoSeleccionado.nombre_estcal} />
       <br />
+      <TextField className={styles.inputMaterial} label="Observación" name="observacion_estcal" onChange={handleChange} 
+         value={estadoSeleccionado && estadoSeleccionado.observacion_estcal}  />
       <FormControl className={styles.formControl} >
         <InputLabel id="idselectEmpresa">Empresa</InputLabel>
         <Select
@@ -283,20 +309,18 @@ function EstadosCalidad() {
       <div align="right">
         <Button color="secondary" onClick={() => borrarEstado()}> Confirmar </Button>
         <Button onClick={() => abrirCerrarModalEliminar()}> Cancelar </Button>
-
       </div>
-
     </div>
   )
 
   return (
     <div className="App">
       <br />
-      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Estado</Button>
+      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Estado de Calidad</Button>
       <MaterialTable
         columns={columnas}
         data={listEstados}
-        title="MAESTRA DE ESTADOS DE CALIDAD"
+        title="ESTADOS DE CALIDAD"
         actions={[
           {
             icon: 'edit',

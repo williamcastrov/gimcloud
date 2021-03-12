@@ -55,6 +55,7 @@ function Ubicaciones(props) {
   const [listarClientes, setListarClientes] = useState([]);
   const [actualiza, setActualiza] = useState(false);
   const [ubicacionesSeleccionado, setUbicacionesSeleccionado] = useState({
+    'id_ubi': "",
     'equipo_ubi': equipoID,
     'cliente_ubi': "",
     'direccion_ubi': "",
@@ -249,8 +250,7 @@ function Ubicaciones(props) {
   }
 
   const borrarUbicacion = async () => {
-
-    const res = await ubicacionServices.delete(ubicacionesSeleccionado.equipo_ubi);
+    const res = await ubicacionesServices.delete(ubicacionesSeleccionado.id_ubi);
 
     if (res.success) {
       swal( "Ubicación", "El Tipo de Ubicación del Equipo Borrada de forma Correcta!", "success", { button: "Aceptar" });

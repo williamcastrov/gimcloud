@@ -426,11 +426,6 @@ function Proveedores() {
       title: 'Ciudad'
     },
     {
-      field: 'direccion_int',
-      title: 'Dirección',
-      cellStyle: { minWidth: 140 }
-    },
-    {
       field: 'telefono_int',
       title: 'Teléfono'
     },
@@ -758,6 +753,25 @@ function Proveedores() {
             actions: "Acciones"
           }
         }}
+        detailPanel={[
+          {
+            tooltip: 'Datos adicionales del Proveedor',
+            render: rowData => {
+              return (
+                <div
+                  style={{
+                    fontSize: 14,
+                    textAlign: 'center',
+                    color: 'white',
+                    backgroundColor: '#0277bd',
+                  }}
+                >
+                  <Button variant="contained">Dirección : {rowData.direccion_int}</Button> {}
+                </div>
+              )
+            },
+          },
+        ]}
       />
       {}
 

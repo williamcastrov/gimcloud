@@ -48,6 +48,7 @@ function Especialidades() {
   const [formError, setFormError] = useState(false);
   const [listarEmpresas, setListarEmpresas] = useState([]);
   const [listarEstados, setListarEstados] = useState([]);
+  const [actualiza, setActualiza] = useState(false);
   const [especialidadesSeleccionado, setEspecialidadesSeleccionado] = useState({
     id_esp: "",
     codigo_esp: "",
@@ -57,12 +58,13 @@ function Especialidades() {
 
   useEffect (() => {
       async function fetchDataEspecialidad() {
-      const res = await empresasServices.listEmpresas();
-      setListarEmpresas(res.data) 
+      const res = await especialidadesServices.listEspecialidades();
+      setListEspecialidades(res.data) 
+      setActualiza(false);
       //console.log(res.data);
     }
     fetchDataEspecialidad();
-  }, [])
+  }, [actualiza])
 
   useEffect (() => {
     async function fetchDataEstados() {
@@ -74,12 +76,12 @@ function Especialidades() {
   }, [])
 
   useEffect(() => {
-    async function fetchDataEstados() {
-      const res = await estadosServices.listEstados();
-      setListarEstados(res.data)
+    async function fetchDataEmpresa() {
+      const res = await empresasServices.listEmpresas();
+      setListarEmpresas(res.data)
       console.log(res.data);
     }
-    fetchDataEstados();
+    fetchDataEmpresa();
   }, [])
 
   const handleChange = e => {
@@ -177,6 +179,7 @@ function Especialidades() {
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
+    setActualiza(true);
   }
 
   const actualizarEspecialidad = async () => {
@@ -240,6 +243,7 @@ function Especialidades() {
       console.log(res.message);
       abrirCerrarModalEditar();
     } 
+    setActualiza(true);
   }
 
   const borrarEspecialidad = async()=>{
@@ -266,7 +270,7 @@ function Especialidades() {
         console.log(res.message);
         abrirCerrarModalEliminar();
     }
-    
+    setActualiza(true);
   }
  // "string","boolean","numeric","date","datetime","time","currency"
   const columnas = [
@@ -417,7 +421,7 @@ function Especialidades() {
       <MaterialTable
         columns={columnas}
         data={listEspecialidades}
-        title="MAESTRA DE ESPECIALIDADES DEL INTERLOCUTOR"
+        title="ESPECIALIDADES DEL INTERLOCUTOR"
         actions={[
           {
             icon     : 'edit',

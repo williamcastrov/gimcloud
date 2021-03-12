@@ -129,7 +129,7 @@ function Equipos() {
     'codigo_equ': "",
     'tipo_equ': "EQM",
     'descripcion_equ': "",
-    'empresa_equ': "",
+    'empresa_equ': 1,
     'frecuencia_equ': frecuencia,
     'propietario_equ': "",
     'marca_equ': "",
@@ -143,7 +143,9 @@ function Equipos() {
     'estadocalidad_equ': "",
     'ctacontable_equ': "",
     'manejamatricula_equ': "",
-    'manejaDNI_equ': ""
+    'manejamarcacion_equ': "",
+    'observacion1_equ': "",
+    'observacion2_equ': ""
   })
 
   useEffect(() => {
@@ -297,12 +299,12 @@ function Equipos() {
       errors.descripcion_equ = true;
       formOk = false;
     }
-
+/*
     if (!equiposSeleccionado.empresa_equ) {
       errors.empresa_equ = true;
       formOk = false;
     }
-
+*/
     if (!equiposSeleccionado.frecuencia_equ) {
       errors.frecuencia_equ = true;
       formOk = false;
@@ -368,8 +370,8 @@ function Equipos() {
       formOk = false;
     }
 
-    if (!equiposSeleccionado.manejaDNI_equ) {
-      errors.manejaDNI_equ = true;
+    if (!equiposSeleccionado.manejamarcacion_equ) {
+      errors.manejamarcacion_equ = true;
       formOk = false;
     }
 
@@ -385,7 +387,7 @@ function Equipos() {
         abrirCerrarModalInsertar();
         delete equiposSeleccionado.codigo_equ;
         delete equiposSeleccionado.descripcion_equ;
-        delete equiposSeleccionado.empresa_equ;
+        //delete equiposSeleccionado.empresa_equ;
         delete equiposSeleccionado.frecuencia_equ;
         delete equiposSeleccionado.propietario_equ;
         delete equiposSeleccionado.marca_equ;
@@ -399,7 +401,7 @@ function Equipos() {
         delete equiposSeleccionado.estadocaliad_equ;
         delete equiposSeleccionado.ctacontable_equ;
         delete equiposSeleccionado.manejamatricula_equ;
-        delete equiposSeleccionado.manejaDNI_equ;
+        delete equiposSeleccionado.manejamarcacion_equ;
       } else {
         swal("Equipo", "Error Creando el Equipo!", "error", { button: "Aceptar" });
         console.log(res.message);
@@ -430,12 +432,12 @@ function Equipos() {
       errors.descripcion_equ = true;
       formOk = false;
     }
-
+/*
     if (!equiposSeleccionado.empresa_equ) {
       errors.empresa_equ = true;
       formOk = false;
     }
-
+*/
     if (!equiposSeleccionado.frecuencia_equ) {
       errors.frecuencia_equ = true;
       formOk = false;
@@ -501,8 +503,8 @@ function Equipos() {
       formOk = false;
     }
 
-    if (!equiposSeleccionado.manejaDNI_equ) {
-      errors.manejaDNI_equ = true;
+    if (!equiposSeleccionado.manejamarcacion_equ) {
+      errors.manejamarcacion_equ = true;
       formOk = false;
     }
 
@@ -518,7 +520,7 @@ function Equipos() {
         abrirCerrarModalEditar();
         delete equiposSeleccionado.codigo_equ;
         delete equiposSeleccionado.descripcion_equ;
-        delete equiposSeleccionado.empresa_equ;
+        //delete equiposSeleccionado.empresa_equ;
         delete equiposSeleccionado.frecuencia_equ;
         delete equiposSeleccionado.propietario_equ;
         delete equiposSeleccionado.marca_equ;
@@ -532,7 +534,7 @@ function Equipos() {
         delete equiposSeleccionado.estadocaliad_equ;
         delete equiposSeleccionado.ctacontable_equ;
         delete equiposSeleccionado.manejamatricula_equ;
-        delete equiposSeleccionado.manejaDNI_equ;  
+        delete equiposSeleccionado.manejamarcacion_equ;  
       } else {
         swal("Equipo", "Error Actualizando el Equipo!", "error", { button: "Aceptar" });
         console.log(res.message);
@@ -665,38 +667,17 @@ function Equipos() {
         </Grid>
         <Grid item xs={12} md={3}>
           <FormControl className={styles.formControlManeja}>
-            <InputLabel id="idselectDNI" >Maneja Chapa</InputLabel>
+            <InputLabel id="idselectDNI" >Tiene Marcación</InputLabel>
             <Select
               labelId="selectDNI"
-              name="manejaDNI_equ"
+              name="manejamarcacion_equ"
               id="idselectDNI"
               fullWidth
               onChange={handleChange}
             >
               <MenuItem value=""> <em>None</em> </MenuItem>
-              <MenuItem value="S">Maneja DNI S</MenuItem>
-              <MenuItem value="N">Maneja DNI N</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
-            <InputLabel id="idselectEmpresa" >Empresa</InputLabel>
-            <Select
-              labelId="selecEmpresa"
-              name="empresa_equ"
-              id="idselectEmpresa"
-              fullWidth
-              onChange={handleChange}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarEmpresas.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_emp}>{itemselect.nombre_emp}</MenuItem>
-                  )
-                })
-              }
+              <MenuItem value="S">Esta Marcado</MenuItem>
+              <MenuItem value="N">No esta Marcado</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -763,8 +744,8 @@ function Equipos() {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={4}>
-          <FormControl className={styles.formControlEstados}>
+        <Grid item xs={12} md={6}>
+          <FormControl className={styles.formControl}>
             <InputLabel id="idselectMarca">Marca</InputLabel>
             <Select
               labelId="selectMarca"
@@ -786,17 +767,17 @@ function Equipos() {
         </Grid>
         <Grid item xs={12} md={4}> <TextField name="antiguedad_equ" label="Antiguedad" fullWidth onChange={handleChange} /> </Grid>
         <Grid item xs={12} md={4}> <TextField name="ctacontable_equ" label="Cuenta Contable" fullWidth onChange={handleChange} /> </Grid>
-        <Grid item xs={12} md={8}> <TextField name="descripcion_equ" label="Descripción del Equipo"
-          fullWidth onChange={handleChange} />
-        </Grid>
         <Grid item xs={12} md={4}>
           <TextField className={styles.inputMaterial} name="valoradquisicion_equ" label="Valor de Compra" fullWidth
             InputLabelProps={{ shrink: true }} InputProps={{ inputComponent: NumberFormatCustom, }}
             onChange={handleChange}
           />
         </Grid>
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
+        <Grid item xs={12} md={8}> <TextField name="descripcion_equ" label="Descripción del Equipo"
+          fullWidth onChange={handleChange} />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControlEstados}>
             <InputLabel id="idselectEstadoCalidad">Estado Calidad</InputLabel>
             <Select
               labelId="selectEstadoCalidad"
@@ -816,8 +797,8 @@ function Equipos() {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControlEstados}>
             <InputLabel id="idselectEstadoContable">Estado del Equipo</InputLabel>
             <Select
               labelId="selectEstadoContable"
@@ -837,8 +818,8 @@ function Equipos() {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControlEstados}>
             <InputLabel id="idselectEstadoCliente">Estado del Cliente</InputLabel>
             <Select
               labelId="selectEstadoCliente"
@@ -858,8 +839,8 @@ function Equipos() {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControlEstados}>
             <InputLabel id="idselectEstadoMtto">Estado de Mantenimiento</InputLabel>
             <Select
               labelId="selectEstadoMtto"
@@ -879,8 +860,13 @@ function Equipos() {
             </Select>
           </FormControl>
         </Grid>
+        <Grid item xs={12} md={12}> <TextField name="observacion1_equ" label="Dato Auxiliar Uno del Equipo"
+          fullWidth onChange={handleChange} />
+        </Grid>
+        <Grid item xs={12} md={12}> <TextField name="observacion2_equ" label="Dato Auxiliar Dos del Equipo"
+          fullWidth onChange={handleChange} />
+        </Grid>
       </Grid>
-      <br /><br />
       <div align="right">
         <Button color="primary" onClick={() => grabarEquipo()} >Insertar</Button>
         <Button onClick={() => abrirCerrarModalInsertar()} >Cancelar</Button>
@@ -896,7 +882,7 @@ function Equipos() {
           fullWidth onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.codigo_equ}  />
         </Grid>
         <Grid item xs={12} md={3}>
-          <FormControl className={styles.formControl}>
+          <FormControl className={styles.formControlManeja}>
             <InputLabel id="idselectFrecuencia">Frecuencia</InputLabel>
             <Select
               labelId="selectFrecuencia"
@@ -937,40 +923,18 @@ function Equipos() {
         </Grid>
         <Grid item xs={12} md={3}>
           <FormControl className={styles.formControlManeja}>
-            <InputLabel id="idselectDNI" >Maneja Chapa</InputLabel>
+            <InputLabel id="idselectDNI" >Tiene Marcación</InputLabel>
             <Select
               labelId="selectDNI"
-              name="manejaDNI_equ"
+              name="manejamarcacion_equ"
               id="idselectDNI"
               fullWidth
               onChange={handleChange}
-              value={equiposSeleccionado && equiposSeleccionado.manejaDNI_equ}
+              value={equiposSeleccionado && equiposSeleccionado.manejamarcacion_equ}
             >
               <MenuItem value=""> <em>None</em> </MenuItem>
-              <MenuItem value="S">Maneja DNI S</MenuItem>
-              <MenuItem value="N">Maneja DNI N</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
-            <InputLabel id="idselectEmpresa" >Empresa</InputLabel>
-            <Select
-              labelId="selecEmpresa"
-              name="empresa_equ"
-              id="idselectEmpresa"
-              fullWidth
-              onChange={handleChange}
-              value={equiposSeleccionado && equiposSeleccionado.empresa_equ}
-            >
-              <MenuItem value=""> <em>None</em> </MenuItem>
-              {
-                listarEmpresas.map((itemselect) => {
-                  return (
-                    <MenuItem value={itemselect.id_emp}>{itemselect.nombre_emp}</MenuItem>
-                  )
-                })
-              }
+              <MenuItem value="S">Esta Marcado</MenuItem>
+              <MenuItem value="N">No esta Marcado</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -1070,17 +1034,17 @@ function Equipos() {
             <TextField name="ctacontable_equ" label="Cuenta Contable" fullWidth onChange={handleChange} 
                          value={equiposSeleccionado && equiposSeleccionado.ctacontable_equ} /> 
         </Grid>
-        <Grid item xs={12} md={8}> <TextField name="descripcion_equ" label="Descripción del Equipo"
-          fullWidth onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.descripcion_equ} />
-        </Grid>
         <Grid item xs={12} md={4}>
           <TextField className={styles.inputMaterial} name="valoradquisicion_equ" label="Valor de Compra" fullWidth
             InputLabelProps={{ shrink: true }} InputProps={{ inputComponent: NumberFormatCustom, }}
             onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.valoradquisicion_equ}
           />
         </Grid>
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
+        <Grid item xs={12} md={8}> <TextField name="descripcion_equ" label="Descripción del Equipo"
+          fullWidth onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.descripcion_equ} />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControlEstados}>
             <InputLabel id="idselectEstadoCalidad">Estado Calidad</InputLabel>
             <Select
               labelId="selectEstadoCalidad"
@@ -1101,8 +1065,8 @@ function Equipos() {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControlEstados}>
             <InputLabel id="idselectEstadoContable">Estado del Equipo</InputLabel>
             <Select
               labelId="selectEstadoContable"
@@ -1123,8 +1087,8 @@ function Equipos() {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControlEstados}>
             <InputLabel id="idselectEstadoCliente">Estado del Cliente</InputLabel>
             <Select
               labelId="selectEstadoCliente"
@@ -1145,8 +1109,8 @@ function Equipos() {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <FormControl className={styles.formControl}>
+        <Grid item xs={12} md={4}>
+          <FormControl className={styles.formControlEstados}>
             <InputLabel id="idselectEstadoMtto">Estado de Mantenimiento</InputLabel>
             <Select
               labelId="selectEstadoMtto"
@@ -1167,8 +1131,13 @@ function Equipos() {
             </Select>
           </FormControl>
         </Grid>
+        <Grid item xs={12} md={12}> <TextField name="observacion1_equ" label="Dato Auxiliar Uno del Equipo"
+          fullWidth onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.observacion1_equ} />
+        </Grid>
+        <Grid item xs={12} md={12}> <TextField name="observacion2_equ" label="Dato Auxiliar Dos del Equipo"
+          fullWidth onChange={handleChange} value={equiposSeleccionado && equiposSeleccionado.observacion2_equ} />
+        </Grid>
       </Grid>
-      <br /><br />
       <div align="right">
         <Button color="primary" onClick={() => actualizarEquipo()} >Editar</Button>
         <Button onClick={() => abrirCerrarModalEditar()}>Cancelar</Button>
@@ -1235,7 +1204,7 @@ function Equipos() {
                   <Button variant="contained">Estado Calidad :{rowData.nombre_estcal}</Button>{}
                   <Button variant="contained">Marca :{rowData.descripcion_mar}</Button>
                   <Button variant="contained">Maneja Matricula :{rowData.manejamatricula_equ}</Button>
-                  <Button variant="contained">Maneja Chapa :{rowData.manejaDNI_equ}</Button>
+                  <Button variant="contained">Maneja Chapa :{rowData.manejamarcacion_equ}</Button>
                 </div>
               )
             },

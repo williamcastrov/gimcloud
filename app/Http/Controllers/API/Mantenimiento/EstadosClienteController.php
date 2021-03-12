@@ -12,8 +12,9 @@ class EstadosClienteController extends Controller
     public function create(Request $request){
 
         try {
-            $insert['nombre_estcli'] = $request['nombre_estcli'];
-            $insert['empresa_estcli'] = $request['empresa_estcli'];
+            $insert['nombre_estcli']      = $request['nombre_estcli'];
+            $insert['empresa_estcli']     = $request['empresa_estcli'];
+            $insert['observacion_estcli'] = $request['observacion_estcli'];
   
             EstadosCliente::insert($insert);
     
@@ -72,8 +73,9 @@ class EstadosClienteController extends Controller
         public function update(Request $request, $id_estcli){
   
             try {
-                $data['nombre_estcli'] = $request['nombre_estcli'];
-                $data['empresa_estcli'] = $request['empresa_estcli'];
+                $data['nombre_estcli']      = $request['nombre_estcli'];
+                $data['empresa_estcli']     = $request['empresa_estcli'];
+                $data['observacion_estcli'] = $request['observacion_estcli'];
   
             //Console::info('mymessage');
   

@@ -50,7 +50,7 @@ function Frecuencias() {
   const [listarEstados, setListarEstados] = useState([]);
   const [listarEmpresas, setListarEmpresas] = useState([]);
   const [listarUnidades, setListarUnidades] = useState([]);
-
+  const [actualiza, setActualiza] = useState(false);
   const [frecuenciasSeleccionado, setFrecuenciasSeleccionado] = useState({
     id_fre: "",
     descripcion_fre: "",
@@ -64,9 +64,10 @@ function Frecuencias() {
     async function fetchDataFrecuencias() {
       const res = await frecuenciasServices.listFrecuencias();
       setListFrecuencias(res.data);
+      setActualiza(false);
     }
     fetchDataFrecuencias();
-  }, [])
+  }, [actualiza])
 
   useEffect(() => {
     async function fetchDataEmpresas() {
@@ -178,6 +179,7 @@ function Frecuencias() {
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
+    setActualiza(true);
   }
 
   const actualizarFrecuencia = async () => {
@@ -237,6 +239,7 @@ function Frecuencias() {
       console.log(res.message);
       abrirCerrarModalEditar();
     }
+    setActualiza(true);
   }
 
   const borrarFrecuencia = async () => {
@@ -253,7 +256,7 @@ function Frecuencias() {
       console.log(res.message);
       abrirCerrarModalEliminar();
     }
-
+    setActualiza(true);
   }
   // "string","boolean","numeric","date","datetime","time","currency"
   const columnas = [

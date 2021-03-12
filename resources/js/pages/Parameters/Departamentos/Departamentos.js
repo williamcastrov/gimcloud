@@ -46,6 +46,7 @@ function Departamentos() {
   const [modalEliminar, setModalEliminar]= useState(false);
   const [formError, setFormError] = useState(false);
   const [listarRegiones, setListarRegiones] = useState([]);
+  const [actualiza, setActualiza] = useState(false);
   const [departamentoSeleccionado, setDepartamentoSeleccionado] = useState({
     id_dep: "",
     codigo_dep: "",
@@ -92,9 +93,10 @@ function Departamentos() {
     async function fetchDataDepartamentos() {
       const res = await departamentosServices.listDepartamentos();
       setListDepartamentos(res.data);
+      setActualiza(false);
     }
     fetchDataDepartamentos();
-  }, [])
+  }, [actualiza])
 
   const grabarDepartamentos = async () => {
 
@@ -156,6 +158,7 @@ function Departamentos() {
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
+    setActualiza(true);
   }
 
   const actualizarDepartamento = async () => {
@@ -219,10 +222,11 @@ function Departamentos() {
       console.log(res.message);
       abrirCerrarModalEditar();
     } 
+    setActualiza(true);
   }
 
   const borrarDepartamento = async()=>{
-   
+    
     const res = await departamentosServices.delete(departamentoSeleccionado.id_dep);
 
     if (res.success) {
@@ -245,7 +249,7 @@ function Departamentos() {
         console.log(res.message);
         abrirCerrarModalEliminar();
     }
-    
+    setActualiza(true);
   }
  // "string","boolean","numeric","date","datetime","time","currency"
   const columnas = [
@@ -268,7 +272,7 @@ function Departamentos() {
     },
     {
       title: 'Nombre Región',
-      field: 'region.nombre_reg'
+      field: 'nombre_reg'
     }
   ]
 

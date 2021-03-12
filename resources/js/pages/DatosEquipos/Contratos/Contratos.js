@@ -39,11 +39,11 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl: {
     margin: theme.spacing(0),
-    minWidth: 300,
+    minWidth: 320,
   },
   formControl2: {
     margin: theme.spacing(0),
-    minWidth: 640,
+    minWidth: 550,
   },
   typography: {
     fontSize: 16,
@@ -387,7 +387,7 @@ function Contratos(props) {
 
   const borrarContrato = async () => {
 
-    const res = await contratosServices.delete(contratoSeleccionado.id_ctr);
+    const res = await contratosServices.delete(contratoSeleccionado.codigocontrato_ctr);
 
     if (res.success) {
       swal("Contrato", "Contrato Brorrando de forma Correcta!", "success", { button: "Aceptar" });
@@ -447,19 +447,21 @@ function Contratos(props) {
     }
   ]
 
+  /*
+ <Grid item xs={12} md={6}> <TextField name="codigocontrato_ctr" label="Número del Contrato"
+          fullWidth onChange={handleChange} />
+        </Grid>
+  */
   const contratoInsertar = (
     <div className={styles.modal}>
       <Typography align="center" className={styles.typography} variant="button" display="block">
         Agregar Contrato del Equipo { } {equipoCodigo}
       </Typography>
       <Grid container spacing={2} >
-        <Grid item xs={12} md={6}> <TextField name="id_ctr" label="ID del Contrato" defaultValue={equipoID} disabled="true"
+        <Grid item xs={12} md={2}> <TextField name="id_ctr" label="ID Equipo" defaultValue={equipoID} disabled="true"
           fullWidth onChange={handleChange} />
         </Grid>
-        <Grid item xs={12} md={6}> <TextField name="codigocontrato_ctr" label="Número del Contrato"
-          fullWidth onChange={handleChange} />
-        </Grid>
-        <Grid item xs={12} md={12}>
+        <Grid item xs={12} md={10}>
           <FormControl className={styles.formControl2}>
             <InputLabel id="idselectcliente_ctr" >Cliente que contrata</InputLabel>
             <Select
@@ -522,7 +524,7 @@ function Contratos(props) {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={4}> <TextField name="duracion_ctr" label="Duración del Contrato"
+        <Grid item xs={12} md={4}> <TextField type="numeric" name="duracion_ctr" label="Duración del Contrato"
           fullWidth onChange={handleChange} />
         </Grid>
         <Grid item xs={12} md={4}> <TextField type="date" InputLabelProps={{ shrink: true }} name="fechainicio_ctr"
@@ -570,19 +572,22 @@ function Contratos(props) {
     </div>
   )
 
+  /*
+ <Grid item xs={12} md={6}> <TextField name="codigocontrato_ctr" label="Número del Contrato"
+          fullWidth onChange={handleChange} value={contratoSeleccionado && contratoSeleccionado.codigocontrato_ctr} />
+        </Grid>
+  */
+
   const contratoEditar = (
     <div className={styles.modal}>
       <Typography align="center" className={styles.typography} variant="button" display="block">
         Modificar Contrato del Equipo { } {equipoCodigo}
       </Typography>
       <Grid container spacing={2} >
-        <Grid item xs={12} md={6}> <TextField name="id_ctr" label="ID del Contrato" defaultValue={equipoID} disabled="true"
+        <Grid item xs={12} md={2}> <TextField name="id_ctr" label="ID del Equipo" defaultValue={equipoID} disabled="true"
           fullWidth onChange={handleChange} value={contratoSeleccionado && contratoSeleccionado.id_ctr} />
         </Grid>
-        <Grid item xs={12} md={6}> <TextField name="codigocontrato_ctr" label="Número del Contrato"
-          fullWidth onChange={handleChange} value={contratoSeleccionado && contratoSeleccionado.codigocontrato_ctr} />
-        </Grid>
-        <Grid item xs={12} md={12}>
+        <Grid item xs={12} md={10}>
           <FormControl className={styles.formControl2}>
             <InputLabel id="idselectcliente_ctr" >Cliente que contrata</InputLabel>
             <Select
@@ -648,7 +653,7 @@ function Contratos(props) {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={4}> <TextField name="duracion_ctr" label="Duración del Contrato"
+        <Grid item xs={12} md={4}> <TextField  name="duracion_ctr" label="Duración del Contrato"
           fullWidth onChange={handleChange} value={contratoSeleccionado && contratoSeleccionado.duracion_ctr} />
         </Grid>
         <Grid item xs={12} md={4}> <TextField type="date" InputLabelProps={{ shrink: true }} name="fechainicio_ctr"
@@ -702,11 +707,9 @@ function Contratos(props) {
     <div className={styles.modal}>
       <p>Estás seguro que deseas eliminar el Contrato <b>{contratoSeleccionado && contratoSeleccionado.codigocontrato_ctr}</b>? </p>
       <div align="right">
-        <Button color="secondary" onClick={() => borrarGarantia()}> Confirmar </Button>
+        <Button color="secondary" onClick={() => borrarContrato()}> Confirmar </Button>
         <Button onClick={() => abrirCerrarModalEliminar()}> Cancelar </Button>
-
       </div>
-
     </div>
   )
 

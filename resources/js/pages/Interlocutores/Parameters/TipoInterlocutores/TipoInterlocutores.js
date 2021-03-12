@@ -48,6 +48,7 @@ function TipoInterlocutores() {
   const [formError, setFormError] = useState(false);
   const [listarEmpresas, setListarEmpresas] = useState([]);
   const [listarEstados, setListarEstados] = useState([]);
+  const [actualiza, setActualiza] = useState(false);
   const [tipointerlocutorSeleccionado, setTipoInterlocutorSeleccionado] = useState({
     id_tint: "",
     nombre_tint: "",
@@ -59,9 +60,10 @@ function TipoInterlocutores() {
     async function fetchDataTipoInterlocutores() {
       const res = await tipointerlocutoresServices.listTipoInterlocutor();
       setListTipoInterlocutores(res.data);
+      setActualiza(false);
     }
     fetchDataTipoInterlocutores();
-  }, [])
+  }, [actualiza])
 
   useEffect(() => {
     async function fetchDataEmpresa() {
@@ -152,6 +154,7 @@ function TipoInterlocutores() {
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
+    setActualiza(true);
   }
 
   const actualizarTipoInterlocutor = async () => {
@@ -200,6 +203,7 @@ function TipoInterlocutores() {
       console.log(res.message);
       abrirCerrarModalEditar();
     }
+    setActualiza(true);
   }
 
   const borrarTipoInterlocutor = async () => {
@@ -216,7 +220,7 @@ function TipoInterlocutores() {
       console.log(res.message);
       abrirCerrarModalEliminar();
     }
-
+    setActualiza(true);
   }
   // "string","boolean","numeric","date","datetime","time","currency"
   const columnas = [

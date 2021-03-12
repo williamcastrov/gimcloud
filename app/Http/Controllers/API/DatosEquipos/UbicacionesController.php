@@ -90,7 +90,7 @@ class UbicacionesController extends Controller
         return $response;
     }
   
-    public function update(Request $request, $equipo_ubi){
+    public function update(Request $request, $id_ubi){
   
           try {
             $data['equipo_ubi']     = $request['equipo_ubi'];
@@ -101,7 +101,7 @@ class UbicacionesController extends Controller
 
             //Console::info('mymessage');
   
-            $res = Ubicaciones::where("equipo_ubi",$equipo_ubi)->update($data);
+            $res = Ubicaciones::where("id_ubi",$id_ubi)->update($data);
   
             $response['res'] = $res;
             $response['message'] = "Updated successful";
@@ -115,10 +115,10 @@ class UbicacionesController extends Controller
     
         }
   
-        public function delete($equipo_ubi){
+        public function delete($id_ubi){
   
           try {
-            $res = Ubicaciones::where("equipo_ubi",$equipo_ubi)->delete($equipo_ubi);
+            $res = Ubicaciones::where("id_ubi",$id_ubi)->delete($id_ubi);
             $response['res'] = $res;
   
             $response['message'] = "Deleted successful";

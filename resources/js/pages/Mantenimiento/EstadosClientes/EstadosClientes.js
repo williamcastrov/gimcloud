@@ -46,10 +46,12 @@ function EstadosClientes() {
   const [modalEliminar, setModalEliminar] = useState(false);
   const [formError, setFormError] = useState(false);
   const [listarEmpresas, setListarEmpresas] = useState([]);
+  const [actualiza, setActualiza] = useState(false);
   const [estadoSeleccionado, setEstadoSeleccionado] = useState({
     id_est: "",
     nombre_est: "",
-    empresa_est: ""
+    empresa_est: "",
+    observacion_estcli: ""
   })
 
   useEffect(() => {
@@ -57,9 +59,10 @@ function EstadosClientes() {
       const res = await estadosclientesServices.listEstadosClientes();
       setListEstados(res.data)
       //console.log(res.data);
+      setActualiza(false);
     }
     fetchDataEstados();
-  }, [])
+  }, [actualiza])
 
   useEffect(() => {
     async function fetchDataEmpresas() {
@@ -112,6 +115,11 @@ function EstadosClientes() {
       formOk = false;
     }
 
+    if (!estadoSeleccionado.observacion_estcli) {
+      errors.observacion_estcli = true;
+      formOk = false;
+    }
+
     setFormError(errors);
 
     if (formOk) {
@@ -124,6 +132,7 @@ function EstadosClientes() {
         abrirCerrarModalInsertar();
         delete estadoSeleccionado.nombre_estcli;
         delete estadoSeleccionado.empresa_estcli;
+        delete estadoSeleccionado.observacion_estcli;
       } else {
         swal("Estados Clientes", "Error Creando el Estado!", "error", { button: "Aceptar" });
         console.log(res.message);
@@ -135,6 +144,7 @@ function EstadosClientes() {
       console.log(res.message);
       abrirCerrarModalInsertar();
     }
+    setActualiza(true);
   }
 
   const actualizarEstado = async () => {
@@ -153,6 +163,11 @@ function EstadosClientes() {
       formOk = false;
     }
 
+    if (!estadoSeleccionado.observacion_estcli) {
+      errors.observacion_estcli = true;
+      formOk = false;
+    }
+
     setFormError(errors);
 
     if (formOk) {
@@ -165,6 +180,7 @@ function EstadosClientes() {
         abrirCerrarModalEditar();
         delete estadoSeleccionado.nombre_est;
         delete estadoSeleccionado.empresa_est;
+        delete estadoSeleccionado.observacion_estcli
       } else {
         swal("Estados Clientes", "Error Actualizando el Estado del Cliente!", "error", { button: "Aceptar" });
         console.log(res.message);
@@ -176,6 +192,7 @@ function EstadosClientes() {
       console.log(res.message);
       abrirCerrarModalEditar();
     }
+    setActualiza(true);
   }
 
   const borrarEstado = async () => {
@@ -192,7 +209,7 @@ function EstadosClientes() {
       console.log(res.message);
       abrirCerrarModalEliminar();
     }
-
+    setActualiza(true);
   }
   // "string","boolean","numeric","date","datetime","time","currency"
   const columnas = [
@@ -203,6 +220,11 @@ function EstadosClientes() {
     {
       title: 'Descripción',
       field: 'nombre_estcli'
+    },
+    {
+      title: 'Observación',
+      field: 'observacion_estcli',
+      cellStyle: { minWidth: 300 }
     },
     {
       title: 'Codigo Empresa',
@@ -219,6 +241,7 @@ function EstadosClientes() {
       <Typography align="center" className={styles.typography} variant="button" display="block">Agregar Nuevo Estado del Cliente </Typography>
       <TextField className={styles.inputMaterial} label="Descripción" name="nombre_estcli" onChange={handleChange} />
       <br />
+      <TextField className={styles.inputMaterial} label="Observación" name="observacion_estcli" onChange={handleChange} />
       <FormControl className={styles.formControl}>
         <InputLabel id="idselectEmpresa"> Empresa </InputLabel>
         <Select
@@ -248,8 +271,11 @@ function EstadosClientes() {
   const estadoEditar = (
     <div className={styles.modal}>
       <Typography align="center" className={styles.typography} variant="button" display="block">Actualizar Estados del Cliente</Typography>
-      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_estcli" onChange={handleChange} value={estadoSeleccionado && estadoSeleccionado.nombre_estcli} />
+      <TextField className={styles.inputMaterial} label="Descripción" name="nombre_estcli" onChange={handleChange} 
+                 value={estadoSeleccionado && estadoSeleccionado.nombre_estcli} />
       <br />
+      <TextField className={styles.inputMaterial} label="Observación" name="observacion_estcli" onChange={handleChange} 
+                 value={estadoSeleccionado && estadoSeleccionado.observacion_estcli } />
       <FormControl className={styles.formControl} >
         <InputLabel id="idselectEmpresa">Empresa</InputLabel>
         <Select
@@ -292,11 +318,11 @@ function EstadosClientes() {
   return (
     <div className="App">
       <br />
-      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Estado</Button>
+      <Button variant="contained" startIcon={<SaveIcon />} color="primary" onClick={() => abrirCerrarModalInsertar()} >Agregar Estado del Cliente</Button>
       <MaterialTable
         columns={columnas}
         data={listEstados}
-        title="MAESTRA DE ESTADOS"
+        title="MAESTRA ESTADOS DE CLIENTES"
         actions={[
           {
             icon: 'edit',

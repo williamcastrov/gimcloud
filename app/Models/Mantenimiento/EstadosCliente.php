@@ -15,7 +15,8 @@ class EstadosCliente extends Model
 
     protected $fillable = [
         'nombre_estcli',
-        'empresa_estcli'
+        'empresa_estcli',
+        'observacion_estcli'
     ];
 
     public function empresa(){

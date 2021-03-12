@@ -38,7 +38,7 @@ class CiudadesController extends Controller
   
             $data = DB::select("SELECT t0.*, t1.nombre_dep
             FROM ciudades as t0 INNER JOIN departamentos as t1
-            WHERE t0.departamento_ciu = t1.id_dep
+            WHERE t0.departamento_ciu = t1.codigo_dep
             ORDER BY nombre_ciu ASC");
   
             $response['data'] = $data;
@@ -55,8 +55,11 @@ class CiudadesController extends Controller
         public function get($id_ciu){
   
           try {
-    
-            $data = Ciudades::find($id_ciu);
+
+            $data = DB::select("SELECT t0.*, t1.nombre_dep
+            FROM ciudades as t0 INNER JOIN departamentos as t1
+            WHERE t0.departamento_ciu = t1.codigo_dep and t0.id_ciu = $id_ciu
+            ORDER BY nombre_ciu ASC");
     
             if ($data) {
               $response['data'] = $data;

@@ -12,8 +12,9 @@ class EstadosMttoController extends Controller
     public function create(Request $request){
 
         try {
-            $insert['nombre_estmtto'] = $request['nombre_estmtto'];
-            $insert['empresa_estmtto'] = $request['empresa_estmtto'];
+            $insert['nombre_estmtto']      = $request['nombre_estmtto'];
+            $insert['empresa_estmtto']     = $request['empresa_estmtto'];
+            $insert['observacion_estmtto'] = $request['observacion_estmtto'];
   
             EstadosMtto::insert($insert);
     
@@ -72,10 +73,9 @@ class EstadosMttoController extends Controller
         public function update(Request $request, $id_estmtto){
   
             try {
-                $data['nombre_estmtto'] = $request['nombre_estmtto'];
-                $data['empresa_estmtto'] = $request['empresa_estmtto'];
-  
-            //Console::info('mymessage');
+                $data['nombre_estmtto']      = $request['nombre_estmtto'];
+                $data['empresa_estmtto']     = $request['empresa_estmtto'];
+                $data['observacion_estmtto'] = $request['observacion_estmtto'];
   
                 $res = EstadosMtto::where("id_estmtto",$id_estmtto)->update($data);
   

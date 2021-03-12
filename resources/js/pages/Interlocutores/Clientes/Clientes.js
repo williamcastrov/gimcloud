@@ -66,7 +66,7 @@ function Clientes() {
     id_cli: "",
     codigo_tipo_cli: 2,
     nit_cli: "",
-    digitochequeo_cli: "",
+    digitochequeo_cli: 0,
     estado_cli: "",
     primer_nombre_cli: "",
     segundo_nombre_cli: "",
@@ -273,66 +273,79 @@ function Clientes() {
     if (!clientesSeleccionado.codigo_tipo_cli) {
       errors.codigo_tipo_cli = true;
       formOk = false;
+      alert("1")
     }
 
     if (!clientesSeleccionado.nit_cli) {
       errors.nit_cli = true;
       formOk = false;
+      alert("2")
     }
-
+/*
     if (!clientesSeleccionado.digitochequeo_cli) {
       errors.digitochequeo_cli = true;
       formOk = false;
+      alert("3")
     }
-
+*/
     if (!clientesSeleccionado.estado_cli) {
       errors.estado_cli = true;
       formOk = false;
+      alert("4")
     }
 
     if (!clientesSeleccionado.razonsocial_cli) {
       errors.razonsocial_cli = true;
       formOk = false;
+      alert("5")
     }
 
     if (!clientesSeleccionado.ciudad_cli) {
       errors.ciudad_cli = true;
       formOk = false;
+      alert("6")
     }
 
     if (!clientesSeleccionado.direccion_cli) {
       errors.direccion_cli = true;
       formOk = false;
+      alert("7")
     }
 
     if (!clientesSeleccionado.telefono_cli) {
       errors.telefono_cli = true;
       formOk = false;
+      alert("8")
     }
 
     if (!clientesSeleccionado.email_cli) {
       errors.email_cli = true;
       formOk = false;
+      alert("9")
     }
 
     if (!clientesSeleccionado.empresa_cli) {
       errors.empresa_cli = true;
       formOk = false;
+      alert("10")
     }
 
     if (!clientesSeleccionado.fecha_creacion_cli) {
       errors.fecha_creacion_cli = true;
       formOk = false;
+      alert("11")
     }
 
     if (!clientesSeleccionado.fecha_modificacion_cli) {
       errors.fecha_modificacion_cli = true;
       formOk = false;
+      alert("12")
     }
 
     if (!clientesSeleccionado.especialidad_cli) {
       errors.especialidad_cli = true;
       formOk = false;
+      alert("13")
     }
 
     setFormError(errors);
@@ -342,7 +355,7 @@ function Clientes() {
       const res = await clientesServices.update(clientesSeleccionado);
 
       if (res.success) {
-        swal("Cliente", "Creado forma Correcta!", "success", { button: "Aceptar" });
+        swal("Cliente", "Actualizado de forma Correcta!", "success", { button: "Aceptar" });
         console.log(res.message)
         abrirCerrarModalEditar();
         delete clientesSeleccionado.codigo_tipo_cli;
@@ -365,8 +378,8 @@ function Clientes() {
       }
     }
     else {
-      alert("Debe Ingresar Todos los Datos, Error Actualizando el Cliente");
       swal("Cliente", "Debe Ingresar Todos los Datos, Error!", "warning", { button: "Aceptar" });
+      console.log("DATOS CLIENTES ACTUALIZAR : ",clientesSeleccionado);
       console.log(res.message);
       abrirCerrarModalEditar();
     }
@@ -393,12 +406,17 @@ function Clientes() {
   // "string","boolean","numeric","date","datetime","time","currency"
   const columnas = [
     {
+      field: 'id_cli',
+      title: 'Id'
+    },
+    {
       field: 'nit_cli',
       title: 'Nit'
     },
     {
       field: 'digitochequeo_cli',
-      title: 'DC'
+      title: 'DC',
+      cellStyle: { minWidth: 20 }
     },
     {
       field: 'nombre_est',
@@ -412,11 +430,6 @@ function Clientes() {
     {
       field: 'nombre_ciu',
       title: 'Ciudad'
-    },
-    {
-      field: 'direccion_cli',
-      title: 'Dirección',
-      cellStyle: { minWidth: 130 }
     },
     {
       field: 'telefono_cli',
@@ -740,6 +753,25 @@ function Clientes() {
             actions: "Acciones"
           }
         }}
+        detailPanel={[
+          {
+            tooltip: 'Datos adicionales del Cliente',
+            render: rowData => {
+              return (
+                <div
+                  style={{
+                    fontSize: 14,
+                    textAlign: 'center',
+                    color: 'white',
+                    backgroundColor: '#0277bd',
+                  }}
+                >
+                  <Button variant="contained">Dirección : {rowData.direccion_cli}</Button> {}
+                </div>
+              )
+            },
+          },
+        ]}
       />
       {}
 

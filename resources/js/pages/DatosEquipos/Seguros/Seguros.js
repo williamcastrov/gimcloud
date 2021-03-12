@@ -376,7 +376,7 @@ function Seguros(props) {
     {
       title: 'Dirección',
       field: 'direccionubicacion_seg',
-      cellStyle: { minWidth: 400 }
+      cellStyle: { minWidth: 300 }
     },
     {
       title: 'Ciudad',

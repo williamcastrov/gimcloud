@@ -79,7 +79,7 @@ class ContratosController extends Controller
           }
           else {
               $response['data'] = null;
-              $response['message'] = "Not found data equipo_gar => $id_ctr";
+              $response['message'] = "Not found data id_ctr => $id_ctr";
               $response['success'] = false;
           }
           } catch (\Exception $e) {
@@ -88,8 +88,35 @@ class ContratosController extends Controller
           }
           return $response;
     }
+
     
-    public function update(Request $request, $id_ctr){
+    public function listar_uncontrato($codigocontrato_ctr){
+      try {
+          $data = DB::select("SELECT t0.*, t1.nombre_ciu, t2.nombre_est, t3.descripcion_equ, t4.razonsocial_cli, t5.primer_nombre_emp,
+                                           t5.segundo_nombre_emp, t5.primer_apellido_emp, t5.segundo_apellido_emp 
+          FROM contratos as t0 INNER JOIN ciudades           as t1 INNER JOIN estados            as t2 INNER JOIN equipos as t3
+                               INNER JOIN interlocutores_cli as t4 INNER JOIN interlocutores_emp as t5
+          WHERE t0.ciudad_ctr  = t1.id_ciu and t0.estado_ctr          = t2.id_est and t0.id_ctr = t3.id_equ and
+                t0.cliente_ctr = t4.id_cli and t0.asesorcomercial_ctr = t5.id_emp and t0.codigocontrato_ctr = $codigocontrato_ctr");
+        
+        if ($data) {
+            $response['data'] = $data;
+            $response['message'] = "Load successful";
+            $response['success'] = true;
+        }
+        else {
+            $response['data'] = null;
+            $response['message'] = "Not found data codigocontrato_ctr => $codigocontrato_ctr";
+            $response['success'] = false;
+        }
+        } catch (\Exception $e) {
+            $response['message'] = $e->getMessage();
+            $response['success'] = false;
+        }
+        return $response;
+    }
+    
+    public function update(Request $request, $codigocontrato_ctr){
         try {
             $data['id_ctr']              = $request['id_ctr'];
             $data['codigocontrato_ctr']  = $request['codigocontrato_ctr'];
@@ -103,7 +130,7 @@ class ContratosController extends Controller
             $data['estado_ctr']          = $request['estado_ctr'];
             $data['observacion_ctr']     = $request['observacion_ctr'];
     
-            $res = Contratos::where("id_ctr",$id_ctr)->update($data);
+            $res = Contratos::where("codigocontrato_ctr",$codigocontrato_ctr)->update($data);
     
             $response['res'] = $res;
             $response['message'] = "Updated successful";
@@ -115,12 +142,12 @@ class ContratosController extends Controller
             return $response;
     }
     
-    public function delete($id_ctr){ 
+    public function delete($codigocontrato_ctr){ 
         $isError = false;
         $message = 'Success';
       
         try {
-          $res = Contratos::where("id_ctr",$id_ctr)->delete($id_ctr);
+          $res = Contratos::where("codigocontrato_ctr",$codigocontrato_ctr)->delete($codigocontrato_ctr);
           $response['res'] = $res;
     
           $response['message'] = "Deleted successful";

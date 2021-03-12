@@ -14,8 +14,9 @@ class EstadosCalidadController extends Controller
     public function create(Request $request){
 
         try {
-            $insert['nombre_estcal']        = $request['nombre_estcal'];
-            $insert['empresa_estcal']       = $request['empresa_estcal'];
+            $insert['nombre_estcal']      = $request['nombre_estcal'];
+            $insert['empresa_estcal']     = $request['empresa_estcal'];
+            $insert['observacion_estcal'] = $request['observacion_estcal'];
   
             EstadosCalidad::insert($insert);
     
@@ -78,9 +79,9 @@ class EstadosCalidadController extends Controller
         public function update(Request $request, $id_estcal){
   
           try {
-            $data['nombre_estcal']         = $request['nombre_estcal'];
-            $data['empresa_estcal']        = $request['empresa_estcal'];
-  
+            $data['nombre_estcal']      = $request['nombre_estcal'];
+            $data['empresa_estcal']     = $request['empresa_estcal'];
+            $data['observacion_estcal'] = $request['observacion_estcal'];
             //Console::info('mymessage');
   
             $res = EstadosCalidad::where("id_estcal",$id_estcal)->update($data);

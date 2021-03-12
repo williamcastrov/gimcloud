@@ -245,6 +245,7 @@ Route::delete('/garantias/delete/{id}', 'App\Http\Controllers\API\DatosEquipos\G
 Route::put('/garantias/update/{id}', 'App\Http\Controllers\API\DatosEquipos\GarantiasController@update');
 
 Route::get('/contratos/listar_contratos', 'App\Http\Controllers\API\DatosEquipos\ContratosController@listar_contratos');
+Route::get('/contratos/listar_uncontrato/{id}', 'App\Http\Controllers\API\DatosEquipos\ContratosController@listar_uncontrato');
 Route::post('/contratos/create', 'App\Http\Controllers\API\DatosEquipos\ContratosController@create');
 Route::get('/contratos/get/{id}', 'App\Http\Controllers\API\DatosEquipos\ContratosController@get');
 Route::delete('/contratos/delete/{id}', 'App\Http\Controllers\API\DatosEquipos\ContratosController@delete');

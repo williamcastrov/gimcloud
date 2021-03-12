@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ToastContainer } from "react-toastify";
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import { ThemeProvider } from '@material-ui/core/styles';
 import firebase from "./server/firebase";
 import "firebase/auth";
@@ -94,12 +95,6 @@ import Pdf from './components/Pdf/VisualizarPDF/Pdf';
 
 //Impresión PDF
 import Cliente from './components/SubirArchivos/Cliente';
-
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route
-} from "react-router-dom";
 
 function Main() {
   const [user, setUser] = useState(false);
